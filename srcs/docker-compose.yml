@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  nginx:
+    build: docker/nginx/.
+    container_name: nginx
+    depends_on:
+      - website
+    ports:
+      - "443:443"
+    volumes:
+      - website:/usr/share/nginx/html
+    env_file:
+      - .env
+    networks:
+      ft_transcendence:
+    restart: always
+
+  website:
+    build: docker/website/.
+    container_name: website
+    ports:
+      - "3000:3000"
+    networks:
+      ft_transcendence:
+    volumes:
+      - website:/usr/src/app
+    restart: always
+
+volumes:
+  website:
+    name: website
+
+networks:
+  ft_transcendence:
+
