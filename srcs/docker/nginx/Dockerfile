@@ -1,20 +1,11 @@
-FROM	debian:bullseye-slim
+FROM	nginx:1.25-alpine
 
-RUN		apt update && apt upgrade -y && apt install -y nginx openssl
-RUN 	mkdir -p /etc/nginx/ssl && \
+RUN		mkdir -p /etc/nginx/ssl && \
+	    apk add --no-cache openssl && \
 	    openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-	    -keyout /etc/nginx/ssl/nginx.key \
+    	-keyout /etc/nginx/ssl/nginx.key \
 	    -out /etc/nginx/ssl/nginx.crt \
-	    -subj "/C=ES/L=Barcelona/CN=ft_transcendence.42.fr"
+    	-subj "/C=ES/L=Barcelona/CN=ft_transcendence.42.fr"
 
-COPY	default.conf /etc/nginx/sites-available/.
-RUN mkdir -p /etc/nginx/sites-available /etc/nginx/sites-enabled
-
-COPY default.conf /etc/nginx/sites-available/default.conf
-RUN ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/default.conf
-
-COPY nginx.conf /etc/nginx/nginx.conf
-
-EXPOSE	443
-
-CMD		["nginx", "-g", "daemon off;"]
+COPY	default.conf /etc/nginx/conf.d/default.conf
+COPY	nginx.conf	/etc/nginx/nginx.conf
