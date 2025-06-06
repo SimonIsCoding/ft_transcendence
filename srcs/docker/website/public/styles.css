@@ -1,5 +1,12 @@
-body, html{
-	background-color: green;
-
+body{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;				 /* 100% de la hauteur de l'écran */
+	margin: 0;					 /* enlève les marges par défaut */
+	background-color: #222;	/* optionnel : fond sombre */
 }
-
+  
+#pong_table {
+	background-color: black;
+}
