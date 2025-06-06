@@ -24,7 +24,9 @@ services:
     networks:
       ft_transcendence:
     volumes:
-      - website:/usr/src/app
+      - ./docker/website/public:/app/public
+      - ./docker/website/typescript:/app/typescript
+      - ./docker/website/server.js:/app/server.js
     restart: always
 
 volumes:
