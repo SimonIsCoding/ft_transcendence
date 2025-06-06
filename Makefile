@@ -9,6 +9,9 @@ retry: stop all
 status:
 	docker ps
 
+live:
+	docker exec -it website npx tsc
+
 clean:
 	docker ps -qa | xargs -r docker rm || true
 	docker images -q | xargs -r docker rmi -f || true
