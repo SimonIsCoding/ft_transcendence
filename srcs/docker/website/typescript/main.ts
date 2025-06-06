@@ -3,7 +3,7 @@ window.addEventListener("load", () => {
 	const ctx = canvas.getContext("2d");
 
 	if (ctx) {
-		ctx.fillStyle = "white";
+		ctx.fillStyle = "purple";
 		ctx.fillRect(50, 50, 100, 100);
 	}
 });
