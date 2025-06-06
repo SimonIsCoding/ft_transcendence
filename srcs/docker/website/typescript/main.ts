@@ -8,22 +8,26 @@ const leftPaddle = {
 	height: 125
 };
 
-const interval = setInterval(() => {
-  if (leftPaddle.y > 475)
-	  return;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);// Efface le canvas
+document.addEventListener("keydown", handleKeyDown);
 
-  ctx.fillStyle = 'black';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);// Redessine le fond
+function handleKeyDown(event: KeyboardEvent)
+{
+	if ((event.key === "w" || event.key === "W") && (leftPaddle.y > 0))
+	  leftPaddle.y -= 25; // Haut
+	else if ((event.key === "s" || event.key === "S") && (leftPaddle.y < canvas.height - leftPaddle.height))
+	  leftPaddle.y += 25; // Bas
+}
 
-  ctx.fillStyle = 'white';
-  ctx.fillRect(leftPaddle.x, leftPaddle.y, leftPaddle.width, leftPaddle.height);// Dessine la raquette
-  leftPaddle.y += 25;
-  console.log("valeur de leftPaddle.y = ", leftPaddle.y);
-}, 10); // toutes les 10 ms
+function draw()
+{
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.fillStyle = 'black';
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+	ctx.fillStyle = 'white';
+	ctx.fillRect(leftPaddle.x, leftPaddle.y, leftPaddle.width, leftPaddle.height);
+  
+	requestAnimationFrame(draw);
+}
 
-
-// // if (left_paddle) {
-// // 		left_paddle.fillStyle = "white";
-// // 	left_paddle.fillRect(leftPaddle.x, leftPaddle.y, leftPaddle.width, leftPaddle.height); //fillRect to draw
-// // }
+draw();
