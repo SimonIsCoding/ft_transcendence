@@ -10,7 +10,9 @@ status:
 	docker ps
 
 live:
-	docker exec -it website npx tsc
+	@docker exec -it website npm install typescript > .osef
+	@docker exec -it website npx tsc
+	@rm -rf .osef
 
 clean:
 	docker ps -qa | xargs -r docker rm || true
