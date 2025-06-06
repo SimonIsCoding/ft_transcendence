@@ -9,7 +9,7 @@ services:
     ports:
       - "443:443"
     volumes:
-      - website:/usr/share/nginx/html
+      - nginx_volume:/usr/share/nginx/html
     env_file:
       - .env
     networks:
@@ -32,8 +32,8 @@ services:
     restart: always
 
 volumes:
-  website:
-    name: website
+  nginx_volume:
+    name: nginx_volume
 
 networks:
   ft_transcendence:
