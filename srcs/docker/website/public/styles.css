@@ -1,5 +1,6 @@
 body{
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	height: 100vh;				 /* 100% de la hauteur de l'écran */
@@ -11,4 +12,12 @@ body{
   
 #pong_table {
 	background-color: black;
+}
+
+#scoreboard
+{
+	color: white;
+	font-size: 24px;
+	text-align: center;
+	margin-bottom: 10px;
 }
