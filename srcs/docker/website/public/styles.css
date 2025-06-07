@@ -6,8 +6,27 @@ body{
 	height: 100vh;				 /* 100% de la hauteur de l'écran */
 	margin: 0;					 /* enlève les marges par défaut */
 	background-color: #222;	/* optionnel : fond sombre */
-	margin: 0;
 	overflow: hidden;
+}
+
+header
+{
+	background-color: aliceblue;
+	height: 20px;
+	/* margin: 20px; */
+	padding: 1rem 2rem;
+}
+
+#pauseBtn
+{
+	
+}
+
+#tournament
+{
+	justify-content: center;
+	align-items: center;
+	margin: 0;
 }
   
 #pong_table {
