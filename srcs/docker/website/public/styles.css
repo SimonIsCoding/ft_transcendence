@@ -5,6 +5,8 @@ body{
 	height: 100vh;				 /* 100% de la hauteur de l'écran */
 	margin: 0;					 /* enlève les marges par défaut */
 	background-color: #222;	/* optionnel : fond sombre */
+	margin: 0;
+	overflow: hidden;
 }
   
 #pong_table {
