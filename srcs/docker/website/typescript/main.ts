@@ -8,6 +8,8 @@ let leftPlayerScore = 0;
 let rightPlayerScore = 0;
 const maxScore = 5;
 
+let isPaused = false;
+
 document.addEventListener("keydown", (event) => {
 	keysPressed[event.key] = true;
 });
@@ -99,25 +101,33 @@ function update()
 	count_and_reset_ball();
 }
 
+document.getElementById('pauseBtn')!.addEventListener('click', () => {
+	isPaused = !isPaused;
+});
+
 function draw()
 {
-	update();
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	ctx.fillStyle = 'black';
-	ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
-	ctx.fillStyle = 'white';
-	ctx.fillRect(leftPaddle.x, leftPaddle.y, leftPaddle.width, leftPaddle.height);
-	ctx.fillRect(rightPaddle.x, rightPaddle.y, rightPaddle.width, rightPaddle.height);
+	if (!isPaused)
+	{
+		update();
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		ctx.fillStyle = 'black';
+		ctx.fillRect(0, 0, canvas.width, canvas.height);
 	
-	ctx.beginPath();
-	ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-	ctx.fill();
+		ctx.fillStyle = 'white';
+		ctx.fillRect(leftPaddle.x, leftPaddle.y, leftPaddle.width, leftPaddle.height);
+		ctx.fillRect(rightPaddle.x, rightPaddle.y, rightPaddle.width, rightPaddle.height);
+		
+		ctx.beginPath();
+		ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+		ctx.fill();
+	}
 
 	if (leftPlayerScore >= maxScore)
 		return(setTimeout(() => {alert("Left Player won!")}, 0));
 	if (rightPlayerScore >= maxScore)
 		return(setTimeout(() => {alert("Right Player won!")}, 0));
+	
 	requestAnimationFrame(draw);
 }
 
