@@ -17,9 +17,39 @@ header
 	padding: 1rem 2rem;
 }
 
+#playerForm
+{
+	display: none;
+	color: white;
+	position: absolute;
+	background-color: green;
+}
+
+#formPopup
+{
+	display: none;
+	background-color: pink;
+	margin: 20px;
+	padding: 20px;
+	position: fixed;
+	top: 20%;
+	left: 50%;
+	transform: translate(-50%, 50%);
+	align-items: center;
+	justify-content: center;
+}
+
 #pauseBtn
 {
-	
+	margin: 0;
+}
+
+#start_tournament
+{
+	display: none;
+	margin: 20px;
+	padding: 20px;
+	position: fixed;
 }
 
 #tournament
