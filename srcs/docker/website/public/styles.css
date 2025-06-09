@@ -11,10 +11,14 @@ body{
 
 header
 {
+	position: fixed;
+	top: 0;
+	width: 100%;
 	background-color: aliceblue;
 	height: 20px;
-	/* margin: 20px; */
+	/* margin: 0px; */
 	padding: 1rem 2rem;
+	z-index: 1000;
 }
 
 #playerForm
@@ -23,6 +27,7 @@ header
 	color: white;
 	position: absolute;
 	background-color: green;
+	z-index: 999;
 }
 
 #formPopup
@@ -39,9 +44,24 @@ header
 	justify-content: center;
 }
 
-#pauseBtn
+#playersList {
+	position: fixed; /* même contexte que la popup */
+	top: calc(20% + /* hauteur de la popup */ 150px); /* ajuster selon ta popup */
+	left: 50%;
+	transform: translateX(-50%);
+	background-color: #eee;
+	padding: 10px 20px;
+	border-radius: 8px;
+	max-width: 300px;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+	font-family: Arial, sans-serif;
+  }
+  
+
+.tournament
 {
-	margin: 0;
+	left: 50%;
+	transform: translateX(-50%);
 }
 
 #start_tournament
@@ -50,13 +70,21 @@ header
 	margin: 20px;
 	padding: 20px;
 	position: fixed;
+	align-items: center;
+	justify-content: center;
+	left: 50%;
+	transform: translateX(-50%);
 }
 
-#tournament
+#create_tournament
 {
-	justify-content: center;
+	position: fixed;
 	align-items: center;
+	justify-content: center;
+	left: 50%;
 	margin: 0;
+	transform: translateX(-50%);
+
 }
   
 #pong_table {

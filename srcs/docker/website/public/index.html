@@ -7,17 +7,18 @@
 </head>
 <body>
 	<header>
-		<button id="tournament">Create a tournament</button>
-		<div id="playerForm">Player Form for tournament<br>Number of player has to be even.</div>
-		<div id="formPopup">
+		<button class="tournament" id="create_tournament">Create a tournament</button>
+		<div class="tournament" id="playerForm">Player Form for tournament<br>Number of player has to be even.</div>
+		<div class="tournament" id="formPopup">
 			<input type="text" placeholder="Player name" id="playerNameInput" />
 			<button id="addPlayerBtn">Add Player</button>
 			<button id="start_tournament">Start tournament</button>
+			<div id="playersList"></div>
 		</div>
-		<button id="pauseBtn">Pause</button>
+		<!-- <button id="pauseBtn">Pause</button> -->
 	</header>
 	<div id="scoreboard">
-		Left Player: <span id="left-score">0</span> - Right Player: <span id="right-score">0</span>
+		<span id="left-score">0</span> - <span id="right-score">0</span>
 	</div>
 	<canvas id="pong_table" width="800" height="600"></canvas> 
 	<script src="/dist/main.js" type="module"></script>

@@ -40,7 +40,7 @@ document.addEventListener("keyup", (event) => {
 		keysPressed[event.key] = false;
 });
 
-export function collision_with_paddle()
+function collision_with_paddle()
 {
 	if (ball.x - ball.radius < leftPaddle.x + leftPaddle.width && ball.y > leftPaddle.y && ball.y < leftPaddle.y + leftPaddle.height)
 		ball.speedX = -ball.speedX;
@@ -50,7 +50,7 @@ export function collision_with_paddle()
 }
 
 let direction = 1;
-export function resetBall()
+function resetBall()
 {
 	direction *= -1;
 	ball.x = canvas.width / 2;
@@ -58,7 +58,7 @@ export function resetBall()
 	ball.speedX = direction * ball.speedX;
 }
 
-export function count_score()
+function count_score()
 {
 	ctx.fillStyle = 'white';
 	ctx.font = '30px Arial';
@@ -66,7 +66,7 @@ export function count_score()
 	ctx.fillText(rightPlayerScore.toString(), canvas.width * 0.75, 50);
 }
 
-export function count_and_reset_ball()
+function count_and_reset_ball()
 {
 	if (ball.x + ball.radius < 0)
 	{
@@ -82,7 +82,7 @@ export function count_and_reset_ball()
 	}
 }
 
-export function update()
+function update()
 {
 	if ((keysPressed["w"] || keysPressed["W"]) && (leftPaddle.y > 0))
 	  leftPaddle.y -= 12.5; // Up
