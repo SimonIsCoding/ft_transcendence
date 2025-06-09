@@ -1,5 +1,6 @@
 let tournament = false;
 let players: string[] = [];
+const playersListElem = document.getElementById("playersList")!;
 
 export function setupTournamentUI()
 {
@@ -12,10 +13,9 @@ export function setupTournamentUI()
 			input.value = "";
 		}
 		console.log("players: ", players);
+		playersListElem.innerHTML = players.map(p => `<div>${p}</div>`).join('');
 		if (players.length >= 1)
-		{
 			document.getElementById("start_tournament")!.style.display = 'block';
-		}
 
 	});
 
@@ -24,7 +24,7 @@ export function setupTournamentUI()
 			alert("Number of players has to be even.");
 	});
 
-	document.getElementById("tournament")!.addEventListener('click', () =>
+	document.getElementById("create_tournament")!.addEventListener('click', () =>
 		{
 			document.getElementById("playerForm")!.style.display = 'block';
 			document.getElementById("formPopup")!.style.display = 'block';
