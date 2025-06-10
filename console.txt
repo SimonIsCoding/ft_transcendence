@@ -1,0 +1,15 @@
+injection-tss TSS: hosted page injected <anonymous code>:1:39
+injection-tss MBTSS: Nonce:  nonce <anonymous code>:1:87
+CONTENT_SHELL: Page is excluded. Skipping shell protection. content-scripts.js:1:258271
+TSS: excluded result:  true content-scripts.js:1:1024708
+DFP: Breach notification feature flag is enabled. true content-scripts.js:1:973419
+DFP: Search Hijacking notification feature flag is enabled. true content-scripts.js:1:419481
+The Components object is deprecated. It will soon be removed. ft_transcendence.42.fr
+Uncaught TypeError: document.getElementById(...) is null
+    setupTournamentUI https://ft_transcendence.42.fr/dist/tournament/tournament.js:36
+6 tournament.js:36:18
+Source map error: Error: request failed with status 404
+Stack in the worker:networkRequest@resource://devtools/client/shared/source-map-loader/utils/network-request.js:43:9
+
+Resource URL: https://ft_transcendence.42.fr/%3Canonymous%20code%3E
+Source Map URL: injection-tss-mv3.js.map
