@@ -8,15 +8,17 @@
 <body>
 	<header>
 		<button class="tournament" id="create_tournament">Create a tournament</button>
-		<!-- <div class="tournament" id="playerForm">Player Form for tournament<br>Number of player has to be even.</div> -->
 		<div id="popup" class="popup"></div>
-		<div class="tournament" id="formPopup">
-			<input type="text" placeholder="Player name" id="playerNameInput" />
-			<button id="addPlayerBtn">Add Player</button>
-			<button id="start_tournament">Start tournament</button>
+		<!-- <div id="test"> -->
+		<div class="tournament" id="set_tournament">
+			<div id="add_player_box">
+				<input type="text" placeholder="Player name" id="playerNameInput" />
+				<button id="addPlayerBtn">Add Player</button>
+			</div>
 			<div id="playersList"></div>
+			<button id="start_tournament">Start tournament</button>
 		</div>
-		<!-- <button id="pauseBtn">Pause</button> -->
+		<!-- </div> -->
 	</header>
 	<div id="scoreboard">
 		<span id="left-score">0</span> - <span id="right-score">0</span>

@@ -101,10 +101,6 @@ function update()
 	count_and_reset_ball();
 }
 
-// document.getElementById('pauseBtn')!.addEventListener('click', () => {
-// 	isPaused = !isPaused;
-// });
-
 document.addEventListener("keydown", (event) => {
 	if (event.code === 'Space')
 	{

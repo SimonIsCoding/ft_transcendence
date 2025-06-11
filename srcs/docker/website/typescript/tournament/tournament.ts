@@ -4,19 +4,24 @@ const playersListElem = document.getElementById("playersList")!;
 
 export function showPopup(message: string): void
 {
-    const popup = document.getElementById('popup');
-    if (popup)
+	const popup = document.getElementById('popup');
+	if (popup)
 	{
-        popup.textContent = message;
-        popup.style.opacity = '1'; // Show popup
-        setTimeout(() => {
-            popup.style.opacity = '0'; // Hide popup after 2 seconds
-        }, 2000);
-    }
+		popup.textContent = message;
+		popup.style.opacity = '1'; // Show popup
+		setTimeout(() => {
+			popup.style.opacity = '0'; // Hide popup after 2 seconds
+		}, 2000);
+	}
 }
 
 export function setupTournamentUI()
 {
+	document.getElementById("create_tournament")!.addEventListener('click', () =>
+		{
+			document.getElementById("set_tournament")!.style.display = 'block';
+		});
+	
 	document.getElementById("addPlayerBtn")!.addEventListener("click", () => {
 		const input = document.getElementById("playerNameInput") as HTMLInputElement;
 		const name = input.value.trim();
@@ -29,6 +34,8 @@ export function setupTournamentUI()
 			showPopup("the player's name has already been added.");
 		console.log("players: ", players);
 		playersListElem.innerHTML = players.map(p => `<div>${p}</div>`).join('');
+		if (players.length > 0)
+			document.getElementById("playersList")!.style.display = 'block';
 		if (players.length >= 1)
 			document.getElementById("start_tournament")!.style.display = 'block';
 
@@ -39,9 +46,4 @@ export function setupTournamentUI()
 			showPopup("Number of players has to be even.");
 	});
 
-	document.getElementById("create_tournament")!.addEventListener('click', () =>
-		{
-			// document.getElementById("playerForm")!.style.display = 'block';
-			document.getElementById("formPopup")!.style.display = 'block';
-		});
 }
