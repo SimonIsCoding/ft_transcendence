@@ -12,6 +12,7 @@
     "caniuse-lite": "^1.0.30001721",
     "electron-to-chromium": "^1.5.166",
     "escalade": "^3.2.0",
+    "express": "^5.1.0",
     "fraction.js": "^4.3.7",
     "nanoid": "^3.3.11",
     "node-releases": "^2.0.19",
@@ -31,4 +32,3 @@
   "license": "ISC",
   "description": ""
 }
-
