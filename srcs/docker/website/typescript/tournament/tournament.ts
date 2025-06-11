@@ -30,6 +30,8 @@ export function setupTournamentUI()
 			players.push(name);
 			input.value = "";
 		}
+		else if (name.length === 0)
+			showPopup("Player's name can't be empty.");
 		else
 			showPopup("the player's name has already been added.");
 		console.log("players: ", players);
