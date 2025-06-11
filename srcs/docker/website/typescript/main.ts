@@ -5,4 +5,3 @@ setupTournamentUI();
 window.addEventListener("DOMContentLoaded", () => {
 	draw();
 });
-// showPopup();
