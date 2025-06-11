@@ -32,3 +32,10 @@ body
 	border-style: solid;
 	border-width: 1px;
 }
+
+#scoreboard
+{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}

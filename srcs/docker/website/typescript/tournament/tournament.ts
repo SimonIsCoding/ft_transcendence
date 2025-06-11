@@ -42,7 +42,9 @@ export function setupTournamentUI()
 	});
 
 	document.getElementById("start_tournament")?.addEventListener("click", () => {
-		if (players.length % 2 !== 0)
+		if (players.length < 4)
+			showPopup("Add at least 4 players.");
+		else if (players.length % 2 !== 0)
 			showPopup("Number of players has to be even.");
 	});
 
