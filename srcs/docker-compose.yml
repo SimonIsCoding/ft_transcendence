@@ -26,7 +26,7 @@ services:
     volumes:
       - ./docker/website/public:/app/public
       - ./docker/website/typescript:/app/typescript
-      - ./docker/website/server.js:/app/server.js
+      - ./docker/website/backend/server.js:/app/server.js
     command: sh -c "npm run build && node server.js"
     # command: sh -c "tsc --watch & node server.js"
     restart: always
