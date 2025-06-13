@@ -7,7 +7,7 @@ services:
     depends_on:
       - website
     ports:
-      - "443:443"
+      - "4443:443"
     volumes:
       - nginx_volume:/usr/share/nginx/html
     env_file:
@@ -28,7 +28,6 @@ services:
       - ./docker/website/typescript:/app/typescript
       - ./docker/website/backend/server.js:/app/server.js
     command: sh -c "npm run build && node server.js"
-    # command: sh -c "tsc --watch & node server.js"
     restart: always
 
 volumes:

@@ -21,6 +21,10 @@ export function setupTournamentUI()
 		{
 			document.getElementById("set_tournament")!.style.display = 'block';
 		});
+	// document.getElementById("create_tournament")!.addEventListener('click', (function()
+	// {
+ 	// 	document.getElementById("set_tournament")!.style.display = 'block';
+	// }));
 	
 	document.getElementById("addPlayerBtn")!.addEventListener("click", () => {
 		const input = document.getElementById("playerNameInput") as HTMLInputElement;
