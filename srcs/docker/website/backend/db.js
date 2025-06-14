@@ -11,7 +11,6 @@ db.run(
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		name TEXT NOT NULL
 		alias TEXT NOT NULL
-		// nb_game INTEGER
 	)
 `);
 
