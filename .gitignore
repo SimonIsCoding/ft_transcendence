@@ -1,5 +1,5 @@
 ./srcs/docker/website/node_modules
 *node_modules
-*subject.txt
+*subject.pdf
 console.txt
 *.env
