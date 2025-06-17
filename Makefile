@@ -1,5 +1,8 @@
 all:
 	docker-compose -f ./srcs/docker-compose.yml up -d --build
+	@docker exec -it website npm install typescript > .osef
+	@docker exec -it website npx tsc
+	@rm -rf .osef
 
 stop:
 	cd ./srcs && docker-compose down
