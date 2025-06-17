@@ -7,6 +7,8 @@
 <img src="https://github.com/SimonIsCoding/utils_and_random/blob/main/ft_irc_grade.png"/>
 </div> -->
 
+<!-- This is a test -->
+
 ## How to setup the project ?
 
 0. **Make sure you have docker installed in you computer**
