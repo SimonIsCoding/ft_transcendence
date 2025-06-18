@@ -4,18 +4,18 @@ import fetch from 'node-fetch';  // Explicit import
 const fastify = Fastify({ logger: true });
 
 // Route to demonstrate gateway routing
-fastify.get('/', async (request, reply) => {
-  return { message: "API Gateway → Try /a or /b" };
+fastify.get('/api', async (request, reply) => {
+  return { message: "API Gateway → Try /api/a or /api/b" };
 });
 
 // Proxy to Service A
-fastify.get('/a', async (request, reply) => {
+fastify.get('/api/a', async (request, reply) => {
   const response = await fetch('http://service-a:3001/');
   return response.json();
 });
 
 // Proxy to Service B
-fastify.get('/b', async (request, reply) => {
+fastify.get('/api/b', async (request, reply) => {
   const response = await fetch('http://service-b:3002/');
   return response.json();
 });
