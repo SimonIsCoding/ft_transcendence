@@ -9,9 +9,6 @@ RUN apt-get update && apt-get -y install \
 COPY ./tools/nginxentry.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/nginxentry.sh
 
-RUN chmod 755 /etc/nginx && \
-    chmod 644 /etc/nginx/nginx.conf
-
 EXPOSE 443
 
 ENTRYPOINT ["nginxentry.sh"]

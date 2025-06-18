@@ -16,7 +16,6 @@ services:
     volumes:
       - ./requirements/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./requirements/nginx/conf.d:/etc/nginx/conf.d
-      - ./requirements/nginx/html:/usr/share/nginx/html
       - transcendence:/var/www/html/transcendence
     restart: always
 
