@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  api-gateway:
+    build: requirements/api-gateway
+    ports:
+      - "3000:3000"
+    depends_on:
+      - service-a
+      - service-b
+
+  service-a:
+    build: requirements/service-a
+    expose:
+      - "3001"
+
+  service-b:
+    build: requirements/service-b
+    expose:
+      - "3002"
+
+networks:
+  default:
+    name: transcendence-network
+    driver: bridge
