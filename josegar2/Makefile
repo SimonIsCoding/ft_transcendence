@@ -9,7 +9,7 @@ stop:
 retry: stop all
 
 status:
-	docker compose -f $(COMPOSE_FILE) down
+	docker compose -f $(COMPOSE_FILE) ps
 
 clean:
 	docker compose -f $(COMPOSE_FILE) down --rmi all -v
