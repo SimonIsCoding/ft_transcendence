@@ -1,30 +1,23 @@
+COMPOSE_FILE = ./srcs/docker-compose.yml
+
 all:
-	docker-compose -f ./srcs/docker-compose.yml up -d --build
-	@docker exec -it website npm install typescript > .osef
-	@docker exec -it website npx tsc
-	@rm -rf .osef
+	docker compose -f $(COMPOSE_FILE) up -d --build
 
 stop:
-	cd ./srcs && docker-compose down
+	docker compose -f $(COMPOSE_FILE) down
 
 retry: stop all
 
 status:
-	docker ps
-
-live:
-	@docker exec -it website npm install typescript > .osef
-	@docker exec -it website npx tsc
-	@rm -rf .osef
+	docker compose -f $(COMPOSE_FILE) ps
 
 clean:
-	docker ps -qa | xargs -r docker rm || true
-	docker images -q | xargs -r docker rmi -f || true
-	docker volume ls -q | xargs -r docker volume rm || true
-	docker network ls -q | xargs -r docker network rm || true
+	docker compose -f $(COMPOSE_FILE) down --rmi all -v
+	docker volume prune -f
+	docker network prune -f
 	# sudo rm -rf $(HOME)/data 
 
-fclean: stop clean
+fclean: clean
 
 re: fclean all
 
