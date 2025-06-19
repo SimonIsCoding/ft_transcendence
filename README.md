@@ -15,7 +15,7 @@
     cd ft_transcendence
     echo "DOMAIN_NAME=localhost" > srcs/.env
     make
-    xdg-open http://localhost:3000
+    xdg-open http://localhost:4443
     ```
 
 ### To know what you are doing
@@ -37,4 +37,4 @@
    - `make`
 
 3. **check on web browser**
-   - Open any web browser. You should put on the URL: 'http://localhost:3000' - for the project we use the port 3000. For the moment, it is not availble in https.
+   - Open any web browser. You should put on the URL: 'http://localhost:4443' - for the project we use the port 4443. For the moment, it is not availble in https (443) in campus computers.
