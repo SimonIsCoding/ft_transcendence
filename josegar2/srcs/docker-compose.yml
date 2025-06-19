@@ -12,7 +12,7 @@ services:
     depends_on: 
       - api-gateway
     ports:
-      - "443:443"
+      - "4443:443"
     volumes:
       - ./requirements/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./requirements/nginx/conf.d:/etc/nginx/conf.d
@@ -21,21 +21,15 @@ services:
 
   api-gateway:
     build: requirements/api-gateway
-    ports:
-      - "3000:3000"
     depends_on:
       - service-a
       - service-b
 
   service-a:
     build: requirements/service-a
-    expose:
-      - "3001"
 
   service-b:
     build: requirements/service-b
-    expose:
-      - "3002"
 
 networks:
   default:
