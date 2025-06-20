@@ -19,22 +19,19 @@ services:
       - transcendence:/var/www/html/transcendence
     restart: always
 
-  api-gateway:
-    build: requirements/api-gateway
-    depends_on:
-      - service-a
-      - service-b
-
-  service-a:
-    build: requirements/service-a
-
-  service-b:
-    build: requirements/service-b
-
-networks:
-  default:
-    name: transcendence-network
-    driver: bridge
+  website:
+    build: docker/website/.
+    container_name: website
+    ports:
+      - "3000:3000"
+    networks:
+      ft_transcendence:
+    volumes:
+      - ./docker/website/public:/app/public
+      - ./docker/website/typescript:/app/typescript
+      - ./docker/website/backend/server.js:/app/server.js
+    command: sh -c "npm run build && node server.js"
+    restart: always
 
 volumes:
   transcendence:
