@@ -18,8 +18,8 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
       <button
         id="counter"
         type="button"
-        class="bg-[#f9f9f9] text-black dark:bg-[#1a1a1a] dark:text-white border border-transparent px-[1.2em] py-[0.6em] text-[1em] font-medium rounded-[8px] cursor-pointer transition-colors duration-200 hover:border-[#646cff] focus:outline focus:outline-4"
-      >
+			class="bg-[#f9f9f9] text-black dark:bg-[#1a1a1a] dark:text-white border border-transparent px-[1.2em] py-[0.6em] text-[1em] font-medium rounded-[8px] cursor-pointer transition-colors duration-200 hover:border-[#646cff] focus:outline focus:outline-4"
+		>
         count is 0
       </button>
     </div>
