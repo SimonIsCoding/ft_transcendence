@@ -1,9 +1,11 @@
 COMPOSE_FILE = ./srcs/docker-compose.yml
 
 all:
+	mkdir -p srcs/data/pong
 	cd webdev/pong && \
+	  npm install && \
 	  npm run build && \
-	  sudo cp -r webdev/pong/* srcs/data/pong
+	  sudo cp -r dist/* ../../srcs/data/pong
 	docker compose -f $(COMPOSE_FILE) up -d --build
 
 stop:
@@ -18,6 +20,8 @@ clean:
 	docker compose -f $(COMPOSE_FILE) down --rmi all -v
 	docker volume prune -f
 	docker network prune -f
+	cd webdev/pong && \
+	  npm run clean
 
 fclean: clean
 
