@@ -12,28 +12,46 @@ export interface AuthResponse {
 }
 
 export const login = async (email: string, password: string) => {
-  console.log("Sending request to:", API_URL); // Verify endpoint
   try {
     const response = await fetch(`${API_URL}/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
     });
-    console.log("Raw response:", response); // Check HTTP status
 
-    return response.json();
+    const data = await response.json(); // Parse always
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Registration failed');
+    }
+    return data;
   } catch (error) {
-    console.error("Fetch error:", error);
+    console.error("Login error:", error);
     throw error;
   }
 };
 
 export const register = async (email: string, password: string) => {
-  const response = await fetch(`${API_URL}/register`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password }),
-  });
-  return response.json();
+  try {
+    const response = await fetch(`${API_URL}/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await response.json(); // Parse always
+
+    if (!response.ok) {
+      // Handle all possible error response structures
+      throw new Error(
+        data.error || 
+        data.message || 
+        'Registration failed'
+      );
+    }
+    return data;
+  } catch (error) {
+    console.error("Register error:", error);
+    throw error;
+  }
 };
-// Similar for register()

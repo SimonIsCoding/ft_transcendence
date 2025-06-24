@@ -9,10 +9,11 @@ export default class DashboardView {
 
   private initializeUser(): void {
     const token = localStorage.getItem('authToken');
-    if (token) {
+    const userEmail = localStorage.getItem('userEmail');
+    if (token && userEmail) {
       // In a real app, you would verify the token and fetch user data
       this.currentUser = {
-        email: 'user@example.com', // Replace with actual user data
+        email: userEmail, // Replace with actual user data
         token: token
       };
     } else {
@@ -57,6 +58,7 @@ export default class DashboardView {
 
   private handleLogout(): void {
     localStorage.removeItem('authToken');
+    localStorage.removeItem('userEmail');
     this.currentUser = null;
     Router.navigate('home');
   }
@@ -74,3 +76,4 @@ export default class DashboardView {
 }
 
 export { DashboardView };
+
