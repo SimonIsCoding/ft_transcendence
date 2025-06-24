@@ -20,15 +20,18 @@ services:
     restart: always
 
   api-gateway:
+    container_name: api-gateway
     build: requirements/api-gateway
     depends_on:
       - auth-service
       - service-b
 
   auth-service:
+    container_name: auth-service
     build: requirements/auth-service
 
   service-b:
+    container_name: service-b
     build: requirements/service-b
 
 networks:

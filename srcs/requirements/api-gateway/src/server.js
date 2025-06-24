@@ -1,5 +1,6 @@
 import Fastify from 'fastify';
 import fetch from 'node-fetch';  // Explicit import
+import fastifyHttpProxy from '@fastify/http-proxy';
 
 const fastify = Fastify({ logger: true });
 
@@ -11,7 +12,7 @@ fastify.get('/api', async (request, reply) => {
 // Proxy to Auth Service
 fastify.register(fastifyHttpProxy, {
   upstream: 'http://auth-service:3001',
-  prefix: '/auth',
+  prefix: '/api/auth',
   rewritePrefix: '/'
 });
 

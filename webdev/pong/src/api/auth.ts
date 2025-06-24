@@ -1,4 +1,4 @@
-const API_URL = 'http://api-gateway:3000/auth';
+const API_URL = 'http://api-gateway:3000/api/auth';
 
 //expected structure from API
 export interface AuthResponse {
