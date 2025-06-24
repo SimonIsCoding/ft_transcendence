@@ -1,8 +1,15 @@
 import Fastify from 'fastify';
 import fetch from 'node-fetch';  // Explicit import
 import fastifyHttpProxy from '@fastify/http-proxy';
+import fs from 'fs';
 
-const fastify = Fastify({ logger: true });
+const fastify = Fastify({
+  logger: true,
+  https: {
+    key: fs.readFileSync('/run/secrets/api_key'),
+    cert: fs.readFileSync('/run/secrets/api_cert')
+  }
+});
 
 // Route to demonstrate gateway routing
 fastify.get('/api', async (request, reply) => {

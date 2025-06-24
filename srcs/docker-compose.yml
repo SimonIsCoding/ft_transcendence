@@ -21,6 +21,9 @@ services:
 
   api-gateway:
     container_name: api-gateway
+    secrets:
+      - api_cert
+      - api_key
     build: requirements/api-gateway
     depends_on:
       - auth-service
@@ -52,4 +55,8 @@ secrets:
     file: ./secrets/cert.pem
   server_key:
     file: ./secrets/key.pem
+  api_cert:
+    file: ./secrets/apicert.pem
+  api_key:
+    file: ./secrets/apikey.pem
 

@@ -1,4 +1,4 @@
-const API_URL = 'http://api-gateway:3000/api/auth';
+const API_URL = 'https://localhost:4443/api/auth';
 
 //expected structure from API
 export interface AuthResponse {
@@ -12,12 +12,20 @@ export interface AuthResponse {
 }
 
 export const login = async (email: string, password: string) => {
-  const response = await fetch(`${API_URL}/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password }),
-  });
-  return response.json();
+  console.log("Sending request to:", API_URL); // Verify endpoint
+  try {
+    const response = await fetch(`${API_URL}/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+    console.log("Raw response:", response); // Check HTTP status
+
+    return response.json();
+  } catch (error) {
+    console.error("Fetch error:", error);
+    throw error;
+  }
 };
 
 export const register = async (email: string, password: string) => {
