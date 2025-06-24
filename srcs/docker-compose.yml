@@ -22,11 +22,11 @@ services:
   api-gateway:
     build: requirements/api-gateway
     depends_on:
-      - service-a
+      - auth-service
       - service-b
 
-  service-a:
-    build: requirements/service-a
+  auth-service:
+    build: requirements/auth-service
 
   service-b:
     build: requirements/service-b

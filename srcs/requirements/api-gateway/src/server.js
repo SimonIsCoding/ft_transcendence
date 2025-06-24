@@ -8,10 +8,11 @@ fastify.get('/api', async (request, reply) => {
   return { message: "API Gateway → Try /api/a or /api/b" };
 });
 
-// Proxy to Service A
-fastify.get('/api/a', async (request, reply) => {
-  const response = await fetch('http://service-a:3001/');
-  return response.json();
+// Proxy to Auth Service
+fastify.register(fastifyHttpProxy, {
+  upstream: 'http://auth-service:3001',
+  prefix: '/auth',
+  rewritePrefix: '/'
 });
 
 // Proxy to Service B
