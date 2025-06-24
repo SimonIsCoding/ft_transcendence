@@ -18,6 +18,7 @@ status:
 
 clean:
 	docker compose -f $(COMPOSE_FILE) down --rmi all -v
+	docker image prune -af
 	docker volume prune -f
 	docker network prune -f
 	cd webdev/pong && \
