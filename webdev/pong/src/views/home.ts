@@ -44,10 +44,11 @@ const showAuthError = (message: string): void => {
 // 4. HomeView Implementation
 export const HomeView = {
   render(): string {
+    const isLoggedIn = !!localStorage.getItem('authToken'); // Simple check
 	return `
     <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div id="auth-container" class="sm:mx-auto sm:w-full sm:max-w-md">
-        ${currentUser ? this.renderWelcome() : this.renderAuthForm()}
+        ${isLoggedIn ? this.renderWelcome() : this.renderAuthForm()}
       </div>
     </div>
   `;
@@ -143,6 +144,7 @@ export const HomeView = {
               token: response.data.token
             };
             localStorage.setItem('authToken', response.data.token);
+            localStorage.setItem('userEmail', response.data.user.email);
             this.updateUI();
             Router.navigate('dashboard');
           }
@@ -164,6 +166,7 @@ export const HomeView = {
         logoutBtn.addEventListener('click', () => {
           currentUser = null;
           localStorage.removeItem('authToken');
+          localStorage.removeItem('userEmail');
           this.updateUI();
         });
       }
@@ -176,16 +179,18 @@ export const HomeView = {
     const container = document.getElementById('auth-container');
     if (!container) return;
     
-    container.innerHTML = currentUser ? this.renderWelcome() : this.renderAuthForm();
+    const isLoggedIn = !!localStorage.getItem('authToken'); // Simple check
+    container.innerHTML = isLoggedIn ? this.renderWelcome() : this.renderAuthForm();
     this.initEventListeners();
   },
 
   init(): void  {
     const token = localStorage.getItem('authToken');
-    if (token) {
+    const userEmail = localStorage.getItem('userEmail');
+    if (token && userEmail) {
       currentUser = { 
-        email: 'user@example.com', // Replace with actual user data in real app
-        token 
+        email: userEmail, // Replace with actual user data in real app
+        token: token
       };
     }
     this.updateUI();
