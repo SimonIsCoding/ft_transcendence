@@ -116,6 +116,13 @@ export const HomeView = {
 
 
   initEventListeners(): void  {
+  const form = document.getElementById('auth-form');
+  if (!form) {
+    // Try again on next animation frame
+    requestAnimationFrame(() => this.initEventListeners());
+    return;
+  }
+
     try {
       // Form submission
       getSafeElement<HTMLFormElement>('auth-form').addEventListener('submit', async (e) => {
