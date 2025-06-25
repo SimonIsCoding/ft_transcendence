@@ -1,7 +1,8 @@
 COMPOSE_FILE = ./srcs/docker-compose.yml
 
 all:
-	docker compose -f $(COMPOSE_FILE) up -d --build
+	docker-compose -f $(COMPOSE_FILE) build --no-cache
+	docker compose -f $(COMPOSE_FILE) up -d
 
 stop:
 	docker compose -f $(COMPOSE_FILE) down
