@@ -16,7 +16,7 @@ clean:
 	docker compose -f $(COMPOSE_FILE) down --rmi all -v
 	docker volume prune -f
 	docker network prune -f
-	# sudo rm -rf $(HOME)/data 
+	sudo rm -rf $(PWD)/data 
 
 fclean: clean
 
