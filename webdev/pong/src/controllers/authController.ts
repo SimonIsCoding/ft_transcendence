@@ -24,17 +24,17 @@ class AuthController {
     document.addEventListener('click', (e) => {
       const target = e.target as HTMLElement;
       
-      if (target.closest('login-btn')) {
+      if (target.closest('#login-btn')) {
         this.isLoginView = true;
         this.render();
-      } else if (target.closest('register-btn')) {
+      } else if (target.closest('#register-btn')) {
         this.isLoginView = false;
         this.render();
-	} else if (target.closest('logout-btn')) {
+	} else if (target.closest('#logout-btn')) {
 		authService.logout();
         this.isLoginView = true; // Reset to login form after logout
         this.render();
-	} else if (target.closest('toggle-auth')) {
+	} else if (target.closest('#toggle-auth')) {
 		this.isLoginView = !this.isLoginView;
 		this.render();
       }
