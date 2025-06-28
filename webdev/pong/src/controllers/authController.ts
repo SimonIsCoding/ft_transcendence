@@ -24,18 +24,19 @@ class AuthController {
     document.addEventListener('click', (e) => {
       const target = e.target as HTMLElement;
       
-      if (target.id === 'login-btn') {
+      if (target.closest('login-btn')) {
         this.isLoginView = true;
         this.render();
-      } else if (target.id === 'register-btn') {
+      } else if (target.closest('register-btn')) {
         this.isLoginView = false;
         this.render();
-      } else if (target.id === 'logout-btn') {
-        authService.logout();
+	} else if (target.closest('logout-btn')) {
+		authService.logout();
         this.isLoginView = true; // Reset to login form after logout
         this.render();
-      } else if (target.id === 'toggle-auth') {
-        this.toggleAuthForms();
+	} else if (target.closest('toggle-auth')) {
+		this.isLoginView = !this.isLoginView;
+		this.render();
       }
     });
 
@@ -70,27 +71,6 @@ class AuthController {
     }
   }
 
-  showLoginForm() {
-    this.isLoginView = true;
-    this.renderAuthForm();
-  }
-
-  showRegisterForm() {
-    this.isLoginView = false;
-    this.renderAuthForm();
-  }
-
-  toggleAuthForms() {
-    this.isLoginView = !this.isLoginView;
-    this.renderAuthForm();
-  }
-
-  renderAuthForm() {
-    const container = document.getElementById('auth-container');
-    if (container) {
-      container.innerHTML = AuthView.renderAuthForm(this.isLoginView);
-    }
-  }
 }
 
 export const authController = new AuthController();
