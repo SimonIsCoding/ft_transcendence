@@ -1,7 +1,8 @@
 import { AuthView } from './authView';
 import { GameView } from './game';
 import { SettingsView } from './settings';
-import { authService } from '../services/authService'; // Use your auth service instead of direct localStorage
+import { authService } from '../services/authService';
+import { authController } from '../controllers/authController';
 
 interface User {
   email: string;
@@ -47,6 +48,8 @@ export const HomeView = {
     this.currentUser = authService.getCurrentUser();
     GameView.initGameCanvas();
     
+    authController.init();
+
     // Add this if you need to re-render when auth state changes
     authService.onAuthStateChanged(() => {
       this.currentUser = authService.getCurrentUser();
