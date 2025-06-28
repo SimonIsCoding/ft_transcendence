@@ -25,6 +25,7 @@ export class Router {
           return this.navigate('dashboard'); // Redirect if already logged in
         }
         this.app.innerHTML = HomeView.render();
+		HomeView.init();
         break;
 
       case 'dashboard':
