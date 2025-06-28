@@ -25,47 +25,79 @@ class AuthService {
     return user ? JSON.parse(user) : null;
   }
 
-  // Login with alias support
-  public async login(email: string, password: string, alias?: string): Promise<User> {
+public async login(email: string, password: string, alias?: string): Promise<User> {
+  try {
     const response = await fetch(`${API_URL}/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
     });
 
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.error || 'Login failed');
+    const result = await response.json();
+    
+    // Check for unsuccessful response
+    if (!response.ok || result.status !== 'success') {
+      throw new Error(result.error || result.message || 'Login failed');
+    }
 
-    const user: User = { 
-      email: data.user.email, 
-      token: data.token,
-      alias: alias || data.user.email.split('@')[0]
+    // Verify required fields exist in the response
+    if (!result.data?.user?.email || !result.data?.token) {
+      throw new Error('Invalid server response format');
+    }
+
+    const user: User = {
+      email: result.data.user.email,
+      token: result.data.token,
+      alias: alias || result.data.user.alias || result.data.user.email.split('@')[0]
     };
     
     this.saveUser(user);
     return user;
+    
+  } catch (error) {
+    console.error('Login error:', error);
+    throw new Error(
+      error instanceof Error ? error.message : 'An unknown error occurred'
+    );
   }
+}
 
-  // Register with optional alias
-  public async register(email: string, password: string, alias?: string): Promise<User> {
+public async register(email: string, password: string, alias?: string): Promise<User> {
+  try {
     const response = await fetch(`${API_URL}/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password, ...(alias && { alias }) }), // Include alias if provided
     });
 
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.error || 'Registration failed');
+    const result = await response.json();
+    
+    // Check for unsuccessful response
+    if (!response.ok || result.status !== 'success') {
+      throw new Error(result.error || result.message || 'Registration failed');
+    }
 
-    const user: User = { 
-      email: data.user.email, 
-      token: data.token,
-      alias: alias || data.user.email.split('@')[0]
+    // Verify required fields exist in the response
+    if (!result.data?.user?.email || !result.data?.token) {
+      throw new Error('Invalid server response format');
+    }
+
+    const user: User = {
+      email: result.data.user.email,
+      token: result.data.token,
+      alias: alias || result.data.user.alias || result.data.user.email.split('@')[0]
     };
     
     this.saveUser(user);
     return user;
+    
+  } catch (error) {
+    console.error('Registration error:', error);
+    throw new Error(
+      error instanceof Error ? error.message : 'Registration failed'
+    );
   }
+}
 
   public logout(): void {
     localStorage.removeItem('user');
