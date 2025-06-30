@@ -1,8 +1,17 @@
 COMPOSE_FILE = ./srcs/docker-compose.yml
 
 all:
+	mkdir -p srcs/data/pong
+	cd webdev/pong && \
+	  npm install && \
+	  npm run build && \
+	  sudo cp -r dist/* ../../srcs/data/pong
 	docker-compose -f $(COMPOSE_FILE) build --no-cache
 	docker compose -f $(COMPOSE_FILE) up -d
+# live:
+# 	@docker exec -it  npm install typescript > .osef
+# 	@docker exec -it  npx tsc
+# 	@rm -rf .osef
 
 stop:
 	docker compose -f $(COMPOSE_FILE) down
@@ -14,9 +23,11 @@ status:
 
 clean:
 	docker compose -f $(COMPOSE_FILE) down --rmi all -v
+	docker image prune -af
 	docker volume prune -f
 	docker network prune -f
-	sudo rm -rf $(PWD)/data 
+	cd webdev/pong && \
+	  npm run clean
 
 fclean: clean
 
