@@ -20,15 +20,21 @@ services:
     restart: always
 
   api-gateway:
+    container_name: api-gateway
+    secrets:
+      - api_cert
+      - api_key
     build: requirements/api-gateway
     depends_on:
-      - service-a
+      - auth-service
       - service-b
 
-  service-a:
-    build: requirements/service-a
+  auth-service:
+    container_name: auth-service
+    build: requirements/auth-service
 
   service-b:
+    container_name: service-b
     build: requirements/service-b
 
 networks:
@@ -49,3 +55,8 @@ secrets:
     file: ./secrets/cert.pem
   server_key:
     file: ./secrets/key.pem
+  api_cert:
+    file: ./secrets/apicert.pem
+  api_key:
+    file: ./secrets/apikey.pem
+
