@@ -1,3 +1,5 @@
+import { GameView } from './game';
+
 export const SettingsView = {
   renderGameSettings(): string {
     return `
@@ -33,8 +35,33 @@ export const SettingsView = {
             >
             <span>Play against AI</span>
           </label>
+
+          <!-- New Ball Speed Slider -->
+          <label class="block">
+            <span class="text-gray-700">Ball Speed:</span>
+            <input 
+              type="range" 
+              id="ball-speed" 
+              min="1" 
+              max="10" 
+              value="2" 
+              class="mt-1 w-full accent-red-600"
+            >
+          </label>
         </div>
       </div>
     `;
+  },
+
+  initSettings(): void {
+    const speedInput = document.getElementById('ball-speed') as HTMLInputElement;
+    if (speedInput) {
+      speedInput.addEventListener('input', () => {
+        const newSpeed = parseFloat(speedInput.value);
+        GameView.setBallSpeed(newSpeed);
+      });
+    }
+
+    // Add listeners here later for aliases, AI toggle, etc.
   }
 };

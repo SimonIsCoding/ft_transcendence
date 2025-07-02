@@ -1,57 +1,88 @@
 // game.ts
 
 class Game {
-  private ballEl!: HTMLElement;
-  private areaEl!: HTMLElement;
-  private x = 100;
-  private y = 100;
+  private canvas!: HTMLCanvasElement;
+  private ctx!: CanvasRenderingContext2D;
+  private animationFrameId: number = 0;
+  private ball = { x: 100, y: 100, radius: 10 };
   private dx = 2;
   private dy = 2;
-  private readonly radius = 12;
-  private animationFrameId: number | null = null;
+  private speed = 2;
+
+  init() {
+    this.canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
+    this.ctx = this.canvas.getContext('2d')!;
+    this.resizeCanvas();
+    this.startLoop();
+  }
+
+  setSpeed(newSpeed: number): void {
+    this.speed = newSpeed;
+    // Normalize and scale dx, dy based on current direction
+    const angle = Math.atan2(this.dy, this.dx);
+    this.dx = Math.cos(angle) * this.speed;
+    this.dy = Math.sin(angle) * this.speed;
+  }
 
   render(): string {
-    return `
-      <div class="flex items-center justify-center w-full h-full bg-black min-w-[1024px] min-h-[768px]">
-        <div id="game-area" class="relative bg-black border-4 border-white aspect-[4/3] w-full max-w-[calc(100vh*4/3)] max-h-full overflow-hidden">
-          <div id="ball" class="absolute w-6 h-6 rounded-full bg-red-500"></div>
-        </div>
-      </div>
-    `;
-  }
+  return `
+    <div class="flex justify-center items-center w-full h-full">
+      <canvas id="game-canvas" class="border-4 border-white"></canvas>
+    </div>
+  `;
+}
 
-  init(): void {
-    this.areaEl = document.getElementById("game-area")!;
-    this.ballEl = document.getElementById("ball")!;
-    this.startBouncing();
-  }
+  update(): void {
+    // Move ball
+    this.ball.x += this.dx;
+    this.ball.y += this.dy;
 
-  private startBouncing(): void {
-    const update = () => {
-      const rect = this.areaEl.getBoundingClientRect();
-
-      this.x += this.dx;
-      this.y += this.dy;
-
-      if (this.x <= 0 || this.x + this.radius * 2 >= rect.width) this.dx *= -1;
-      if (this.y <= 0 || this.y + this.radius * 2 >= rect.height) this.dy *= -1;
-
-      this.ballEl.style.left = `${this.x}px`;
-      this.ballEl.style.top = `${this.y}px`;
-
-      this.animationFrameId = requestAnimationFrame(update);
-    };
-
-    update();
-  }
-
-  stop(): void {
-    if (this.animationFrameId !== null) {
-      cancelAnimationFrame(this.animationFrameId);
-      this.animationFrameId = null;
+    // Bounce logic...
+    if (
+      this.ball.x - this.ball.radius <= 0 ||
+      this.ball.x + this.ball.radius >= this.canvas.width
+    ) {
+      this.dx = -this.dx;
+    }
+    if (
+      this.ball.y - this.ball.radius <= 0 ||
+      this.ball.y + this.ball.radius >= this.canvas.height
+    ) {
+      this.dy = -this.dy;
     }
   }
+
+  draw(): void {
+    this.ctx.fillStyle = 'black';
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+    this.ctx.fillStyle = 'white';
+    this.ctx.beginPath();
+    this.ctx.arc(this.ball.x, this.ball.y, this.ball.radius, 0, Math.PI * 2);
+    this.ctx.fill();
+  }
+
+  startLoop(): void {
+    const loop = () => {
+      this.update();
+      this.draw();
+      this.animationFrameId = requestAnimationFrame(loop);
+    };
+    loop();
+  }
+
+  resizeCanvas(): void {
+    const parent = this.canvas.parentElement!;
+    const width = Math.max(parent.clientWidth, 1024);
+    const height = (width * 3) / 4;
+    this.canvas.width = width;
+    this.canvas.height = height;
+  }
+  stop(): void {
+    cancelAnimationFrame(this.animationFrameId);
+  }
 }
+
 
 // Create a single instance and expose rendering/initialization
 const game = new Game();
@@ -65,5 +96,8 @@ export const GameView = {
   },
   stop(): void {
     game.stop();
+  },
+  setBallSpeed(speed: number): void {
+    game.setSpeed(speed); // This must call your Game instance
   }
 };
