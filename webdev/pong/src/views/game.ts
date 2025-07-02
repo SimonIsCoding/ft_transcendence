@@ -38,7 +38,7 @@ class Game {
       <canvas 
         id="game-canvas" 
         class="border-4 border-white block" 
-        style="min-width: 1024px; aspect-ratio: 4 / 3;">
+        style="min-width: 800px; aspect-ratio: 4 / 3;">
       </canvas>
     </div>
     `;
@@ -109,7 +109,7 @@ class Game {
 
   resizeCanvas(): void {
     const parent = this.canvas.parentElement!;
-    const width = Math.max(parent.clientWidth, 1024);
+    const width = Math.max(parent.clientWidth, 800);
     const height = (width * 3) / 4;
     this.canvas.width = width;
     this.canvas.height = height;
