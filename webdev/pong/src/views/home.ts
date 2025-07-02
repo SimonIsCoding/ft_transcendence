@@ -2,6 +2,7 @@ import { AuthView } from './authView';
 import { GameView } from './game';
 import { SettingsView } from './settings';
 import { authService } from '../services/authService';
+import { gameController } from '../controllers/gameController';
 import { authController } from '../controllers/authController';
 
 interface User {
@@ -51,7 +52,8 @@ export const HomeView = {
   init(): void {
     this.currentUser = authService.getCurrentUser();
     GameView.initGameCanvas();
-    
+    gameController.init();
+
     authController.init();
 
 	SettingsView.initSettings();

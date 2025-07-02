@@ -8,6 +8,14 @@ class Game {
   private dx = 2;
   private dy = 2;
   private speed = 2;
+  private keysPressed: Record<string, boolean> = {};
+  private paddleWidth = 10;
+  private paddleHeight = 80;
+  
+  private leftPaddle = { x: 0, y: 100 };
+  private rightPaddle = { x: 0, y: 100 };
+  private paddleSpeed = 5;
+
 
   init() {
     this.canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
@@ -50,16 +58,40 @@ class Game {
     ) {
       this.dy = -this.dy;
     }
+	if (this.keysPressed['w']) {
+      this.leftPaddle.y = Math.max(0, this.leftPaddle.y - this.paddleSpeed);
+    }
+    if (this.keysPressed['s']) {
+      this.leftPaddle.y = Math.min(
+        this.canvas.height - this.paddleHeight,
+        this.leftPaddle.y + this.paddleSpeed
+      );
+    }
+    if (this.keysPressed['ArrowUp']) {
+      this.rightPaddle.y = Math.max(0, this.rightPaddle.y - this.paddleSpeed);
+    }
+    if (this.keysPressed['ArrowDown']) {
+      this.rightPaddle.y = Math.min(
+        this.canvas.height - this.paddleHeight,
+        this.rightPaddle.y + this.paddleSpeed
+      );
+    }
   }
 
   draw(): void {
+	// Background
     this.ctx.fillStyle = 'black';
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
+    // Draw ball
     this.ctx.fillStyle = 'white';
     this.ctx.beginPath();
     this.ctx.arc(this.ball.x, this.ball.y, this.ball.radius, 0, Math.PI * 2);
     this.ctx.fill();
+	// Draw paddles
+    this.ctx.fillStyle = 'white';
+    this.ctx.fillRect(this.leftPaddle.x, this.leftPaddle.y, this.paddleWidth, this.paddleHeight);
+    this.ctx.fillRect(this.rightPaddle.x, this.rightPaddle.y, this.paddleWidth, this.paddleHeight);
+
   }
 
   startLoop(): void {
@@ -77,6 +109,11 @@ class Game {
     const height = (width * 3) / 4;
     this.canvas.width = width;
     this.canvas.height = height;
+	this.leftPaddle.x = 30; // Margin from left
+    this.rightPaddle.x = this.canvas.width - 30 - this.paddleWidth;
+  }
+  setKey(key: string, pressed: boolean) {
+    this.keysPressed[key] = pressed;
   }
   stop(): void {
     cancelAnimationFrame(this.animationFrameId);
@@ -99,5 +136,13 @@ export const GameView = {
   },
   setBallSpeed(speed: number): void {
     game.setSpeed(speed); // This must call your Game instance
+  },
+
+  handleKeyDown(key: string): void {
+    game.setKey(key, true);
+  },
+
+  handleKeyUp(key: string): void {
+    game.setKey(key, false);
   }
 };
