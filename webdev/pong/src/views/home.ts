@@ -25,7 +25,7 @@ export const HomeView = {
         </aside>
 
         <!-- Game Area -->
-        <main class="flex-1 min-w-[800px] bg-black p-4 overflow-auto">
+        <main class="flex-1 bg-black p-4 p-0 overflow-hidden flex items-center justify-center">
           ${GameView.renderGameCanvas()}
         </main>
 

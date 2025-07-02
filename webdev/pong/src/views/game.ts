@@ -33,12 +33,16 @@ class Game {
   }
 
   render(): string {
-  return `
+    return `
     <div class="flex justify-center items-center w-full h-full">
-      <canvas id="game-canvas" class="border-4 border-white"></canvas>
+      <canvas 
+        id="game-canvas" 
+        class="border-4 border-white block" 
+        style="min-width: 1024px; aspect-ratio: 4 / 3;">
+      </canvas>
     </div>
-  `;
-}
+    `;
+  }
 
   update(): void {
     // Move ball
