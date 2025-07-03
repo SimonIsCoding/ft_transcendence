@@ -38,9 +38,8 @@ export const HomeView = {
       <!-- Message Bar -->
       <div class="w-full bg-gray-800 text-white p-2" id="system-messages"></div>
     </div>
-  `;
-},
-
+    `;
+  },
 
   renderAuth(): string {
     const user = authService.getCurrentUser(); // Use service instead of direct localStorage
