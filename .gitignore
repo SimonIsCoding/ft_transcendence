@@ -5,3 +5,4 @@ console.txt
 *.swp
 srcs/data/pong
 learning/
+.DS_Store
