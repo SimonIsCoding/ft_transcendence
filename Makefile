@@ -8,10 +8,15 @@ all:
 	  sudo cp -r dist/* ../../srcs/data/pong
 	docker-compose -f $(COMPOSE_FILE) build --no-cache
 	docker compose -f $(COMPOSE_FILE) up -d
-# live:
-# 	@docker exec -it  npm install typescript > .osef
-# 	@docker exec -it  npx tsc
-# 	@rm -rf .osef
+
+webupdate:
+	mkdir -p srcs/data/pong
+	cd webdev/pong && \
+	  rm -r dist && \
+	  npm install && \
+	  npm run build && \
+	  sudo cp -r dist/* ../../srcs/data/pong && \
+	  docker exec nginx /usr/sbin/nginx -s reload
 
 stop:
 	docker compose -f $(COMPOSE_FILE) down

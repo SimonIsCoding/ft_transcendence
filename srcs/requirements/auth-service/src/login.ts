@@ -11,6 +11,7 @@ async function loginRoute(fastify: FastifyInstance) {
 
     const user = users.find(u => u.login === login && u.password === password);
 
+	console.log("WE ARE IN LOGIN.TS FILE");
     if (user) {
       return reply.send({ message: 'Login réussi', login: user.login });
     }
