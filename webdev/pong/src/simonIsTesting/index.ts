@@ -19,6 +19,6 @@ submitBtn.addEventListener("click", () => {
 	  .then(res => res.json())
   	  .then(data => console.log(data));
 
-	console.log("Login:", login, "Password:", password);
+	console.log("we are in simonIsTesting INDEX.ts file: Login:", login, "Password:", password);
 });
 
