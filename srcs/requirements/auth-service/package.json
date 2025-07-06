@@ -4,9 +4,12 @@
   "scripts": {
     "dev": "ts-node server.ts"
   },
-"devDependencies": {
-  "ts-node": "^10.0.0",
-  "typescript": "^5.0.0",
-  "@types/node": "^20.0.0"
+  "devDependencies": {
+    "@types/node": "^20.19.4",
+    "ts-node": "^10.0.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "fastify": "^5.4.0"
   }
 }
