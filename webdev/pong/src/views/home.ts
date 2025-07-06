@@ -20,7 +20,7 @@ export const HomeView = {
 
       <!-- Header with Pong Logo -->
       <header class="flex justify-center items-center h-24 bg-[#fbd11b]">
-        <img src="path/to/pong-text.png" alt="PONG Logo" class="h-16">
+        <img src="/pong-logo.png" alt="PONG Logo" class="h-16">
       </header>
 
       <!-- Game Canvas Area -->
