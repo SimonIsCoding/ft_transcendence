@@ -38,12 +38,17 @@ class Game {
 
   render(): string {
     return `
-    <div class="flex items-center justify-center bg-black p-2 w-full h-full overflow-auto">
-      <canvas id="game-canvas" class="border-4 border-white min-w-[600px] min-h-[450px] max-w-[1024px] max-h-[768px] aspect-video"></canvas>
+    <div class="flex items-center justify-center bg-[#fbd11b] p-2 w-full h-full overflow-auto">
+      <canvas 
+        id="game-canvas" 
+        class="border-4 border-white bg-black 
+               min-w-[600px] min-h-[450px] 
+               max-w-[1024px] max-h-[768px] 
+               aspect-video">
+      </canvas>
     </div>
     `;
   }
-
   update(): void {
     // Move ball
     this.ball.x += this.dx;
@@ -86,8 +91,10 @@ class Game {
 
   draw(): void {
 	// Background
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.fillStyle = 'black';
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
 	// Draw dashed center line
     this.ctx.strokeStyle = 'white';
     this.ctx.lineWidth = 4;
