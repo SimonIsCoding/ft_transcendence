@@ -14,32 +14,29 @@ export const HomeView = {
   currentUser: null as User | null,
   isLogin: true,
 
-  render(): string {
+ render(): string {
   return `
-    <div class="flex flex-col h-screen">
-      <!-- Main Content -->
-      <div class="flex-1 flex flex-col md:flex-row md:min-w-[1000px] overflow-hidden">
-        <!-- Left Sidebar -->
-        <aside class="w-full md:w-64 bg-gray-100 p-4 border-r border-gray-200" id="auth-container">
-          ${this.renderAuth()}
-        </aside>
+    <div class="flex flex-col min-h-screen bg-[#fbd11b] text-black">
 
-        <!-- Game Area -->
-        <main class="flex-1 bg-black p-0 overflow-hidden flex items-center justify-center">
-          ${GameView.renderGameCanvas()}
-        </main>
+      <!-- Header with Pong Logo -->
+      <header class="flex justify-center items-center h-24 bg-[#fbd11b]">
+        <img src="path/to/pong-text.png" alt="PONG Logo" class="h-16">
+      </header>
 
-        <!-- Settings Panel -->
-        <div class="w-full md:w-72 bg-gray-50 p-4 border-l border-gray-200">
-          ${SettingsView.renderGameSettings()}
-        </div>
-      </div>
+      <!-- Game Canvas Area -->
+      <main class="flex-1 flex items-center justify-center bg-[#fbd11b] overflow-auto">
+        ${GameView.renderGameCanvas()}
+      </main>
 
-      <!-- Message Bar -->
-      <div class="w-full bg-gray-800 text-white p-2" id="system-messages"></div>
+      <!-- Control Panel -->
+      <footer class="bg-[#fbd11b] p-4">
+        ${SettingsView.renderGameSettings()}
+      </footer>
+
     </div>
     `;
   },
+
 
   renderAuth(): string {
     const user = authService.getCurrentUser(); // Use service instead of direct localStorage
