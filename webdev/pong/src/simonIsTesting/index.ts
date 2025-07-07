@@ -1,11 +1,4 @@
-console.log('index.ts chargé');
-
-const button = document.getElementById('bg-button');
-button?.addEventListener('click', () => {
-  document.body.style.backgroundColor = '#add8e6';
-});
-
-const submitBtn = document.getElementById("submit-btn") as HTMLButtonElement;
+const submitBtn = document.getElementById("login-btn") as HTMLButtonElement;
 
 submitBtn.addEventListener("click", () => {
 	const login = (document.getElementById("login") as HTMLInputElement).value;
@@ -17,8 +10,42 @@ submitBtn.addEventListener("click", () => {
 	  body: JSON.stringify({ login: login, password: password }),
 	})
 	  .then(res => res.json())
-  	  .then(data => console.log(data));
+  	  .then(data => {
+    document.getElementById("welcome-div")!.style.display = data.success ? "block" : "none";
+  });
 
-	console.log("we are in simonIsTesting INDEX.ts file: Login:", login, "Password:", password);
+	console.log(login, "Password:", password);
 });
 
+// --- form to create account
+const registerBtn = document.getElementById("registerBtn");
+
+registerBtn?.addEventListener("click", () => {
+  const container = document.getElementById("register-container");
+  if (container) return; // Empêche de recréer plusieurs fois
+
+  const form = document.createElement("div");
+  form.id = "register-container";
+  form.innerHTML = `
+    <input id="new-username" placeholder="Username" /><br/>
+    <input id="new-password" placeholder="Password" type="password" /><br/>
+    <input id="new-alias" placeholder="Alias" /><br/>
+    <button id="create-account">Create Account</button>
+  `;
+  document.body.appendChild(form);
+
+  document.getElementById("create-account")?.addEventListener("click", () => {
+    const username = (document.getElementById("new-username") as HTMLInputElement).value;
+    const password = (document.getElementById("new-password") as HTMLInputElement).value;
+    const alias = (document.getElementById("new-alias") as HTMLInputElement).value;
+
+    fetch('/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ login: username, password, alias })
+    })
+    .then(res => res.json())
+    .then(data => console.log("Account created:", data))
+    .catch(err => console.error(err));
+  });
+});

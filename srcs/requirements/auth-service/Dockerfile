@@ -1,5 +1,6 @@
-FROM node:18-alpine
-RUN apk add --no-cache bash
+FROM node:18-slim
+RUN apt-get install -y bash
+RUN	apt-get update && apt-get install -y sqlite3
 WORKDIR /app
 COPY package*.json ./
 RUN npm install --omit=dev \
