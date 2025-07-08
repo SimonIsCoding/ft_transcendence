@@ -27,4 +27,8 @@ export class VirtualCanvas {
     // For collision detection in virtual space
     get currentVirtualWidth(): number { return this.baseWidth; }
     get currentVirtualHeight(): number { return this.baseHeight; }
+
+	getPhysicalDimensions(): { width: number, height: number } {
+    	return { width: this.physicalWidth, height: this.physicalHeight };
+	}
 }
