@@ -2,20 +2,14 @@ import { FastifyInstance } from 'fastify';
 import db from './database';
 
 async function loginRoute(fastify: FastifyInstance) {
+	// to log in
 	fastify.post('/login', async (request, reply) => {
     const { login, password } = request.body as { login: string; password: string };
 
-    const users = [
-      { login: 'simon', password: '1234' },
-      { login: 'alice', password: 'abcd' }
-    ];
-
-    const user = users.find(u => u.login === login && u.password === password);
-
-    if (user) {
-		reply.send({success: true});
-      return reply.send({ message: 'Login succeed', login: user.login});
-    }
+	const stmt = db.prepare("SELECT * FROM users WHERE login = ? AND password = ?");
+	const user = stmt.get(login, password) as { login: string; password: string; alias: string } | undefined;
+    if (user)
+		return reply.send({ success: true, message: 'Login succeed', login: user.login });
     return reply.status(401).send({ error: 'incorrect Id', success: false});
   });
 

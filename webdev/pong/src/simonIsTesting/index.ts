@@ -22,7 +22,8 @@ const registerBtn = document.getElementById("registerBtn");
 
 registerBtn?.addEventListener("click", () => {
   const container = document.getElementById("register-container");
-  if (container) return; // Empêche de recréer plusieurs fois
+  if (container)
+	return; // avoid to create several times the same account
 
   const form = document.createElement("div");
   form.id = "register-container";
