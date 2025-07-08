@@ -16,7 +16,7 @@ export const HomeView = {
 
  render(): string {
   return `
-    <div class="flex flex-col h-screen bg-[#fbd11b] text-black">
+    <div class="flex flex-col min-h-screen bg-[#fbd11b] text-black">
 
       <!-- Header with Pong Logo -->
       <header class="flex justify-center items-center h-24 bg-[#fbd11b]">
@@ -24,7 +24,7 @@ export const HomeView = {
       </header>
 
       <!-- Game Canvas Area -->
-      <main class="flex-1 flex items-center justify-center bg-[#fbd11b] overflow-hidden">
+	<main class="flex-1 flex items-center justify-center bg-[#fbd11b] overflow-y-auto min-h-[450px]">
         ${GameView.renderGameCanvas()}
       </main>
 

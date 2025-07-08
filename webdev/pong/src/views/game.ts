@@ -99,8 +99,8 @@ class Game {
 
   private resetRound() {
     this.ball.reset();
-    this.leftPaddle.reset();
-    this.rightPaddle.reset();
+    // this.leftPaddle.reset();
+    // this.rightPaddle.reset();
   }
 
   // All drawing methods:
@@ -120,7 +120,7 @@ class Game {
 
   private drawCenterLine() {
     this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
-    this.ctx.lineWidth = this.virtualCanvas.toPhysicalSize(2);
+    this.ctx.lineWidth = this.virtualCanvas.toPhysicalSize(4);
     this.ctx.setLineDash([
       this.virtualCanvas.toPhysicalSize(20),
       this.virtualCanvas.toPhysicalSize(15)
@@ -172,7 +172,7 @@ class Game {
 
   private drawScore() {
     const fontSize = this.virtualCanvas.toPhysicalSize(48);
-    this.ctx.font = `${fontSize}px 'Press Start 2P', monospace`;
+    this.ctx.font = `${fontSize}px 'DSEG7ClassicMini', monospace`;
     this.ctx.textAlign = 'center';
     this.ctx.fillStyle = 'white';
     
@@ -203,15 +203,14 @@ class Game {
   }
 
   render(): string {
-    return `
-    <div class="flex items-center justify-center bg-[#fbd11b] p-2 w-full h-full overflow-auto">
-      <canvas 
-        id="game-canvas" 
-        class="border-4 border-white bg-black 
-               min-w-[600px] min-h-[450px] 
-               max-w-[1024px] max-h-[768px] 
-               w-full h-full object-contain">
-      </canvas>
+  return `
+    <div class="flex items-center justify-center bg-[#fbd11b] p-2 w-full">
+      <div class="aspect-[4/3] w-full max-w-[1024px] min-w-[600px] bg-black border-4 border-white">
+        <canvas 
+          id="game-canvas" 
+          class="w-full h-full"
+        ></canvas>
+      </div>
     </div>
     `;
   }
