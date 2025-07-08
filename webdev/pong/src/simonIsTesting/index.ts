@@ -23,7 +23,7 @@ const registerBtn = document.getElementById("registerBtn");
 registerBtn?.addEventListener("click", () => {
   const container = document.getElementById("register-container");
   if (container)
-	return; // avoid to create several times the same account
+	return; // avoid to create the container several times
 
   const form = document.createElement("div");
   form.id = "register-container";
@@ -39,6 +39,8 @@ registerBtn?.addEventListener("click", () => {
     const username = (document.getElementById("new-username") as HTMLInputElement).value;
     const password = (document.getElementById("new-password") as HTMLInputElement).value;
     const alias = (document.getElementById("new-alias") as HTMLInputElement).value;
+
+	console.log("We are in ft_transcendence/webdev/pong/src/simonIsTesting/index.ts & PASSWORD=", password);
 
     fetch('/api/auth/register', {
       method: 'POST',
