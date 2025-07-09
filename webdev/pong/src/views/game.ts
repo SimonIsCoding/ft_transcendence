@@ -1,6 +1,7 @@
 import { VirtualCanvas } from '../models/VirtualCanvas';
 import { Ball } from '../models/Ball';
 import { Paddle } from '../models/Paddle';
+import { GameSounds } from '../models/GameSounds';
 import { GAME_CONFIG } from '../config';
 
 class Game {
@@ -20,6 +21,7 @@ class Game {
     this.canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
     this.ctx = this.canvas.getContext('2d')!;
     this.resizeCanvas();
+	GameSounds.init();
     window.addEventListener('resize', () => this.resizeCanvas());
     this.startLoop();
   }
@@ -54,7 +56,7 @@ class Game {
     this.ball.move();
 
     if (this.ball.checkWallCollision()) {
-      // Play sound if needed
+      	GameSounds.play("wall");
     }
 
     this.checkPaddleCollision(this.leftPaddle);
@@ -76,6 +78,7 @@ class Game {
 
     if (zone > 0) {
       const angle = paddle.getDeflectionAngle(zone);
+	  GameSounds.play("paddle");
       this.ball.handlePaddleCollision(angle, paddle === this.rightPaddle);
       this.showCollisionZones = true;
       setTimeout(() => this.showCollisionZones = false, 100);
@@ -98,6 +101,7 @@ class Game {
   }
 
   private resetRound() {
+	GameSounds.play("score");
     this.ball.reset();
     // this.leftPaddle.reset();
     // this.rightPaddle.reset();
@@ -177,13 +181,13 @@ class Game {
     this.ctx.fillStyle = 'white';
     
     this.ctx.fillText(
-      this.scorePlayer1.toString(),
+      this.scorePlayer1.toString().padStart(2, '0'),
       this.virtualCanvas.toPhysicalX(GAME_CONFIG.BASE_WIDTH / 4),
       this.virtualCanvas.toPhysicalY(60)
     );
     
     this.ctx.fillText(
-      this.scorePlayer2.toString(),
+      this.scorePlayer2.toString().padStart(2, '0'),
       this.virtualCanvas.toPhysicalX((GAME_CONFIG.BASE_WIDTH * 3) / 4),
       this.virtualCanvas.toPhysicalY(60)
     );
