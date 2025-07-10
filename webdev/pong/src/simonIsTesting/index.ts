@@ -9,10 +9,16 @@ submitBtn.addEventListener("click", () => {
 	  headers: { 'Content-Type': 'application/json' },
 	  body: JSON.stringify({ login: login, password: password }),
 	})
-	  .then(res => res.json())
-  	  .then(data => {
-    document.getElementById("welcome-div")!.style.display = data.success ? "block" : "none";
-  });
+	.then(res => res.json())
+	.then(data =>
+	{
+		localStorage.setItem('login', login);
+		const username = localStorage.getItem('login');
+		if (username)
+			document.getElementById('title')!.textContent = `Hi ${username}`;
+		document.getElementById("welcome-div")!.style.display = data.success ? "block" : "none";
+		document.getElementById("welcome-div")!.textContent = `Welcome ${username}, you are now connected :)`;
+	});
 
 	console.log(login, "Password:", password);
 });
@@ -50,3 +56,4 @@ registerBtn?.addEventListener("click", () => {
     .catch(err => console.error(err));
   });
 });
+
