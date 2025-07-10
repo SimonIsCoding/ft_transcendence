@@ -41,7 +41,7 @@ async function registerRoute(fastify: FastifyInstance)
 	console.log("before encryption We are in srcs/requirements/auth-service/src/login.ts and PASSWORD=", password);
 	const encryptedPassword = await hashPassword(password);
 	console.log("after encryption We are in srcs/requirements/auth-service/src/login.ts and PASSWORD=", encryptedPassword);
-
+	
 	try
 	{
 		const stmt = db.prepare("INSERT INTO users (login, password, alias) VALUES (?, ?, ?)");
