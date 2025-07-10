@@ -1,9 +1,10 @@
 import fastify from 'fastify';
-import loginRoute from './src/login';
+import { loginRoute, registerRoute } from './src/login';
 
 const app = fastify();
 
 app.register(loginRoute); // tu enregistres bien la route
+app.register(registerRoute);
 
 app.listen({ port: 3001, host: '0.0.0.0' }, err => {
   if (err) {
