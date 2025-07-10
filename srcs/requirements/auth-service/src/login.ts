@@ -50,7 +50,16 @@ async function registerRoute(fastify: FastifyInstance)
 	}
 	catch (err)
 	{
-		console.error("Database error:", err);
+		// if (err && typeof err === 'object' && 'code' in err)
+		//   console.error('Database error code:', (err as { code: string }).code);
+		// else
+		//   console.error('Unknown error:', err);
+		if (err && typeof err === 'object' && 'code' in err)
+		{
+			const code = (err as any).code;
+			if (code === 'SQLITE_CONSTRAINT_UNIQUE')
+				return reply.status(409).send({ success: false, error: "User already exists" });
+		}
 		return reply.status(500).send({ success: false, error: "Database error" });
 	}
 	});
