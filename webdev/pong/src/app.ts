@@ -1,5 +1,5 @@
 import { Router } from './router.ts';
-import { initLoginAndRegistration } from './services/loginAndRegistration.ts';
+import { initLogin, initRegistration } from './services/loginAndRegistration.ts';
 
 // Initialize on load
 window.addEventListener('load', () => {
@@ -9,9 +9,9 @@ window.addEventListener('load', () => {
   path.includes('login') ? 'login' :
   'home'
 );
-  initLoginAndRegistration();
+  initLogin();
+  initRegistration();
 });
-
 
 // Handle browser back/forward
 window.addEventListener('popstate', () => {
