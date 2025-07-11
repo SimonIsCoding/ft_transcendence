@@ -1,3 +1,4 @@
+//I think this file is useless - check with josegar2
 const API_URL = 'https://localhost:4443/api/auth';
 
 interface User {
