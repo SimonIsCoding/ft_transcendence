@@ -3,6 +3,8 @@ import fetch from 'node-fetch';  // Explicit import
 import fastifyHttpProxy from '@fastify/http-proxy';
 import fs from 'fs';
 import fastifyCors from '@fastify/cors';
+import fastifyStatic from '@fastify/static';
+import path from 'path';
 
 const fastify = Fastify({
   logger: true,
@@ -42,6 +44,12 @@ fastify.get('/api/b', async (request, reply) => {
   const response = await fetch('http://service-b:3002/');
   return response.json();
 });
+
+fastify.register(fastifyStatic, {
+  root: path.join(process.cwd(), 'app/webdev/pong'), // chemin absolu vers ton dossier frontend
+  prefix: '/', // sert les fichiers à la racine
+});
+
 
 // Start server
 fastify.listen({ port: 3000, host: '0.0.0.0' }, (err) => {
