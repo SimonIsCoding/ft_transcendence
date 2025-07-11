@@ -29,6 +29,7 @@ export function initLoginAndRegistration()
 	const registerBtn = document.getElementById("registerBtn");
 
 	registerBtn?.addEventListener("click", () => {
+	document.getElementById("loginConnexion")!.style.display = "none";
 	const container = document.getElementById("register-container");
 	if (container)
 		return; // avoid to create several times the same account
