@@ -16,6 +16,7 @@ class Game {
   private scorePlayer2 = 0;
   private keysPressed: Record<string, boolean> = {};
   private showCollisionZones = false;
+  private hitsCount = 0;
 
   init() {
     this.canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
@@ -77,11 +78,12 @@ class Game {
     );
 
     if (zone > 0) {
-      const angle = paddle.getDeflectionAngle(zone);
-	  GameSounds.play("paddle");
-      this.ball.handlePaddleCollision(angle, paddle === this.rightPaddle);
-      this.showCollisionZones = true;
-      setTimeout(() => this.showCollisionZones = false, 100);
+		const angle = paddle.getDeflectionAngle(zone);
+		GameSounds.play("paddle");
+		this.ball.handlePaddleCollision(angle, paddle === this.rightPaddle);
+		this.showCollisionZones = true;
+		setTimeout(() => this.showCollisionZones = false, 100);
+		this.hitsCount++;
     }
   }
 
@@ -94,9 +96,10 @@ class Game {
       this.resetRound();
     }
 
-    if (this.scorePlayer1 >= 21 || this.scorePlayer2 >= 21) {
+    if (this.scorePlayer1 >= 11 || this.scorePlayer2 >= 11) {
       this.scorePlayer1 = 0;
       this.scorePlayer2 = 0;
+	  this.hitsCount = 0;
     }
   }
 
@@ -181,13 +184,13 @@ class Game {
     this.ctx.fillStyle = 'white';
     
     this.ctx.fillText(
-      this.scorePlayer1.toString().padStart(2, '0'),
+      this.scorePlayer1.toString().padStart(2, ' '),
       this.virtualCanvas.toPhysicalX(GAME_CONFIG.BASE_WIDTH / 4),
       this.virtualCanvas.toPhysicalY(60)
     );
     
     this.ctx.fillText(
-      this.scorePlayer2.toString().padStart(2, '0'),
+      this.scorePlayer2.toString().padStart(2, ' '),
       this.virtualCanvas.toPhysicalX((GAME_CONFIG.BASE_WIDTH * 3) / 4),
       this.virtualCanvas.toPhysicalY(60)
     );
@@ -207,15 +210,25 @@ class Game {
   }
 
   render(): string {
-  return `
-    <div class="flex items-center justify-center bg-[#fbd11b] p-2 w-full">
-      <div class="aspect-[4/3] w-full max-w-[1024px] min-w-[600px] bg-black border-4 border-white">
-        <canvas 
-          id="game-canvas" 
-          class="w-full h-full"
-        ></canvas>
+    return `
+      <div class="flex items-center justify-center w-full bg-[#fbd11b] p-4">
+        <div class="relative aspect-[4/3] w-full max-w-[1024px] min-w-[600px] flex items-center justify-center">
+  
+          <!-- Bezel Layer -->
+          <div class="absolute inset-0 rounded-[36px] bg-black/80 shadow-[inset_0_0_40px_#000000cc] z-0"
+               style="clip-path: polygon(5% 0%, 95% 0%, 100% 100%, 0% 100%);">
+          </div>
+  
+          <!-- CRT Screen Layer -->
+          <div class="relative z-10 w-[95%] h-[92%] rounded-[24px] bg-[#111] shadow-[inset_0_0_30px_#444] flex items-center justify-center">
+            <canvas 
+              id="game-canvas"
+              class="w-full h-full rounded-[20px]"
+            ></canvas>
+          </div>
+  
+        </div>
       </div>
-    </div>
     `;
   }
 }
