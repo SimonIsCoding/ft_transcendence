@@ -28,15 +28,6 @@ services:
     depends_on:
       - auth-service
       - service-b
-    
-  sqlite-web:
-    build: requirements/sqlite-web
-    container_name: sqlite-web
-    ports:
-      - "9090:9090"
-    depends_on:
-      - auth-service
-    restart: always
 
   auth-service:
     container_name: auth-service

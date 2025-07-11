@@ -4,8 +4,7 @@ FROM debian:bullseye
 RUN apt-get update && apt-get -y install \
 	nginx \
 	gosu \
-	openssl \
-	bash
+	openssl
 
 COPY ./tools/nginxentry.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/nginxentry.sh
