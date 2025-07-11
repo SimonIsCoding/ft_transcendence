@@ -14,7 +14,7 @@ submitBtn.addEventListener("click", () => {
 	{
 		localStorage.setItem('login', login);
 		const username = localStorage.getItem('login');
-		if (username)
+		if (username && data.success == true)
 			document.getElementById('title')!.textContent = `Hi ${username}`;
 		document.getElementById("welcome-div")!.style.display = data.success ? "block" : "none";
 		document.getElementById("welcome-div")!.textContent = `Welcome ${username}, you are now connected :)`;
