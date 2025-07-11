@@ -215,19 +215,19 @@ class Game {
         <div class="relative aspect-[4/3] w-full max-w-[1024px] min-w-[600px] flex items-center justify-center">
   
           <!-- Bezel Layer -->
-          <div class="absolute inset-0 rounded-[36px] bg-black/80 shadow-[inset_0_0_40px_#000000cc] z-0"
-               style="clip-path: polygon(5% 0%, 95% 0%, 100% 100%, 0% 100%);">
+          <div class="absolute inset-0 rounded-[48px] bg-black/80 shadow-[inset_0_0_40px_#000000cc] z-0"
+               style="clip-path: polygon(0% 0%, 100% 0%, 95% 100%, 5% 100%);">
           </div>
   
           <!-- CRT Screen Layer -->
-          <div class="relative z-10 w-[95%] h-[92%] rounded-[24px] bg-[#111] shadow-[inset_0_0_30px_#444] flex items-center justify-center">
-            <canvas 
-              id="game-canvas"
-              class="w-full h-full rounded-[20px]"
-            ></canvas>
-          </div>
-  
-        </div>
+	 <div class="relative z-10 w-[90%] h-[85%] rounded-[24px] bg-[#111] shadow-[inset_0_0_30px_#444] flex justify-center">
+  	   <div class="w-full h-[90%] rounded-[20px] transform translate-y-6">
+    		<canvas 
+      			id="game-canvas"
+      			class="w-full h-full rounded-[20px]"
+    		></canvas>
+  	   </div>
+	 </div> 
       </div>
     `;
   }
