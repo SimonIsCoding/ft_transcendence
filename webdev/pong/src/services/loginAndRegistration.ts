@@ -4,6 +4,7 @@ export function initLogin()
 	const submitBtn = document.getElementById("login-btn") as HTMLButtonElement;
 
 	submitBtn.addEventListener("click", () => {
+		// data.success = false;
 		const login = (document.getElementById("login") as HTMLInputElement).value;
 		const password = (document.getElementById("password") as HTMLInputElement).value;
 
@@ -18,9 +19,21 @@ export function initLogin()
 			localStorage.setItem('login', login);
 			const username = localStorage.getItem('login');
 			if (username && data.success == true)
+			{
 				document.getElementById('title')!.textContent = `Hi ${username}`;
-			document.getElementById("welcome-div")!.style.display = data.success ? "block" : "none";
-			document.getElementById("welcome-div")!.textContent = `Welcome ${username}, you are now connected :)`;
+				document.getElementById("welcome-div")!.style.display = "block";
+				document.getElementById("welcome-div")!.textContent = `Welcome ${username}, you are now connected :)`;
+			}
+			else
+			{
+				document.getElementById("welcome-div")!.style.display = "block";
+				document.getElementById("welcome-div")!.textContent = `Sorry. Your credentials doesn't match.`;
+				// const forgotPassword = document.createElement("button");
+				// forgotPassword.textContent = "Forgot Password ?";
+				// forgotPassword.className = "cursor-pointer text-blue-500 underline";
+				// document.body.appendChild(forgotPassword);
+				// return ;
+			}
 		});
 
 		console.log(login, "Password:", password);
