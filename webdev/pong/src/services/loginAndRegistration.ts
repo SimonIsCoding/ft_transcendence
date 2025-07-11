@@ -1,4 +1,4 @@
-export function initSimonFeatures()
+export function initLoginAndRegistration()
 {
 	const submitBtn = document.getElementById("login-btn") as HTMLButtonElement;
 
@@ -36,10 +36,10 @@ export function initSimonFeatures()
 	const form = document.createElement("div");
 	form.id = "register-container";
 	form.innerHTML = `
-		<input id="new-username" placeholder="Username" /><br/>
-		<input id="new-password" placeholder="Password" type="password" /><br/>
-		<input id="new-alias" placeholder="Alias" /><br/>
-		<button id="create-account">Create Account</button>
+		<input id="new-username" placeholder="Username" class="mb-4 px-4 py-2 border rounded w-64"/><br/>
+		<input id="new-password" placeholder="Password" type="password" class="mb-4 px-4 py-2 border rounded w-64"/><br/>
+		<input id="new-alias" placeholder="Alias" class="mb-4 px-4 py-2 border rounded w-64"/><br/>
+		<button id="create-account" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Create Account</button>
 	`;
 	document.body.appendChild(form);
 

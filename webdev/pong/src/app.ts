@@ -1,5 +1,5 @@
 import { Router } from './router.ts';
-import { initSimonFeatures } from './services/simonFeatures.ts';
+import { initLoginAndRegistration } from './services/loginAndRegistration.ts';
 
 // Initialize on load
 window.addEventListener('load', () => {
@@ -9,7 +9,7 @@ window.addEventListener('load', () => {
   path.includes('login') ? 'login' :
   'home'
 );
-  initSimonFeatures();
+  initLoginAndRegistration();
 });
 
 
