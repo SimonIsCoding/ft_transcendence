@@ -1,8 +1,8 @@
 {
-  "type": "commonjs",
-  "main": "server.ts",
+  "type": "module",
+  "main": "server.js",
   "scripts": {
-    "dev": "ts-node server.ts"
+    "dev": "node server.js"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
