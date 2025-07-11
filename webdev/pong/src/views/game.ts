@@ -137,6 +137,13 @@ class Game {
     this.ctx.lineTo(this.canvas.width / 2, this.canvas.height);
     this.ctx.stroke();
     this.ctx.setLineDash([]);
+
+//console.log({
+//    physicalCenter: this.canvas.width / 2,
+//    virtualCenter: this.virtualCanvas.toPhysicalX(this.virtualCanvas.baseWidth / 2),
+//    scaleFactor: this.virtualCanvas.scaleFactor
+//});
+
   }
 
   private drawPaddle(paddle: Paddle) {
@@ -218,15 +225,13 @@ class Game {
           <div class="absolute inset-0 rounded-[48px] bg-black/80 shadow-[inset_0_0_40px_#000000cc] z-0"
                style="clip-path: polygon(0% 0%, 100% 0%, 95% 100%, 5% 100%);">
           </div>
-  
+ 
           <!-- CRT Screen Layer -->
-	 <div class="relative z-10 w-[90%] h-[85%] rounded-[24px] bg-[#111] shadow-[inset_0_0_30px_#444] flex justify-center">
-  	   <div class="w-full h-[90%] rounded-[20px] transform translate-y-6">
+          <div class="relative z-10 w-[90%] aspect-[4/3] rounded-[24px] bg-[#111] shadow-[inset_0_0_30px_#444] flex justify-center items-center">
     		<canvas 
       			id="game-canvas"
-      			class="w-full h-full rounded-[20px]"
+      			class="w-full h-full block rounded-[20px]"
     		></canvas>
-  	   </div>
 	 </div> 
       </div>
     `;
