@@ -20,7 +20,6 @@ async function loginRoute(fastify)
 	const stmt = db.prepare("SELECT * FROM users WHERE login = ?");
 	const user = stmt.get(login);
 	const match = user ? await bcrypt.compare(password, user.password) : false;
-	console.log("match = ", match);
 	if(user && match)
 		return reply.send({ success: true, message: 'Login succeed', login: user.login });
 	return reply.status(401).send({ error: 'incorrect Id', success: false});
@@ -36,11 +35,7 @@ async function registerRoute(fastify)
 	if (!login || !password || !alias) {
 	  return reply.status(400).send({ success: false, error: "All fields required" });
 	}
-
-	console.log("before encryption We are in srcs/requirements/auth-service/src/login.ts and PASSWORD=", password);
 	const encryptedPassword = await hashPassword(password);
-	console.log("after encryption We are in srcs/requirements/auth-service/src/login.ts and PASSWORD=", encryptedPassword);
-	
 	try
 	{
 		const stmt = db.prepare("INSERT INTO users (login, password, alias) VALUES (?, ?, ?)");
