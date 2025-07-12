@@ -1,11 +1,12 @@
 import { HomeView } from './views/home';
 import { DashboardView } from './views/dashboard.ts';
 import { LoginView } from './views/login.ts';
+import { infoView } from './views/info.ts';
 
 export class Router {
   private static app = document.getElementById('app');
 
-  public static navigate(page: 'home' | 'dashboard' | 'login'): void {
+  public static navigate(page: 'home' | 'dashboard' | 'login' | 'info'): void {
     if (!this.app) {
       console.error('App container not found');
       return;
@@ -38,6 +39,11 @@ export class Router {
         this.app.innerHTML = LoginView.render();
         LoginView.init();
         break;
+
+	  case 'info':
+        this.app.innerHTML = infoView.render();
+        infoView.init();
+        break;
     }
 
     // Update browser history
@@ -55,6 +61,7 @@ export class Router {
 	  this.navigate(
 	    path.includes('dashboard') ? 'dashboard' :
 	    path.includes('login') ? 'login' :
+	    path.includes('info') ? 'info' :
 	    'home'
 	  );
 
@@ -66,6 +73,7 @@ export class Router {
 	  this.navigate(
 	  path.includes('dashboard') ? 'dashboard' :
 	  path.includes('login') ? 'login' :
+	  path.includes('info') ? 'info' :
 	  'home'
 	  );
 

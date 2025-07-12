@@ -32,9 +32,8 @@ async function registerRoute(fastify)
   fastify.post('/register', async (request, reply) => {
 	const { login, password, alias } = request.body;
   
-	if (!login || !password || !alias) {
+	if (!login || !password || !alias)
 	  return reply.status(400).send({ success: false, error: "All fields required" });
-	}
 	const encryptedPassword = await hashPassword(password);
 	try
 	{
@@ -45,7 +44,7 @@ async function registerRoute(fastify)
 	catch (err)
 	{
 		if (err && typeof err === 'object' && 'code' in err && err.code === 'SQLITE_CONSTRAINT_UNIQUE')
-				return reply.status(409).send({ success: false, error: "User already exists" });
+			return reply.status(409).send({ success: false, error: "User already exists" });
 		return reply.status(500).send({ success: false, error: "Database error" });
 	}
 	});

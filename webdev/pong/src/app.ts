@@ -1,5 +1,5 @@
 import { Router } from './router.ts';
-import { initLogin, initRegistration } from './services/loginAndRegistration.ts';
+import { initLogin, initRegistration, modifyInfo } from './services/loginAndRegistration.ts';
 
 // Initialize on load
 window.addEventListener('load', () => {
@@ -7,10 +7,12 @@ window.addEventListener('load', () => {
   Router.navigate(
   path.includes('dashboard') ? 'dashboard' :
   path.includes('login') ? 'login' :
+  path.includes('info') ? 'info' :
   'home'
 );
   initLogin();
   initRegistration();
+  modifyInfo();
 });
 
 // Handle browser back/forward
@@ -19,6 +21,7 @@ window.addEventListener('popstate', () => {
   Router.navigate(
   path.includes('dashboard') ? 'dashboard' :
   path.includes('login') ? 'login' :
+  path.includes('info') ? 'info' :
   'home'
 );
 });
