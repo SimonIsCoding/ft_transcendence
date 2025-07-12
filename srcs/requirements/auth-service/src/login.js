@@ -39,7 +39,7 @@ async function registerRoute(fastify)
 	{
 		const stmt = db.prepare("INSERT INTO users (login, password, alias) VALUES (?, ?, ?)");
 		stmt.run(login, encryptedPassword, alias);
-		return reply.send({ success: true, message: "User registered" });
+		return reply.status(200).send({ success: true, message: "User registered" });
 	}
 	catch (err)
 	{

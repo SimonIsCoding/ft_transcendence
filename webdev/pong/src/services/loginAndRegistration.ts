@@ -75,7 +75,17 @@ export function initRegistration()
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ login: username, password, alias })
 		})
-		.then(res => res.json())
+		.then(res => 
+		{
+			if (res.status === 200)
+			{
+				const registrationCreated = document.createElement("p");
+				registrationCreated.id = "registration-created";
+				registrationCreated.innerHTML = `Wonderful. You have created your account. You can connect to your account now.`;
+				document.getElementById("registrationBlock")!.appendChild(registrationCreated);
+			}
+			return res.json();
+		})
 		.then(data => console.log("Account created:", data))
 		.catch(err => console.error(err));
 	});
@@ -88,13 +98,15 @@ export function modifyInfo()
 
 	btn.addEventListener("click", () => {
 		const alias = (document.getElementById("btn") as HTMLInputElement).value;
+		const login = (document.getElementById("btn") as HTMLInputElement).value;//change btn by login
 
 		fetch('/api/auth/info', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ alias : alias }),
+		body: JSON.stringify({ login : login, alias : alias }),
 		})
 		.then(res => res.json())
 		.then(data => console.log("You are in info page & data:", data))
 	});
 }
+// Je veux créer une page web avec des utilisateurs connectés. Comment bien architecturer les identifiants, le fait que lorsque l'utilisateur est connecté on garde son token d'authentification et 
