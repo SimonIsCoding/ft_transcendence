@@ -4,7 +4,6 @@ export function initLogin()
 	const submitBtn = document.getElementById("login-btn") as HTMLButtonElement;
 
 	submitBtn.addEventListener("click", () => {
-		// data.success = false;
 		const login = (document.getElementById("login") as HTMLInputElement).value;
 		const password = (document.getElementById("password") as HTMLInputElement).value;
 
@@ -26,17 +25,12 @@ export function initLogin()
 			}
 			else
 			{
+				document.getElementById('title')!.textContent = `Hi`;
 				document.getElementById("welcome-div")!.style.display = "block";
 				document.getElementById("welcome-div")!.textContent = `Sorry. Your credentials doesn't match.`;
-				// const forgotPassword = document.createElement("button");
-				// forgotPassword.textContent = "Forgot Password ?";
-				// forgotPassword.className = "cursor-pointer text-blue-500 underline";
-				// document.body.appendChild(forgotPassword);
-				// return ;
 			}
 		});
-
-		console.log(login, "Password:", password);
+		// console.log(login, "Password:", password);
 	});
 }
 

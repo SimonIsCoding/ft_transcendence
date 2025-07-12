@@ -16,7 +16,7 @@ export class LoginView {
   }
 
 public static init(): void {
-  console.log("in webdev/pong/src/views/login.ts: Login page initialized");
+//   console.log("in webdev/pong/src/views/login.ts: Login page initialized");
   initLogin();
   initRegistration();
 }
