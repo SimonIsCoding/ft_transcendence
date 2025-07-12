@@ -81,3 +81,20 @@ export function initRegistration()
 	});
 	});
 }
+
+export function modifyInfo()
+{
+	const btn = document.getElementById("btn") as HTMLButtonElement;
+
+	btn.addEventListener("click", () => {
+		const alias = (document.getElementById("btn") as HTMLInputElement).value;
+
+		fetch('/api/auth/info', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ alias : alias }),
+		})
+		.then(res => res.json())
+		.then(data => console.log("You are in info page & data:", data))
+	});
+}
