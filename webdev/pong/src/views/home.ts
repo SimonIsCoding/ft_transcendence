@@ -68,15 +68,6 @@ export const HomeView = {
       document.getElementById('auth-container')!.innerHTML = this.renderAuth();
     });
 
-	// initInfo().then(token => {
-	// console.log("Received token in HomeView - token:", token);
-	//   document.addEventListener("DOMContentLoaded", () => {loginLogo(token);});
-	// });
-	
 	isConnected();
-// 	initInfo()
-//   .then(isAuthenticated => {
-//     loginLogo(isAuthenticated);
-//   });
-}
+  }
 };
