@@ -3,6 +3,31 @@ export function getToken()
   return localStorage.getItem("token");
 }
 
+export function isConnected() {
+  fetch('/api/private/info', {
+    method: 'GET',
+    credentials: 'include',
+  })
+    .then(res => {
+      if (!res.ok) throw new Error("Unauthorized");
+      return res.json();
+    })
+    .then(data => {
+      const loginIcon = document.getElementById("login-icon");
+      const loggedIcon = document.getElementById("logged-icon");
+      console.log("User info:", data);
+      loginIcon?.classList.add("hidden");
+      loggedIcon?.classList.remove("hidden");
+    })
+    .catch(() => {
+      // Pas connecté
+      const loginIcon = document.getElementById("login-icon");
+      const loggedIcon = document.getElementById("logged-icon");
+      loggedIcon?.classList.add("hidden");
+      loginIcon?.classList.remove("hidden");
+    });
+}
+
 // --- form to log in
 export function initLogin()
 {
@@ -107,16 +132,15 @@ export function initRegistration()
 	});
 }
 
-export function loginLogo()
+export function loginLogo(isAuthenticated: boolean)
 {
-	const loginIcon = document.getElementById("login-icon");
-	const loggedIcon = document.getElementById("logged-icon");
-	const token = document.cookie.includes('token=');
-	console.log("call for loginlogo done");
-	if (!token)
-		loginIcon!.classList.remove("hidden");
-	else
-		loggedIcon!.classList.remove("hidden");
+  const loginIcon = document.getElementById("login-icon");
+  const loggedIcon = document.getElementById("logged-icon");
+
+  if (!isAuthenticated)
+    loginIcon?.classList.remove("hidden");
+  else
+    loggedIcon?.classList.remove("hidden");
 }
 
 export function modifyInfo()
@@ -133,25 +157,30 @@ export function modifyInfo()
 			console.log("You are in info page & data:", data);
 			// localStorage.setItem("token", data.token);
 			console.log("in modifyInfo() JWToken received:", getToken());
+			// const token = getToken();
+			// if (token)
+
 		})
 }
 
-export function initInfo()
+export async function initInfo(): Promise<boolean>
 {
-	fetch('/api/private/info', {
-	  method: 'GET',
-	  credentials: 'include' // include cookies
-	})
-	.then(res => {
-	  if (!res.ok)
-		throw new Error("Not authorized");
-	  return res.json();
-	})
-	.then(data =>
+	try
 	{
-		console.log("User info:", data);
-		// const token = data.token;
-		console.log("in initInfo() JWToken received:", getToken());
-	});
-
+		const res = await fetch('/api/auth/info',
+		{
+	    	method: 'GET',
+	    	credentials: 'include'
+		});	
+	  	if (!res.ok)
+			throw new Error('Not authenticated');	
+	  	const data = await res.json();
+	  	console.log("User info received:", data);
+	  	return true; //  connected
+	}
+	catch (err)
+	{
+		console.warn("User not authenticated:", err);
+		return false; // not connected
+	}
 }
