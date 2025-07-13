@@ -4,6 +4,8 @@ import { SettingsView } from './settings';
 import { authService } from '../services/authService';
 import { gameController } from '../controllers/gameController';
 import { authController } from '../controllers/authController';
+import { loginLogo } from '../services/loginAndRegistration';
+//where the code start on the main page
 
 interface User {
   email: string;
@@ -21,6 +23,12 @@ export const HomeView = {
       <!-- Header with Pong Logo -->
       <header class="flex justify-center items-center h-24 bg-[#fbd11b]">
         <img src="/pong-logo.png" alt="PONG Logo" class="h-16">
+		<a href="/login" id="login-icon" class="hidden absolute right-6 top-6">
+  			<img src="/login-icon.png" alt="Login" class="h-8 w-8" />
+		</a>
+		<a href="/logged" id="logged-icon" class="hidden absolute right-6 top-6">
+  			<img src="/logged-icon.png" alt="Logged" class="h-8 w-8" />
+		</a>
       </header>
 
       <!-- Game Canvas Area -->
@@ -59,5 +67,6 @@ export const HomeView = {
       this.currentUser = authService.getCurrentUser();
       document.getElementById('auth-container')!.innerHTML = this.renderAuth();
     });
+	loginLogo();
   }
 };
