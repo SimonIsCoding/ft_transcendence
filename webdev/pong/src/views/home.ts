@@ -4,7 +4,7 @@ import { SettingsView } from './settings';
 import { authService } from '../services/authService';
 import { gameController } from '../controllers/gameController';
 import { authController } from '../controllers/authController';
-import { loginLogo } from '../services/loginAndRegistration';
+import { isConnected } from '../services/loginAndRegistration';
 //where the code start on the main page
 
 interface User {
@@ -67,6 +67,16 @@ export const HomeView = {
       this.currentUser = authService.getCurrentUser();
       document.getElementById('auth-container')!.innerHTML = this.renderAuth();
     });
-	loginLogo();
-  }
+
+	// initInfo().then(token => {
+	// console.log("Received token in HomeView - token:", token);
+	//   document.addEventListener("DOMContentLoaded", () => {loginLogo(token);});
+	// });
+	
+	isConnected();
+// 	initInfo()
+//   .then(isAuthenticated => {
+//     loginLogo(isAuthenticated);
+//   });
+}
 };

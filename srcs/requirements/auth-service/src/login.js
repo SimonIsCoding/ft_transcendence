@@ -23,7 +23,12 @@ async function loginRoute(fastify)
 	if(user && match)
 	{
 		const token = fastify.jwt.sign({ login: user.login, alias: user.alias });
-		reply.setCookie('token', token, { httpOnly: true })
+		reply.setCookie('token', token, {
+			httpOnly: true,
+			secure: true,
+			sameSite: 'strict',
+			path: '/'
+			});
 		return reply.send({ success: true, token, message: 'Login succeed', login: user.login });
 	}
 	return reply.status(401).send({ error: 'incorrect Id', success: false});
@@ -54,4 +59,4 @@ async function registerRoute(fastify)
 	});
 }
 
-export { loginRoute, registerRoute, };
+export { loginRoute, registerRoute };

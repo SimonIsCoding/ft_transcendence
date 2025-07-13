@@ -32,6 +32,7 @@ public async login(email: string, password: string, alias?: string): Promise<Use
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
+	  credentials: 'include'
     });
 
     const result = await response.json();
@@ -69,6 +70,7 @@ public async register(email: string, password: string, alias?: string): Promise<
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password, ...(alias && { alias }) }), // Include alias if provided
+	  credentials: 'include'
     });
 
     const result = await response.json();

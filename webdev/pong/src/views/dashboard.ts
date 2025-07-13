@@ -8,7 +8,7 @@ export default class DashboardView {
   }
 
   private initializeUser(): void {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('token');
     const userEmail = localStorage.getItem('userEmail');
     if (token && userEmail) {
       // In a real app, you would verify the token and fetch user data
