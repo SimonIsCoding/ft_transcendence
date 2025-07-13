@@ -21,7 +21,11 @@ async function loginRoute(fastify)
 	const user = stmt.get(login);
 	const match = user ? await bcrypt.compare(password, user.password) : false;
 	if(user && match)
-		return reply.send({ success: true, message: 'Login succeed', login: user.login });
+	{
+		const token = fastify.jwt.sign({ login: user.login, alias: user.alias });
+		reply.setCookie('token', token, { httpOnly: true })
+		return reply.send({ success: true, token, message: 'Login succeed', login: user.login });
+	}
 	return reply.status(401).send({ error: 'incorrect Id', success: false});
 	});
 }
@@ -50,4 +54,4 @@ async function registerRoute(fastify)
 	});
 }
 
-export { loginRoute, registerRoute };
+export { loginRoute, registerRoute, };

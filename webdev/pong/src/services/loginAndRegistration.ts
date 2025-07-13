@@ -1,3 +1,8 @@
+export function getToken()
+{
+  return localStorage.getItem("token");
+}
+
 // --- form to log in
 export function initLogin()
 {
@@ -11,6 +16,7 @@ export function initLogin()
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ login: login, password: password }),
+		credentials: 'include' 
 		})
 		.then(res => res.json())
 		.then(data =>
@@ -22,6 +28,8 @@ export function initLogin()
 				document.getElementById('title')!.textContent = `Hi ${username}`;
 				document.getElementById("welcome-div")!.style.display = "block";
 				document.getElementById("welcome-div")!.textContent = `Welcome ${username}, you are now connected :)`;
+				localStorage.setItem("token", data.token);
+				console.log("JWToken received:", data.token);
 			}
 			else
 			{
@@ -30,7 +38,8 @@ export function initLogin()
 				document.getElementById("welcome-div")!.textContent = `Sorry. Your credentials doesn't match.`;
 			}
 		});
-		// console.log(login, "Password:", password);
+		console.log("login: ", login, "Password:", password);
+
 	});
 }
 
@@ -73,7 +82,8 @@ export function initRegistration()
 		fetch('/api/auth/register', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ login: username, password, alias })
+		body: JSON.stringify({ login: username, password, alias }),
+		credentials: 'include'
 		})
 		.then(res => 
 		{
@@ -82,31 +92,66 @@ export function initRegistration()
 				const registrationCreated = document.createElement("p");
 				registrationCreated.id = "registration-created";
 				registrationCreated.innerHTML = `Wonderful. You have created your account. You can connect to your account now.`;
-				document.getElementById("registrationBlock")!.appendChild(registrationCreated);
+				document.getElementById("registrationBlock")?.appendChild(registrationCreated);
 			}
 			return res.json();
 		})
-		.then(data => console.log("Account created:", data))
+		.then(data =>
+		{
+		console.log("Account created:", data);
+		const token = data.token;
+		console.log("JWToken received:", token);
+		})
 		.catch(err => console.error(err));
 	});
 	});
 }
 
+export function loginLogo()
+{
+	const loginIcon = document.getElementById("login-icon");
+	const loggedIcon = document.getElementById("logged-icon");
+	const token = document.cookie.includes('token=');
+	console.log("call for loginlogo done");
+	if (!token)
+		loginIcon!.classList.remove("hidden");
+	else
+		loggedIcon!.classList.remove("hidden");
+}
+
 export function modifyInfo()
 {
-	const btn = document.getElementById("btn") as HTMLButtonElement;
-
-	btn.addEventListener("click", () => {
-		const alias = (document.getElementById("btn") as HTMLInputElement).value;
-		const login = (document.getElementById("btn") as HTMLInputElement).value;//change btn by login
-
 		fetch('/api/auth/info', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ login : login, alias : alias }),
+		body: JSON.stringify({}),
+		credentials: 'include'
 		})
 		.then(res => res.json())
-		.then(data => console.log("You are in info page & data:", data))
-	});
+		.then(data =>
+		{
+			console.log("You are in info page & data:", data);
+			// localStorage.setItem("token", data.token);
+			console.log("in modifyInfo() JWToken received:", getToken());
+		})
 }
-// Je veux créer une page web avec des utilisateurs connectés. Comment bien architecturer les identifiants, le fait que lorsque l'utilisateur est connecté on garde son token d'authentification et 
+
+export function initInfo()
+{
+	fetch('/api/private/info', {
+	  method: 'GET',
+	  credentials: 'include' // include cookies
+	})
+	.then(res => {
+	  if (!res.ok)
+		throw new Error("Not authorized");
+	  return res.json();
+	})
+	.then(data =>
+	{
+		console.log("User info:", data);
+		// const token = data.token;
+		console.log("in initInfo() JWToken received:", getToken());
+	});
+
+}
