@@ -12,10 +12,11 @@ async function hashPassword(password)
 async function loginRoute(fastify)
 {
 	// to log in
-	fastify.post('/login', async (request, reply) => {
-    const { login, password } = request.body;
 	
-	if (!login || !password)
+	fastify.post('/login', async (request, reply) => {
+		const { login, password } = request.body;
+		
+		if (!login || !password)
 	  return reply.status(400).send({ error: "Missing login or password" });
 	
 	const stmt = db.prepare("SELECT * FROM users WHERE login = ?");
@@ -24,45 +25,55 @@ async function loginRoute(fastify)
 	
 	const SECRET = 'super-secret-key';
 	if(user && match)
-	{
-		const token = jwt.sign({ userId: user.id }, SECRET, { expiresIn: '1h' });
-		reply
-		  .setCookie('token', token, {
-		    httpOnly: true, //ALWAYS PUT TRUE FOR PROD
-		    secure: true,
-		    sameSite: 'strict',
-		    path: '/', // important !
-		  })
-		  .send({ success: true, message: 'Login succeed', login: user.login });
-	}
-	return reply.status(401).send({ error: 'incorrect Id', success: false});
+		{
+			const token = jwt.sign({ userId: user.id }, SECRET, { expiresIn: '1h' });
+			reply
+			.setCookie('token', token, {
+				httpOnly: true, //ALWAYS PUT TRUE FOR PROD
+				secure: true,
+				sameSite: 'strict',
+				path: '/', // important !
+			})
+			.send({ success: true, message: 'Login succeed', login: user.login });
+		}
+		return reply.status(401).send({ error: 'incorrect Id', success: false});
 	});
+
+	
 }
 
 async function registerRoute(fastify)
 {
-  //to create an account
-  fastify.post('/register', async (request, reply) => {
-	const { login, password, alias } = request.body;
+	//to create an account
+	fastify.post('/register', async (request, reply) => {
+		const { login, password, alias } = request.body;
   
-	if (!login || !password || !alias)
-	  return reply.status(400).send({ success: false, error: "All fields required" });
-	const encryptedPassword = await hashPassword(password);
-	try
-	{
-		const stmt = db.prepare("INSERT INTO users (login, password, alias) VALUES (?, ?, ?)");
-		stmt.run(login, encryptedPassword, alias);
-		return reply.status(200).send({ success: true, message: "User registered" });
-	}
-	catch (err)
-	{
-		if (err && typeof err === 'object' && 'code' in err && err.code === 'SQLITE_CONSTRAINT_UNIQUE')
-			return reply.status(409).send({ success: false, error: "User already exists" });
-		console.log("Body reçu:", request.body);
-		console.error("Erreur SQL:", err);
-		return reply.status(500).send({ success: false, error: "Database error" });
-	}
+		if (!login || !password || !alias)
+			return reply.status(400).send({ success: false, error: "All fields required" });
+		const encryptedPassword = await hashPassword(password);
+		try
+		{
+			const stmt = db.prepare("INSERT INTO users (login, password, alias) VALUES (?, ?, ?)");
+			stmt.run(login, encryptedPassword, alias);
+			return reply.status(200).send({ success: true, message: "User registered" });
+		}
+		catch (err)
+		{
+			if (err && typeof err === 'object' && 'code' in err && err.code === 'SQLITE_CONSTRAINT_UNIQUE')
+				return reply.status(409).send({ success: false, error: "User already exists" });
+			console.log("Body reçu:", request.body);
+			console.error("Erreur SQL:", err);
+			return reply.status(500).send({ success: false, error: "Database error" });
+		}
 	});
 }
 
-export { loginRoute, registerRoute };
+async function infoUserRoute(fastify)
+{
+	fastify.get('/api/auth/info', { preHandler: [fastify.auth] }, async (request, reply) => {
+		const user = request.user;
+		return { message: `Welcome ${user.login}`, userId: user.userId, login: user.login, alias: user.alias };
+	});
+}
+
+export { loginRoute, registerRoute, infoUserRoute };
