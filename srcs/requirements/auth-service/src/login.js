@@ -1,5 +1,6 @@
 import db from './database.js';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 async function hashPassword(password)
 {
@@ -20,16 +21,19 @@ async function loginRoute(fastify)
 	const stmt = db.prepare("SELECT * FROM users WHERE login = ?");
 	const user = stmt.get(login);
 	const match = user ? await bcrypt.compare(password, user.password) : false;
+	
+	const SECRET = 'super-secret-key';
 	if(user && match)
 	{
-		const token = fastify.jwt.sign({ login: user.login, alias: user.alias });
-		reply.setCookie('token', token, {
-			httpOnly: true,
-			secure: true,
-			sameSite: 'strict',
-			path: '/'
-			});
-		return reply.send({ success: true, token, message: 'Login succeed', login: user.login });
+		const token = jwt.sign({ userId: user.id }, SECRET, { expiresIn: '1h' });
+		reply
+		  .setCookie('token', token, {
+		    httpOnly: true, //ALWAYS PUT TRUE FOR PROD
+		    secure: true,
+		    sameSite: 'strict',
+		    path: '/', // important !
+		  })
+		  .send({ success: true, message: 'Login succeed', login: user.login });
 	}
 	return reply.status(401).send({ error: 'incorrect Id', success: false});
 	});
@@ -54,6 +58,8 @@ async function registerRoute(fastify)
 	{
 		if (err && typeof err === 'object' && 'code' in err && err.code === 'SQLITE_CONSTRAINT_UNIQUE')
 			return reply.status(409).send({ success: false, error: "User already exists" });
+		console.log("Body reçu:", request.body);
+		console.error("Erreur SQL:", err);
 		return reply.status(500).send({ success: false, error: "Database error" });
 	}
 	});

@@ -45,7 +45,6 @@ export const HomeView = {
     `;
   },
 
-
   renderAuth(): string {
     const user = authService.getCurrentUser(); // Use service instead of direct localStorage
     return user 

@@ -36,7 +36,16 @@ fastify.get('/api', async (request, reply) => {
 fastify.register(fastifyHttpProxy, {
   upstream: 'http://auth-service:3001',
   prefix: '/api/auth',
-  rewritePrefix: '/'
+  rewritePrefix: '/',
+    http2: false,
+  replyOptions: {
+    rewriteRequestHeaders: (originalReq, headers) => {
+      return {
+        ...headers,
+        host: 'auth-service',
+      };
+    },
+  },
 });
 
 // Proxy to Service B
@@ -54,7 +63,6 @@ fastify.register(fastifyStatic, {
   root: path.join(process.cwd(), 'app/webdev/pong'), // absolute path for frontend folder
   prefix: '/', // root files
 });
-
 
 // Start server
 fastify.listen({ port: 3000, host: '0.0.0.0' }, (err) => {
