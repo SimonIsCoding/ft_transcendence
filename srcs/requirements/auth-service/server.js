@@ -38,12 +38,19 @@ app.decorate("auth", async (request, reply) => {
 	}
 });
 
-app.get('/api/auth/info', { preHandler: [app.auth] }, async (request, reply) => {
+// en gros la tu crees une route qui va te retourner les informations dont tu as besoin
+// si tu as besoin de ces infos tu vas appeler l'adresse avec la methode get
+app.get('/api/private/info', { preHandler: [app.auth] }, async (request, reply) => {
   const user = request.user;
-  return { message: `Welcome ${user.login}`, alias: user.alias };
+  return { message: `Welcome ${user.login}`, userId: user.userId, login: user.login, alias: user.alias };
 });
 
-app.get('/api/auth/debug-token', async (request, reply) => {
+app.get('/api/auth/info', { preHandler: [app.auth] }, async (request, reply) => {
+  const user = request.user; // JWT payload
+  return { userId: user.userId };
+});
+
+app.get('/debug-token', async (request, reply) => {
   const token = request.cookies.token;
   console.log("JWToken :", token);
   return { token };
