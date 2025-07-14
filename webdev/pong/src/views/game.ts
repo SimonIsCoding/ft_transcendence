@@ -36,12 +36,18 @@ class Game {
     const availableHeight = parent.clientHeight - 
       (parseFloat(style.paddingTop) + parseFloat(style.paddingBottom));
 
-    this.virtualCanvas.update(availableWidth, availableHeight);
-    
-    this.canvas.width = availableWidth;
-    this.canvas.height = availableHeight;
-    this.canvas.style.width = `${availableWidth}px`;
-    this.canvas.style.height = `${availableHeight}px`;
+  // Calculate the largest size that fits in 4:3
+    const idealWidth = Math.min(availableWidth, availableHeight * 4 / 3);
+     const idealHeight = idealWidth * 3 / 4;
+
+    this.virtualCanvas.update(idealWidth, idealHeight);
+
+    this.canvas.width = Math.round(idealWidth);
+    this.canvas.height = Math.round(idealHeight);
+    this.canvas.style.width = `${idealWidth}px`;
+    this.canvas.style.height = `${idealHeight}px`;
+
+    this.virtualCanvas.update(idealWidth, idealHeight);
   }
 
   private startLoop() {
@@ -218,7 +224,7 @@ class Game {
 
   render(): string {
     return `
-      <div class="flex items-center justify-center w-full bg-[#fbd11b] p-4">
+      <div class="flex items-center justify-center w-full bg-[#fbd11b] px-4 py-2 overflow-hidden">
         <div class="relative aspect-[4/3] w-full max-w-[1024px] min-w-[600px] flex items-center justify-center">
   
           <!-- Bezel Layer -->
