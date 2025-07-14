@@ -8,8 +8,12 @@ export class GameSounds {
         }
     }
 
-    static play(name: 'paddle' | 'wall' | 'score') {
-        this.init();
+    static async play(name: 'paddle' | 'wall' | 'score') {
+        await this.init();
+
+        if (this.ctx!.state === 'suspended') {
+            await this.ctx!.resume();
+        }
         
         // Stop existing sound if playing
         if (this.nodes[name]) {

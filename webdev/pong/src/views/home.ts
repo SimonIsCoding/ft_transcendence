@@ -19,12 +19,14 @@ export const HomeView = {
     <div class="flex flex-col min-h-screen bg-[#fbd11b] text-black">
 
       <!-- Header with Pong Logo -->
-      <header class="flex justify-center items-center h-24 bg-[#fbd11b]">
-        <img src="/pong-logo.png" alt="PONG Logo" class="h-16">
+      <header class="flex justify-center items-center bg-[#fbd11b] h-auto min-h-[26px] py-[clamp(4px,2vh,16px)]">
+        <img src="/pong-logo.png"
+	     alt="PONG Logo"
+	     class="h-[clamp(24px,10vh,52px)] transition-all duration-300">
       </header>
 
       <!-- Game Canvas Area -->
-	<main class="flex-1 flex items-center justify-center bg-[#fbd11b] overflow-y-auto min-h-[450px]">
+	<main class="flex-1 flex items-center justify-center bg-[#fbd11b] overflow-hidden">
         ${GameView.renderGameCanvas()}
       </main>
 
