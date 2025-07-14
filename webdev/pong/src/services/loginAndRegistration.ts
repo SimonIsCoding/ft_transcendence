@@ -25,15 +25,18 @@ export function isConnected() {
     //   loginIcon?.classList.remove("hidden");
     // });
 
-	fetch('/api/auth/debug-token', {
-	credentials: 'include',
-	})
+	// fetch('/api/auth/debug-token', {
+	// credentials: 'include',
+	// })
     .then(res => {
       if (!res.ok) throw new Error("Unauthorized");
       return res.json();
     })
     .then(data => {
-	  console.log("In isConnected(): Token received via cookie:", data.token)
+	//   console.log("In isConnected(): Token received via cookie:", data.token);
+	  console.log("In isConnected(): userId:", data.userId);
+	  console.log("In isConnected(): login:", data.login);
+	  console.log("In isConnected(): alias:", data.alias);
 	  console.log("connecté in data");
       const loginIcon = document.getElementById("login-icon");
       const loggedIcon = document.getElementById("logged-icon");
@@ -86,11 +89,27 @@ export function initLogin()
 		});
 		console.log("login: ", login, "Password:", password);
 		
+		//to get the token
 		fetch('/api/auth/debug-token', {
 		  credentials: 'include',
 		})
 		  .then(res => res.json())
 		  .then(data => console.log("Token received via cookie:", data.token));
+
+		//to get the user data
+		fetch('/api/auth/info', {
+		method: 'GET',
+		credentials: 'include',
+		})
+		.then(res => {
+	      if (!res.ok) throw new Error("Unauthorized");
+	      return res.json();
+	    })
+	    .then(data => {
+		  console.log("In isConnected(): userId:", data.userId);
+		  console.log("In isConnected(): login:", data.login);
+		  console.log("In isConnected(): alias:", data.alias);
+		});
 	});
 }
 
@@ -148,6 +167,8 @@ export function initRegistration()
 			}
 			if (res.status === 200)
 			  registrationCreated.textContent = "Wonderful. You have created your account. You can connect to your account now.";
+			else if (res.status === 500)
+			  registrationCreated.textContent = "DB Error";
 			else
 			  registrationCreated.textContent = "An account with this login has already been created.";
 			return res.json();

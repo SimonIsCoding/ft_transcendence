@@ -1,5 +1,5 @@
 import fastify from 'fastify';
-import { loginRoute, registerRoute } from './src/login.js';
+import { loginRoute, registerRoute, infoUserRoute } from './src/login.js';
 import fastifyJwt from '@fastify/jwt';
 import fastifyCookie from '@fastify/cookie';
 import fastifyCors from '@fastify/cors';
@@ -8,6 +8,7 @@ const app = fastify();
 
 app.register(loginRoute);
 app.register(registerRoute);
+app.register(infoUserRoute);
 
 app.register(fastifyCookie, {
   secret: 'super-secret-key',
@@ -25,7 +26,6 @@ app.register(fastifyJwt, {
     signed: false,
   }
 });
-
 
 app.decorate("auth", async (request, reply) => {
 	try
@@ -45,10 +45,10 @@ app.get('/api/private/info', { preHandler: [app.auth] }, async (request, reply) 
   return { message: `Welcome ${user.login}`, userId: user.userId, login: user.login, alias: user.alias };
 });
 
-app.get('/api/auth/info', { preHandler: [app.auth] }, async (request, reply) => {
-  const user = request.user; // JWT payload
-  return { userId: user.userId };
-});
+// app.get('/api/auth/info', { preHandler: [app.auth] }, async (request, reply) => {
+//   const user = request.user; // JWT payload
+//   return { userId: user.userId };
+// });
 
 app.get('/debug-token', async (request, reply) => {
   const token = request.cookies.token;
