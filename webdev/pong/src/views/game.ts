@@ -16,6 +16,7 @@ class Game {
   private scorePlayer2 = 0;
   private keysPressed: Record<string, boolean> = {};
   private showCollisionZones = false;
+  private maxPoints: number = 11;
   private hitsCount = 0;
 
   init() {
@@ -102,7 +103,7 @@ class Game {
       this.resetRound();
     }
 
-    if (this.scorePlayer1 >= 11 || this.scorePlayer2 >= 11) {
+    if (this.scorePlayer1 >= this.maxPoints || this.scorePlayer2 >= this.maxPoints) {
       this.scorePlayer1 = 0;
       this.scorePlayer2 = 0;
 	  this.hitsCount = 0;
@@ -218,6 +219,15 @@ class Game {
     this.ball.speed = speed;
   }
 
+  setPaddleSize(size: number) {
+    this.leftPaddle.setPaddleHeight(size);
+    this.rightPaddle.setPaddleHeight(size);
+  }
+
+  setMaxPoints(points: number) {
+    this.maxPoints = points;
+  }
+
   stop() {
     cancelAnimationFrame(this.animationFrameId);
   }
@@ -252,6 +262,13 @@ export const GameView = {
   initGameCanvas: () => gameInstance.init(),
   stop: () => gameInstance.stop(),
   setBallSpeed: (speed: number) => gameInstance.setBallSpeed(speed),
+  setPaddleSize: (size: number) => gameInstance.setPaddleSize(size),
+  setMaxPoints: (points: number) => gameInstance.setMaxPoints(points),
+  setPlayerType(playerId: string, type: 'me' | 'alias' | 'remote' | 'ia'): void {
+    // Implementation here
+    console.log(`Player ${playerId} set to ${type}`);
+    // Update your game state accordingly
+  },
   handleKeyDown: (key: string) => gameInstance.setKey(key, true),
   handleKeyUp: (key: string) => gameInstance.setKey(key, false)
 };

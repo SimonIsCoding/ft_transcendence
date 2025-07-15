@@ -3,8 +3,8 @@ export const GAME_CONFIG = {
     BASE_WIDTH: 1024,
     BASE_HEIGHT: 768,
     // Other tunable parameters
-    BALL_SPEED: 4,
-    MAX_BALL_SPEED: 16,
+    BALL_SPEED: 8,
+    MAX_BALL_SPEED: 24,
     PADDLE_WIDTH: 8,          // Base paddle width
     PADDLE_HEIGHT: 40,         // Base paddle height
     PADDLE_SPEED: 5,           // Base movement speed
