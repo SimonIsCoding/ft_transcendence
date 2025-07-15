@@ -1,15 +1,35 @@
 export class GameSounds {
-    private static ctx: AudioContext;
+    private static ctx: AudioContext | null = null;
     private static nodes: Record<string, OscillatorNode> = {};
+	private static isEnabled = false;
+	private static isInitialized = false;
+
 
     static init() {
-        if (!this.ctx) {
-            this.ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+		if (this.isInitialized) return;
+
+        document.addEventListener('click', () => {
+            if (!this.ctx) {
+                this.ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+                this.isInitialized = true;
+            }
+        }, { once: true });
+    }
+
+	static setEnabled(enabled: boolean) {
+        this.isEnabled = enabled;
+        if (enabled && this.ctx?.state === 'suspended') {
+            this.ctx.resume();
         }
     }
 
     static async play(name: 'paddle' | 'wall' | 'score') {
-        await this.init();
+		if (!this.isEnabled) return;
+
+        if (!this.ctx) {
+            await this.init();
+            if (!this.ctx) return;
+        }
 
         if (this.ctx!.state === 'suspended') {
             await this.ctx!.resume();
@@ -53,3 +73,6 @@ export class GameSounds {
         this.nodes[name] = osc;
     }
 }
+
+// Initialize on module load
+GameSounds.init();
