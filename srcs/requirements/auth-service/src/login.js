@@ -38,7 +38,6 @@ async function loginRoute(fastify)
 		}
 		return reply.status(401).send({ error: 'incorrect Id', success: false});
 	});
-
 	
 }
 
