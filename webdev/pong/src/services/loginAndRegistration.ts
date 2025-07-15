@@ -110,6 +110,13 @@ export function initLogin()
 		  console.log("In isConnected(): login:", data.login);
 		  console.log("In isConnected(): alias:", data.alias);
 		});
+
+		// login.js
+		fetch('/api/auth/login', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ username: 'alice', password: '1234' })
+		});
 	});
 }
 

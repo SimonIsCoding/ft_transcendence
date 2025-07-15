@@ -49,6 +49,11 @@ app.get('/api/private/info', { preHandler: [app.auth] }, async (request, reply) 
 //   const user = request.user; // JWT payload
 //   return { userId: user.userId };
 // });
+app.post('/', async (request, reply) => {
+  const data = request.body;
+  console.log(data); // pour tester
+  return { status: 'ok that\'s wonderful' };
+});
 
 app.get('/debug-token', async (request, reply) => {
   const token = request.cookies.token;
