@@ -150,7 +150,7 @@ export const SettingsView = {
       input.addEventListener('change', (e) => {
         if (!GameState.isSettingsEditable()) return;
         const level = (e.target as HTMLInputElement).value;
-        GameView.setBallSpeed(level === 'high' ? 8 : 12);
+        GameView.setBallSpeedMultiplier(level === 'high' ? 1.2 : 1);
         GameView.setPaddleSize(level === 'high' ? GAME_CONFIG.PADDLE_HEIGHT * 0.75: GAME_CONFIG.PADDLE_HEIGHT);
       });
 	
