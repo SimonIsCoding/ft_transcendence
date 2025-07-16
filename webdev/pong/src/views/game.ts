@@ -17,7 +17,6 @@ class Game {
   private keysPressed: Record<string, boolean> = {};
   private showCollisionZones = false;
   private maxPoints: number = 11;
-  private hitsCount = 0;
 
   init() {
     this.canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
@@ -85,12 +84,10 @@ class Game {
     );
 
     if (zone > 0) {
-		const angle = paddle.getDeflectionAngle(zone);
 //		GameSounds.play("paddle");
-		this.ball.handlePaddleCollision(angle, paddle === this.rightPaddle);
+		this.ball.handlePaddleCollision(zone, paddle === this.rightPaddle);
 		this.showCollisionZones = true;
 		setTimeout(() => this.showCollisionZones = false, 100);
-		this.hitsCount++;
     }
   }
 
@@ -106,7 +103,6 @@ class Game {
     if (this.scorePlayer1 >= this.maxPoints || this.scorePlayer2 >= this.maxPoints) {
       this.scorePlayer1 = 0;
       this.scorePlayer2 = 0;
-	  this.hitsCount = 0;
     }
   }
 
@@ -215,8 +211,8 @@ class Game {
     this.keysPressed[key] = pressed;
   }
 
-  setBallSpeed(speed: number) {
-    this.ball.speed = speed;
+  setBallSpeedMultiplier(multiplier: number) {
+    this.ball.speedMultiplier = multiplier;
   }
 
   setPaddleSize(size: number) {
@@ -261,7 +257,7 @@ export const GameView = {
   renderGameCanvas: () => gameInstance.render(),
   initGameCanvas: () => gameInstance.init(),
   stop: () => gameInstance.stop(),
-  setBallSpeed: (speed: number) => gameInstance.setBallSpeed(speed),
+  setBallSpeedMultiplier: (multiplier: number) => gameInstance.setBallSpeedMultiplier(multiplier),
   setPaddleSize: (size: number) => gameInstance.setPaddleSize(size),
   setMaxPoints: (points: number) => gameInstance.setMaxPoints(points),
   setPlayerType(playerId: string, type: 'me' | 'alias' | 'remote' | 'ia'): void {
