@@ -1,33 +1,9 @@
-export function isConnected() {
+export function isConnected(user: User): void {
+	console.log("in isConnected(), user: ", user);
   fetch('/api/private/info', {
     method: 'GET',
     credentials: 'include',
   })
-    // .then(res => {
-    //   if (!res.ok) throw new Error("Unauthorized");
-    //   return res.json();
-    // })
-    // .then(data => {
-	//   console.log("In isConnected(): Token received via cookie:", data.token)
-	//   console.log("connecté in data");
-    //   const loginIcon = document.getElementById("login-icon");
-    //   const loggedIcon = document.getElementById("logged-icon");
-    //   console.log("User info:", data);
-    //   loginIcon?.classList.add("hidden");
-    //   loggedIcon?.classList.remove("hidden");
-    // })
-    // .catch(() => {
-    //   // Pas connecté
-	//   console.log("Pas connecté, in catch");
-    //   const loginIcon = document.getElementById("login-icon");
-    //   const loggedIcon = document.getElementById("logged-icon");
-    //   loggedIcon?.classList.add("hidden");
-    //   loginIcon?.classList.remove("hidden");
-    // });
-
-	// fetch('/api/auth/debug-token', {
-	// credentials: 'include',
-	// })
     .then(res => {
       if (!res.ok) throw new Error("Unauthorized");
       return res.json();
@@ -52,12 +28,13 @@ export function isConnected() {
       loggedIcon?.classList.add("hidden");
       loginIcon?.classList.remove("hidden");
     });
+
 }
 
 // --- form to log in
 export function initLogin()
 {
-	const submitBtn = document.getElementById("login-btn") as HTMLButtonElement;
+	const submitBtn = document.getElementById("loginBtn") as HTMLButtonElement;
 
 	submitBtn.addEventListener("click", () => {
 		const login = (document.getElementById("login") as HTMLInputElement).value;
@@ -79,6 +56,11 @@ export function initLogin()
 				document.getElementById('title')!.textContent = `Hi ${username}`;
 				document.getElementById("welcome-div")!.style.display = "block";
 				document.getElementById("welcome-div")!.textContent = `Welcome ${username}, you are now connected :)`;
+				document.getElementById("login")!.style.display = "none";
+				document.getElementById("password")!.style.display = "none";
+				document.getElementById("loginBtn")!.style.display = "none";
+				document.getElementById("registerBtn")!.style.display = "none";
+				document.getElementById("logoutBtn")!.style.display = "block";
 			}
 			else
 			{
@@ -120,9 +102,17 @@ export function initLogin()
 	});
 }
 
+interface User {
+  login: string;
+  password: string;
+  alias: string;
+  token: string;
+}
+
 // --- form to create account
-export function initRegistration()
+export async function initRegistration(onUserRegistered: (user: User) => void)
 {
+	
 	const registerBtn = document.getElementById("registerBtn");
 
 	registerBtn?.addEventListener("click", () => {
@@ -143,7 +133,7 @@ export function initRegistration()
 			<button id="backToLogin" class="cursor-pointer text-blue-500 underline">Click here to be back to log in</button>
 		</div>
 	`;
-	
+
 	document.body.appendChild(form);
 
 	document.getElementById("backToLogin")?.addEventListener("click", () => {
@@ -151,37 +141,46 @@ export function initRegistration()
 	document.getElementById("connexionBlock")!.style.display = "flex";
 	});
 
-	document.getElementById("create-account")?.addEventListener("click", () => {
-		const username = (document.getElementById("new-username") as HTMLInputElement).value;
-		const password = (document.getElementById("new-password") as HTMLInputElement).value;
-		const alias = (document.getElementById("new-alias") as HTMLInputElement).value;
+	document.getElementById("create-account")?.addEventListener("click", async () => {
+	const username = (document.getElementById("new-username") as HTMLInputElement).value;
+	const password = (document.getElementById("new-password") as HTMLInputElement).value;
+	const alias = (document.getElementById("new-alias") as HTMLInputElement).value;
+	
+	const response = await fetch('/api/auth/register', {
+	method: 'POST',
+	headers: { 'Content-Type': 'application/json' },
+	body: JSON.stringify({ login: username, password, alias }),
+	credentials: 'include'
+	});
+	
+	const result = await response.json();
+	const user: User = {
+     login: result.data.user.login,
+	 password: result.data.password,
+      alias: alias,
+      token: result.data.token
+    };
 
-		fetch('/api/auth/register', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ login: username, password, alias }),
-		credentials: 'include'
-		})
-		.then(res => 
-		{
-			const registrationBlock = document.getElementById("registrationBlock");
-			let registrationCreated = document.getElementById("registration-created") as HTMLParagraphElement | null;
-			if (!registrationCreated)
-			{
-				registrationCreated = document.createElement("p");
-				registrationCreated.id = "registration-created";
-				registrationBlock?.appendChild(registrationCreated);
-			}
-			if (res.status === 200)
-			  registrationCreated.textContent = "Wonderful. You have created your account. You can connect to your account now.";
-			else if (res.status === 500)
-			  registrationCreated.textContent = "DB Error";
-			else
-			  registrationCreated.textContent = "An account with this login has already been created.";
-			return res.json();
-		})
-		.then(data => { console.log("Account created:", data); })
-		.catch(err => console.error(err));
+	const registrationBlock = document.getElementById("registrationBlock");
+	let registrationCreated = document.getElementById("registration-created") as HTMLParagraphElement | null;
+	if (!registrationCreated)
+	{
+		registrationCreated = document.createElement("p");
+		registrationCreated.id = "registration-created";
+		registrationBlock?.appendChild(registrationCreated);
+	}
+	if (result.status === 200)
+	{
+		registrationCreated.textContent = "Wonderful. You have created your account. You can connect to your account now.";
+		onUserRegistered(user);
+	}
+	else if (result.status === 500)
+		registrationCreated.textContent = "DB Error";
+	else
+		registrationCreated.textContent = "An account with this login has already been created.";
+	
+	console.log(user);
+
 	});
 	});
 }

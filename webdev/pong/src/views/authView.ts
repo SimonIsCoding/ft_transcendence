@@ -16,7 +16,7 @@ export const AuthView = {
       <div class="p-4 space-y-4">
         <h2 class="text-xl font-bold">Welcome!</h2>
         <div class="flex space-x-4">
-          <button id="login-btn" class="flex-1 bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
+          <button id="loginBtn" class="flex-1 bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
             Login
           </button>
           <button id="register-btn" class="flex-1 bg-gray-500 text-white py-2 rounded hover:bg-gray-600">
