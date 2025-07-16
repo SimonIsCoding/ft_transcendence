@@ -1,8 +1,8 @@
 import { VirtualCanvas } from '../models/VirtualCanvas';
 import { Ball } from '../models/Ball';
 import { Paddle } from '../models/Paddle';
-import { GameSounds } from '../models/GameSounds';
 import { GAME_CONFIG } from '../config';
+//import { GameSounds } from '../models/GameSounds';
 
 class Game {
   private canvas!: HTMLCanvasElement;
@@ -23,7 +23,7 @@ class Game {
     this.canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
     this.ctx = this.canvas.getContext('2d')!;
     this.resizeCanvas();
-	GameSounds.init();
+//	GameSounds.init();
     window.addEventListener('resize', () => this.resizeCanvas());
     this.startLoop();
   }
@@ -64,7 +64,7 @@ class Game {
     this.ball.move();
 
     if (this.ball.checkWallCollision()) {
-      	GameSounds.play("wall");
+ //     	GameSounds.play("wall");
     }
 
     this.checkPaddleCollision(this.leftPaddle);
@@ -86,7 +86,7 @@ class Game {
 
     if (zone > 0) {
 		const angle = paddle.getDeflectionAngle(zone);
-		GameSounds.play("paddle");
+//		GameSounds.play("paddle");
 		this.ball.handlePaddleCollision(angle, paddle === this.rightPaddle);
 		this.showCollisionZones = true;
 		setTimeout(() => this.showCollisionZones = false, 100);
@@ -111,7 +111,7 @@ class Game {
   }
 
   private resetRound() {
-	GameSounds.play("score");
+//	GameSounds.play("score");
     this.ball.reset();
     // this.leftPaddle.reset();
     // this.rightPaddle.reset();

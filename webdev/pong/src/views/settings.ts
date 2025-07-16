@@ -1,7 +1,7 @@
 import { GameView } from './game';
 import { GameState } from '../models/GamePhase';
 import { GAME_CONFIG } from '../config';
-import { GameSounds } from '../models/GameSounds';
+// import { GameSounds } from '../models/GameSounds';
 
 
 export const SettingsView = {
@@ -39,10 +39,12 @@ export const SettingsView = {
           </div>
           
           <!-- Sound Toggle (always editable) -->
-          <div>
+          <!--
+		  <div>
             <p class="text-sm font-medium mb-2 text-center">Sound</p>
             ${this.renderSoundToggle()}
           </div>
+		  -->
         </div>
 
         <!-- Player 2 Settings -->
@@ -149,8 +151,11 @@ export const SettingsView = {
         if (!GameState.isSettingsEditable()) return;
         const level = (e.target as HTMLInputElement).value;
         GameView.setBallSpeed(level === 'high' ? 8 : 12);
-        GameView.setPaddleSize(level === 'high' ? GAME_CONFIG.PADDLE_HEIGHT : GAME_CONFIG.PADDLE_HEIGHT * 0.75);
+        GameView.setPaddleSize(level === 'high' ? GAME_CONFIG.PADDLE_HEIGHT * 0.75: GAME_CONFIG.PADDLE_HEIGHT);
       });
+	
+    })
+	/*
 	const soundToggle = document.getElementById('sound-toggle');
     if (soundToggle) {
       soundToggle.addEventListener('change', async (e) => {
@@ -165,16 +170,15 @@ export const SettingsView = {
 
       // Initialize toggle state
       (soundToggle as HTMLInputElement).checked = true;
-    }
-    });
-
+    };
+*/
     document.querySelectorAll('input[name="points"]').forEach(input => {
       input.addEventListener('change', (e) => {
         if (!GameState.isSettingsEditable()) return;
         GameView.setMaxPoints(parseInt((e.target as HTMLInputElement).value));
       });
     });
-
+/*
     // Sound toggle (always works)
     document.getElementById('sound-toggle')?.addEventListener('change', (e) => {
       const isChecked = (e.target as HTMLInputElement).checked;
@@ -184,13 +188,13 @@ export const SettingsView = {
 	    GameSounds.play('paddle'); // Optional: play test sound
 	  }
     });
-
+*/
 	    // Player type handlers
 	['p1', 'p2'].forEach(playerId => {
 	  const typeSelect = document.getElementById(`${playerId}-type`);
 	  const aliasContainer = document.getElementById(`${playerId}-alias-container`);
 	  const remoteContainer = document.getElementById(`${playerId}-remote-container`);
-	
+
 	  typeSelect?.addEventListener('change', (e) => {
 	    if (!GameState.isSettingsEditable()) return;
 	
@@ -200,7 +204,7 @@ export const SettingsView = {
 	    // Type guard to ensure valid player type
 	    if (type === 'me' || type === 'alias' || type === 'remote' || type === 'ia') {
 	      GameView.setPlayerType(playerId, type);
-		
+
 	      // Show/hide additional fields
 	      if (aliasContainer && remoteContainer) {
 	        aliasContainer.classList.toggle('hidden', type !== 'alias');
@@ -210,7 +214,7 @@ export const SettingsView = {
 	      console.error('Invalid player type selected:', type);
 	    }
 	  });
-  
+
 	  // Initialize player type UI
 	  if (typeSelect && aliasContainer && remoteContainer) {
 	    const currentType = (typeSelect as HTMLSelectElement).value;
