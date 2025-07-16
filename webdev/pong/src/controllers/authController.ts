@@ -24,7 +24,7 @@ class AuthController {
     document.addEventListener('click', (e) => {
       const target = e.target as HTMLElement;
       
-      if (target.closest('#login-btn')) {
+      if (target.closest('#loginBtn')) {
         this.isLoginView = true;
         this.render();
       } else if (target.closest('#register-btn')) {

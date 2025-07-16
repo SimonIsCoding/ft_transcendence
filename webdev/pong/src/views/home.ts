@@ -4,11 +4,19 @@ import { SettingsView } from './settings';
 import { authService } from '../services/authService';
 import { gameController } from '../controllers/gameController';
 import { authController } from '../controllers/authController';
-import { isConnected } from '../services/loginAndRegistration';
+import { isConnected, initRegistration } from '../services/loginAndRegistration';
+import { LoginView } from './login';
 //where the code start on the main page
 
+// interface User {
+//   email: string;
+//   token: string;
+// }
+
 interface User {
-  email: string;
+  login: string;
+  password: string;
+  alias: string;
   token: string;
 }
 
@@ -53,7 +61,7 @@ export const HomeView = {
   },
 
   init(): void {
-    this.currentUser = authService.getCurrentUser();
+    // this.currentUser = authService.getCurrentUser();
     GameView.initGameCanvas();
     gameController.init();
 
@@ -63,10 +71,15 @@ export const HomeView = {
 
     // Add this if you need to re-render when auth state changes
     authService.onAuthStateChanged(() => {
-      this.currentUser = authService.getCurrentUser();
+    //   this.currentUser = authService.getCurrentUser();
       document.getElementById('auth-container')!.innerHTML = this.renderAuth();
     });
 
-	isConnected();
+	console.log("HOLAAAA");
+	LoginView.init();
+	initRegistration((user) => {
+	  isConnected(user);
+	});
+
   }
 };

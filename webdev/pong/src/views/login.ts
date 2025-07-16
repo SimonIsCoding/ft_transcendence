@@ -1,4 +1,4 @@
-import { initLogin, initRegistration } from '../services/loginAndRegistration';
+import { initLogin, initRegistration, isConnected} from '../services/loginAndRegistration';
 
 export class LoginView {
   public static render(): string {
@@ -8,16 +8,20 @@ export class LoginView {
 		<input id="login" type="text" placeholder="Login" class="mb-2 px-4 py-2 border rounded w-64" />
 		<input id="password" type="password" placeholder="Password" class="mb-4 px-4 py-2 border rounded w-64"/>
 		<div class="mb-4 px-4 py-2 rounded w-64 flex justify-between">
-			<button id="login-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Log in</button>
+			<button id="loginBtn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Log in</button>
 			<button id="registerBtn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Register</button>
 		</div>
-		<p id="welcome-div" style="display: none;"></p>
+	<p id="welcome-div" style="display: none;"></p><br>
+	<button id="logoutBtn" style="display: none;" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Logout</button>
 	</div>`;
-  }
+	}
 
 public static init(): void {
 //   console.log("in webdev/pong/src/views/login.ts: Login page initialized");
   initLogin();
-  initRegistration();
+	initRegistration((user) => {
+	  isConnected(user);
+	});
+	
 }
 }

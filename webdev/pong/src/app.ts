@@ -11,7 +11,9 @@ window.addEventListener('load', () => {
   'home'
 );
   initLogin();
-  initRegistration();
+  initRegistration((user) => {
+	console.log("in app.ts, user", user);
+});
   modifyInfo();
 });
 
