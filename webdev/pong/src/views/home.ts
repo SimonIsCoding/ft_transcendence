@@ -4,8 +4,9 @@ import { SettingsView } from './settings';
 import { authService } from '../services/authService';
 import { gameController } from '../controllers/gameController';
 import { authController } from '../controllers/authController';
-import { isConnected, initRegistration } from '../services/loginAndRegistration';
-import { LoginView } from './login';
+
+// import { isConnected, initRegistration } from '../services/loginAndRegistration';
+// import { LoginView } from './login';
 //where the code start on the main page
 
 // interface User {
@@ -19,6 +20,28 @@ interface User {
   alias: string;
   token: string;
 }
+
+export const MenuView = {
+  renderMenu: () => `
+	<div class="flex items-center justify-center bg-[#fbd11b] p-2 w-full">
+	  <div class="aspect-[4/3] w-full max-w-[1024px] min-w-[600px] bg-black border-4 border-white flex">
+	
+	    <!-- left part -->
+	    <div class="w-1/2 flex flex-col items-center justify-center space-y-6">
+	      <button class="font-seven text-white uppercase">LOGIN</button>
+	      <button class="font-seven uppercase bg-black-500 hover:bg-black-600 text-white px-6 py-2 rounded">REGISTER</button>
+	    </div>
+
+	    <!-- canva's right part-->
+	    <div class="w-1/2">
+	      <canvas id="game-canvas" class="w-full h-full"></canvas>
+	    </div>
+
+	  </div>
+	</div>
+  `
+};
+
 
 export const HomeView = {
   currentUser: null as User | null,
@@ -41,7 +64,9 @@ export const HomeView = {
 
       <!-- Game Canvas Area -->
 	<main class="flex-1 flex items-center justify-center bg-[#fbd11b] overflow-y-auto min-h-[450px]">
-        ${GameView.renderGameCanvas()}
+        <!-- ${GameView.renderGameCanvas()} -->
+		${MenuView.renderMenu()} 
+
       </main>
 
       <!-- Control Panel -->
@@ -62,7 +87,8 @@ export const HomeView = {
 
   init(): void {
     // this.currentUser = authService.getCurrentUser();
-    GameView.initGameCanvas();
+
+    // GameView.initGameCanvas(); // code to play game
     gameController.init();
 
     authController.init();
@@ -75,11 +101,11 @@ export const HomeView = {
       document.getElementById('auth-container')!.innerHTML = this.renderAuth();
     });
 
-	console.log("HOLAAAA");
-	LoginView.init();
-	initRegistration((user) => {
-	  isConnected(user);
-	});
+	// console.log("HOLAAAA");
+	// LoginView.init();
+	// initRegistration((user) => {
+	//   isConnected(user);
+	// });
 
   }
 };

@@ -4,8 +4,12 @@ module.exports = {
 	        "./src/**/*.{ts,js}"],
   darkMode: "media",
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        dseg: ["DSEG7ClassicMini", "monospace"],
+		seven: ["SevenSegment", "monospace"],
+      },
+    },
   },
   plugins: [],
 }
-
