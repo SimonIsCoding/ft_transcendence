@@ -110,7 +110,7 @@ class Game {
   // All drawing methods:
   private draw() {
     this.drawBackground();
-    this.drawCenterLine();
+    this.drawCenterLine(); // I would like to use it for the menus
     this.drawPaddle(this.leftPaddle);
     this.drawPaddle(this.rightPaddle);
     this.drawBall();
@@ -206,6 +206,7 @@ class Game {
     cancelAnimationFrame(this.animationFrameId);
   }
 
+  //here is the code for the black board game
   render(): string {
   return `
     <div class="flex items-center justify-center bg-[#fbd11b] p-2 w-full">
