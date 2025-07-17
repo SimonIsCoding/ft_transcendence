@@ -4,6 +4,8 @@ import { SettingsView } from './settings';
 import { authService } from '../services/authService';
 import { gameController } from '../controllers/gameController';
 import { authController } from '../controllers/authController';
+import { initCanvas } from './menu';
+
 
 // import { isConnected, initRegistration } from '../services/loginAndRegistration';
 // import { LoginView } from './login';
@@ -21,26 +23,24 @@ interface User {
   token: string;
 }
 
+
 export const MenuView = {
   renderMenu: () => `
-	<div class="flex items-center justify-center bg-[#fbd11b] p-2 w-full">
-	  <div class="aspect-[4/3] w-full max-w-[1024px] min-w-[600px] bg-black border-4 border-white flex">
-	
-	    <!-- left part -->
-	    <div class="w-1/2 flex flex-col items-center justify-center space-y-6">
-	      <button class="font-seven text-white uppercase">LOGIN</button>
-	      <button class="font-seven uppercase bg-black-500 hover:bg-black-600 text-white px-6 py-2 rounded">REGISTER</button>
-	    </div>
+    <div class="flex w-full max-w-[1024px] h-[768px] border-4 border-white bg-black mx-auto">
+      
+      <!-- Gauche -->
+      <div class="w-1/2 flex flex-col justify-center items-center space-y-10 bg-gray-900">
+        <button class="font-seven text-white uppercase px-6 py-3 border border-white rounded">LOGIN</button>
+        <button class="font-seven text-white uppercase px-6 py-3 border border-white rounded">REGISTER</button>
+      </div>
 
-	    <!-- canva's right part-->
-	    <div class="w-1/2">
-	      <canvas id="game-canvas" class="w-full h-full"></canvas>
-	    </div>
-
-	  </div>
-	</div>
-  `
-};
+      <!-- Droite -->
+      <div class="w-1/2 flex items-center justify-center bg-black">
+        <canvas id="game-canvas" class="block" style="width: 100%; height: 100%;"></canvas>
+      </div>
+    </div>
+  `,
+}
 
 
 export const HomeView = {
@@ -101,6 +101,8 @@ export const HomeView = {
       document.getElementById('auth-container')!.innerHTML = this.renderAuth();
     });
 
+	document.body.innerHTML = MenuView.renderMenu();
+	initCanvas();
 	// console.log("HOLAAAA");
 	// LoginView.init();
 	// initRegistration((user) => {
