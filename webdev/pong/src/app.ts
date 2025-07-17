@@ -1,5 +1,5 @@
 import { Router } from './router.ts';
-import { initLogin, initRegistration, modifyInfo } from './services/loginAndRegistration.ts';
+// import { initLogin, initRegistration, modifyInfo } from './services/loginAndRegistration.ts';
 
 // Initialize on load
 window.addEventListener('load', () => {
@@ -10,11 +10,7 @@ window.addEventListener('load', () => {
   path.includes('info') ? 'info' :
   'home'
 );
-  initLogin();
-  initRegistration((user) => {
-	console.log("in app.ts, user", user);
-});
-  modifyInfo();
+
 });
 
 // Handle browser back/forward

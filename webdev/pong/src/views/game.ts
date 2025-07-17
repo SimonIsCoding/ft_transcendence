@@ -230,5 +230,8 @@ export const GameView = {
   stop: () => gameInstance.stop(),
   setBallSpeed: (speed: number) => gameInstance.setBallSpeed(speed),
   handleKeyDown: (key: string) => gameInstance.setKey(key, true),
-  handleKeyUp: (key: string) => gameInstance.setKey(key, false)
+  handleKeyUp: (key: string) => gameInstance.setKey(key, false),
+
 };
+
+
