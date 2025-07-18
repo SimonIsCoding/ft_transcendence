@@ -1,20 +1,7 @@
-import { AuthView } from './authView';
 import { GameView } from './game';
 import { SettingsView } from './settings';
-import { authService } from '../services/authService';
 import { gameController } from '../controllers/gameController';
-import { authController } from '../controllers/authController';
 import { initCanvas } from './menu';
-
-
-// import { isConnected, initRegistration } from '../services/loginAndRegistration';
-// import { LoginView } from './login';
-//where the code start on the main page
-
-// interface User {
-//   email: string;
-//   token: string;
-// }
 
 interface User {
   login: string;
@@ -64,8 +51,7 @@ export const HomeView = {
 
       <!-- Game Canvas Area -->
 	<main class="flex-1 flex items-center justify-center bg-[#fbd11b] overflow-y-auto min-h-[450px]">
-        <!-- ${GameView.renderGameCanvas()} -->
-		${MenuView.renderMenu()} 
+        ${GameView.renderGameCanvas()}
 
       </main>
 
@@ -76,38 +62,17 @@ export const HomeView = {
 
     </div>
     `;
-  },
-
-  renderAuth(): string {
-    const user = authService.getCurrentUser(); // Use service instead of direct localStorage
-    return user 
-      ? AuthView.renderProfile(user.email)
-      : AuthView.renderAuthForm(this.isLogin);
+// ${MenuView.renderMenu()} after ${GameView.renderGameCanvas()}
   },
 
   init(): void {
-    // this.currentUser = authService.getCurrentUser();
-
-    // GameView.initGameCanvas(); // code to play game
+    GameView.initGameCanvas(); // code to play game
     gameController.init();
-
-    authController.init();
 
 	SettingsView.initSettings();
 
-    // Add this if you need to re-render when auth state changes
-    authService.onAuthStateChanged(() => {
-    //   this.currentUser = authService.getCurrentUser();
-      document.getElementById('auth-container')!.innerHTML = this.renderAuth();
-    });
-
-	document.body.innerHTML = MenuView.renderMenu();
+	// document.body.innerHTML = MenuView.renderMenu();
 	initCanvas();
-	// console.log("HOLAAAA");
-	// LoginView.init();
-	// initRegistration((user) => {
-	//   isConnected(user);
-	// });
 
   }
 };
