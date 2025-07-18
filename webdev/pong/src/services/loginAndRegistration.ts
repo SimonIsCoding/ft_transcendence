@@ -28,7 +28,6 @@ export function isConnected(user: User): void {
       loggedIcon?.classList.add("hidden");
       loginIcon?.classList.remove("hidden");
     });
-
 }
 
 // --- form to log in
