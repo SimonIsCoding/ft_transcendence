@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
-@theme {
+/* @theme {
 	--font-scoreboard: "DSEG7ClassicMini", "monospace";
-}
+} */
 
 @font-face {
   font-family: 'DSEG7ClassicMini';
