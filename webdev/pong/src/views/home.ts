@@ -1,7 +1,6 @@
 // import { GameView } from './game';
 // import { gameController } from '../controllers/gameController';
 // import { SettingsView } from './settings';
-import { MenuView } from './menu';
 import { menuController } from '../controllers/menuController';
 
 interface User {
@@ -29,7 +28,15 @@ export const HomeView = {
         </header>
 
         <main id="main-content" class="flex-1 flex items-center justify-center bg-[#fbd11b] overflow-y-auto min-h-[450px]">
-          ${MenuView.renderMenu()}
+		<div id="fullCanva" class="flex w-full max-w-[1024px] h-[768px] border-4 border-white bg-black mx-auto">
+			<div id="leftCanvaPart" class="w-1/2 flex flex-col justify-center items-center space-y-10 bg-gray-900">
+				<button class="font-seven text-white uppercase px-6 py-3 border border-white rounded">LOGIN</button>
+				<button class="font-seven text-white uppercase px-6 py-3 border border-white rounded">REGISTER</button>
+			</div>
+			<div id="rightCanvaPart" class="w-1/2 flex items-center justify-center bg-black">
+				<button id="playBtn" class="font-seven text-white uppercase px-6 py-3 border border-white rounded">PLAY</button>
+			</div>
+		</div>
         </main>
 
         <footer class="bg-[#fbd11b] p-4">

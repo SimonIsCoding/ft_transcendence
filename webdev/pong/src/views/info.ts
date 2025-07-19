@@ -1,4 +1,4 @@
-//this file has to be
+//this file has to be changed but to keep
 import { modifyInfo, initInfo} from '../services/loginAndRegistration';
 
 export class infoView {

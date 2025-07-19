@@ -1,3 +1,4 @@
+//this file has to be changed but to keep
 export function isConnected(user: User): void {
 	console.log("in isConnected(), user: ", user);
   fetch('/api/private/info', {
