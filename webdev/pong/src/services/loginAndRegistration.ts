@@ -116,7 +116,7 @@ export async function initRegistration(onUserRegistered: (user: User) => void)
 	const registerBtn = document.getElementById("registerBtn");
 
 	registerBtn?.addEventListener("click", () => {
-	document.getElementById("connexionBlock")!.style.display = "none";
+	document.getElementById("connectionBlock")!.style.display = "none";
 	const container = document.getElementById("register-container");
 	if (container)
 		return; // avoid to create several times the same account
@@ -126,9 +126,9 @@ export async function initRegistration(onUserRegistered: (user: User) => void)
 	form.innerHTML = `
 		<div id="registrationBlock" class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
 			<h1 id="title" class="text-3xl font-bold mb-6 text-blue-600">Hi</h1>
-			<input id="new-username" placeholder="Username" class="mb-4 px-4 py-2 border rounded w-64"/><br/>
-			<input id="new-password" placeholder="Password" type="password" class="mb-4 px-4 py-2 border rounded w-64"/><br/>
-			<input id="new-alias" placeholder="Alias" class="mb-4 px-4 py-2 border rounded w-64"/><br/>
+			<input id="newUsername" placeholder="Username" class="mb-4 px-4 py-2 border rounded w-64"/><br/>
+			<input id="newPassword" placeholder="Password" type="password" class="mb-4 px-4 py-2 border rounded w-64"/><br/>
+			<input id="newAlias" placeholder="Alias" class="mb-4 px-4 py-2 border rounded w-64"/><br/>
 			<button id="create-account" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Create Account</button>
 			<button id="backToLogin" class="cursor-pointer text-blue-500 underline">Click here to be back to log in</button>
 		</div>
@@ -138,13 +138,13 @@ export async function initRegistration(onUserRegistered: (user: User) => void)
 
 	document.getElementById("backToLogin")?.addEventListener("click", () => {
 	document.getElementById("register-container")?.remove();
-	document.getElementById("connexionBlock")!.style.display = "flex";
+	document.getElementById("connectionBlock")!.style.display = "flex";
 	});
 
 	document.getElementById("create-account")?.addEventListener("click", async () => {
-	const username = (document.getElementById("new-username") as HTMLInputElement).value;
-	const password = (document.getElementById("new-password") as HTMLInputElement).value;
-	const alias = (document.getElementById("new-alias") as HTMLInputElement).value;
+	const username = (document.getElementById("newUsername") as HTMLInputElement).value;
+	const password = (document.getElementById("newPassword") as HTMLInputElement).value;
+	const alias = (document.getElementById("newAlias") as HTMLInputElement).value;
 	
 	const response = await fetch('/api/auth/register', {
 	method: 'POST',

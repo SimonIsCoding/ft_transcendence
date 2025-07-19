@@ -4,7 +4,7 @@ import { initLogin, initRegistration, isConnected} from '../services/loginAndReg
 export class LoginView {
   public static render(): string {
     return `
-	<div id="connexionBlock" class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+	<div id="connectionBlock" class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
 		<h1 id="title" class="text-3xl font-bold mb-6 text-blue-600">Hi</h1>
 		<input id="login" type="text" placeholder="Login" class="mb-2 px-4 py-2 border rounded w-64" />
 		<input id="password" type="password" placeholder="Password" class="mb-4 px-4 py-2 border rounded w-64"/>

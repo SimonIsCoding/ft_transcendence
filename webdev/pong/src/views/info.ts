@@ -11,7 +11,7 @@ export class infoView {
 			<label id="current-login" for="current-login">current login: - Change it to: </label>
   			<input type="text" id="new-login" name="new-login" class="mb-4 px-4 py-2 border rounded w-64"><br><br>
 			<label id="current-alias" for="current-alias">current alias: - Change it to: </label>
-  			<input type="text" id="new-alias" name="new-alias" class="mb-4 px-4 py-2 border rounded w-64"><br><br>
+  			<input type="text" id="newAlias" name="newAlias" class="mb-4 px-4 py-2 border rounded w-64"><br><br>
 			<button id="modifyBtn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Modify</button>
 		</div>
 	</div>`;
@@ -28,7 +28,7 @@ public static init(): void {
 			const aliasLabel = document.getElementById("current-alias");
 
 			const loginInput = document.getElementById("new-login") as HTMLInputElement;
-			const aliasInput = document.getElementById("new-alias") as HTMLInputElement;
+			const aliasInput = document.getElementById("newAlias") as HTMLInputElement;
 
 			if (loginLabel)
 				loginLabel.innerText = `Current login: ${login} - Change it to:`;
