@@ -1,3 +1,4 @@
+//this file has to be changed but to keep
 import { initLogin, initRegistration, isConnected} from '../services/loginAndRegistration';
 
 export class LoginView {
