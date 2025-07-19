@@ -1,3 +1,4 @@
+//this file has to be
 import { modifyInfo, initInfo} from '../services/loginAndRegistration';
 
 export class infoView {
