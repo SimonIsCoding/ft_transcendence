@@ -184,17 +184,6 @@ export async function initRegistration(onUserRegistered: (user: User) => void)
 	});
 }
 
-export function loginLogo(isAuthenticated: boolean)
-{
-  const loginIcon = document.getElementById("login-icon");
-  const loggedIcon = document.getElementById("logged-icon");
-
-  if (!isAuthenticated)
-    loginIcon?.classList.remove("hidden");
-  else
-    loggedIcon?.classList.remove("hidden");
-}
-
 export function modifyInfo()
 {
 		fetch('/api/auth/info', {
