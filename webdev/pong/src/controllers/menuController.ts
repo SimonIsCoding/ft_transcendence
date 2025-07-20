@@ -1,4 +1,7 @@
-import { loginView, registerView, chooseTypeOfGameView, simonokok } from '../views/chooseTypeOfGameView';
+import { loginView, registerView, chooseTypeOfGameView } from '../views/menu';
+import { GameView } from '../views/game';
+import { gameController } from './gameController';
+import { SettingsView } from '../views/settings';
 
 export const menuController = {
   init(): void {
@@ -13,17 +16,27 @@ export const menuController = {
 				if (fullCanva) {
 					fullCanva.innerHTML = chooseTypeOfGameView.render();
 				}
+
 		const OneVsOneBtn = document.getElementById('OneVsOneBtn');
-		
 		if (OneVsOneBtn)
 		{
     	  OneVsOneBtn.addEventListener('click', () => {
     	    const fullCanva = document.getElementById('fullCanva');
-    	    if (fullCanva) {
-    	      fullCanva.innerHTML = simonokok.render();
+    	    if (fullCanva)
+			{
+				fullCanva.innerHTML = GameView.renderGameCanvas();
+				GameView.initGameCanvas();
+				gameController.init();
     	    }
+    	    const footer = document.getElementById('footerSettings');
+			if (footer)
+			{
+				footer.innerHTML = SettingsView.renderGameSettings();
+				SettingsView.initSettings();
+			}
     	  });
     	}
+		//here to add the button to redirect to the tournament
       });
     }
 	

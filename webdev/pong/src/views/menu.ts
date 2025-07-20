@@ -1,3 +1,7 @@
+// import { GameView } from './game';
+// import { gameController } from '../controllers/gameController';
+// import { SettingsView } from './settings';
+
 export const loginView = {
   render: (): string => `
 	<div class="flex w-full max-w-[1024px] h-[768px] border-4 border-white bg-black mx-auto">
@@ -40,6 +44,7 @@ export const chooseTypeOfGameView = {
   `
 };
 
+//you should put the game here
 export const simonokok = {
   render: (): string => `
     <div class="flex w-full max-w-[1024px] h-[768px] border-4 border-white bg-black mx-auto">
@@ -51,4 +56,10 @@ export const simonokok = {
       </div>
     </div>
   `
+// },
+// 	init(): void {
+// 	GameView.initGameCanvas(); // code to play game
+// 	gameController.init(); // code to play game
+// 	SettingsView.initSettings();
+// 	}
 };
