@@ -1,6 +1,3 @@
-// import { GameView } from './game';
-// import { gameController } from '../controllers/gameController';
-// import { SettingsView } from './settings';
 import { menuController } from '../controllers/menuController';
 
 interface User {
@@ -39,17 +36,14 @@ export const HomeView = {
 		</div>
         </main>
 
-        <footer class="bg-[#fbd11b] p-4">
+        <footer id="footerSettings" class="bg-[#fbd11b] p-4">
         </footer>
       </div>
     `;
   },
 
   init(): void {
-    // GameView.initGameCanvas(); // code to play game
-	// gameController.init(); // code to play game
 	menuController.init();
-	// SettingsView.initSettings();
 
   }
 };
