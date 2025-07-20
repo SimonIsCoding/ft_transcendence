@@ -25,7 +25,7 @@ export const HomeView = {
         </header>
 
         <main id="main-content" class="flex-1 flex items-center justify-center bg-[#fbd11b] overflow-y-auto min-h-[450px]">
-		<div id="fullCanva" class="flex w-full max-w-[1024px] h-[768px] border-4 border-white bg-black mx-auto">
+		<div id="fullCanva" class="relative flex w-full max-w-[1024px] h-[768px] border-4 border-white bg-black mx-auto">
 		<div class="absolute left-1/2 top-0 h-full border-l-4 border-white opacity-50 border-dashed -translate-x-1/2"></div>
 			<div id="leftCanvaPart" class="w-1/2 flex flex-col justify-center items-center space-y-10 bg-black">
 				<button id="loginBtn" class="font-seven text-white uppercase px-6 py-3 text-5xl border border-white rounded">LOGIN</button>
