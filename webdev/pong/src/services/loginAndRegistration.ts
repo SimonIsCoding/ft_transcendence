@@ -1,35 +1,4 @@
-//this file has to be changed but to keep
-export function isConnected(user: User): void {
-	console.log("in isConnected(), user: ", user);
-  fetch('/api/private/info', {
-    method: 'GET',
-    credentials: 'include',
-  })
-    .then(res => {
-      if (!res.ok) throw new Error("Unauthorized");
-      return res.json();
-    })
-    .then(data => {
-	//   console.log("In isConnected(): Token received via cookie:", data.token);
-	  console.log("In isConnected(): userId:", data.userId);
-	  console.log("In isConnected(): login:", data.login);
-	  console.log("In isConnected(): alias:", data.alias);
-	  console.log("connecté in data");
-      const loginIcon = document.getElementById("login-icon");
-      const loggedIcon = document.getElementById("logged-icon");
-      console.log("User info:", data);
-      loginIcon?.classList.add("hidden");
-      loggedIcon?.classList.remove("hidden");
-    })
-    .catch(() => {
-      // Pas connecté
-	  console.log("Pas connecté, in catch");
-      const loginIcon = document.getElementById("login-icon");
-      const loggedIcon = document.getElementById("logged-icon");
-      loggedIcon?.classList.add("hidden");
-      loginIcon?.classList.remove("hidden");
-    });
-}
+import { playBtnClicked } from '../controllers/menuController';
 
 // --- form to log in
 export function initLogin()
@@ -51,64 +20,43 @@ export function initLogin()
 		{
 			localStorage.setItem('login', login);
 			const username = localStorage.getItem('login');
-			if (username && data.success == true)
+
+			const connectionMsgId = "connectionMsg";
+			let connectionMsg = document.getElementById(connectionMsgId) as HTMLParagraphElement | null;
+			if (!connectionMsg)
 			{
-				// document.getElementById('title')!.textContent = `Hi ${username}`;
-				// document.getElementById("welcome-div")!.style.display = "block";
-				// document.getElementById("welcome-div")!.textContent = `Welcome ${username}, you are now connected :)`;
-				// document.getElementById("login")!.style.display = "none";
-				// document.getElementById("password")!.style.display = "none";
-				// document.getElementById("loginBtn")!.style.display = "none";
-				// document.getElementById("registerBtn")!.style.display = "none";
-				// document.getElementById("logoutBtn")!.style.display = "block";
-				console.log(`User ${login} has been logged in`, login);
+				connectionMsg = document.createElement("p");
+				connectionMsg.id = "connectionMsg";
+				connectionMsg.classList.add("font-seven", "text-white", "uppercase", "px-1", "py-1", "text-2xl");
+				const connectionBtn = document.getElementById("connectionBtn");
+				if (connectionBtn)
+					connectionBtn.insertAdjacentElement("afterend", connectionMsg);
+			}
+
+			if (username && data.success === true)
+			{
+				connectionMsg.textContent = `User ${login} has been logged in`;
+
+				const playBtnLoginPageId = "playBtnLoginPage";
+				let playBtnLoginPage = document.getElementById(playBtnLoginPageId) as HTMLButtonElement | null
+				if (!playBtnLoginPage)
+				{
+					playBtnLoginPage = document.createElement("button");
+					playBtnLoginPage.id = "playBtnLoginPage";
+					playBtnLoginPage.classList.add("font-seven", "text-white", "uppercase", "px-1", "py-1", "text-5xl", "border", "border-white", "rounded", "px-6", "py-3", "w-90");
+					playBtnLoginPage.textContent = "Play";
+					const connectionBtn = document.getElementById("connectionBtn");
+					if (connectionBtn)
+						connectionBtn.insertAdjacentElement("afterend", playBtnLoginPage);
+					if (playBtnLoginPage)
+						playBtnClicked(playBtnLoginPage);
+				}
 			}
 			else
-			{
-				// document.getElementById('title')!.textContent = `Hi`;
-				// document.getElementById("welcome-div")!.style.display = "block";
-				// document.getElementById("welcome-div")!.textContent = `Sorry. Your credentials doesn't match.`;
-				console.log(`Sorry. Your credentials doesn't match`);
-			}
-		});
-		console.log("login: ", login, "Password:", password);
-		
-		//to get the token
-		// fetch('/api/auth/debug-token', {
-		//   credentials: 'include',
-		// })
-		//   .then(res => res.json())
-		//   .then(data => console.log("Token received via cookie:", data.token));
-
-		// //to get the user data
-		// fetch('/api/auth/info', {
-		// method: 'GET',
-		// credentials: 'include',
-		// })
-		// .then(res => {
-	    //   if (!res.ok) throw new Error("Unauthorized");
-	    //   return res.json();
-	    // })
-	    // .then(data => {
-		//   console.log("In isConnected(): userId:", data.userId);
-		//   console.log("In isConnected(): login:", data.login);
-		//   console.log("In isConnected(): alias:", data.alias);
-		// });
-
-		// // login.js
-		// fetch('/api/auth/login', {
-		// method: 'POST',
-		// headers: { 'Content-Type': 'application/json' },
-		// body: JSON.stringify({ username: 'alice', password: '1234' })
-		// });
+				connectionMsg.textContent = `Sorry. Your credentials doesn't match`;
+			});
+		console.log("login: ", login, "Password:", password);// to erase for PROD
 	});
-}
-
-interface User {
-  login: string;
-  password: string;
-  alias: string;
-  token: string;
 }
 
 // --- form to create account
@@ -125,14 +73,32 @@ export function initRegistration()
 		body: JSON.stringify({ login: username, password, alias })
 		})
 		.then(res => res.json())
-		.then(data => console.log("Account created:", data))
+		.then(data => {
+		console.log("Account created:", data);
+		const registrationMsgId = "registrationMsg";
+		let registrationMsg = document.getElementById(registrationMsgId) as HTMLParagraphElement | null;
+		if (!registrationMsg)
+		{
+			registrationMsg = document.createElement("p");
+			registrationMsg.id = "registrationMsg";
+			registrationMsg.classList.add("font-seven", "text-white", "uppercase", "px-1", "py-1", "text-2xl");
+			const createAccountBtn = document.getElementById("createAccountBtn");
+			if (createAccountBtn)
+				createAccountBtn.insertAdjacentElement("afterend", registrationMsg);
+		}
+		if (data.success === true)
+			registrationMsg.textContent = `Account created. Welcome ${username}`;
+		else
+			registrationMsg.textContent = `The username '${username}' already exists. Try another one.`;
+		})
 		.catch(err => console.error(err));
 	});
 }
 
+//to forget for the moment
 export function modifyInfo()
 {
-		fetch('/api/auth/info', {
+	fetch('/api/auth/info', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({}),
@@ -142,9 +108,10 @@ export function modifyInfo()
 		.then(data =>
 		{
 			console.log("You are in info page & data:", data);
-		})
+	})
 }
 
+//to forget for the moment
 export async function initInfo(): Promise<boolean>
 {
 	try
