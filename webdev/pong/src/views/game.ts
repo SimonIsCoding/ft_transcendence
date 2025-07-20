@@ -209,8 +209,8 @@ class Game {
   //here is the code for the black board game
   render(): string {
   return `
-    <div class="flex items-center justify-center bg-[#fbd11b] p-2 w-full">
-      <div class="aspect-[4/3] w-full max-w-[1024px] min-w-[600px] bg-black border-4 border-white">
+    <div class="flex items-center justify-center bg-[#fbd11b] w-full">
+      <!-- <div class="aspect-[4/3] w-full max-w-[1024px] min-w-[600px] bg-black border-4 border-white"> -->
         <canvas 
           id="game-canvas" 
           class="w-full h-full"
