@@ -24,7 +24,7 @@ export const registerView = {
 			<input id="newUsername" placeholder="Username" class="font-seven text-white uppercase px-6 py-3 text-5xl border border-white rounded w-120"/><br/>	
 			<input id="newPassword" placeholder="Password" type="password" class="font-seven text-white uppercase px-6 py-3 text-5xl border border-white rounded w-120"/><br/>
 			<input id="newAlias" placeholder="Alias" class="font-seven text-white uppercase px-6 py-3 text-5xl border border-white rounded w-120"/><br/>
-			<button id="createAccount" class="font-seven text-white uppercase px-6 py-3 text-5xl border border-white rounded w-120">Create Account</button>
+			<button id="createAccountBtn" class="font-seven text-white uppercase px-6 py-3 text-5xl border border-white rounded w-120">Create Account</button>
 			<button id="backToLogin" class="font-seven text-white uppercase px-1 py-1 text-2xl">Click here to be back to log in</button>
 		</div>
 	</div>

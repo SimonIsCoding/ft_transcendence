@@ -1,11 +1,10 @@
 import { HomeView } from './views/home';
-import { LoginView } from './views/login.ts';
 import { infoView } from './views/info.ts';
 
 export class Router {
   private static app = document.getElementById('app');
 
-  public static navigate(page: 'home' | 'login' | 'info'): void {
+  public static navigate(page: 'home' | 'info'): void {
     if (!this.app) {
       console.error('App container not found');
       return;
@@ -20,11 +19,6 @@ export class Router {
       case 'home':
         this.app.innerHTML = HomeView.render();
 		HomeView.init();
-        break;
-
-	  case 'login':
-        this.app.innerHTML = LoginView.render();
-        LoginView.init();
         break;
 
 	  case 'info':
@@ -42,7 +36,6 @@ export class Router {
     window.addEventListener('load', () => {
       const path = window.location.pathname;
 	  this.navigate(
-	    path.includes('login') ? 'login' :
 	    path.includes('info') ? 'info' :
 	    'home'
 	  );
@@ -53,7 +46,6 @@ export class Router {
     window.addEventListener('popstate', () => {
       const path = window.location.pathname;
 	  this.navigate(
-	  path.includes('login') ? 'login' :
 	  path.includes('info') ? 'info' :
 	  'home'
 	  );

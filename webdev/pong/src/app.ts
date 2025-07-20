@@ -4,7 +4,6 @@ import { Router } from './router.ts';
 window.addEventListener('load', () => {
   const path = window.location.pathname;
   Router.navigate(
-  path.includes('login') ? 'login' :
   path.includes('info') ? 'info' :
   'home'
 );
@@ -15,7 +14,6 @@ window.addEventListener('load', () => {
 window.addEventListener('popstate', () => {
   const path = window.location.pathname;
   Router.navigate(
-  path.includes('login') ? 'login' :
   path.includes('info') ? 'info' :
   'home'
 );
