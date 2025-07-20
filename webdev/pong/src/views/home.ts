@@ -16,11 +16,11 @@ export const HomeView = {
       <div class="flex flex-col min-h-screen bg-[#fbd11b] text-black">
         <header class="flex justify-center items-center h-24 bg-[#fbd11b]">
           <img src="/pong-logo.png" alt="PONG Logo" class="h-16">
-          <a href="/login" id="login-icon" class="hidden absolute right-6 top-6">
-            <img src="/login-icon.png" alt="Login" class="h-8 w-8" />
+          <a href="/login" id="loginIcon" class="hidden absolute right-6 top-6">
+            <img src="/loginIcon.png" alt="Login" class="h-8 w-8" />
           </a>
-          <a href="/logged" id="logged-icon" class="hidden absolute right-6 top-6">
-            <img src="/logged-icon.png" alt="Logged" class="h-8 w-8" />
+          <a href="/logged" id="loggedIcon" class="hidden absolute right-6 top-6">
+            <img src="/loggedIcon.png" alt="Logged" class="h-8 w-8" />
           </a>
         </header>
 
@@ -43,7 +43,8 @@ export const HomeView = {
     `;
   },
 
-  init(): void {
+  init(): void
+  {
 	menuController.init();
 
   }

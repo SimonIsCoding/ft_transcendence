@@ -51,6 +51,12 @@ export function initLogin()
 					if (playBtnLoginPage)
 						playBtnClicked(playBtnLoginPage);
 				}
+				let loggedIcon = document.getElementById("loggedIcon") as HTMLAnchorElement | null;
+				if (loggedIcon)
+				{
+					loggedIcon.classList.remove("hidden");
+					loggedIcon.title = `Logged as ${username}`;
+				}
 			}
 			else
 				connectionMsg.textContent = `Sorry. Your credentials doesn't match`;

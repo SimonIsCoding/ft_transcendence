@@ -63,17 +63,17 @@ export function registerBtnClicked(registerBtn: HTMLButtonElement): void
 }
 
 export const menuController = {
-  init(): void {
-  const loginBtn = document.getElementById('loginBtn') as HTMLButtonElement | null;
-  const registerBtn = document.getElementById('registerBtn') as HTMLButtonElement | null;
-  const playBtn = document.getElementById('playBtn') as HTMLButtonElement | null;
-    
-  if (loginBtn)
-  	loginBtnClicked(loginBtn);
-  if (registerBtn)
-  	registerBtnClicked(registerBtn);
-  if (playBtn)
-  	playBtnClicked(playBtn);
-
-}
+  init(): void
+  {
+	const loginBtn = document.getElementById('loginBtn') as HTMLButtonElement | null;
+	const registerBtn = document.getElementById('registerBtn') as HTMLButtonElement | null;
+	const playBtn = document.getElementById('playBtn') as HTMLButtonElement | null;
+		
+	if (loginBtn)
+		loginBtnClicked(loginBtn);
+	if (registerBtn)
+		registerBtnClicked(registerBtn);
+	if (playBtn)
+		playBtnClicked(playBtn);
+  }
 };
