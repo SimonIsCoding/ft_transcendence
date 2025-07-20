@@ -110,7 +110,7 @@ class Game {
   // All drawing methods:
   private draw() {
     this.drawBackground();
-    this.drawCenterLine(); // I would like to use it for the menus
+    this.drawCenterLine();
     this.drawPaddle(this.leftPaddle);
     this.drawPaddle(this.rightPaddle);
     this.drawBall();
@@ -126,8 +126,8 @@ class Game {
     this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
     this.ctx.lineWidth = this.virtualCanvas.toPhysicalSize(4);
     this.ctx.setLineDash([
-      this.virtualCanvas.toPhysicalSize(20),
-      this.virtualCanvas.toPhysicalSize(15)
+	this.virtualCanvas.toPhysicalSize(14),// line height
+	this.virtualCanvas.toPhysicalSize(12) // spacement
     ]);
     this.ctx.beginPath();
     this.ctx.moveTo(this.canvas.width / 2, 0);
