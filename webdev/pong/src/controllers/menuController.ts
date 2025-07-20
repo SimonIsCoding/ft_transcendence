@@ -2,6 +2,7 @@ import { loginView, registerView, chooseTypeOfGameView } from '../views/menu';
 import { GameView } from '../views/game';
 import { gameController } from './gameController';
 import { SettingsView } from '../views/settings';
+import { initLogin, initRegistration } from '../services/loginAndRegistration';
 
 export const menuController = {
   init(): void {
@@ -46,6 +47,7 @@ export const menuController = {
         const fullCanva = document.getElementById('fullCanva');
         if (fullCanva) {
           fullCanva.innerHTML = loginView.render();
+		  initLogin();
         }
       });
 	}
@@ -56,6 +58,7 @@ export const menuController = {
         const fullCanva = document.getElementById('fullCanva');
         if (fullCanva) {
           fullCanva.innerHTML = registerView.render();
+		  initRegistration();
         }
 	    
 		const backToLogin = document.getElementById('backToLogin');

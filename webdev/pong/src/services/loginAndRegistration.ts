@@ -34,7 +34,7 @@ export function isConnected(user: User): void {
 // --- form to log in
 export function initLogin()
 {
-	const submitBtn = document.getElementById("loginBtn") as HTMLButtonElement;
+	const submitBtn = document.getElementById("connectionBtn") as HTMLButtonElement;
 
 	submitBtn.addEventListener("click", () => {
 		const login = (document.getElementById("login") as HTMLInputElement).value;
@@ -53,52 +53,54 @@ export function initLogin()
 			const username = localStorage.getItem('login');
 			if (username && data.success == true)
 			{
-				document.getElementById('title')!.textContent = `Hi ${username}`;
-				document.getElementById("welcome-div")!.style.display = "block";
-				document.getElementById("welcome-div")!.textContent = `Welcome ${username}, you are now connected :)`;
-				document.getElementById("login")!.style.display = "none";
-				document.getElementById("password")!.style.display = "none";
-				document.getElementById("loginBtn")!.style.display = "none";
-				document.getElementById("registerBtn")!.style.display = "none";
-				document.getElementById("logoutBtn")!.style.display = "block";
+				// document.getElementById('title')!.textContent = `Hi ${username}`;
+				// document.getElementById("welcome-div")!.style.display = "block";
+				// document.getElementById("welcome-div")!.textContent = `Welcome ${username}, you are now connected :)`;
+				// document.getElementById("login")!.style.display = "none";
+				// document.getElementById("password")!.style.display = "none";
+				// document.getElementById("loginBtn")!.style.display = "none";
+				// document.getElementById("registerBtn")!.style.display = "none";
+				// document.getElementById("logoutBtn")!.style.display = "block";
+				console.log(`User ${login} has been logged in`, login);
 			}
 			else
 			{
-				document.getElementById('title')!.textContent = `Hi`;
-				document.getElementById("welcome-div")!.style.display = "block";
-				document.getElementById("welcome-div")!.textContent = `Sorry. Your credentials doesn't match.`;
+				// document.getElementById('title')!.textContent = `Hi`;
+				// document.getElementById("welcome-div")!.style.display = "block";
+				// document.getElementById("welcome-div")!.textContent = `Sorry. Your credentials doesn't match.`;
+				console.log(`Sorry. Your credentials doesn't match`);
 			}
 		});
 		console.log("login: ", login, "Password:", password);
 		
 		//to get the token
-		fetch('/api/auth/debug-token', {
-		  credentials: 'include',
-		})
-		  .then(res => res.json())
-		  .then(data => console.log("Token received via cookie:", data.token));
+		// fetch('/api/auth/debug-token', {
+		//   credentials: 'include',
+		// })
+		//   .then(res => res.json())
+		//   .then(data => console.log("Token received via cookie:", data.token));
 
-		//to get the user data
-		fetch('/api/auth/info', {
-		method: 'GET',
-		credentials: 'include',
-		})
-		.then(res => {
-	      if (!res.ok) throw new Error("Unauthorized");
-	      return res.json();
-	    })
-	    .then(data => {
-		  console.log("In isConnected(): userId:", data.userId);
-		  console.log("In isConnected(): login:", data.login);
-		  console.log("In isConnected(): alias:", data.alias);
-		});
+		// //to get the user data
+		// fetch('/api/auth/info', {
+		// method: 'GET',
+		// credentials: 'include',
+		// })
+		// .then(res => {
+	    //   if (!res.ok) throw new Error("Unauthorized");
+	    //   return res.json();
+	    // })
+	    // .then(data => {
+		//   console.log("In isConnected(): userId:", data.userId);
+		//   console.log("In isConnected(): login:", data.login);
+		//   console.log("In isConnected(): alias:", data.alias);
+		// });
 
-		// login.js
-		fetch('/api/auth/login', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ username: 'alice', password: '1234' })
-		});
+		// // login.js
+		// fetch('/api/auth/login', {
+		// method: 'POST',
+		// headers: { 'Content-Type': 'application/json' },
+		// body: JSON.stringify({ username: 'alice', password: '1234' })
+		// });
 	});
 }
 
@@ -110,78 +112,21 @@ interface User {
 }
 
 // --- form to create account
-export async function initRegistration(onUserRegistered: (user: User) => void)
+export function initRegistration()
 {
-	
-	const registerBtn = document.getElementById("registerBtn");
+	document.getElementById("createAccountBtn")?.addEventListener("click", () => {
+		const username = (document.getElementById("newUsername") as HTMLInputElement).value;
+		const password = (document.getElementById("newPassword") as HTMLInputElement).value;
+		const alias = (document.getElementById("newAlias") as HTMLInputElement).value;
 
-	registerBtn?.addEventListener("click", () => {
-	document.getElementById("connectionBlock")!.style.display = "none";
-	const container = document.getElementById("register-container");
-	if (container)
-		return; // avoid to create several times the same account
-
-	const form = document.createElement("div");
-	form.id = "register-container";
-	form.innerHTML = `
-		<div id="registrationBlock" class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-			<h1 id="title" class="text-3xl font-bold mb-6 text-blue-600">Hi</h1>
-			<input id="newUsername" placeholder="Username" class="mb-4 px-4 py-2 border rounded w-64"/><br/>
-			<input id="newPassword" placeholder="Password" type="password" class="mb-4 px-4 py-2 border rounded w-64"/><br/>
-			<input id="newAlias" placeholder="Alias" class="mb-4 px-4 py-2 border rounded w-64"/><br/>
-			<button id="create-account" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Create Account</button>
-			<button id="backToLogin" class="cursor-pointer text-blue-500 underline">Click here to be back to log in</button>
-		</div>
-	`;
-
-	document.body.appendChild(form);
-
-	document.getElementById("backToLogin")?.addEventListener("click", () => {
-	document.getElementById("register-container")?.remove();
-	document.getElementById("connectionBlock")!.style.display = "flex";
-	});
-
-	document.getElementById("create-account")?.addEventListener("click", async () => {
-	const username = (document.getElementById("newUsername") as HTMLInputElement).value;
-	const password = (document.getElementById("newPassword") as HTMLInputElement).value;
-	const alias = (document.getElementById("newAlias") as HTMLInputElement).value;
-	
-	const response = await fetch('/api/auth/register', {
-	method: 'POST',
-	headers: { 'Content-Type': 'application/json' },
-	body: JSON.stringify({ login: username, password, alias }),
-	credentials: 'include'
-	});
-	
-	const result = await response.json();
-	const user: User = {
-     login: result.data.user.login,
-	 password: result.data.password,
-      alias: alias,
-      token: result.data.token
-    };
-
-	const registrationBlock = document.getElementById("registrationBlock");
-	let registrationCreated = document.getElementById("registration-created") as HTMLParagraphElement | null;
-	if (!registrationCreated)
-	{
-		registrationCreated = document.createElement("p");
-		registrationCreated.id = "registration-created";
-		registrationBlock?.appendChild(registrationCreated);
-	}
-	if (result.status === 200)
-	{
-		registrationCreated.textContent = "Wonderful. You have created your account. You can connect to your account now.";
-		onUserRegistered(user);
-	}
-	else if (result.status === 500)
-		registrationCreated.textContent = "DB Error";
-	else
-		registrationCreated.textContent = "An account with this login has already been created.";
-	
-	console.log(user);
-
-	});
+		fetch('/api/auth/register', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ login: username, password, alias })
+		})
+		.then(res => res.json())
+		.then(data => console.log("Account created:", data))
+		.catch(err => console.error(err));
 	});
 }
 

@@ -38,6 +38,7 @@ clean:
 	docker image prune -af
 	docker volume prune -f
 	docker network prune -f
+	sudo rm -rf srcs/data/pong/assets/index-*
 	cd webdev/pong && \
 	  npm run clean
 
