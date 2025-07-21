@@ -7,7 +7,7 @@ all:
 	  npm run build && \
 	  sudo cp -r dist/* ../../srcs/data/pong
 	# docker compose -f $(COMPOSE_FILE) up -d --build
-	docker-compose -f $(COMPOSE_FILE) build --no-cache
+	docker compose -f $(COMPOSE_FILE) build --no-cache
 	docker compose -f $(COMPOSE_FILE) up -d
 	sleep 2
 	docker ps
