@@ -54,10 +54,7 @@ fastify.get('/api/b', async (request, reply) => {
   return response.json();
 });
 
-fastify.get('/info', async (request, reply) => {
-  return reply.type('text/html').send('<html><body><h1>You are in Info Page</h1></body></html>')
-});
-
+//check if this is useful
 //https://localhost:4443/login
 fastify.register(fastifyStatic, {
   root: path.join(process.cwd(), 'app/webdev/pong'), // absolute path for frontend folder
