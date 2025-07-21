@@ -8,7 +8,7 @@ export class Paddle {
   
   // Dimensions (in virtual units)
   readonly width: number;
-  readonly height: number;
+  public height: number;
   
   // Movement
   readonly speed: number;
@@ -26,6 +26,10 @@ export class Paddle {
       : GAME_CONFIG.BASE_WIDTH - GAME_CONFIG.PADDLE_OFFSET - this.width;
     
     this.y = this.targetY;
+  }
+
+  setPaddleHeight(paddleHeight: number) {
+	this.height = paddleHeight;
   }
 
   // Movement methods

@@ -15,7 +15,7 @@ all:
 webupdate:
 	mkdir -p srcs/data/pong
 	cd webdev/pong && \
-	  rm -r dist && \
+	  rm -rf dist && \
 	  npm install && \
 	  npm run build && \
 	  sudo cp -r dist/* ../../srcs/data/pong && \
@@ -46,5 +46,5 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all stop clean fclean re
+.PHONY: all stop clean fclean re auth-service
 
