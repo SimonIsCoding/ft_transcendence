@@ -76,7 +76,8 @@ export class Paddle {
 
     // Clamp to 1-8 range (in case of edge cases)
     zone = Math.max(1, Math.min(8, zone));
-
+//let collision = { X: this.x, Y: this.y, bY: ballY, Zone: zone};
+//console.log(collision);
     // Return zone with collision vector adjustment
     return zone;
   }
