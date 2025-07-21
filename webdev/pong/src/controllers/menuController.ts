@@ -1,8 +1,9 @@
-import { loginView, registerView, chooseTypeOfGameView } from '../views/menu';
+import { loginView, registerView, chooseTypeOfGameView, infoView } from '../views/menu';
 import { GameView } from '../views/game';
 import { gameController } from './gameController';
 import { SettingsView } from '../views/settings';
 import { initLogin, initRegistration } from '../services/loginAndRegistration';
+import { Router } from '../router';
 
 //playBtnClicked || bindPlayButton
 export function playBtnClicked(playBtn: HTMLButtonElement): void 
@@ -62,12 +63,29 @@ export function registerBtnClicked(registerBtn: HTMLButtonElement): void
 	});
 }
 
+export function loggedIconAnchorClicked(loggedIconAnchor: HTMLAnchorElement): void 
+{
+	loggedIconAnchor.addEventListener('click', (event) => {
+		event!.preventDefault();
+		Router.navigate('info');
+	const fullCanva = document.getElementById('fullCanva');
+	if (fullCanva)
+	{
+		fullCanva.innerHTML = infoView.render();
+	}
+	// history.pushState({ view: "info" }, "", "/info");
+
+	});
+//here to add the button to redirect to the dashboard
+}
+
 export const menuController = {
   init(): void
   {
 	const loginBtn = document.getElementById('loginBtn') as HTMLButtonElement | null;
 	const registerBtn = document.getElementById('registerBtn') as HTMLButtonElement | null;
 	const playBtn = document.getElementById('playBtn') as HTMLButtonElement | null;
+	const loggedIconAnchor = document.getElementById('loggedIcon') as HTMLAnchorElement | null;
 		
 	if (loginBtn)
 		loginBtnClicked(loginBtn);
@@ -75,5 +93,7 @@ export const menuController = {
 		registerBtnClicked(registerBtn);
 	if (playBtn)
 		playBtnClicked(playBtn);
+	if (loggedIconAnchor)
+		loggedIconAnchorClicked(loggedIconAnchor);
   }
 };
