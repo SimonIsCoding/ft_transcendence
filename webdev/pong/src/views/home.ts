@@ -14,7 +14,7 @@ export const HomeView = {
  render(): string {
     return `
       <div class="flex flex-col min-h-screen bg-[#fbd11b] text-black">
-
+        
 	 	<header class="flex justify-center items-center h-24 bg-[#fbd11b]">
           <img src="/pong-logo.png" alt="PONG Logo" class="h-16">
           <a href="/login" id="loginIcon" class="hidden absolute right-6 top-6">

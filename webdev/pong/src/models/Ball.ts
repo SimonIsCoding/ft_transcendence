@@ -25,17 +25,15 @@ export class Ball {
         this.radius = 10;
 
         this.color = 'white';
-		this.paddleHits = 0;
+	this.paddleHits = 0;
 
         const randomHorizontalSpeed = Ball.xSpeed[0]; // Start with slowest
         const randomVerticalZone = Math.floor(Math.random() * 8); // 0-7
-        const randomVerticalSpeed = Ball.ySpeed[randomVerticalZone];
 
-		this.dx = (randomHorizontalSpeed * GAME_CONFIG.BASE_WIDTH / GAME_CONFIG.FPS) * (Math.random() > 0.5 ? 1 : -1);
-        this.dy = (randomVerticalSpeed * GAME_CONFIG.BASE_HEIGHT / GAME_CONFIG.FPS) * (Math.random() > 0.5 ? 1 : -1);
+	this.dx = (randomHorizontalSpeed * GAME_CONFIG.BASE_WIDTH / GAME_CONFIG.FPS) * (Math.random() > 0.5 ? 1 : -1);
 
-		this.dx *= this.speedMultiplier;
-		this.dy *= this.speedMultiplier;
+	this.dx *= this.speedMultiplier;
+	this.dy = Ball.ySpeed[randomVerticalZone];
     }
 
     // All game logic uses virtual coordinates
@@ -75,7 +73,7 @@ export class Ball {
 
         // Calculate dy (vertical movement)
         const verticalSpeedInPixelsPerSec = 
-            Ball.ySpeed[zone] * GAME_CONFIG.BASE_HEIGHT;
+            Ball.ySpeed[zone - 1] * GAME_CONFIG.BASE_HEIGHT;
         const dyPerFrame = verticalSpeedInPixelsPerSec / GAME_CONFIG.FPS;
 
         // Apply direction

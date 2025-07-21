@@ -32,7 +32,7 @@ export function displayGameOnClick(OneVsOneBtn: HTMLButtonElement): void
 	});
 }
 
-export function playBtnClicked(playBtn: HTMLButtonElement): void
+export function playBtnClicked(playBtn: HTMLButtonElement): void 
 {
 	playBtn.addEventListener('click', () => {
 	Router.navigate('play');
@@ -47,7 +47,7 @@ export function playBtnClicked(playBtn: HTMLButtonElement): void
 	});
 }
 
-export function loginBtnClicked(loginBtn: HTMLButtonElement): void
+export function loginBtnClicked(loginBtn: HTMLButtonElement): void 
 {
 	loginBtn.addEventListener('click', () => {
 	Router.navigate('login');
@@ -59,7 +59,7 @@ export function loginBtnClicked(loginBtn: HTMLButtonElement): void
 	});
 }
 
-export function registerBtnClicked(registerBtn: HTMLButtonElement): void
+export function registerBtnClicked(registerBtn: HTMLButtonElement): void 
 {
 	registerBtn.addEventListener('click', () => {
 	Router.navigate('register');
@@ -69,14 +69,14 @@ export function registerBtnClicked(registerBtn: HTMLButtonElement): void
 		fullCanva.innerHTML = registerView.render();
 		initRegistration();
 	}
-
+	
 	const backToLogin = document.getElementById('backToLogin') as HTMLButtonElement | null;
 	if (backToLogin)
 		loginBtnClicked(backToLogin);
 	});
 }
 
-export function loggedIconAnchorClicked(loggedIconAnchor: HTMLAnchorElement): void
+export function loggedIconAnchorClicked(loggedIconAnchor: HTMLAnchorElement): void 
 {
 	loggedIconAnchor.addEventListener('click', (event) => {
 		event!.preventDefault();
@@ -98,7 +98,7 @@ export const menuController = {
 	const registerBtn = document.getElementById('registerBtn') as HTMLButtonElement | null;
 	const playBtn = document.getElementById('playBtn') as HTMLButtonElement | null;
 	const loggedIconAnchor = document.getElementById('loggedIcon') as HTMLAnchorElement | null;
-
+		
 	if (loginBtn)
 		loginBtnClicked(loginBtn);
 	if (registerBtn)

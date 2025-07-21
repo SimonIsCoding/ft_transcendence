@@ -1,13 +1,14 @@
 @import "tailwindcss";
 
-@theme {
+/* @theme {
 	--font-scoreboard: "DSEG7ClassicMini", "monospace";
-}
+} */
 
 @font-face {
   font-family: 'DSEG7ClassicMini';
   src: url('/fonts/DSEG7ClassicMini-Regular.woff2') format("woff2");
 }
+
 .font-dseg {
   font-family: 'DSEG7ClassicMini', monospace;
   color: white;
