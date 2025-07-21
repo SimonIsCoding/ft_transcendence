@@ -1,58 +1,78 @@
 import { HomeView } from './views/home';
-import { DashboardView } from './views/dashboard.ts';
+import { infoView, loginView, registerView, chooseTypeOfGameView } from './views/menu';
+import { showGame } from './controllers/menuController';
 
 export class Router {
   private static app = document.getElementById('app');
+public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'play' | 'game' , addToHistory = true): void {
+  if (!this.app) {
+    console.error('App container not found');
+    return;
+  }
 
-  public static navigate(page: 'home' | 'dashboard'): void {
-    if (!this.app) {
-      console.error('App container not found');
-      return;
-    }
+  // Handle route protection + rendering
+  const fullCanva = document.getElementById('fullCanva') as HTMLDivElement | null;
+  switch (page) {
+    case 'home':
+      this.app.innerHTML = HomeView.render();
+      HomeView.init();
+      break;
 
-    // Clear previous view
-    this.app.innerHTML = '';
+    case 'info':
+      if (fullCanva)
+        fullCanva.innerHTML = infoView.render();
+      break;
 
-    // Handle route protection
-    if (page === 'dashboard' && !this.isAuthenticated()) {
-      console.warn('Redirecting to home: not authenticated');
-      return this.navigate('home');
-    }
+	case 'login':
+      if (fullCanva)
+        fullCanva.innerHTML = loginView.render();
+      break;
 
-    switch (page) {
-      case 'home':
-        if (this.isAuthenticated()) {
-          return this.navigate('dashboard'); // Redirect if already logged in
-        }
-        this.app.innerHTML = HomeView.render();
-		HomeView.init();
-        break;
+	case 'register':
+      if (fullCanva)
+        fullCanva.innerHTML = registerView.render();
+      break;
 
-      case 'dashboard':
-        const dashboard = new DashboardView();
-        dashboard.initialize();
-        break;
-    }
+	case 'play':
+      if (fullCanva)
+        fullCanva.innerHTML = chooseTypeOfGameView.render();
+      break;
 
-    // Update browser history
+	case 'game':
+	  if (fullCanva)
+		showGame(fullCanva);
+      break;
+  }
+
+  if (addToHistory)
     history.pushState({}, '', page === 'home' ? '/' : `/${page}`);
-  }
-
-  private static isAuthenticated(): boolean {
-    return localStorage.getItem('authToken') !== null;
-  }
+}
 
   public static init(): void {
     // Handle initial load
     window.addEventListener('load', () => {
       const path = window.location.pathname;
-      this.navigate(path.includes('dashboard') ? 'dashboard' : 'home');
+	  this.navigate(
+	  path.includes('login') ? 'login' :
+	  path.includes('register') ? 'register' :
+	  path.includes('play') ? 'play' :
+	  path.includes('game') ? 'game' :
+	  path.includes('info') ? 'info' :
+	  'home' , false);
+
     });
 
     // Handle back/forward navigation
     window.addEventListener('popstate', () => {
       const path = window.location.pathname;
-      this.navigate(path.includes('dashboard') ? 'dashboard' : 'home');
+	  this.navigate(
+	  path.includes('login') ? 'login' :
+	  path.includes('register') ? 'register' :
+	  path.includes('play') ? 'play' :
+	  path.includes('game') ? 'game' :
+	  path.includes('info') ? 'info' :
+	  'home' , false);
+
     });
   }
 }
