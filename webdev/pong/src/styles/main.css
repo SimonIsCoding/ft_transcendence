@@ -8,3 +8,19 @@
   font-family: 'DSEG7ClassicMini';
   src: url('/fonts/DSEG7ClassicMini-Regular.woff2') format("woff2");
 }
+.font-dseg {
+  font-family: 'DSEG7ClassicMini', monospace;
+  color: white;
+  font-size: 3rem;
+}
+
+@font-face {
+  font-family: 'SevenSegment';
+  src: url('/fonts/SevenSegment.ttf') format('truetype');
+  font-display: swap;
+}
+
+.font-seven {
+  font-family: 'SevenSegment', monospace;
+  color: white;
+}
