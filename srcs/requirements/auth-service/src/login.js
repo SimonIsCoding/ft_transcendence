@@ -12,17 +12,17 @@ async function hashPassword(password)
 async function loginRoute(fastify)
 {
 	// to log in
-
+	
 	fastify.post('/login', async (request, reply) => {
 		const { login, password } = request.body;
-
+		
 		if (!login || !password)
 	  return reply.status(400).send({ error: "Missing login or password" });
-
+	
 	const stmt = db.prepare("SELECT * FROM users WHERE login = ?");
 	const user = stmt.get(login);
 	const match = user ? await bcrypt.compare(password, user.password) : false;
-
+	
 	const SECRET = 'super-secret-key';
 	if(user && match)
 		{
@@ -38,7 +38,7 @@ async function loginRoute(fastify)
 		}
 		return reply.status(401).send({ error: 'incorrect Id', success: false});
 	});
-
+	
 }
 
 async function registerRoute(fastify)
@@ -46,7 +46,7 @@ async function registerRoute(fastify)
 	//to create an account
 	fastify.post('/register', async (request, reply) => {
 		const { login, password, alias } = request.body;
-
+  
 		if (!login || !password || !alias)
 			return reply.status(400).send({ success: false, error: "All fields required" });
 		const encryptedPassword = await hashPassword(password);

@@ -22,17 +22,17 @@ public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'play' | '
       if (fullCanva)
         fullCanva.innerHTML = infoView.render();
       break;
-
+	
 	case 'login':
       if (fullCanva)
         fullCanva.innerHTML = loginView.render();
       break;
-
+	
 	case 'register':
       if (fullCanva)
         fullCanva.innerHTML = registerView.render();
       break;
-
+	
 	case 'play':
       if (fullCanva)
         fullCanva.innerHTML = chooseTypeOfGameView.render();
@@ -57,7 +57,7 @@ public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'play' | '
 	  path.includes('register') ? 'register' :
 	  path.includes('play') ? 'play' :
 	  path.includes('game') ? 'game' :
-	  path.includes('info') ? 'info' :
+	  path.includes('info') ? 'info' : 
 	  'home' , false);
 
     });
@@ -70,7 +70,7 @@ public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'play' | '
 	  path.includes('register') ? 'register' :
 	  path.includes('play') ? 'play' :
 	  path.includes('game') ? 'game' :
-	  path.includes('info') ? 'info' :
+	  path.includes('info') ? 'info' : 
 	  'home' , false);
 
     });

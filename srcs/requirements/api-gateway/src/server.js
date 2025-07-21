@@ -37,7 +37,7 @@ fastify.register(fastifyHttpProxy, {
   upstream: 'http://auth-service:3001',
   prefix: '/api/auth',
   rewritePrefix: '/',
-  http2: false,
+    http2: false,
   replyOptions: {
     rewriteRequestHeaders: (originalReq, headers) => {
       return {
