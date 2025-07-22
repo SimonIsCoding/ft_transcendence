@@ -12,4 +12,4 @@ RUN npm install --save-dev @types/better-sqlite3
 RUN npm install --save-dev @types/bcrypt
 COPY . .
 EXPOSE 3001
-CMD ["node", "server.js"]
+CMD ["node", "src/server.js"]
