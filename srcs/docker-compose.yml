@@ -27,7 +27,6 @@ services:
     build: requirements/api-gateway
     depends_on:
       - auth-service
-      - service-b
 
   auth-service:
     container_name: auth-service
