@@ -1,4 +1,7 @@
 import { playBtnClicked } from '../controllers/menuController';
+import { Router } from '../router';
+import { loginView } from '../views/menu'
+
 
 export function isValidEmail(email: string): boolean
 {
@@ -11,9 +14,9 @@ export function setupPasswordToggle(passwordId: string, toggleBtnId: string, eye
 	const input = document.getElementById(passwordId) as HTMLInputElement | null;
 	const toggleBtn = document.getElementById(toggleBtnId);
 	const eyeClosed = document.getElementById(eyeClosedIconId);
-	const eyeOpen = document.getElementById(eyeOpenIconId);
+	const eyeOpened = document.getElementById(eyeOpenIconId);
 
-	if (!input || !toggleBtn || !eyeOpen || !eyeClosed)
+	if (!input || !toggleBtn || !eyeOpened || !eyeClosed)
 		return;
 
 	let isVisible = false;
@@ -21,7 +24,7 @@ export function setupPasswordToggle(passwordId: string, toggleBtnId: string, eye
 	toggleBtn.addEventListener("click", () => {
 		isVisible = !isVisible;
 		input.type = isVisible ? "text" : "password";
-		eyeOpen.classList.toggle("hidden", !isVisible);
+		eyeOpened.classList.toggle("hidden", !isVisible);
 		eyeClosed.classList.toggle("hidden", isVisible);
 	});
 }
@@ -92,6 +95,18 @@ export function initLogin()
 	});
 }
 
+export function showSuccessPopup(duration: number = 5000): void {
+	const popup = document.getElementById("successPopup");
+	if (!popup) return;
+
+	popup.classList.remove("hidden");
+
+	setTimeout(() => {
+		popup.classList.add("hidden");
+	}, duration);
+}
+
+
 // --- form to create account
 export function initRegistration()
 {
@@ -133,6 +148,15 @@ export function initRegistration()
 
 		console.log("Account created:", data);
 		registrationMsg.textContent = `Account created. Welcome ${username}`;
+
+		Router.navigate('login');
+		const fullCanva = document.getElementById('fullCanva');
+		if (fullCanva)
+		{
+			fullCanva.innerHTML = loginView.render();
+			showSuccessPopup();
+		}
+
 		})
 		.catch(err => {
 			if (err)
