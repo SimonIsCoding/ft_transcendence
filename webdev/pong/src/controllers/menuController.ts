@@ -2,7 +2,7 @@ import { loginView, registerView, chooseTypeOfGameView, infoView } from '../view
 import { GameView } from '../views/game';
 import { gameController } from './gameController';
 import { SettingsView } from '../views/settings';
-import { initLogin, initRegistration } from '../services/loginAndRegistration';
+import { initLogin, initRegistration, setupPasswordToggle } from '../services/loginAndRegistration';
 import { Router } from '../router';
 
 export function showGame(fullCanva: HTMLDivElement): void
@@ -67,6 +67,8 @@ export function registerBtnClicked(registerBtn: HTMLButtonElement): void
 	if (fullCanva)
 	{
 		fullCanva.innerHTML = registerView.render();
+		setupPasswordToggle("newPassword", "togglePassword", "eyeIconClosed", "eyeIconOpened");
+		setupPasswordToggle("confirmPassword", "toggleConfirmPassword", "confirmEyeIconClosed", "confirmEyeIconOpened");
 		initRegistration();
 	}
 	

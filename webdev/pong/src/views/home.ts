@@ -3,7 +3,7 @@ import { menuController } from '../controllers/menuController';
 interface User {
   login: string;
   password: string;
-  alias: string;
+  mail: string;
   token: string;
 }
 
@@ -30,11 +30,11 @@ export const HomeView = {
 			<div class="absolute left-1/2 top-0 h-full border-l-4 border-white opacity-50 border-dashed -translate-x-1/2">
 			</div>
 			<div id="leftCanvaPart" class="w-1/2 flex flex-col justify-center items-center space-y-10 bg-black">
-				<button id="loginBtn" class="font-seven text-white uppercase px-6 py-3 text-5xl border border-white rounded">LOGIN</button>
-				<button id="registerBtn" class="font-seven text-white uppercase px-6 py-3 text-5xl border border-white rounded">REGISTER</button>
+				<button id="loginBtn" class="font-seven text-white px-6 py-3 text-5xl border border-white rounded">LOGIN</button>
+				<button id="registerBtn" class="font-seven text-white px-6 py-3 text-5xl border border-white rounded">REGISTER</button>
 			</div>
 			<div id="rightCanvaPart" class="w-1/2 flex items-center justify-center bg-black">
-				<button id="playBtn" class="font-seven text-white uppercase px-6 py-3 text-5xl border border-white rounded">PLAY</button>
+				<button id="playBtn" class="font-seven text-white px-6 py-3 text-5xl border border-white rounded">PLAY</button>
 			</div>
 		</div>
         </main>
