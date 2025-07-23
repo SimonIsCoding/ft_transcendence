@@ -1,5 +1,5 @@
 import fastify from 'fastify';
-import { loginRoute, registerRoute, infoUserRoute } from './src/login.js';
+import { loginRoute, registerRoute, infoUserRoute } from './login.js';
 import fastifyJwt from '@fastify/jwt';
 import fastifyCookie from '@fastify/cookie';
 import fastifyCors from '@fastify/cors';
@@ -42,7 +42,7 @@ app.decorate("auth", async (request, reply) => {
 // si tu as besoin de ces infos tu vas appeler l'adresse avec la methode get
 app.get('/api/private/info', { preHandler: [app.auth] }, async (request, reply) => {
   const user = request.user;
-  return { message: `Welcome ${user.login}`, userId: user.userId, login: user.login, alias: user.alias };
+  return { message: `Welcome ${user.login}`, userId: user.userId, login: user.login, mail: user.mail };
 });
 
 // app.get('/api/auth/info', { preHandler: [app.auth] }, async (request, reply) => {

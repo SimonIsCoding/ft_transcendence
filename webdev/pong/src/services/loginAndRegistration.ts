@@ -1,11 +1,41 @@
 import { playBtnClicked } from '../controllers/menuController';
+import { Router } from '../router';
+import { loginView, chooseTypeOfGameView } from '../views/menu'
+
+
+export function isValidEmail(email: string): boolean
+{
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+export function setupPasswordToggle(passwordId: string, toggleBtnId: string, eyeClosedIconId: string, eyeOpenIconId: string): void
+{
+	const input = document.getElementById(passwordId) as HTMLInputElement | null;
+	const toggleBtn = document.getElementById(toggleBtnId);
+	const eyeClosed = document.getElementById(eyeClosedIconId);
+	const eyeOpened = document.getElementById(eyeOpenIconId);
+
+	if (!input || !toggleBtn || !eyeOpened || !eyeClosed)
+		return;
+
+	let isVisible = false;
+
+	toggleBtn.addEventListener("click", () => {
+		isVisible = !isVisible;
+		input.type = isVisible ? "text" : "password";
+		eyeOpened.classList.toggle("hidden", !isVisible);
+		eyeClosed.classList.toggle("hidden", isVisible);
+	});
+}
+
 
 // --- form to log in
 export function initLogin()
 {
 	const submitBtn = document.getElementById("connectionBtn") as HTMLButtonElement;
-
 	submitBtn.addEventListener("click", () => {
+
 		const login = (document.getElementById("login") as HTMLInputElement).value;
 		const password = (document.getElementById("password") as HTMLInputElement).value;
 
@@ -27,7 +57,7 @@ export function initLogin()
 			{
 				connectionMsg = document.createElement("p");
 				connectionMsg.id = "connectionMsg";
-				connectionMsg.classList.add("font-seven", "text-white", "uppercase", "px-1", "py-1", "text-2xl");
+				connectionMsg.classList.add("font-seven", "text-white", "px-1", "py-1", "text-2xl");
 				const connectionBtn = document.getElementById("connectionBtn");
 				if (connectionBtn)
 					connectionBtn.insertAdjacentElement("afterend", connectionMsg);
@@ -43,7 +73,7 @@ export function initLogin()
 				{
 					playBtnLoginPage = document.createElement("button");
 					playBtnLoginPage.id = "playBtnLoginPage";
-					playBtnLoginPage.classList.add("font-seven", "text-white", "uppercase", "px-1", "py-1", "text-5xl", "border", "border-white", "rounded", "px-6", "py-3", "w-90");
+					playBtnLoginPage.classList.add("font-seven", "text-white", "px-1", "py-1", "text-5xl", "border", "border-white", "rounded", "px-6", "py-3", "w-90");
 					playBtnLoginPage.textContent = "Play";
 					const connectionBtn = document.getElementById("connectionBtn");
 					if (connectionBtn)
@@ -56,48 +86,91 @@ export function initLogin()
 				{
 					loggedIcon.classList.remove("hidden");
 					loggedIcon.title = `Logged as ${username}`;
+					
+					//redirection to play page
+					Router.navigate('play');
+					const fullCanva = document.getElementById('fullCanva');
+					if (fullCanva)
+						fullCanva.innerHTML = chooseTypeOfGameView.render();
 				}
 			}
 			else
 				connectionMsg.textContent = `Sorry. Your credentials doesn't match`;
+
 			});
-		console.log("login: ", login, "Password:", password);// to erase for PROD
+			console.log("login: ", login, "Password:", password);// to erase for PROD
 	});
 }
+
+export function showSuccessPopup(duration: number = 5000): void {
+	const popup = document.getElementById("successPopup");
+	if (!popup)
+		return;
+
+	popup.classList.remove("hidden");
+
+	setTimeout(() => {
+		popup.classList.add("hidden");
+	}, duration);
+}
+
 
 // --- form to create account
 export function initRegistration()
 {
 	document.getElementById("createAccountBtn")?.addEventListener("click", () => {
+		
 		const username = (document.getElementById("newUsername") as HTMLInputElement).value;
 		const password = (document.getElementById("newPassword") as HTMLInputElement).value;
-		const alias = (document.getElementById("newAlias") as HTMLInputElement).value;
+		const confirmPassword = (document.getElementById("confirmPassword") as HTMLInputElement).value;
+		const mail = (document.getElementById("newMail") as HTMLInputElement).value.toLowerCase();
 
-		fetch('/api/auth/register', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ login: username, password, alias })
-		})
-		.then(res => res.json())
-		.then(data => {
-		console.log("Account created:", data);
 		const registrationMsgId = "registrationMsg";
 		let registrationMsg = document.getElementById(registrationMsgId) as HTMLParagraphElement | null;
+		const createAccountBtn = document.getElementById("createAccountBtn");
 		if (!registrationMsg)
 		{
 			registrationMsg = document.createElement("p");
 			registrationMsg.id = "registrationMsg";
-			registrationMsg.classList.add("font-seven", "text-white", "uppercase", "px-1", "py-1", "text-2xl");
-			const createAccountBtn = document.getElementById("createAccountBtn");
+			registrationMsg.classList.add("font-seven", "text-white", "px-1", "py-1", "text-2xl");
 			if (createAccountBtn)
 				createAccountBtn.insertAdjacentElement("afterend", registrationMsg);
 		}
-		if (data.success === true)
-			registrationMsg.textContent = `Account created. Welcome ${username}`;
-		else
-			registrationMsg.textContent = `The username '${username}' already exists. Try another one.`;
+		if (confirmPassword !== password)
+			return registrationMsg!.textContent = `The passwords are not matching.`;
+		if (!username || !password || !confirmPassword || !mail)
+			return registrationMsg!.textContent = `All fields has to be filled to create an account.`;
+		if (isValidEmail(mail) === false)
+			return registrationMsg!.textContent = `The mail format is not correct.`;			
+			
+		fetch('/api/auth/register', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ login: username, password, mail })
 		})
-		.catch(err => console.error(err));
+		.then(async res => {
+		const data = await res.json();
+
+		if (!res.ok)
+			throw new Error(data.error);
+
+		console.log("Account created:", data);
+		registrationMsg.textContent = `Account created. Welcome ${username}`;
+
+		//redirection on login page
+		Router.navigate('login');
+		const fullCanva = document.getElementById('fullCanva');
+		if (fullCanva)
+		{
+			fullCanva.innerHTML = loginView.render();
+			showSuccessPopup();
+		}
+
+		})
+		.catch(err => {
+			if (err)
+				registrationMsg.textContent = err.message;
+		});
 	});
 }
 
