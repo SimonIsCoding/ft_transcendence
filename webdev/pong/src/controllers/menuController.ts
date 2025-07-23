@@ -70,8 +70,6 @@ export function registerBtnClicked(registerBtn: HTMLButtonElement): void
 		setupPasswordToggle("newPassword", "togglePassword", "eyeIconClosed", "eyeIconOpened");
 		setupPasswordToggle("confirmPassword", "toggleConfirmPassword", "confirmEyeIconClosed", "confirmEyeIconOpened");
 		initRegistration();
-
-
 	}
 	
 	const backToLogin = document.getElementById('backToLogin') as HTMLButtonElement | null;

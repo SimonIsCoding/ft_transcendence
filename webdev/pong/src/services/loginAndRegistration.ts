@@ -115,7 +115,7 @@ export function initRegistration()
 		const username = (document.getElementById("newUsername") as HTMLInputElement).value;
 		const password = (document.getElementById("newPassword") as HTMLInputElement).value;
 		const confirmPassword = (document.getElementById("confirmPassword") as HTMLInputElement).value;
-		const mail = (document.getElementById("newMail") as HTMLInputElement).value;
+		const mail = (document.getElementById("newMail") as HTMLInputElement).value.toLowerCase();
 
 		const registrationMsgId = "registrationMsg";
 		let registrationMsg = document.getElementById(registrationMsgId) as HTMLParagraphElement | null;
@@ -149,6 +149,7 @@ export function initRegistration()
 		console.log("Account created:", data);
 		registrationMsg.textContent = `Account created. Welcome ${username}`;
 
+		//redirection on login page
 		Router.navigate('login');
 		const fullCanva = document.getElementById('fullCanva');
 		if (fullCanva)
