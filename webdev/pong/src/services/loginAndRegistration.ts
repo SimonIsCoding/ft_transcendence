@@ -1,6 +1,6 @@
 import { playBtnClicked } from '../controllers/menuController';
 import { Router } from '../router';
-import { loginView } from '../views/menu'
+import { loginView, chooseTypeOfGameView } from '../views/menu'
 
 
 export function isValidEmail(email: string): boolean
@@ -86,18 +86,26 @@ export function initLogin()
 				{
 					loggedIcon.classList.remove("hidden");
 					loggedIcon.title = `Logged as ${username}`;
+					
+					//redirection to play page
+					Router.navigate('play');
+					const fullCanva = document.getElementById('fullCanva');
+					if (fullCanva)
+						fullCanva.innerHTML = chooseTypeOfGameView.render();
 				}
 			}
 			else
 				connectionMsg.textContent = `Sorry. Your credentials doesn't match`;
+
 			});
-		console.log("login: ", login, "Password:", password);// to erase for PROD
+			console.log("login: ", login, "Password:", password);// to erase for PROD
 	});
 }
 
 export function showSuccessPopup(duration: number = 5000): void {
 	const popup = document.getElementById("successPopup");
-	if (!popup) return;
+	if (!popup)
+		return;
 
 	popup.classList.remove("hidden");
 
