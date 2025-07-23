@@ -67,8 +67,8 @@ export function registerBtnClicked(registerBtn: HTMLButtonElement): void
 	if (fullCanva)
 	{
 		fullCanva.innerHTML = registerView.render();
-		setupPasswordToggle("newPassword", "togglePassword", "eyeIcon");
-		setupPasswordToggle("confirmPassword", "toggleConfirmPassword", "eyeIconConfirm");
+		setupPasswordToggle("newPassword", "togglePassword", "eyeIconClosed", "eyeIconOpened");
+		setupPasswordToggle("confirmPassword", "toggleConfirmPassword", "confirmEyeIconClosed", "confirmEyeIconOpened");
 		initRegistration();
 	}
 	
