@@ -22,7 +22,7 @@ webupdate:
 	  docker exec nginx /usr/sbin/nginx -s reload
 
 auth-service:
-	cd srcs && docker-compose up -d --build auth-service && cd -
+	cd srcs && docker compose up -d --build auth-service && cd -
 #to rebuild and restart the auth-service container - useful for User Management module
 
 stop:

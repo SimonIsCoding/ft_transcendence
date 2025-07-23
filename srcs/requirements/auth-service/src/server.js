@@ -6,17 +6,8 @@ import fastifyCors from '@fastify/cors';
 
 const app = fastify();
 
-app.register(loginRoute);
-app.register(registerRoute);
-app.register(infoUserRoute);
-
 app.register(fastifyCookie, {
   secret: 'super-secret-key',
-});
-
-app.register(fastifyCors, {
-  origin: 'https://localhost:4443',
-  credentials: true,
 });
 
 app.register(fastifyJwt, {
@@ -25,6 +16,15 @@ app.register(fastifyJwt, {
     cookieName: 'token',
     signed: false,
   }
+});
+
+app.register(loginRoute);
+app.register(registerRoute);
+app.register(infoUserRoute);
+
+app.register(fastifyCors, {
+  origin: 'https://localhost:4443',
+  credentials: true,
 });
 
 app.decorate("auth", async (request, reply) => {
@@ -59,6 +59,11 @@ app.get('/debug-token', async (request, reply) => {
   const token = request.cookies.token;
   console.log("JWToken :", token);
   return { token };
+});
+
+app.ready(() => {
+  console.log('Registered routes:');
+  console.log(app.printRoutes());
 });
 
 app.listen({ port: 3001, host: '0.0.0.0' }, err => {
