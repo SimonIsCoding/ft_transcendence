@@ -48,7 +48,8 @@ services:
     depends_on:
       - auth-service  # If you need authentication
     restart: unless-stopped
-
+    healthcheck:
+      disable: true
 
 networks:
   default:
