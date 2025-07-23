@@ -6,57 +6,42 @@ export function isValidEmail(email: string): boolean
   return emailRegex.test(email);
 }
 
-// function setupPasswordToggle(inputId: string, toggleBtnId: string, iconId: string): void
-// {
-// 	const input = document.getElementById(inputId) as HTMLInputElement | null;
-// 	const toggleBtn = document.getElementById(toggleBtnId);
-// 	const icon = document.getElementById(iconId) as SVGElement | null;
+export function setupPasswordToggle(inputId: string, toggleBtnId: string, iconId: string): void
+{
+	const input = document.getElementById(inputId) as HTMLInputElement | null;
+	const toggleBtn = document.getElementById(toggleBtnId);
+	const icon = document.getElementById(iconId) as SVGElement | null;
 
-// 	if (!input || !toggleBtn ||!icon)
-// 	{
-// 		console.log("entered in return condition in setupPasswordToggle function")
-// 		return;
-// 	}
+	if (!input || !toggleBtn ||!icon)
+	{
+		console.log("entered in return condition in setupPasswordToggle function")
+		return;
+	}
 
-// 	let isVisible = false;
-// 	toggleBtn.addEventListener("click", () => {
-// 		isVisible = !isVisible;
-// 		input.type = isVisible ? "text" : "password";
+	let isVisible = false;
+	toggleBtn.addEventListener("click", () => {
+		isVisible = !isVisible;
+		input.type = isVisible ? "text" : "password";
 
-// 		icon.innerHTML = isVisible
-// 			? `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-// 					d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7
-// 					a10.05 10.05 0 012.943-4.418M15 12a3 3 0 11-6 0 3 3 0 016 0zM3 3l18 18" />`
-// 			: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-// 					d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-// 			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-// 					d="M2.458 12C3.732 7.943 7.523 5 12 5
-// 					c4.477 0 8.268 2.943 9.542 7
-// 					-1.274 4.057-5.065 7-9.542 7
-// 					-4.477 0-8.268-2.943-9.542-7z" />`;
-// 	});
-// }
+		icon.innerHTML = isVisible
+			? `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+					d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7
+					a10.05 10.05 0 012.943-4.418M15 12a3 3 0 11-6 0 3 3 0 016 0zM3 3l18 18" />`
+			: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+					d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+					d="M2.458 12C3.732 7.943 7.523 5 12 5
+					c4.477 0 8.268 2.943 9.542 7
+					-1.274 4.057-5.065 7-9.542 7
+					-4.477 0-8.268-2.943-9.542-7z" />`;
+	});
+}
 
 // --- form to log in
 export function initLogin()
 {
-	// setupPasswordToggle("newPassword", "togglePassword", "eyeIcon");
-	// setupPasswordToggle("confirmPassword", "toggleConfirmPassword", "eyeIconConfirm");
-
-	const toggleBtn = document.getElementById("togglePassword");
-	const passwordInput = document.getElementById("newPassword") as HTMLInputElement;
-	console.log("toggleBtn:", toggleBtn);
-
-	console.log("🎯 Script chargé 1!");
-	toggleBtn?.addEventListener("click", () => {
-	console.log("received click on toggleBtn");
-	const isHidden = passwordInput.type === "password";
-	passwordInput.type = isHidden ? "text" : "password";
-	toggleBtn.textContent = isHidden ? "Hide" : "Show";
-	});
 	const submitBtn = document.getElementById("connectionBtn") as HTMLButtonElement;
 	submitBtn.addEventListener("click", () => {
-		console.log("🎯 Script chargé 2!");
 
 		const login = (document.getElementById("login") as HTMLInputElement).value;
 		const password = (document.getElementById("password") as HTMLInputElement).value;
