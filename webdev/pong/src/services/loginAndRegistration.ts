@@ -1,9 +1,41 @@
+import { playBtnClicked } from '../controllers/menuController';
+import { Router } from '../router';
+import { loginView, chooseTypeOfGameView } from '../views/menu'
+
+
+export function isValidEmail(email: string): boolean
+{
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+export function setupPasswordToggle(passwordId: string, toggleBtnId: string, eyeClosedIconId: string, eyeOpenIconId: string): void
+{
+	const input = document.getElementById(passwordId) as HTMLInputElement | null;
+	const toggleBtn = document.getElementById(toggleBtnId);
+	const eyeClosed = document.getElementById(eyeClosedIconId);
+	const eyeOpened = document.getElementById(eyeOpenIconId);
+
+	if (!input || !toggleBtn || !eyeOpened || !eyeClosed)
+		return;
+
+	let isVisible = false;
+
+	toggleBtn.addEventListener("click", () => {
+		isVisible = !isVisible;
+		input.type = isVisible ? "text" : "password";
+		eyeOpened.classList.toggle("hidden", !isVisible);
+		eyeClosed.classList.toggle("hidden", isVisible);
+	});
+}
+
+
 // --- form to log in
 export function initLogin()
 {
-	const submitBtn = document.getElementById("login-btn") as HTMLButtonElement;
-
+	const submitBtn = document.getElementById("connectionBtn") as HTMLButtonElement;
 	submitBtn.addEventListener("click", () => {
+
 		const login = (document.getElementById("login") as HTMLInputElement).value;
 		const password = (document.getElementById("password") as HTMLInputElement).value;
 
@@ -11,73 +43,172 @@ export function initLogin()
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ login: login, password: password }),
+		credentials: 'include' 
 		})
 		.then(res => res.json())
 		.then(data =>
 		{
 			localStorage.setItem('login', login);
 			const username = localStorage.getItem('login');
-			if (username && data.success == true)
+
+			const connectionMsgId = "connectionMsg";
+			let connectionMsg = document.getElementById(connectionMsgId) as HTMLParagraphElement | null;
+			if (!connectionMsg)
 			{
-				document.getElementById('title')!.textContent = `Hi ${username}`;
-				document.getElementById("welcome-div")!.style.display = "block";
-				document.getElementById("welcome-div")!.textContent = `Welcome ${username}, you are now connected :)`;
+				connectionMsg = document.createElement("p");
+				connectionMsg.id = "connectionMsg";
+				connectionMsg.classList.add("font-seven", "text-white", "px-1", "py-1", "text-2xl");
+				const connectionBtn = document.getElementById("connectionBtn");
+				if (connectionBtn)
+					connectionBtn.insertAdjacentElement("afterend", connectionMsg);
+			}
+
+			if (username && data.success === true)
+			{
+				connectionMsg.textContent = `User ${login} has been logged in`;
+
+				const playBtnLoginPageId = "playBtnLoginPage";
+				let playBtnLoginPage = document.getElementById(playBtnLoginPageId) as HTMLButtonElement | null
+				if (!playBtnLoginPage)
+				{
+					playBtnLoginPage = document.createElement("button");
+					playBtnLoginPage.id = "playBtnLoginPage";
+					playBtnLoginPage.classList.add("font-seven", "text-white", "px-1", "py-1", "text-5xl", "border", "border-white", "rounded", "px-6", "py-3", "w-90");
+					playBtnLoginPage.textContent = "Play";
+					const connectionBtn = document.getElementById("connectionBtn");
+					if (connectionBtn)
+						connectionBtn.insertAdjacentElement("afterend", playBtnLoginPage);
+					if (playBtnLoginPage)
+						playBtnClicked(playBtnLoginPage);
+				}
+				let loggedIcon = document.getElementById("loggedIcon") as HTMLAnchorElement | null;
+				if (loggedIcon)
+				{
+					loggedIcon.classList.remove("hidden");
+					loggedIcon.title = `Logged as ${username}`;
+					
+					//redirection to play page
+					Router.navigate('play');
+					const fullCanva = document.getElementById('fullCanva');
+					if (fullCanva)
+						fullCanva.innerHTML = chooseTypeOfGameView.render();
+				}
 			}
 			else
-			{
-				document.getElementById('title')!.textContent = `Hi`;
-				document.getElementById("welcome-div")!.style.display = "block";
-				document.getElementById("welcome-div")!.textContent = `Sorry. Your credentials doesn't match.`;
-			}
-		});
-		// console.log(login, "Password:", password);
+				connectionMsg.textContent = `Sorry. Your credentials doesn't match`;
+
+			});
+			console.log("login: ", login, "Password:", password);// to erase for PROD
 	});
 }
+
+export function showSuccessPopup(duration: number = 5000): void {
+	const popup = document.getElementById("successPopup");
+	if (!popup)
+		return;
+
+	popup.classList.remove("hidden");
+
+	setTimeout(() => {
+		popup.classList.add("hidden");
+	}, duration);
+}
+
 
 // --- form to create account
 export function initRegistration()
 {
-	const registerBtn = document.getElementById("registerBtn");
+	document.getElementById("createAccountBtn")?.addEventListener("click", () => {
+		
+		const username = (document.getElementById("newUsername") as HTMLInputElement).value;
+		const password = (document.getElementById("newPassword") as HTMLInputElement).value;
+		const confirmPassword = (document.getElementById("confirmPassword") as HTMLInputElement).value;
+		const mail = (document.getElementById("newMail") as HTMLInputElement).value.toLowerCase();
 
-	registerBtn?.addEventListener("click", () => {
-	document.getElementById("connexionBlock")!.style.display = "none";
-	const container = document.getElementById("register-container");
-	if (container)
-		return; // avoid to create several times the same account
-
-	const form = document.createElement("div");
-	form.id = "register-container";
-	form.innerHTML = `
-		<div id="registrationBlock" class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-			<h1 id="title" class="text-3xl font-bold mb-6 text-blue-600">Hi</h1>
-			<input id="new-username" placeholder="Username" class="mb-4 px-4 py-2 border rounded w-64"/><br/>
-			<input id="new-password" placeholder="Password" type="password" class="mb-4 px-4 py-2 border rounded w-64"/><br/>
-			<input id="new-alias" placeholder="Alias" class="mb-4 px-4 py-2 border rounded w-64"/><br/>
-			<button id="create-account" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Create Account</button>
-			<button id="backToLogin" class="cursor-pointer text-blue-500 underline">Click here to be back to log in</button>
-		</div>
-	`;
-	
-	document.body.appendChild(form);
-
-	document.getElementById("backToLogin")?.addEventListener("click", () => {
-	document.getElementById("register-container")?.remove();
-	document.getElementById("connexionBlock")!.style.display = "flex";
-	});
-
-	document.getElementById("create-account")?.addEventListener("click", () => {
-		const username = (document.getElementById("new-username") as HTMLInputElement).value;
-		const password = (document.getElementById("new-password") as HTMLInputElement).value;
-		const alias = (document.getElementById("new-alias") as HTMLInputElement).value;
-
+		const registrationMsgId = "registrationMsg";
+		let registrationMsg = document.getElementById(registrationMsgId) as HTMLParagraphElement | null;
+		const createAccountBtn = document.getElementById("createAccountBtn");
+		if (!registrationMsg)
+		{
+			registrationMsg = document.createElement("p");
+			registrationMsg.id = "registrationMsg";
+			registrationMsg.classList.add("font-seven", "text-white", "px-1", "py-1", "text-2xl");
+			if (createAccountBtn)
+				createAccountBtn.insertAdjacentElement("afterend", registrationMsg);
+		}
+		if (confirmPassword !== password)
+			return registrationMsg!.textContent = `The passwords are not matching.`;
+		if (!username || !password || !confirmPassword || !mail)
+			return registrationMsg!.textContent = `All fields has to be filled to create an account.`;
+		if (isValidEmail(mail) === false)
+			return registrationMsg!.textContent = `The mail format is not correct.`;			
+			
 		fetch('/api/auth/register', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ login: username, password, alias })
+		body: JSON.stringify({ login: username, password, mail })
+		})
+		.then(async res => {
+		const data = await res.json();
+
+		if (!res.ok)
+			throw new Error(data.error);
+
+		console.log("Account created:", data);
+		registrationMsg.textContent = `Account created. Welcome ${username}`;
+
+		//redirection on login page
+		Router.navigate('login');
+		const fullCanva = document.getElementById('fullCanva');
+		if (fullCanva)
+		{
+			fullCanva.innerHTML = loginView.render();
+			showSuccessPopup();
+		}
+
+		})
+		.catch(err => {
+			if (err)
+				registrationMsg.textContent = err.message;
+		});
+	});
+}
+
+//to forget for the moment
+export function modifyInfo()
+{
+	fetch('/api/auth/info', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({}),
+		credentials: 'include'
 		})
 		.then(res => res.json())
-		.then(data => console.log("Account created:", data))
-		.catch(err => console.error(err));
-	});
-	});
+		.then(data =>
+		{
+			console.log("You are in info page & data:", data);
+	})
+}
+
+//to forget for the moment
+export async function initInfo(): Promise<boolean>
+{
+	try
+	{
+		const res = await fetch('/api/auth/info',
+		{
+	    	method: 'GET',
+	    	credentials: 'include'
+		});	
+	  	if (!res.ok)
+			throw new Error('Not authenticated');	
+	  	const data = await res.json();
+	  	console.log("User info received:", data);
+	  	return true; //  connected
+	}
+	catch (err)
+	{
+		console.warn("User not authenticated:", err);
+		return false; // not connected
+	}
 }
