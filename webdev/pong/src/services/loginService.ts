@@ -1,4 +1,4 @@
-import { playDomLoaded } from '../controllers/menu/menuController'
+import { playDomLoaded } from '../controllers/menu/playController'
 import { showSuccessPopup } from '../utils/utils';
 
 // --- form to log in
