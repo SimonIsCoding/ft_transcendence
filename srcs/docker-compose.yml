@@ -27,11 +27,32 @@ services:
     build: requirements/api-gateway
     depends_on:
       - auth-service
+      - 2fa-service
 
   auth-service:
     container_name: auth-service
     build: requirements/auth-service
   
+  2fa-service:
+    container_name: 2fa-service
+    build: requirements/2fa-service
+    secrets:
+      - email_user
+      - email_password
+    environment:
+      - NODE_ENV=production
+      - PORT=3003
+      - CORS_ORIGINS=http://localhost:4443
+      - EMAIL_USER_FILE=/run/secrets/email_user
+      - EMAIL_PASSWORD_FILE=/run/secrets/email_password
+    networks:
+      - transcendence-network
+    restart: unless-stopped
+    # No ports exposed externally
+    # Add volumes if using SQLite for persistence:
+    volumes:
+      - 2fa-data:/usr/src/app/data
+
   # New WebSocket service
   ws-server:
     container_name: ws-server
@@ -63,6 +84,7 @@ volumes:
       type: none
       device: $PWD/srcs/data/pong
       o: bind
+  2fa_data:
 
 secrets:
   server_cert:
@@ -73,4 +95,8 @@ secrets:
     file: ./secrets/apicert.pem
   api_key:
     file: ./secrets/apikey.pem
+  email_user:
+    file: ./secrets/email_user.txt
+  email_password:
+    file: ./secrets/email_password.txt
 
