@@ -1,6 +1,10 @@
 import { HomeView } from './views/home';
-import { infoView, loginView, registerView, chooseTypeOfGameView } from './views/menu';
-import { showGame } from './controllers/menu/menuController';
+import { infoView, loginView, registerView, emptyFooterView } from './views/menu';
+import { chooseTypeOfGameView } from './views/chooseTypeOfGameView'
+// import { showGame } from './controllers/menu/menuController';
+import { GameView } from './views/game';
+import { gameController } from './controllers/gameController';
+import { SettingsView } from './views/settings';
 
 export class Router {
   private static app = document.getElementById('app');
@@ -35,14 +39,32 @@ public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'play' | '
 	
 	case 'play':
       if (fullCanva)
-        fullCanva.innerHTML = chooseTypeOfGameView.render();
+	  	fullCanva.innerHTML = chooseTypeOfGameView.render();
       break;
 
 	case 'game':
 	  if (fullCanva)
-		showGame(fullCanva);
+	  {
+		fullCanva.innerHTML = GameView.renderGameCanvas();
+		GameView.initGameCanvas();
+		gameController.init();
+		fullCanva.classList.remove("border-4");
+		fullCanva.classList.remove("border-white");
+	  }
       break;
   }
+  
+	const footer = document.getElementById('footerSettings') as HTMLDivElement | null;
+	if (footer)
+	{
+	if (page === 'game')
+	{
+		footer.innerHTML = SettingsView.renderGameSettings();
+		SettingsView.initSettings();
+	}
+	else
+		footer.innerHTML = emptyFooterView.render();
+	}
 
   if (addToHistory)
     history.pushState({}, '', page === 'home' ? '/' : `/${page}`);
@@ -59,7 +81,6 @@ public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'play' | '
 	  path.includes('game') ? 'game' :
 	  path.includes('info') ? 'info' : 
 	  'home' , false);
-
     });
 
     // Handle back/forward navigation
@@ -72,7 +93,6 @@ public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'play' | '
 	  path.includes('game') ? 'game' :
 	  path.includes('info') ? 'info' : 
 	  'home' , false);
-
     });
   }
 }

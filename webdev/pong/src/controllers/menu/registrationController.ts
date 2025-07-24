@@ -1,4 +1,4 @@
-import { registerView, emptyFooterView } from '../../views/menu';
+import { registerView } from '../../views/menu';
 import { initRegistration } from '../../services/registrationService';
 import { Router } from '../../router';
 import { setupPasswordToggle } from '../../utils/utils';
@@ -19,10 +19,6 @@ export function registerDomLoaded(): void
 	const backToLogin = document.getElementById('backToLogin') as HTMLButtonElement | null;
 	if (backToLogin)
 		loginBtnClicked(backToLogin);
-
-	const footer = document.getElementById('footerSettings');
-	if (footer)
-		footer.innerHTML = emptyFooterView.render();
 }
 
 export function registerBtnClicked(registerBtn: HTMLButtonElement): void 
