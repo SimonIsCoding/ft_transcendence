@@ -8,13 +8,13 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install --production
+RUN npm install
 
 # Copy app source
 COPY . .
 
 # Expose the port
-EXPOSE 3000
+EXPOSE 3003
 
 # Start the application
 CMD ["npm", "start"]
