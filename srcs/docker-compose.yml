@@ -27,15 +27,29 @@ services:
     build: requirements/api-gateway
     depends_on:
       - auth-service
-      - service-b
 
   auth-service:
     container_name: auth-service
     build: requirements/auth-service
-
-  service-b:
-    container_name: service-b
-    build: requirements/service-b
+  
+  # New WebSocket service
+  ws-server:
+    container_name: ws-server
+    build: requirements/ws-server
+    secrets:
+      - server_cert  # Share the same certs as nginx
+      - server_key
+    environment:
+      - NODE_ENV=production
+      - CERT_PATH=/run/secrets/server_cert
+      - KEY_PATH=/run/secrets/server_key
+    ports:
+      - "3002:3002"  # Internal port for WebSocket server
+    depends_on:
+      - auth-service  # If you need authentication
+    restart: unless-stopped
+    healthcheck:
+      disable: true
 
 networks:
   default:
