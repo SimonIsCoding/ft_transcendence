@@ -1,7 +1,8 @@
-const fp = require('fastify-plugin');
-const { initiate2FA, verify2FA } = require('../services/authService');
+// requirements/2fa-service/routes/authRoutes.js
+import fp from 'fastify-plugin';
+import { initiate2FA, verify2FA } from '../services/authService.js';
 
-module.exports = fp(async (fastify) => {
+export default fp(async (fastify) => {
   // Request 2FA Token
   fastify.post('/request', {
     schema: {

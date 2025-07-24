@@ -1,4 +1,5 @@
-const Database = require('better-sqlite3');
+// requirements/2fa-service/services/dbService.js
+import Database from 'better-sqlite3';
 
 // Initialize database
 const db = new Database('./2fa-tokens.db');
@@ -28,4 +29,4 @@ function cleanupExpiredTokens() {
 setInterval(cleanupExpiredTokens, 3600000);
 cleanupExpiredTokens();
 
-module.exports = db;
+export default db;

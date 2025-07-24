@@ -45,13 +45,9 @@ services:
       - CORS_ORIGINS=http://localhost:4443
       - EMAIL_USER_FILE=/run/secrets/email_user
       - EMAIL_PASSWORD_FILE=/run/secrets/email_password
-    networks:
-      - transcendence-network
     restart: unless-stopped
-    # No ports exposed externally
-    # Add volumes if using SQLite for persistence:
     volumes:
-      - 2fa-data:/usr/src/app/data
+      - 2fa_data:/usr/src/app/data
 
   # New WebSocket service
   ws-server:
@@ -85,6 +81,7 @@ volumes:
       device: ./data/pong
       o: bind
   2fa_data:
+    driver: local
 
 secrets:
   server_cert:

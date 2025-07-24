@@ -1,42 +1,55 @@
 // requirements/2fa-service/server.js
-const fastify = require('fastify')({ 
+import fastify from 'fastify';
+import helmet from '@fastify/helmet';
+import rateLimit from '@fastify/rate-limit';
+import cors from '@fastify/cors';
+import { config } from './config.js';
+import authRoutes from './routes/authRoutes.js';
+
+// Initialize Fastify
+const server = fastify({ 
   logger: true,
   trustProxy: true 
 });
-const config = require('./config');
 
 // Security Middleware
-fastify.register(require('@fastify/helmet'));
-fastify.register(require('@fastify/rate-limit'), {
+await server.register(helmet);
+await server.register(rateLimit, {
   max: 100,
   timeWindow: '1 minute'
 });
 
-// CORS (using config)
-fastify.register(require('@fastify/cors'), {
+// CORS
+await server.register(cors, {
   origin: config.CORS_ORIGINS,
   methods: ['POST', 'OPTIONS']
 });
 
-// Database (if using SQLite)
-require('./services/dbService');
+// Database (SQLite)
+import './services/dbService.js';
 
 // Routes
-fastify.register(require('./routes/authRoutes'), { 
-  prefix: '/api/2fa' 
-});
+await server.register(
+  async (fastify) => {
+    await fastify.register(authRoutes);
+  },
+  { prefix: '/api/2fa' }
+);
 
 // Health Check
-fastify.get('/health', async () => ({ status: 'ok' }));
+server.get('/health', async () => ({ status: 'ok' }));
 
 // Start Server
-fastify.listen({
-  port: config.PORT,
-  host: '0.0.0.0'
-}, (err) => {
-  if (err) {
-    fastify.log.error(err);
-    process.exit(1);
-  }
-  fastify.log.info(`2FA Service running on port ${config.PORT}`);
-});
+try {
+// Add before server.listen()
+console.log('Registered routes:');
+console.log(server.printRoutes());
+  await server.listen({
+    port: config.PORT,
+    host: '0.0.0.0'
+  });
+  server.log.info(`2FA Service running on port ${config.PORT}`);
+} catch (err) {
+  server.log.error(err);
+  process.exit(1);
+}
