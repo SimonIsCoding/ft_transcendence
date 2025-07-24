@@ -61,7 +61,7 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: $PWD/srcs/data/pong
+      device: ./data/pong
       o: bind
 
 secrets:
