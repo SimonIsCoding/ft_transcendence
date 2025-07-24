@@ -60,7 +60,9 @@ export function loginBtnClicked(loginBtn: HTMLButtonElement): void
 	
 	const backToRegister = document.getElementById('backToRegister') as HTMLButtonElement | null;
 	if (backToRegister)
+	{
 		registerBtnClicked(backToRegister);
+	}
 	});
 }
 
@@ -79,7 +81,18 @@ export function registerBtnClicked(registerBtn: HTMLButtonElement): void
 	
 	const backToLogin = document.getElementById('backToLogin') as HTMLButtonElement | null;
 	if (backToLogin)
-		loginBtnClicked(backToLogin);
+	{
+		// loginBtnClicked(backToLogin);
+		backToLogin.addEventListener('click', () => {
+			Router.navigate('login');
+			const fullCanva = document.getElementById('fullCanva');
+			if (fullCanva) {
+				fullCanva.innerHTML = loginView.render();
+				initLogin();
+				setupPasswordToggle("password", "togglePasswordLogin", "eyeIconClosedLogin", "eyeIconOpenedLogin");
+		}
+		});
+	}
 	});
 }
 

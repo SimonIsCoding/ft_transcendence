@@ -1,7 +1,6 @@
-import { playBtnClicked } from '../controllers/menuController';
 import { Router } from '../router';
 import { loginView, chooseTypeOfGameView } from '../views/menu'
-
+import { displayGameOnClick } from '../controllers/menuController'
 
 export function isValidEmail(email: string): boolean
 {
@@ -65,22 +64,6 @@ export function initLogin()
 
 			if (username && data.success === true)
 			{
-				connectionMsg.textContent = `User ${login} has been logged in`;
-
-				const playBtnLoginPageId = "playBtnLoginPage";
-				let playBtnLoginPage = document.getElementById(playBtnLoginPageId) as HTMLButtonElement | null
-				if (!playBtnLoginPage)
-				{
-					playBtnLoginPage = document.createElement("button");
-					playBtnLoginPage.id = "playBtnLoginPage";
-					playBtnLoginPage.classList.add("font-seven", "text-white", "px-1", "py-1", "text-5xl", "border", "border-white", "rounded", "px-6", "py-3", "w-90");
-					playBtnLoginPage.textContent = "Play";
-					const connectionBtn = document.getElementById("connectionBtn");
-					if (connectionBtn)
-						connectionBtn.insertAdjacentElement("afterend", playBtnLoginPage);
-					if (playBtnLoginPage)
-						playBtnClicked(playBtnLoginPage);
-				}
 				let loggedIcon = document.getElementById("loggedIcon") as HTMLAnchorElement | null;
 				if (loggedIcon)
 				{
@@ -92,6 +75,9 @@ export function initLogin()
 					const fullCanva = document.getElementById('fullCanva');
 					if (fullCanva)
 						fullCanva.innerHTML = chooseTypeOfGameView.render();
+						const OneVsOneBtn = document.getElementById('OneVsOneBtn') as HTMLButtonElement | null;
+					if (OneVsOneBtn)
+						displayGameOnClick(OneVsOneBtn);
 				}
 			}
 			else
@@ -163,6 +149,8 @@ export function initRegistration()
 		if (fullCanva)
 		{
 			fullCanva.innerHTML = loginView.render();
+			initLogin();
+			setupPasswordToggle("password", "togglePasswordLogin", "eyeIconClosedLogin", "eyeIconOpenedLogin");
 			showSuccessPopup();
 		}
 
