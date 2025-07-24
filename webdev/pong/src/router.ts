@@ -1,6 +1,6 @@
 import { HomeView } from './views/home';
 import { infoView, loginView, registerView, chooseTypeOfGameView } from './views/menu';
-import { showGame } from './controllers/menuController';
+import { showGame } from './controllers/menu/menuController';
 
 export class Router {
   private static app = document.getElementById('app');

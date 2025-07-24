@@ -1,4 +1,4 @@
-import { menuController } from '../controllers/menuController';
+import { menuController } from '../controllers/menu/menuController';
 
 interface User {
   login: string;
@@ -23,6 +23,8 @@ export const HomeView = {
           <a href="/logged" id="loggedIcon" class="hidden absolute right-6 top-6">
             <img src="/loggedIcon.png" alt="Logged" class="h-8 w-8" />
           </a>
+		  <div id="successPopup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50">
+		  </div>
         </header>
 
         <main id="main-content" class="flex-1 flex items-center justify-center bg-[#fbd11b] overflow-y-auto min-h-[450px]">
@@ -48,6 +50,5 @@ export const HomeView = {
   init(): void
   {
 	menuController.init();
-
   }
 };

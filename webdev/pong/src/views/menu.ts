@@ -1,8 +1,6 @@
 export const loginView = {
   render: (): string => `
 	<div id="loginCredentials" class="flex flex-col justify-center items-center w-full space-y-10">
-	<div id="successPopup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50">Your account has been created
-	</div>
 		<input id="login" type="text" placeholder="Login" class="font-seven text-white px-6 py-3 text-5xl border border-white rounded w-120" />
 		<div class="relative">
 			<input id="password" type="password" placeholder="Password" class="font-seven text-white px-6 py-3 text-5xl border border-white rounded w-120" />
@@ -77,4 +75,11 @@ export const infoView = {
 		<button id="DashboardBtn" class="font-seven text-white px-6 py-3 text-5xl border border-white rounded">DASHBOARD</button>
 	</div>
   `
+};
+
+export const emptyFooterView = {
+	render: (): string => `
+	<footer id="footerSettings" class="bg-[#fbd11b] p-4">
+	</footer>
+	`
 };
