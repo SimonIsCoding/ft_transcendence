@@ -55,7 +55,12 @@ export function loginBtnClicked(loginBtn: HTMLButtonElement): void
 	if (fullCanva) {
 		fullCanva.innerHTML = loginView.render();
 		initLogin();
+		setupPasswordToggle("password", "togglePasswordLogin", "eyeIconClosedLogin", "eyeIconOpenedLogin");
 	}
+	
+	const backToRegister = document.getElementById('backToRegister') as HTMLButtonElement | null;
+	if (backToRegister)
+		registerBtnClicked(backToRegister);
 	});
 }
 
