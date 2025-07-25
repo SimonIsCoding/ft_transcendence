@@ -3,12 +3,15 @@ export const loggedController = {
   {
 	const playSidebarBtn = document.getElementById('playSidebarBtn');
 	const playSubmenu = document.getElementById('playSubmenu');
+	const sidebar = document.getElementById('sidebar');
+	sidebar?.classList.toggle('w-[6%]');
+	sidebar?.classList.toggle('w-[20%]');
 
-	if (playSidebarBtn && playSubmenu)
+	if (playSidebarBtn && playSubmenu && sidebar)
 	{
 		playSidebarBtn.addEventListener('click', () => {
-			const isHidden = playSubmenu.classList.contains('hidden');
-			playSubmenu.classList.toggle('hidden', !isHidden); // toggle visibility
+			playSubmenu.classList.toggle('hidden');
+			sidebar.classList.toggle('expanded');
 		});
 	}
 
