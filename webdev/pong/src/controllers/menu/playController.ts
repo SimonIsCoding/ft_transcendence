@@ -7,10 +7,10 @@ import { gameController } from '../gameController';
 export function playDomLoaded(): void
 {
 	Router.navigate('play');
-	const fullCanva = document.getElementById('fullCanva');
-	if (fullCanva)
+	const gameArea = document.getElementById('gameArea');
+	if (gameArea)
 	{
-		fullCanva.innerHTML = chooseTypeOfGameView.render();
+		gameArea.innerHTML = chooseTypeOfGameView.render();
 		chooseTypeOfGameView.init();
 	}
 }

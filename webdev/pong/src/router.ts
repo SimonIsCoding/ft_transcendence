@@ -1,14 +1,14 @@
 import { HomeView } from './views/home';
-import { infoView, loginView, registerView, emptyFooterView } from './views/menu';
+import { infoView, loginView, registerView } from './views/menu';
 import { chooseTypeOfGameView } from './views/chooseTypeOfGameView'
 // import { showGame } from './controllers/menu/menuController';
 import { GameView } from './views/game';
+import { userLogged } from './views/userLogged.ts';
 import { gameController } from './controllers/gameController';
-import { SettingsView } from './views/settings';
 
 export class Router {
   private static app = document.getElementById('app');
-public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'play' | 'game' , addToHistory = true): void {
+public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'play' | 'game' | 'userLogged' , addToHistory = true): void {
   if (!this.app) {
     console.error('App container not found');
     return;
@@ -53,19 +53,15 @@ public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'play' | '
 		gameController.init();
 	  }
       break;
+
+	case 'userLogged':
+      if (gameArea)
+	  {
+		gameArea.innerHTML = userLogged.render();
+		userLogged.init();
+	  }
+      break;
   }
-  
-	const footer = document.getElementById('footerSettings') as HTMLDivElement | null;
-	if (footer)
-	{
-	if (page === 'game')
-	{
-		footer.innerHTML = SettingsView.renderGameSettings();
-		SettingsView.initSettings();
-	}
-	else
-		footer.innerHTML = emptyFooterView.render();
-	}
 
   if (addToHistory)
     history.pushState({}, '', page === 'home' ? '/' : `/${page}`);
@@ -80,7 +76,8 @@ public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'play' | '
 	  path.includes('register') ? 'register' :
 	  path.includes('play') ? 'play' :
 	  path.includes('game') ? 'game' :
-	  path.includes('info') ? 'info' : 
+	  path.includes('info') ? 'info' :
+	  path.includes('userLogged') ? 'userLogged' :
 	  'home' , false);
     });
 
@@ -93,6 +90,7 @@ public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'play' | '
 	  path.includes('play') ? 'play' :
 	  path.includes('game') ? 'game' :
 	  path.includes('info') ? 'info' : 
+	  path.includes('userLogged') ? 'userLogged' :
 	  'home' , false);
     });
   }
