@@ -19,7 +19,7 @@ public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'play' | '
   switch (page) {
     case 'home':
       this.app.innerHTML = HomeView.render();
-      HomeView.init();
+    //   HomeView.init();
       break;
 
     case 'info':
@@ -39,7 +39,10 @@ public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'play' | '
 	
 	case 'play':
       if (fullCanva)
-	  	fullCanva.innerHTML = chooseTypeOfGameView.render();
+	  {
+		fullCanva.innerHTML = chooseTypeOfGameView.render();
+		chooseTypeOfGameView.init();
+	  }
       break;
 
 	case 'game':
