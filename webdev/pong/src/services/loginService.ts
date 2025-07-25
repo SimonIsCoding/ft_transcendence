@@ -1,4 +1,3 @@
-// import { userLogged } from '../views/userLogged.ts';
 import { Router } from '../router';
 import { showSuccessPopup } from '../utils/utils';
 
@@ -25,16 +24,6 @@ export function initLogin()
 
 			const connectionMsgId = "connectionMsg";
 			let connectionMsg = document.getElementById(connectionMsgId) as HTMLParagraphElement | null;
-			// if (!connectionMsg)
-			// {
-			// 	connectionMsg = document.createElement("p");
-			// 	connectionMsg.id = "connectionMsg";
-			// 	connectionMsg.classList.add("font-seven", "text-white", "px-1", "py-1", "text-2xl");
-			// 	const connectionBtn = document.getElementById("connectionBtn");
-			// 	if (connectionBtn)
-			// 		connectionBtn.insertAdjacentElement("afterend", connectionMsg);
-			// }
-
 			if (username && data.success === true)
 			{
 				let loggedIcon = document.getElementById("loggedIcon") as HTMLAnchorElement | null;
@@ -45,14 +34,14 @@ export function initLogin()
 				}
 
 				//redirection to userLogged page
-				Router.navigate('userLogged')
+				Router.navigate('userLogged');
 				showSuccessPopup("You are logged");
 			}
 			else if (!connectionMsg)
 			{
 				connectionMsg = document.createElement("p");
 				connectionMsg.id = "connectionMsg";
-				connectionMsg.classList.add("font-seven", "text-white", "px-1", "py-1", "text-2xl");
+				connectionMsg.classList.add("font-seven", "text-white", "px-1", "py-1", "text-xl");
 				connectionMsg.textContent = `Sorry. Your credentials doesn't match`;
 				const connectionBtn = document.getElementById("connectionBtn");
 				if (connectionBtn)
