@@ -15,44 +15,42 @@ public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'play' | '
   }
 
   // Handle route protection + rendering
-  const fullCanva = document.getElementById('fullCanva') as HTMLDivElement | null;
+  const gameArea = document.getElementById('gameArea') as HTMLDivElement | null;
   switch (page) {
     case 'home':
       this.app.innerHTML = HomeView.render();
-    //   HomeView.init();
+      HomeView.init();
       break;
 
     case 'info':
-      if (fullCanva)
-        fullCanva.innerHTML = infoView.render();
+      if (gameArea)
+        gameArea.innerHTML = infoView.render();
       break;
 	
 	case 'login':
-      if (fullCanva)
-        fullCanva.innerHTML = loginView.render();
+      if (gameArea)
+        gameArea.innerHTML = loginView.render();
       break;
 	
 	case 'register':
-      if (fullCanva)
-        fullCanva.innerHTML = registerView.render();
+      if (gameArea)
+        gameArea.innerHTML = registerView.render();
       break;
 	
 	case 'play':
-      if (fullCanva)
+      if (gameArea)
 	  {
-		fullCanva.innerHTML = chooseTypeOfGameView.render();
+		gameArea.innerHTML = chooseTypeOfGameView.render();
 		chooseTypeOfGameView.init();
 	  }
       break;
 
 	case 'game':
-	  if (fullCanva)
+	  if (gameArea)
 	  {
-		fullCanva.innerHTML = GameView.renderGameCanvas();
+		gameArea.innerHTML = GameView.renderGameCanvas();
 		GameView.initGameCanvas();
 		gameController.init();
-		fullCanva.classList.remove("border-4");
-		fullCanva.classList.remove("border-white");
 	  }
       break;
   }

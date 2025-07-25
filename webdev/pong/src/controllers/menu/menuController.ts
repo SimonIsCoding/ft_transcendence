@@ -1,7 +1,7 @@
 import { infoView } from '../../views/menu';
 import { Router } from '../../router';
-import { loginBtnClicked } from './loginController';
-import { registerBtnClicked } from './registrationController';
+// import { loginBtnClicked } from './loginController';
+// import { registerBtnClicked } from './registrationController';
 import { playBtnClicked } from './playController';
 
 export function loggedIconAnchorClicked(loggedIconAnchor: HTMLAnchorElement): void 
@@ -22,20 +22,20 @@ export function loggedIconAnchorClicked(loggedIconAnchor: HTMLAnchorElement): vo
 export const menuController = {
   init(): void
   {
-	const loginBtn = document.getElementById('loginBtn') as HTMLButtonElement | null;
-	if (loginBtn)
-		loginBtnClicked(loginBtn);
-	
-	const registerBtn = document.getElementById('registerBtn') as HTMLButtonElement | null;
-	if (registerBtn)
-		registerBtnClicked(registerBtn);
+	// const loginBtn = document.getElementById('loginBtn') as HTMLButtonElement | null;
+	// if (loginBtn)
+		// loginBtnClicked(loginBtn);
+	// 
+	// const registerBtn = document.getElementById('registerBtn') as HTMLButtonElement | null;
+	// if (registerBtn)
+		// registerBtnClicked(registerBtn);
 	
 	const playBtn = document.getElementById('playBtn') as HTMLButtonElement | null;
 	if (playBtn)
 		playBtnClicked(playBtn);
 	
-	const loggedIconAnchor = document.getElementById('loggedIcon') as HTMLAnchorElement | null;
-	if (loggedIconAnchor)
-		loggedIconAnchorClicked(loggedIconAnchor);
+	// const loggedIconAnchor = document.getElementById('loggedIcon') as HTMLAnchorElement | null;
+	// if (loggedIconAnchor)
+		// loggedIconAnchorClicked(loggedIconAnchor);
   }
 };

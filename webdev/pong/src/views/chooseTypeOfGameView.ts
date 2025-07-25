@@ -27,8 +27,6 @@ export const chooseTypeOfGameView = {
 				fullCanva.innerHTML = GameView.renderGameCanvas();
 				GameView.initGameCanvas();
 				gameController.init();
-				fullCanva.classList.remove("border-4");
-				fullCanva.classList.remove("border-white");
 			}
 		});
 	}

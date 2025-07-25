@@ -1,4 +1,4 @@
-// import { menuController } from '../controllers/menu/menuController';
+import { menuController } from '../controllers/menu/menuController';
 
 interface User {
   login: string;
@@ -13,11 +13,11 @@ export const HomeView = {
 
  render(): string {
 	return `
-	<div class="w-screen h-screen flex bg-yellow-400 overflow-hidden">
+	<div class="w-screen h-screen flex bg-[#fbd11b] overflow-hidden">
 
-      <!-- Menu latéral -->
-      <div id="sidebar" class="w-1/24 bg-yellow-400 flex flex-col transition-all duration-500 ease-in-out overflow-hidden group" style="min-height: 100vh">
-        <img src="/pong-logo.png" alt="PONG Logo" class="h-6 w-auto pl-2 pr-2 pt-2"/>
+      <!-- Sidebar -->
+      <div id="sidebar" class="w-1/24 bg-[#fbd11b] flex flex-col transition-all duration-500 ease-in-out overflow-hidden group" style="min-height: 100vh">
+        <img src="/pong-logo.png" alt="PONG Logo" class="h-auto w-auto pl-2 pr-2 pt-2"/>
 
 
 		<div class="flex flex-col mt-auto items-center space-y-2 pb-6">
@@ -26,14 +26,20 @@ export const HomeView = {
 		</div>
       </div>
 
-      <!-- Zone de jeu -->
+      <!-- Game Area -->
       <div id="gameArea" class="flex-1 bg-black flex items-center justify-center bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center w-full h-full" style="background-image: url('/pongBackgroundPlay.png');">
-        <button id="playBtn" class="text-yellow-400 text-5xl rounded-lg border border-yellow-400 px-12 py-6 rounded-lg hover:bg-yellow-400 hover:text-black transition">
+        <button id="playBtn" class="text-yellow-400 text-5xl rounded-lg border border-yellow-400 px-12 py-6 rounded-lg hover:bg-[#fbd11b] hover:text-black transition">
           PLAY
         </button>
       </div>
     </div>
   `;
+  },
+
+    init(): void
+  {
+	menuController.init();
+  }
 
 //     return `
 //       <div class="flex flex-col min-h-screen bg-[#fbd11b] text-black">
@@ -67,10 +73,4 @@ export const HomeView = {
 //         </footer>
 //       </div>
 //     `;
-  },
-
-//   init(): void
-//   {
-// 	menuController.init();
-//   }
 };
