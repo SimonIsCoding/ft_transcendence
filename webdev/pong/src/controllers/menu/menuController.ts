@@ -23,16 +23,18 @@ export const menuController = {
   init(): void
   {
 	const loginBtn = document.getElementById('loginBtn') as HTMLButtonElement | null;
-	const registerBtn = document.getElementById('registerBtn') as HTMLButtonElement | null;
-	const playBtn = document.getElementById('playBtn') as HTMLButtonElement | null;
-	const loggedIconAnchor = document.getElementById('loggedIcon') as HTMLAnchorElement | null;
-		
 	if (loginBtn)
 		loginBtnClicked(loginBtn);
+	
+	const registerBtn = document.getElementById('registerBtn') as HTMLButtonElement | null;
 	if (registerBtn)
 		registerBtnClicked(registerBtn);
+	
+	const playBtn = document.getElementById('playBtn') as HTMLButtonElement | null;
 	if (playBtn)
 		playBtnClicked(playBtn);
+	
+	const loggedIconAnchor = document.getElementById('loggedIcon') as HTMLAnchorElement | null;
 	if (loggedIconAnchor)
 		loggedIconAnchorClicked(loggedIconAnchor);
   }
