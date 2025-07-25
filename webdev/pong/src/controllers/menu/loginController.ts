@@ -1,16 +1,16 @@
+import { Router } from '../../router';
 import { loginView } from '../../views/menu';
 import { initLogin } from '../../services/loginService';
-import { Router } from '../../router';
 import { setupPasswordToggle } from '../../utils/utils';
 import { registerBtnClicked } from './registrationController';
 
 export function loginDomLoaded(): void
 {
 	Router.navigate('login');
-	const fullCanva = document.getElementById('fullCanva');
-	if (fullCanva)
+	const gameArea = document.getElementById('gameArea');
+	if (gameArea)
 	{
-		fullCanva.innerHTML = loginView.render();
+		gameArea.innerHTML = loginView.render();
 		initLogin();
 		setupPasswordToggle("password", "togglePasswordLogin", "eyeIconClosedLogin", "eyeIconOpenedLogin");
 	}

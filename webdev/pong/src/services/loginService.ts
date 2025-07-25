@@ -1,4 +1,5 @@
-import { playDomLoaded } from '../controllers/menu/playController'
+// import { userLogged } from '../views/userLogged.ts';
+import { Router } from '../router';
 import { showSuccessPopup } from '../utils/utils';
 
 // --- form to log in
@@ -14,7 +15,7 @@ export function initLogin()
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ login: login, password: password }),
-		credentials: 'include' 
+		credentials: 'include'
 		})
 		.then(res => res.json())
 		.then(data =>
@@ -24,15 +25,15 @@ export function initLogin()
 
 			const connectionMsgId = "connectionMsg";
 			let connectionMsg = document.getElementById(connectionMsgId) as HTMLParagraphElement | null;
-			if (!connectionMsg)
-			{
-				connectionMsg = document.createElement("p");
-				connectionMsg.id = "connectionMsg";
-				connectionMsg.classList.add("font-seven", "text-white", "px-1", "py-1", "text-2xl");
-				const connectionBtn = document.getElementById("connectionBtn");
-				if (connectionBtn)
-					connectionBtn.insertAdjacentElement("afterend", connectionMsg);
-			}
+			// if (!connectionMsg)
+			// {
+			// 	connectionMsg = document.createElement("p");
+			// 	connectionMsg.id = "connectionMsg";
+			// 	connectionMsg.classList.add("font-seven", "text-white", "px-1", "py-1", "text-2xl");
+			// 	const connectionBtn = document.getElementById("connectionBtn");
+			// 	if (connectionBtn)
+			// 		connectionBtn.insertAdjacentElement("afterend", connectionMsg);
+			// }
 
 			if (username && data.success === true)
 			{
@@ -41,14 +42,22 @@ export function initLogin()
 				{
 					loggedIcon.classList.remove("hidden");
 					loggedIcon.title = `Logged as ${username}`;
-					
-					//redirection to play page
-					showSuccessPopup("You are logged");
-					playDomLoaded();
 				}
+
+				//redirection to userLogged page
+				Router.navigate('userLogged')
+				showSuccessPopup("You are logged");
 			}
-			else
+			else if (!connectionMsg)
+			{
+				connectionMsg = document.createElement("p");
+				connectionMsg.id = "connectionMsg";
+				connectionMsg.classList.add("font-seven", "text-white", "px-1", "py-1", "text-2xl");
 				connectionMsg.textContent = `Sorry. Your credentials doesn't match`;
+				const connectionBtn = document.getElementById("connectionBtn");
+				if (connectionBtn)
+					connectionBtn.insertAdjacentElement("afterend", connectionMsg);
+			}
 
 			});
 			console.log("login: ", login, "Password:", password);// to erase for PROD

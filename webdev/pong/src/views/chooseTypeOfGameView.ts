@@ -8,10 +8,10 @@ export const chooseTypeOfGameView = {
 	<div class="absolute left-1/2 top-0 h-full border-l-4 border-white opacity-50 	border-dashed -translate-x-1/2">
 	</div>
 	<div id="leftCanvaPart" class="w-1/2 flex flex-col justify-center items-center space-y-10 bg-black">
-		<button id="OneVsOneBtn" class="font-seven text-white px-6 py-3 text-5xl border border-white rounded">1 VS 1</button>
+		<button id="OneVsOneBtn" class="text-white px-6 py-3 text-5xl border border-white rounded">1 VS 1</button>
 	</div>
 	<div id="rightCanvaPart" class="w-1/2 flex items-center justify-center bg-black">
-		<button id="tournamentBtn" class="font-seven text-white px-6 py-3 text-5xl border border-white rounded">TOURNAMENT</button>
+		<button id="tournamentBtn" class="text-white px-6 py-3 text-5xl border border-white rounded">TOURNAMENT</button>
 	</div>
   `,
 
@@ -22,9 +22,9 @@ export const chooseTypeOfGameView = {
 	{
 		OneVsOneBtn.addEventListener('click', () => {
 			Router.navigate('game');
-			const fullCanva = document.getElementById('fullCanva') as HTMLDivElement | null;
-			if (fullCanva) {
-				fullCanva.innerHTML = GameView.renderGameCanvas();
+			const gameArea = document.getElementById('gameArea') as HTMLDivElement | null;
+			if (gameArea) {
+				gameArea.innerHTML = GameView.renderGameCanvas();
 				GameView.initGameCanvas();
 				gameController.init();
 			}
