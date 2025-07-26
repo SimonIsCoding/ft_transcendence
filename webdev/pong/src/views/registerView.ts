@@ -37,7 +37,6 @@ export const registerView = {
 
   init(): void 
   {
-	// Router.navigate('register');
 	const gameArea = document.getElementById('gameArea');
 	if (gameArea)
 	{
@@ -48,11 +47,6 @@ export const registerView = {
 	}
 
 	const backToLogin = document.getElementById('backToLogin') as HTMLButtonElement | null;
-	if (backToLogin)
-	{
-		backToLogin.addEventListener('click', () => {
-		Router.navigate('login');
-	});
-	}
+	backToLogin?.addEventListener('click', () => { Router.navigate('login'); })
   }
 };
