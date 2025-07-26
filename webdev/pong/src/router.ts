@@ -37,8 +37,8 @@ public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'game' | '
 
 	case 'game':
 	  gameArea!.innerHTML = GameView.renderGameCanvas();
-		GameView.initGameCanvas();
-		gameController.init();
+	  GameView.initGameCanvas();
+	  gameController.init();
       break;
 
 	case 'userLogged':

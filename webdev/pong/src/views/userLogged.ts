@@ -28,11 +28,11 @@ export const userLogged = {
 			</svg>
 			</button>
 			<!-- Hidden submenu -->
-			<div id="playSubmenu" class="h-screen absolute left-1/24 top-0 w-48 bg-[#fbd11b] border border-black flex flex-col overflow-hidden max-h-0 transition-[max-height] duration-450 z-50">
-				<p id="submenuName" class="px-2 py-1 items-center justify-start">Play</p>
-				<button id="oneVsOneBtn" class="border border-black rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b]">1 vs 1</button>
-				<button id="oneVsAiBtn" class="border border-black rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b]">1 vs AI</button>
-				<button id="tournamentBtn" class="border border-black rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b]">Tournament</button>
+			<div id="playSubmenu" class="h-screen absolute left-1/24 top-0 w-48 bg-[#fbd11b] border border-black flex items-center flex-col overflow-hidden max-h-0 transition-[max-height] duration-450 z-50 space-y-5">
+				<p id="submenuName" class="text-center pt-5">Play</p>
+				<button id="oneVsOneBtn" class="border border-black rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit ">1 vs 1</button>
+				<button id="oneVsAiBtn" class="border border-black rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit ">1 vs AI</button>
+				<button id="tournamentBtn" class="border border-black rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit ">Tournament</button>
 			</div>
 
 
@@ -50,8 +50,7 @@ export const userLogged = {
 		</div>
 		
 		<div id="sidebarLowPart" class="flex flex-col mt-auto items-center space-y-2 pb-6">
-			<button id="logoutSidebarBtn"
-			class="group mx-2 my-2 border border-black rounded-lg px-2 py-1 hover:bg-black transition">
+			<button id="logoutSidebarBtn" class="group mx-2 my-2 border border-black rounded-lg px-2 py-1 hover:bg-black transition">
 			<svg xmlns="http://www.w3.org/2000/svg" 
 				viewBox="0 0 24 24" 
 				class="w-5 h-5 fill-black group-hover:fill-[#fbd11b] transition">
@@ -88,6 +87,9 @@ export const userLogged = {
 	}
 
 	const playBtn = document.getElementById('playBtn') as HTMLButtonElement | null;
-	playBtn?.addEventListener('click', () => { Router.navigate('game'); })
+	playBtn!.addEventListener('click', () => { Router.navigate('game'); })
+
+	const logoutSidebarBtn = document.getElementById('logoutSidebarBtn') as HTMLButtonElement | null;
+	logoutSidebarBtn!.addEventListener('click', () => Router.navigate('home'));
   }
 };

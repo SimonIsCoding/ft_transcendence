@@ -29,6 +29,6 @@ export const loginView = {
 	initLogin();
 
 	const backToRegister = document.getElementById('backToRegister') as HTMLButtonElement | null;
-	backToRegister?.addEventListener('click', () => Router.navigate('register'));
+	backToRegister!.addEventListener('click', () => Router.navigate('register'));
   }
 };

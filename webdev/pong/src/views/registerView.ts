@@ -43,6 +43,6 @@ export const registerView = {
 	initRegistration();
 
 	const backToLogin = document.getElementById('backToLogin') as HTMLButtonElement | null;
-	backToLogin?.addEventListener('click', () => { Router.navigate('login'); })
+	backToLogin!.addEventListener('click', () => { Router.navigate('login'); })
   }
 };
