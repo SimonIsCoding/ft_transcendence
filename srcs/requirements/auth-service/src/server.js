@@ -45,10 +45,6 @@ app.get('/api/private/info', { preHandler: [app.auth] }, async (request, reply) 
   return { message: `Welcome ${user.login}`, userId: user.userId, login: user.login, mail: user.mail };
 });
 
-// app.get('/api/auth/info', { preHandler: [app.auth] }, async (request, reply) => {
-//   const user = request.user; // JWT payload
-//   return { userId: user.userId };
-// });
 app.post('/', async (request, reply) => {
   const data = request.body;
   console.log(data); // pour tester
