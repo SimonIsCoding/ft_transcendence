@@ -1,5 +1,5 @@
 import { Router } from '../../router';
-import { loginView } from '../../views/menu';
+import { loginView } from '../../views/loginView';
 import { initLogin } from '../../services/loginService';
 import { setupPasswordToggle } from '../../utils/utils';
 import { registerBtnClicked } from './registrationController';

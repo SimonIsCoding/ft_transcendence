@@ -1,5 +1,7 @@
 import { HomeView } from './views/home';
-import { infoView, loginView, registerView } from './views/menu';
+import { infoView } from './views/menu';
+import { loginView } from './views/loginView';
+import { registerView } from './views/registerView';
 import { chooseTypeOfGameView } from './views/chooseTypeOfGameView'
 // import { showGame } from './controllers/menu/menuController';
 import { GameView } from './views/game';
@@ -29,12 +31,18 @@ public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'play' | '
 	
 	case 'login':
       if (gameArea)
-        gameArea.innerHTML = loginView.render();
+      {
+		gameArea.innerHTML = loginView.render();
+		loginView.init();
+	  }
       break;
 	
 	case 'register':
       if (gameArea)
-        gameArea.innerHTML = registerView.render();
+      {
+		gameArea.innerHTML = registerView.render();
+		registerView.init();
+	  }
       break;
 	
 	case 'play':
