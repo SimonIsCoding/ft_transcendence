@@ -1,16 +1,13 @@
 import { HomeView } from './views/home';
-import { infoView } from './views/menu';
 import { loginView } from './views/loginView';
 import { registerView } from './views/registerView';
-import { chooseTypeOfGameView } from './views/chooseTypeOfGameView'
-// import { showGame } from './controllers/menu/menuController';
 import { GameView } from './views/game';
 import { userLogged } from './views/userLogged.ts';
 import { gameController } from './controllers/gameController';
 
 export class Router {
   private static app = document.getElementById('app');
-public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'play' | 'game' | 'userLogged' , addToHistory = true): void {
+public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'game' | 'userLogged' , addToHistory = true): void {
   if (!this.app) {
     console.error('App container not found');
     return;
@@ -25,49 +22,28 @@ public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'play' | '
       break;
 
     case 'info':
-      if (gameArea)
-        gameArea.innerHTML = infoView.render();
+      //TODO
       break;
 	
 	case 'login':
-      if (gameArea)
-      {
-		gameArea.innerHTML = loginView.render();
-		loginView.init();
-	  }
+      gameArea!.innerHTML = loginView.render();
+	  loginView.init();
       break;
 	
 	case 'register':
-      if (gameArea)
-      {
-		gameArea.innerHTML = registerView.render();
-		registerView.init();
-	  }
-      break;
-	
-	case 'play':
-      if (gameArea)
-	  {
-		gameArea.innerHTML = chooseTypeOfGameView.render();
-		chooseTypeOfGameView.init();
-	  }
+	  gameArea!.innerHTML = registerView.render();
+	  registerView.init();
       break;
 
 	case 'game':
-	  if (gameArea)
-	  {
-		gameArea.innerHTML = GameView.renderGameCanvas();
+	  gameArea!.innerHTML = GameView.renderGameCanvas();
 		GameView.initGameCanvas();
 		gameController.init();
-	  }
       break;
 
 	case 'userLogged':
-      if (gameArea)
-	  {
-		gameArea.innerHTML = userLogged.render();
-		userLogged.init();
-	  }
+	  gameArea!.innerHTML = userLogged.render();
+	  userLogged.init();
       break;
   }
 
@@ -82,7 +58,6 @@ public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'play' | '
 	  this.navigate(
 	  path.includes('login') ? 'login' :
 	  path.includes('register') ? 'register' :
-	  path.includes('play') ? 'play' :
 	  path.includes('game') ? 'game' :
 	  path.includes('info') ? 'info' :
 	  path.includes('userLogged') ? 'userLogged' :
@@ -95,7 +70,6 @@ public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'play' | '
 	  this.navigate(
 	  path.includes('login') ? 'login' :
 	  path.includes('register') ? 'register' :
-	  path.includes('play') ? 'play' :
 	  path.includes('game') ? 'game' :
 	  path.includes('info') ? 'info' : 
 	  path.includes('userLogged') ? 'userLogged' :

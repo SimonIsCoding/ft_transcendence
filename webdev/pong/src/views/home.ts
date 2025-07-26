@@ -1,4 +1,4 @@
-import { menuController } from '../controllers/menu/menuController';
+import { Router } from "../router";
 
 interface User {
   login: string;
@@ -39,6 +39,13 @@ export const HomeView = {
 
     init(): void
   {
-	menuController.init();
+	const playBtn = document.getElementById('playBtn') as HTMLButtonElement | null;
+	playBtn?.addEventListener('click', () => { Router.navigate('game'); })
+
+	const loginBtn = document.getElementById('loginBtn') as HTMLButtonElement | null;
+	loginBtn?.addEventListener('click', () => { Router.navigate('login'); })
+	
+	const registerBtn = document.getElementById('registerBtn') as HTMLButtonElement | null;
+	registerBtn?.addEventListener('click', () => { Router.navigate('register'); })
   }
 };

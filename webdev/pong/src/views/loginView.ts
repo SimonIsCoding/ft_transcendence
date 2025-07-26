@@ -1,12 +1,10 @@
 import { initLogin } from '../services/loginService';
 import { setupPasswordToggle } from '../utils/utils';
 import { Router } from '../router.ts';
-// import { registerBtnClicked } from '../controllers/menu/registrationController.ts';
 
 export const loginView = {
   render: (): string => `
-  <h1 id="toEraseAfter" class="text-white">IN loginView.ts</h1>
-		<div id="loginCredentials" class="flex flex-col justify-center items-center w-full space-y-10">
+	<div id="loginCredentials" class="flex flex-col justify-center items-center w-full space-y-10">
 	<div id="successPopup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50">
 	</div>
 		<input id="login" type="text" placeholder="Login" class="text-white px-4 py-2 text-xl border border-white rounded w-80" />
@@ -26,12 +24,9 @@ export const loginView = {
   init(): void 
   {
 	const gameArea = document.getElementById('gameArea');
-	if (gameArea)
-	{
-		gameArea.innerHTML = loginView.render();
-		setupPasswordToggle("password", "togglePasswordLogin", "eyeIconClosedLogin", "eyeIconOpenedLogin");
-		initLogin();
-	}
+	gameArea!.innerHTML = loginView.render();
+	setupPasswordToggle("password", "togglePasswordLogin", "eyeIconClosedLogin", "eyeIconOpenedLogin");
+	initLogin();
 
 	const backToRegister = document.getElementById('backToRegister') as HTMLButtonElement | null;
 	backToRegister?.addEventListener('click', () => Router.navigate('register'));

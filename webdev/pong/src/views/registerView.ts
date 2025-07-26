@@ -4,7 +4,6 @@ import { initRegistration } from '../services/registrationService';
 
 export const registerView = {
   render: (): string => `
-	<h1 id="toEraseAfter" class="text-white">IN registerView.ts</h1>
 	<div id="registerForm" class="flex flex-col justify-center items-center w-full space-y-10">
 		<div class="relative">
 			<input id="newUsername" placeholder="Username" class="text-white px-4 py-2 text-xl border border-white rounded w-80"/><br/>
@@ -38,13 +37,10 @@ export const registerView = {
   init(): void 
   {
 	const gameArea = document.getElementById('gameArea');
-	if (gameArea)
-	{
-		gameArea.innerHTML = registerView.render();
-		setupPasswordToggle("newPassword", "togglePassword", "eyeIconClosed", "eyeIconOpened");
-		setupPasswordToggle("confirmPassword", "toggleConfirmPassword", "confirmEyeIconClosed", "confirmEyeIconOpened");
-		initRegistration();
-	}
+	gameArea!.innerHTML = registerView.render();
+	setupPasswordToggle("newPassword", "togglePassword", "eyeIconClosed", "eyeIconOpened");
+	setupPasswordToggle("confirmPassword", "toggleConfirmPassword", "confirmEyeIconClosed", "confirmEyeIconOpened");
+	initRegistration();
 
 	const backToLogin = document.getElementById('backToLogin') as HTMLButtonElement | null;
 	backToLogin?.addEventListener('click', () => { Router.navigate('login'); })
