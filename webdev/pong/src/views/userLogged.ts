@@ -28,7 +28,7 @@ export const userLogged = {
 			</svg>
 			</button>
 			<!-- Hidden submenu -->
-			<div id="playSubmenu" class="absolute left-[6%] top-0 h-screen w-48 bg-yellow-400 border border-black flex flex-col items-center justify-start pt-12 space-y-4 hidden z-50">
+			<div id="playSubmenu" class="h-screen absolute left-[6%] top-0 w-48 bg-yellow-400 border border-black flex flex-col overflow-hidden max-h-0 transition-[max-height] duration-300 z-50">
 				<p id="submenuName" class="px-2 py-1 items-center justify-start">Play</p>
 				<button id="oneVsOneBtn" class="border border-black rounded px-2 py-1 text-sm hover:bg-black hover:text-yellow-400">1 vs 1</button>
 				<button id="oneVsAiBtn" class="border border-black rounded px-2 py-1 text-sm hover:bg-black hover:text-yellow-400">1 vs AI</button>
