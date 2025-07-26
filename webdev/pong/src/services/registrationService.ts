@@ -1,4 +1,4 @@
-import { loginDomLoaded } from '../controllers/menu/loginController.ts';
+import { Router } from '../router.ts';
 import { isValidEmail } from '../utils/utils.ts';
 import { showSuccessPopup } from '../utils/utils';
 
@@ -42,7 +42,7 @@ export function initRegistration()
 			throw new Error(data.error);
 
 		//redirection on login page
-		loginDomLoaded();
+		Router.navigate('login');
 		showSuccessPopup("Your account has been created");
 
 		})

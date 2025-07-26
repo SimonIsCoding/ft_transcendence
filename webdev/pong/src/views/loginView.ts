@@ -1,6 +1,7 @@
 import { initLogin } from '../services/loginService';
 import { setupPasswordToggle } from '../utils/utils';
-import { registerBtnClicked } from '../controllers/menu/registrationController.ts';
+import { Router } from '../router.ts';
+// import { registerBtnClicked } from '../controllers/menu/registrationController.ts';
 
 export const loginView = {
   render: (): string => `
@@ -28,11 +29,11 @@ export const loginView = {
 	if (gameArea)
 	{
 		gameArea.innerHTML = loginView.render();
-		initLogin();
 		setupPasswordToggle("password", "togglePasswordLogin", "eyeIconClosedLogin", "eyeIconOpenedLogin");
+		initLogin();
 	}
+
 	const backToRegister = document.getElementById('backToRegister') as HTMLButtonElement | null;
-	if (backToRegister)
-		registerBtnClicked(backToRegister);
+	backToRegister?.addEventListener('click', () => Router.navigate('register'));
   }
 };

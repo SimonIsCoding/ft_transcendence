@@ -1,7 +1,7 @@
 import { infoView } from '../../views/menu';
 import { Router } from '../../router';
-import { loginBtnClicked } from './loginController';
-import { registerBtnClicked } from './registrationController';
+// import { loginBtnClicked } from './loginController';
+// import { registerBtnClicked } from './registrationController';
 import { playBtnClicked } from './playController';
 
 export function loggedIconAnchorClicked(loggedIconAnchor: HTMLAnchorElement): void 
@@ -27,12 +27,11 @@ export const menuController = {
 		playBtnClicked(playBtn);
 
 	const loginBtn = document.getElementById('loginBtn') as HTMLButtonElement | null;
-	if (loginBtn)
-		loginBtnClicked(loginBtn);
+	loginBtn?.addEventListener('click', () => { Router.navigate('login'); })
 	
 	const registerBtn = document.getElementById('registerBtn') as HTMLButtonElement | null;
-	if (registerBtn)
-		registerBtnClicked(registerBtn);
+	registerBtn?.addEventListener('click', () => { Router.navigate('register'); })
+
 	
 	// const loggedIconAnchor = document.getElementById('loggedIcon') as HTMLAnchorElement | null;
 	// if (loggedIconAnchor)
