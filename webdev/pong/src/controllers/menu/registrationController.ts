@@ -1,4 +1,4 @@
-import { registerView } from '../../views/menu';
+import { registerView } from '../../views/registerView';
 import { initRegistration } from '../../services/registrationService';
 import { Router } from '../../router';
 import { setupPasswordToggle } from '../../utils/utils';
