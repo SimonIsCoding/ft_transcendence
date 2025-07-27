@@ -58,9 +58,16 @@ fastify.register(fastifyHttpProxy, {
       return {
         ...headers,
         host: '2fa-service',
+		'x-real-ip': originalReq.headers['x-real-ip'] || originalReq.ip,
+        'x-forwarded-for': originalReq.headers['x-forwarded-for'] 
+        	? `${originalReq.headers['x-forwarded-for']}, ${originalReq.ip}`
+        	: originalReq.ip,
+      // Forward other security headers
+        'x-forwarded-proto': originalReq.headers['x-forwarded-proto'] || 'http',
       };
     },
   },
+  proxyPayload: true,
 });
 
 //check if this is useful

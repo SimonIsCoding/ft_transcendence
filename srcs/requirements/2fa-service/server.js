@@ -41,9 +41,9 @@ server.get('/health', async () => ({ status: 'ok' }));
 
 // Start Server
 try {
-// Add before server.listen()
-console.log('Registered routes:');
-console.log(server.printRoutes());
+// Add to debug routes
+// console.log('Registered routes:');
+// console.log(server.printRoutes());
   await server.listen({
     port: config.PORT,
     host: '0.0.0.0'
