@@ -1,4 +1,5 @@
 import fs from 'fs';
+import fastifyStatic from '@fastify/static';
 import path from 'path';
 import { randomUUID } from 'crypto';
 import db from '../src/database.js';
@@ -10,6 +11,11 @@ const __dirname = dirname(__filename);
 
 export async function uploadProfilePictureRoute(fastify)
 {
+  fastify.register(fastifyStatic, {
+  root: path.join(__dirname, '..', 'public'),
+  prefix: '/', // images available on /
+  });
+  
   fastify.post('/uploadProfilePicture', { preHandler: [fastify.auth] }, async (request, reply) => {
 
 	const data = await request.file(); // recover uploaded file
@@ -33,9 +39,9 @@ export async function uploadProfilePictureRoute(fastify)
       return reply.status(500).send({ error: 'Failed to save file', details: err.message});
     }
 
-    const userId = request.user && request.user.id || 1;
+    const userId = request.user?.id;
     if (!userId)
-      return reply.status(401).send({ error: 'Not authenticated' });
+      return reply.status(401).send({ error: 'Not authenticated: userId not found in token' });
 
     const update = db.prepare('UPDATE users SET profile_picture = ? WHERE id = ?');
     update.run(`/profile_pictures/${filename}`, userId);

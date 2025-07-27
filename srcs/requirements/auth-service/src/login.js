@@ -24,18 +24,18 @@ export async function loginRoute(fastify)
 	
 	const SECRET = 'super-secret-key';
 	if(user && match)
-		{
-			const token = jwt.sign({ userId: user.id }, SECRET, { expiresIn: '1h' });
+	{
+			const token = jwt.sign({ id: user.id, login: user.login, mail: user.mail, profile_picture: user.profile_picture }, SECRET, { expiresIn: '1h' });// try to comment profile picture to know if we can receive it only thanks to app.get('/api/private/info'
 			reply
 			.setCookie('token', token, {
 				httpOnly: true, //ALWAYS PUT TRUE FOR PROD
-				secure: true,
+				secure: false,// PUT TRUE FOR PROD
 				sameSite: 'strict',
 				path: '/', // important !
 			})
-			.send({ success: true, message: 'Login succeed', login: user.login });
-		}
-		return reply.status(401).send({ error: 'incorrect Id', success: false});
+			.send({ success: true, message: 'Login succeed', id: user.id, login: user.login, mail: user.mail });		
+	}
+	return reply.status(401).send({ error: 'incorrect Id', success: false});
 	});
 	
 }
