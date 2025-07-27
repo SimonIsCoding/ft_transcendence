@@ -32,6 +32,8 @@ services:
   auth-service:
     container_name: auth-service
     build: requirements/auth-service
+    ports:
+      - "3001:3001"
 
   service-b:
     container_name: service-b

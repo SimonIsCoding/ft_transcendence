@@ -12,11 +12,10 @@ async function hashPassword(password)
 export async function loginRoute(fastify)
 {
 	// to log in
-	
 	fastify.post('/login', async (request, reply) => {
 		const { login, password } = request.body;
 		
-		if (!login || !password)
+	if (!login || !password)
 	  return reply.status(400).send({ error: "Missing login or password" });
 	
 	const stmt = db.prepare("SELECT * FROM users WHERE login = ?");
@@ -58,7 +57,6 @@ export async function registerRoute(fastify)
 		}
 		catch (err)
 		{
-			//essaie aussi d'imposer le failt que tous les caractere d'un mail doivent etre ecrits en minuscules
 			if (err && typeof err === 'object' && 'code' in err && err.code === 'SQLITE_CONSTRAINT_UNIQUE')
 			{
 				if (err.message.includes('login'))
