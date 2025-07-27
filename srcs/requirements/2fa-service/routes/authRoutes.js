@@ -1,4 +1,3 @@
-// requirements/2fa-service/routes/authRoutes.js
 import fp from 'fastify-plugin';
 import { initiate2FA, verify2FA } from '../services/authService.js';
 
