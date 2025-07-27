@@ -5,10 +5,13 @@ import { showSuccessPopup } from '../utils/utils';
 export function initLogin()
 {
 	const submitBtn = document.getElementById("connectionBtn") as HTMLButtonElement;
-	submitBtn.addEventListener("click", () => {
+	submitBtn.addEventListener("click", async () => {
 
 		const login = (document.getElementById("login") as HTMLInputElement).value;
 		const password = (document.getElementById("password") as HTMLInputElement).value;
+
+		// const res = await fetch("http://localhost:3001/api/private/info", { credentials: "include" });
+		// const user = await res.json();
 
 		fetch('/api/auth/login', {
 		method: 'POST',

@@ -30,7 +30,8 @@ app.register(fastifyJwt, {
 app.decorate('auth', async (request, reply) => {
   try
   {
-    await request.jwtVerify();
+	  await request.jwtVerify();
+	  console.log("✅ User Authentificated :", request.user);
   }
   catch (err)
   {
@@ -50,6 +51,7 @@ app.get('/api/private/info', { preHandler: [app.auth] }, async (request, reply) 
     userId: user.userId,
     login: user.login,
     mail: user.mail,
+	profile_picture: user.profile_picture
   };
 });
 

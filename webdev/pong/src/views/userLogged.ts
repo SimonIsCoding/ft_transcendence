@@ -141,6 +141,7 @@ export const userLogged = {
 		});
 	}
 
+	loadExistingProfilePicture();
 	uploadProfilePicture();
 
 	
@@ -183,4 +184,28 @@ export function uploadProfilePicture() : void
 			reader.readAsDataURL(file);
 		}
 	});
+}
+
+//to modify
+export async function loadExistingProfilePicture(): Promise<void>
+{
+	const preview = document.getElementById('previewProfilePicture') as HTMLImageElement;
+	const uploadIcon = document.getElementById('uploadIcon')!;
+
+	try {
+		// Récupérer les infos de l’utilisateur (même s’il n’est pas connecté, on peut fallback à une image par défaut)
+		const res = await fetch('http://localhost:3001/api/private/info', {
+			credentials: 'include'
+		});
+		if (!res.ok) return; // Pas connecté
+
+		const data = await res.json();
+		if (data && data.profile_picture) {
+			preview.src = `http://localhost:3001${data.profile_picture}`;
+			preview.classList.remove('hidden');
+			uploadIcon.classList.add('hidden');
+		}
+	} catch (err) {
+		console.warn('Pas d’image à charger:', err);
+	}
 }
