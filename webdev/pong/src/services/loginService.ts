@@ -41,7 +41,7 @@ export function initLogin()
 			{
 				connectionMsg = document.createElement("p");
 				connectionMsg.id = "connectionMsg";
-				connectionMsg.classList.add("font-seven", "text-white", "px-1", "py-1", "text-xl");
+				connectionMsg.classList.add("text-white", "px-1", "py-1", "text-xl");
 				connectionMsg.textContent = `Sorry. Your credentials doesn't match`;
 				const connectionBtn = document.getElementById("connectionBtn");
 				if (connectionBtn)

@@ -1,4 +1,5 @@
 import { Router } from "../router";
+import { receiveProfilePicture } from "../utils/utils";
 
 interface User {
   login: string;
@@ -164,7 +165,14 @@ export function uploadProfilePicture() : void
 
 	uploadInput!.addEventListener('change', () => {
 		const file = uploadInput.files?.[0];
-		if (file && file.type.startsWith('image/')) {
+		console.log("in uploadProfilePicture");
+		console.log("file = ", file);
+		if (uploadInput?.files && uploadInput.files[0])
+			receiveProfilePicture(uploadInput.files[0]);
+		else
+			alert('Aucun fichier sélectionné.');
+		if (file && file.type.startsWith('image/'))
+		{
 			const reader = new FileReader();
 			reader.onload = (e) => {
 				const result = e.target!.result as string;
