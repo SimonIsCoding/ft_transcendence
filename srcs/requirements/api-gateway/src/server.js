@@ -46,13 +46,6 @@ fastify.register(fastifyHttpProxy, {
   },
 });
 
-//check if this is useful
-//https://localhost:4443/login
-fastify.register(fastifyStatic, {
-  root: path.join(process.cwd(), 'app/webdev/pong'), // absolute path for frontend folder
-  prefix: '/', // root files
-});
-
 // Start server
 fastify.listen({ port: 3000, host: '0.0.0.0' }, (err) => {
   if (err) {
