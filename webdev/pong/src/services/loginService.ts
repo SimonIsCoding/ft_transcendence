@@ -43,7 +43,7 @@ export function initLogin()
 			else if (!connectionMsg)
 			{
 				connectionMsg = document.createElement("p");
-				connectionMsg.id = "connectionMsg";
+				connectionMsg.id = "connectionMsg";//in order to avoid duplicates
 				connectionMsg.classList.add("text-white", "px-1", "py-1", "text-xl");
 				connectionMsg.textContent = `Sorry. Your credentials doesn't match`;
 				const connectionBtn = document.getElementById("connectionBtn");
