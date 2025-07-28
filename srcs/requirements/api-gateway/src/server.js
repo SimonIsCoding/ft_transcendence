@@ -46,6 +46,29 @@ fastify.register(fastifyHttpProxy, {
   },
 });
 
+fastify.register(fastifyHttpProxy, {
+  upstream: 'http://2fa-service:3003',
+  prefix: '/api/2fa',
+  rewritePrefix: '/api/2fa',
+    http2: false,
+  replyOptions: {
+    rewriteRequestHeaders: (originalReq, headers) => {
+      return {
+        ...headers,
+        host: '2fa-service',
+		'x-real-ip': originalReq.headers['x-real-ip'] || originalReq.ip,
+        'x-forwarded-for': originalReq.headers['x-forwarded-for'] 
+        	? `${originalReq.headers['x-forwarded-for']}, ${originalReq.ip}`
+        	: originalReq.ip,
+      // Forward other security headers
+        'x-forwarded-proto': originalReq.headers['x-forwarded-proto'] || 'http',
+      };
+    },
+  },
+  proxyPayload: true,
+});
+
+
 // Start server
 fastify.listen({ port: 3000, host: '0.0.0.0' }, (err) => {
   if (err) {
