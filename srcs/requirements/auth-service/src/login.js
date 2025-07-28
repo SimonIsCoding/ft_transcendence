@@ -77,6 +77,7 @@ export async function registerRoute(fastify)
 	});
 }
 
+// check if this code is useful
 export async function infoUserRoute(fastify)
 {
 	fastify.get('/api/auth/info', { preHandler: [fastify.auth] }, async (request, reply) => {
