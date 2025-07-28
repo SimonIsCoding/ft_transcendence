@@ -161,7 +161,7 @@ export function uploadProfilePicture() : void
 	const uploadIcon = document.getElementById('uploadIcon')!;
 
 	uploadBtn!.addEventListener('click', () => {
-		uploadInput!.click(); // Ouvre la boîte de dialogue
+		uploadInput!.click();
 	});
 
 	uploadInput!.addEventListener('change', () => {
@@ -186,26 +186,35 @@ export function uploadProfilePicture() : void
 	});
 }
 
-//to modify
 export async function loadExistingProfilePicture(): Promise<void>
 {
 	const preview = document.getElementById('previewProfilePicture') as HTMLImageElement;
 	const uploadIcon = document.getElementById('uploadIcon')!;
 
-	try {
-		// Récupérer les infos de l’utilisateur (même s’il n’est pas connecté, on peut fallback à une image par défaut)
+	try
+	{
+		// Recover user info
 		const res = await fetch('http://localhost:3001/api/private/info', {
 			credentials: 'include'
 		});
-		if (!res.ok) return; // Pas connecté
+		if (!res.ok)
+			return; // not connected
 
 		const data = await res.json();
-		if (data && data.profile_picture) {
+		if (data && data.profile_picture)
+		{
 			preview.src = `http://localhost:3001${data.profile_picture}`;
 			preview.classList.remove('hidden');
 			uploadIcon.classList.add('hidden');
 		}
-	} catch (err) {
-		console.warn('Pas d’image à charger:', err);
+		else
+		{
+			preview.src = data.profile_picture;
+			preview.classList.remove("hidden");
+		}
+	}
+	catch (err)
+	{
+		console.warn('Error: No image to load:', err);
 	}
 }
