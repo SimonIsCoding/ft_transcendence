@@ -4,7 +4,11 @@ import fastifyJwt from '@fastify/jwt';
 import fastifyCookie from '@fastify/cookie';
 import fastifyCors from '@fastify/cors';
 import multipart from '@fastify/multipart';
+import fastifyStatic from '@fastify/static';
 import { uploadProfilePictureRoute } from '../routes/uploadAvatar.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 const app = fastify();
 
@@ -37,6 +41,14 @@ app.decorate('auth', async (request, reply) => {
   {
     reply.status(401).send({ error: 'Unauthorized' });
   }
+});
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+app.register(fastifyStatic, {
+  root: path.join(__dirname, '..', 'public'),
+  prefix: '/', // images available on /
 });
 
 app.register(loginRoute);

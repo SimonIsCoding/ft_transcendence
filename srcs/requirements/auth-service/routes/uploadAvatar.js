@@ -1,5 +1,4 @@
 import fs from 'fs';
-import fastifyStatic from '@fastify/static';
 import path from 'path';
 import { randomUUID } from 'crypto';
 import db from '../src/database.js';
@@ -11,11 +10,6 @@ const __dirname = dirname(__filename);
 
 export async function uploadProfilePictureRoute(fastify)
 {
-  fastify.register(fastifyStatic, {
-  root: path.join(__dirname, '..', 'public'),
-  prefix: '/', // images available on /
-  });
-  
   fastify.post('/uploadProfilePicture', { preHandler: [fastify.auth] }, async (request, reply) => {
 
 	const data = await request.file(); // recover uploaded file

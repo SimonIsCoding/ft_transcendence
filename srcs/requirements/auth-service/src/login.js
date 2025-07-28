@@ -9,6 +9,12 @@ async function hashPassword(password)
   return hash;
 }
 
+export function getRandomAvatar()
+{
+	const avatarId = Math.floor(Math.random() * 5) + 1;
+	return `/profile_pictures/avatar_${avatarId}.png`;
+}
+
 export async function loginRoute(fastify)
 {
 	// to log in
@@ -16,7 +22,7 @@ export async function loginRoute(fastify)
 		const { login, password } = request.body;
 		
 	if (!login || !password)
-	  return reply.status(400).send({ error: "Missing login or password" });
+		return reply.status(400).send({ error: "Missing login or password" });
 	
 	const stmt = db.prepare("SELECT * FROM users WHERE login = ?");
 	const user = stmt.get(login);
@@ -25,19 +31,18 @@ export async function loginRoute(fastify)
 	const SECRET = 'super-secret-key';
 	if(user && match)
 	{
-			const token = jwt.sign({ id: user.id, login: user.login, mail: user.mail, profile_picture: user.profile_picture }, SECRET, { expiresIn: '1h' });// try to comment profile picture to know if we can receive it only thanks to app.get('/api/private/info'
-			reply
-			.setCookie('token', token, {
-				httpOnly: true, //ALWAYS PUT TRUE FOR PROD
-				secure: false,// PUT TRUE FOR PROD
-				sameSite: 'strict',
-				path: '/', // important !
-			})
-			.send({ success: true, message: 'Login succeed', id: user.id, login: user.login, mail: user.mail });		
+		const token = jwt.sign({ id: user.id, login: user.login, mail: user.mail, profile_picture: user.profile_picture }, SECRET, { expiresIn: '1h' });// try to comment profile picture to know if we can receive it only thanks to app.get('/api/private/info'
+		reply
+		.setCookie('token', token, {
+			httpOnly: true, //ALWAYS PUT TRUE FOR PROD
+			secure: false,// PUT TRUE FOR PROD
+			sameSite: 'strict',
+			path: '/', // important !
+		})
+		.send({ success: true, message: 'Login succeed', id: user.id, login: user.login, mail: user.mail });		
 	}
 	return reply.status(401).send({ error: 'incorrect Id', success: false});
 	});
-	
 }
 
 export async function registerRoute(fastify)
@@ -45,14 +50,15 @@ export async function registerRoute(fastify)
 	//to create an account
 	fastify.post('/register', async (request, reply) => {
 		const { login, password, mail } = request.body;
-  
+		const avatarPath = getRandomAvatar();
+
 		if (!login || !password || !mail)
 			return reply.status(400).send({ success: false, error: "All fields required" });
 		const encryptedPassword = await hashPassword(password);
 		try
 		{
-			const stmt = db.prepare("INSERT INTO users (login, password, mail) VALUES (?, ?, ?)");
-			stmt.run(login, encryptedPassword, mail);
+			const stmt = db.prepare("INSERT INTO users (login, password, mail, profile_picture) VALUES (?, ?, ?, ?)");
+			stmt.run(login, encryptedPassword, mail, avatarPath);
 			return reply.status(200).send({ success: true, message: "User registered" });
 		}
 		catch (err)

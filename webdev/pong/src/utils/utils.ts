@@ -57,3 +57,4 @@ export async function receiveProfilePicture(file: File): Promise<void>
     return;
   }
 }
+
