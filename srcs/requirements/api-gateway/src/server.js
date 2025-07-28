@@ -3,8 +3,6 @@ import fetch from 'node-fetch';  // Explicit import
 import fastifyHttpProxy from '@fastify/http-proxy';
 import fs from 'fs';
 import fastifyCors from '@fastify/cors';
-import fastifyStatic from '@fastify/static';
-import path from 'path';
 
 const fastify = Fastify({
   logger: true,
