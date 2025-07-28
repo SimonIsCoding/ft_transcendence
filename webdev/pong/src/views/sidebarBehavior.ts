@@ -1,4 +1,5 @@
 import { Router } from "../router";
+import { friendsListView } from "./friendsList"
 
 interface User {
   login: string;
@@ -60,7 +61,6 @@ export const userLoggedSidebar = {
 			<button id="tournamentBtn" class="border border-black rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit ">Tournament</button>
 		</div>
 
-
 		<button id="profileSidebarBtn" data-target="profileSubmenu" class="group mx-2 my-2 border border-black rounded-lg px-2 py-1 text-black text-sm hover:bg-black hover:text-[#fbd11b] transition">
 		<svg xmlns="http://www.w3.org/2000/svg" fill="black" viewBox="0 0 24 24" class="w-5 h-5 fill-black group-hover:fill-[#fbd11b] transition">
 		<path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
@@ -68,7 +68,7 @@ export const userLoggedSidebar = {
 		</button>
 		<!-- Hidden submenu -->
 		<div id="profileSubmenu" class="submenu h-screen absolute left-1/24 top-0 w-48 bg-[#fbd11b] border border-black flex items-center flex-col overflow-hidden max-h-0 transition-[max-height] duration-450 z-50 space-y-5">
-			<p id="submenuProfileName" class="font-bold text-center pt-5">Profile</p>
+			<p id=" " class="font-bold text-center pt-5">Profile</p>
 			<hr class="border-t-1.5 border-black w-full" />
 			<input type="file" id="uploadProfilePictureInput" accept="image/*" class="hidden">
 			<button id="uploadPictureBtn" class="relative w-24 h-24 bg-black rounded-full flex items-center justify-center border border-transparent hover:border-black group hover:bg-[#fbd11b] transition">
@@ -121,7 +121,7 @@ export const userLoggedSidebar = {
   init(): void
   {
 	const dataTargetButtons = document.querySelectorAll('button[data-target]');
-		const submenus = document.querySelectorAll<HTMLElement>('.submenu');
+	const submenus = document.querySelectorAll<HTMLElement>('.submenu');
 	
 		dataTargetButtons.forEach(button => {
 			button.addEventListener('click', () => {
@@ -141,5 +141,6 @@ export const userLoggedSidebar = {
 				});
 			});
 		});
+	friendsListView.init();
   }
 }
