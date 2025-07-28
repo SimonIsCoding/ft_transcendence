@@ -8,6 +8,7 @@ export const registerView = {
 		<div class="relative">
 			<input id="newUsername" placeholder="Username" class="text-white px-4 py-2 text-xl border border-white rounded w-80"/><br/>
 		</div>
+		<input id="newMail" placeholder="Mail" type="email" class="text-white px-4 py-2 text-xl border border-white rounded w-80"/>
 		<div class="relative">
 			<input id="newPassword" placeholder="Password" type="password" class="text-white px-4 py-2 text-xl border border-white rounded w-80"/>
 			<button id="togglePassword" type="button" class="absolute right-2 top-1/2 transform -translate-y-1/2">
@@ -27,8 +28,6 @@ export const registerView = {
 			<br/>
 		</div>
 		<!-- <input id="newAlias" placeholder="Alias" class="text-white px-4 py-2 text-xl border border-white rounded w-80"/><br/> -->
-		<input id="newMail" placeholder="Mail" type="email" class="text-white px-4 py-2 text-xl border border-white rounded w-80"/>
-		<br/>
 		<button id="createAccountBtn" class="text-white px-2 py-1 text-xl border border-white rounded w-80">Create Account</button>
 		<button id="backToLogin" class="text-white px-2 py-1 text-xl underline">Click here to be back to log in</button>
 	</div>
