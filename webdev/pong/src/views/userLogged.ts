@@ -1,5 +1,6 @@
 import { Router } from "../router";
 import { receiveProfilePicture } from "../utils/utils";
+import { playButton } from "./playButton";
 import { userLoggedSidebar } from "./sidebarBehavior";
 
 interface User {
@@ -16,17 +17,12 @@ export const userLogged = {
  render(): string {
 	return `
 	<div class="w-screen h-screen flex bg-[#fbd11b] overflow-hidden">
-	<div id="successPopup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50">
-	</div>
+		<div id="successPopup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50">
+		</div>
 	
 	  ${userLoggedSidebar.render()}
 
-	  <!-- Game Area -->
-		<main id="gameArea" class="flex-1 bg-black flex items-center justify-center bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center w-full h-full" style="background-image: url('/pongBackgroundPlay.png');">
-			<button id="playBtn" class="text-[#fbd11b] text-5xl rounded-lg border border-[#fbd11b] px-12 py-6 rounded-lg hover:bg-[#fbd11b] hover:text-black transition">
-			PLAY
-			</button>
-		</main>
+	  ${playButton.render()}
 
 	</div>
   `;
@@ -39,8 +35,7 @@ export const userLogged = {
 	loadExistingProfilePicture();
 	uploadProfilePicture();
 
-	const playBtn = document.getElementById('playBtn') as HTMLButtonElement | null;
-	playBtn!.addEventListener('click', () => { Router.navigate('game'); })
+	playButton.init();
 
 	const logoutSidebarBtn = document.getElementById('logoutSidebarBtn') as HTMLButtonElement | null;
 	logoutSidebarBtn!.addEventListener('click', () => Router.navigate('home'));

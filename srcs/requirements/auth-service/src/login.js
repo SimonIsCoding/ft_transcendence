@@ -32,14 +32,14 @@ export async function loginRoute(fastify)
 	if(user && match)
 	{
 		const token = jwt.sign({ id: user.id, login: user.login, mail: user.mail, profile_picture: user.profile_picture }, SECRET, { expiresIn: '1h' });// try to comment profile picture to know if we can receive it only thanks to app.get('/api/private/info'
-		reply
-		.setCookie('token', token, {
+		reply.setCookie('token', token, {
 			httpOnly: true, //ALWAYS PUT TRUE FOR PROD
-			secure: false,// PUT TRUE FOR PROD
+			secure: true,
 			sameSite: 'strict',
+			maxAge: 7 * 24 * 60 * 60 * 1000,
 			path: '/', // important !
 		})
-		.send({ success: true, message: 'Login succeed', id: user.id, login: user.login, mail: user.mail });		
+		.send({ success: true, message: 'Login succeed', id: user.id, login: user.login, mail: user.mail, token: token });	
 	}
 	return reply.status(401).send({ error: 'incorrect Id', success: false});
 	});
