@@ -5,6 +5,7 @@ interface User {
   login: string;
   password: string;
   mail: string;
+  photo: string,
   token: string;
 }
 
