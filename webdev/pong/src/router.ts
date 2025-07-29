@@ -5,9 +5,18 @@ import { GameView } from './views/game';
 import { userLogged } from './views/userLogged.ts';
 import { gameController } from './controllers/gameController';
 
+interface User {
+  login: string;
+  password: string;
+  mail: string;
+  photo: string,
+  token: string;
+}
+
 export class Router {
   private static app = document.getElementById('app');
-public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'game' | 'userLogged' , addToHistory = true): void {
+  public static currentUser: User | null;
+  public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'game' | 'userLogged' , addToHistory = true): void {
   if (!this.app) {
     console.error('App container not found');
     return;
