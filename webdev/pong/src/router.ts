@@ -14,7 +14,6 @@ public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'game' | '
   }
 
   // Handle route protection + rendering
-  const gameArea = document.getElementById('gameArea') as HTMLDivElement | null;
   switch (page) {
     case 'home':
       this.app.innerHTML = HomeView.render();
@@ -26,23 +25,23 @@ public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'game' | '
       break;
 	
 	case 'login':
-      gameArea!.innerHTML = loginView.render();
+      this.app.innerHTML = loginView.render();
 	  loginView.init();
       break;
 	
 	case 'register':
-	  gameArea!.innerHTML = registerView.render();
+	  this.app.innerHTML = registerView.render();
 	  registerView.init();
       break;
 
 	case 'game':
-	  gameArea!.innerHTML = GameView.renderGameCanvas();
+	  this.app.innerHTML = GameView.renderGameCanvas();
 	  GameView.initGameCanvas();
 	  gameController.init();
       break;
 
 	case 'userLogged':
-	  gameArea!.innerHTML = userLogged.render();
+	  this.app.innerHTML = userLogged.render();
 	  userLogged.init();
       break;
   }
