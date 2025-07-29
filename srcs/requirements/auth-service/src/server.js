@@ -18,6 +18,11 @@ app.register(fastifyCookie, {
   secret: 'super-secret-key',
 });
 
+app.register(fastifyCors, {
+  origin: 'https://localhost:4443',
+  credentials: true,
+});
+
 app.register(fastifyJwt, {
   secret: 'super-secret-key',
   cookie: {
