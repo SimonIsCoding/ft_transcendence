@@ -1,17 +1,20 @@
 import { HomeView } from './views/home';
-import { infoView, loginView, registerView, chooseTypeOfGameView } from './views/menu';
-import { showGame } from './controllers/menuController';
+import { loginView } from './views/loginView';
+import { registerView } from './views/registerView';
+import { GameView } from './views/game';
+import { userLogged } from './views/userLogged.ts';
+import { gameController } from './controllers/gameController';
 
 export class Router {
   private static app = document.getElementById('app');
-public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'play' | 'game' , addToHistory = true): void {
+public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'game' | 'userLogged' , addToHistory = true): void {
   if (!this.app) {
     console.error('App container not found');
     return;
   }
 
   // Handle route protection + rendering
-  const fullCanva = document.getElementById('fullCanva') as HTMLDivElement | null;
+  const gameArea = document.getElementById('gameArea') as HTMLDivElement | null;
   switch (page) {
     case 'home':
       this.app.innerHTML = HomeView.render();
@@ -19,28 +22,28 @@ public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'play' | '
       break;
 
     case 'info':
-      if (fullCanva)
-        fullCanva.innerHTML = infoView.render();
+      //TODO
       break;
 	
 	case 'login':
-      if (fullCanva)
-        fullCanva.innerHTML = loginView.render();
+      gameArea!.innerHTML = loginView.render();
+	  loginView.init();
       break;
 	
 	case 'register':
-      if (fullCanva)
-        fullCanva.innerHTML = registerView.render();
-      break;
-	
-	case 'play':
-      if (fullCanva)
-        fullCanva.innerHTML = chooseTypeOfGameView.render();
+	  gameArea!.innerHTML = registerView.render();
+	  registerView.init();
       break;
 
 	case 'game':
-	  if (fullCanva)
-		showGame(fullCanva);
+	  gameArea!.innerHTML = GameView.renderGameCanvas();
+	  GameView.initGameCanvas();
+	  gameController.init();
+      break;
+
+	case 'userLogged':
+	  gameArea!.innerHTML = userLogged.render();
+	  userLogged.init();
       break;
   }
 
@@ -55,11 +58,10 @@ public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'play' | '
 	  this.navigate(
 	  path.includes('login') ? 'login' :
 	  path.includes('register') ? 'register' :
-	  path.includes('play') ? 'play' :
 	  path.includes('game') ? 'game' :
-	  path.includes('info') ? 'info' : 
+	  path.includes('info') ? 'info' :
+	  path.includes('userLogged') ? 'userLogged' :
 	  'home' , false);
-
     });
 
     // Handle back/forward navigation
@@ -68,11 +70,10 @@ public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'play' | '
 	  this.navigate(
 	  path.includes('login') ? 'login' :
 	  path.includes('register') ? 'register' :
-	  path.includes('play') ? 'play' :
 	  path.includes('game') ? 'game' :
 	  path.includes('info') ? 'info' : 
+	  path.includes('userLogged') ? 'userLogged' :
 	  'home' , false);
-
     });
   }
 }

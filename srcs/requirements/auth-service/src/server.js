@@ -3,56 +3,69 @@ import { loginRoute, registerRoute, infoUserRoute } from './login.js';
 import fastifyJwt from '@fastify/jwt';
 import fastifyCookie from '@fastify/cookie';
 import fastifyCors from '@fastify/cors';
+import multipart from '@fastify/multipart';
+import fastifyStatic from '@fastify/static';
+import { uploadProfilePictureRoute } from '../routes/uploadAvatar.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 const app = fastify();
+
+await app.register(multipart);//to receive images
 
 app.register(fastifyCookie, {
   secret: 'super-secret-key',
 });
 
 app.register(fastifyJwt, {
-  secret: 'super-secret-key', // 🔒 it should be an env variable
+  secret: 'super-secret-key',
   cookie: {
     cookieName: 'token',
     signed: false,
   }
 });
 
+app.decorate('auth', async (request, reply) => {
+  try
+  {
+	  await request.jwtVerify();
+	  console.log("✅ User Authentificated :", request.user);
+  }
+  catch (err)
+  {
+    reply.status(401).send({ error: 'Unauthorized' });
+  }
+});
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+app.register(fastifyStatic, {
+  root: path.join(__dirname, '..', 'public'),
+  prefix: '/', // images available on /
+});
+
 app.register(loginRoute);
 app.register(registerRoute);
 app.register(infoUserRoute);
+await uploadProfilePictureRoute(app);
 
-app.register(fastifyCors, {
-  origin: 'https://localhost:4443',
-  credentials: true,
-});
-
-app.decorate("auth", async (request, reply) => {
-	try
-	{
-	await request.jwtVerify();
-	}
-	catch (err)
-	{
-	reply.status(401).send({ error: 'Unauthorized' });
-	}
-});
-
-// en gros la tu crees une route qui va te retourner les informations dont tu as besoin
-// si tu as besoin de ces infos tu vas appeler l'adresse avec la methode get
 app.get('/api/private/info', { preHandler: [app.auth] }, async (request, reply) => {
   const user = request.user;
-  return { message: `Welcome ${user.login}`, userId: user.userId, login: user.login, mail: user.mail };
+  return {
+    message: `Welcome ${user.login}`,
+    userId: user.userId,
+    login: user.login,
+    mail: user.mail,
+	profile_picture: user.profile_picture
+  };
 });
 
-// app.get('/api/auth/info', { preHandler: [app.auth] }, async (request, reply) => {
-//   const user = request.user; // JWT payload
-//   return { userId: user.userId };
-// });
 app.post('/', async (request, reply) => {
   const data = request.body;
-  console.log(data); // pour tester
-  return { status: 'ok that\'s wonderful' };
+  console.log(data);
+  return { status: "ok that's wonderful" };
 });
 
 app.get('/debug-token', async (request, reply) => {

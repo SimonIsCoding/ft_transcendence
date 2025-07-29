@@ -3,8 +3,6 @@ import fetch from 'node-fetch';  // Explicit import
 import fastifyHttpProxy from '@fastify/http-proxy';
 import fs from 'fs';
 import fastifyCors from '@fastify/cors';
-import fastifyStatic from '@fastify/static';
-import path from 'path';
 
 const fastify = Fastify({
   logger: true,
@@ -48,12 +46,28 @@ fastify.register(fastifyHttpProxy, {
   },
 });
 
-//check if this is useful
-//https://localhost:4443/login
-fastify.register(fastifyStatic, {
-  root: path.join(process.cwd(), 'app/webdev/pong'), // absolute path for frontend folder
-  prefix: '/', // root files
+fastify.register(fastifyHttpProxy, {
+  upstream: 'http://2fa-service:3003',
+  prefix: '/api/2fa',
+  rewritePrefix: '/api/2fa',
+    http2: false,
+  replyOptions: {
+    rewriteRequestHeaders: (originalReq, headers) => {
+      return {
+        ...headers,
+        host: '2fa-service',
+		'x-real-ip': originalReq.headers['x-real-ip'] || originalReq.ip,
+        'x-forwarded-for': originalReq.headers['x-forwarded-for'] 
+        	? `${originalReq.headers['x-forwarded-for']}, ${originalReq.ip}`
+        	: originalReq.ip,
+      // Forward other security headers
+        'x-forwarded-proto': originalReq.headers['x-forwarded-proto'] || 'http',
+      };
+    },
+  },
+  proxyPayload: true,
 });
+
 
 // Start server
 fastify.listen({ port: 3000, host: '0.0.0.0' }, (err) => {
