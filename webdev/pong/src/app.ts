@@ -6,9 +6,9 @@ window.addEventListener('load', () => {
   Router.navigate(
 	path.includes('login') ? 'login' :
 	path.includes('register') ? 'register' :
-	path.includes('play') ? 'play' :
 	path.includes('game') ? 'game' :
 	path.includes('info') ? 'info' : 
+	path.includes('userLogged') ? 'userLogged' : 
 	'home' , false);
 });
 
@@ -18,8 +18,8 @@ window.addEventListener('popstate', () => {
   Router.navigate(
 	path.includes('login') ? 'login' :
 	path.includes('register') ? 'register' :
-	path.includes('play') ? 'play' :
 	path.includes('game') ? 'game' :
-	path.includes('info') ? 'info' : 
+	path.includes('info') ? 'info' :
+	path.includes('userLogged') ? 'userLogged' :
 	'home' , false);
 });
