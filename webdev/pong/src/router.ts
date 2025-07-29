@@ -5,16 +5,24 @@ import { GameView } from './views/game';
 import { userLogged } from './views/userLogged.ts';
 import { gameController } from './controllers/gameController';
 
+interface User {
+  login: string;
+  password: string;
+  mail: string;
+  photo: string,
+  token: string;
+}
+
 export class Router {
   private static app = document.getElementById('app');
-public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'game' | 'userLogged' , addToHistory = true): void {
+  public static currentUser: User | null;
+  public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'game' | 'userLogged' , addToHistory = true): void {
   if (!this.app) {
     console.error('App container not found');
     return;
   }
 
   // Handle route protection + rendering
-  const gameArea = document.getElementById('gameArea') as HTMLDivElement | null;
   switch (page) {
     case 'home':
       this.app.innerHTML = HomeView.render();
@@ -26,23 +34,23 @@ public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'game' | '
       break;
 	
 	case 'login':
-      gameArea!.innerHTML = loginView.render();
+      this.app.innerHTML = loginView.render();
 	  loginView.init();
       break;
 	
 	case 'register':
-	  gameArea!.innerHTML = registerView.render();
+	  this.app.innerHTML = registerView.render();
 	  registerView.init();
       break;
 
 	case 'game':
-	  gameArea!.innerHTML = GameView.renderGameCanvas();
+	  this.app.innerHTML = GameView.renderGameCanvas();
 	  GameView.initGameCanvas();
 	  gameController.init();
       break;
 
 	case 'userLogged':
-	  gameArea!.innerHTML = userLogged.render();
+	  this.app.innerHTML = userLogged.render();
 	  userLogged.init();
       break;
   }
