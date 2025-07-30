@@ -1,6 +1,5 @@
-import db from './database.js';
+import db from '../src/database.js';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 
 async function hashPassword(password)
 {
@@ -74,14 +73,5 @@ export async function registerRoute(fastify)
 			console.error("SQL Error:", err);
 			return reply.status(500).send({ success: false, error: "Database error" });
 		}
-	});
-}
-
-// check if this code is useful
-export async function infoUserRoute(fastify)
-{
-	fastify.get('/api/auth/info', { preHandler: [fastify.auth] }, async (request, reply) => {
-		const user = request.user;
-		return { message: `Welcome ${user.login}`, userId: user.userId, login: user.login, mail: user.mail };
 	});
 }

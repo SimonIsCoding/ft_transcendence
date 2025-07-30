@@ -32,6 +32,8 @@ services:
   auth-service:
     container_name: auth-service
     build: requirements/auth-service
+    volumes:
+      - pong:/var/www/html/pong
   
   2fa-service:
     container_name: 2fa-service
