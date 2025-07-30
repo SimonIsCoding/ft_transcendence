@@ -1,11 +1,12 @@
 import fastify from 'fastify';
-import { loginRoute, registerRoute, infoUserRoute } from './login.js';
+import { loginRoute } from '../routes/loginRoute.js';
+import { registerRoute } from '../routes/registerRoute.js';
 import fastifyJwt from '@fastify/jwt';
 import fastifyCookie from '@fastify/cookie';
 import fastifyCors from '@fastify/cors';
 import multipart from '@fastify/multipart';
 import fastifyStatic from '@fastify/static';
-import { uploadProfilePictureRoute } from '../routes/uploadAvatar.js';
+import { uploadProfilePictureRoute } from '../routes/uploadProfilePictureRoute.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -47,16 +48,16 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 app.register(fastifyStatic, {
-  root: path.join(__dirname, '..', 'public'),
-  prefix: '/', // images available on /
+  root: path.join(__dirname, 'public'),
+  prefix: '/profile_pictures/', // images available on /
 });
 
 app.register(loginRoute);
 app.register(registerRoute);
-app.register(infoUserRoute);
 await uploadProfilePictureRoute(app);
+// app.register(infoUserRoute);
 
-app.get('/api/private/info', { preHandler: [app.auth] }, async (request, reply) => {
+app.get('/info', { preHandler: [app.auth] }, async (request, reply) => {
   const user = request.user;
   return {
     message: `Welcome ${user.login}`,
@@ -65,7 +66,7 @@ app.get('/api/private/info', { preHandler: [app.auth] }, async (request, reply) 
     mail: user.mail,
 	profile_picture: user.profile_picture
   };
-});
+});//if you can add/get the token, it will be wonderful
 
 app.post('/', async (request, reply) => {
   const data = request.body;
@@ -77,11 +78,6 @@ app.get('/debug-token', async (request, reply) => {
   const token = request.cookies.token;
   console.log("JWToken :", token);
   return { token };
-});
-
-app.ready(() => {
-  console.log('Registered routes:');
-  console.log(app.printRoutes());
 });
 
 app.listen({ port: 3001, host: '0.0.0.0' }, err => {

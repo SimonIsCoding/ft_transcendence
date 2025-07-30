@@ -60,8 +60,6 @@ export function uploadProfilePicture() : void
 
 	uploadInput!.addEventListener('change', () => {
 		const file = uploadInput.files?.[0];
-		console.log("in uploadProfilePicture");
-		console.log("file = ", file);
 		if (uploadInput?.files && uploadInput.files[0])
 			receiveProfilePicture(uploadInput.files[0]);
 		else
@@ -88,7 +86,7 @@ export async function loadExistingProfilePicture(): Promise<void>
 	try
 	{
 		// Recover user info
-		const res = await fetch('http://localhost:3001/api/private/info', {
+		const res = await fetch('/api/auth/info', {
 			credentials: 'include'
 		});
 		if (!res.ok)
@@ -97,7 +95,7 @@ export async function loadExistingProfilePicture(): Promise<void>
 		const data = await res.json();
 		if (data && data.profile_picture)
 		{
-			preview.src = `http://localhost:3001${data.profile_picture}`;
+			preview.src = `https://localhost:4443/${data.profile_picture}`;
 			preview.classList.remove('hidden');
 			uploadIcon.classList.add('hidden');
 		}

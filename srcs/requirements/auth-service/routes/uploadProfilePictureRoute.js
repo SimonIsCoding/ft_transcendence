@@ -21,7 +21,7 @@ export async function uploadProfilePictureRoute(fastify)
 
     const ext = path.extname(data.filename);
     const filename = `${randomUUID()}${ext}`;
-    const filePath = path.join(__dirname, '..', 'public', 'profile_pictures', filename);
+    const filePath = path.join(__dirname, '../../var/www/html/pong/profile_pictures', filename);
 
     try
 	{
