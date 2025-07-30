@@ -22,9 +22,7 @@ export async function uploadProfilePictureRoute(fastify)
 	const ext = path.extname(data.filename);
 	const filename = `${randomUUID()}${ext}`;
 	const filePath = path.join(__dirname, '../../var/www/html/pong/profile_pictures', filename);
-	console.log('Chemin final :', filePath);
-
-	console.log('Taille du buffer :', (await data.toBuffer()).length);
+	//this path is in function of the current file to the docker (I guess)
 
     try
 	{
