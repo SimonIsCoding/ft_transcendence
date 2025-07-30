@@ -19,9 +19,12 @@ export async function uploadProfilePictureRoute(fastify)
     if (!data.mimetype.startsWith('image/'))
       return reply.status(400).send({ error: 'Only images are allowed' });
 
-    const ext = path.extname(data.filename);
-    const filename = `${randomUUID()}${ext}`;
-    const filePath = path.join(__dirname, '..', 'public', 'profile_pictures', filename);
+	const ext = path.extname(data.filename);
+	const filename = `${randomUUID()}${ext}`;
+	const filePath = path.join(__dirname, '../../var/www/html/pong/profile_pictures', filename);
+	console.log('Chemin final :', filePath);
+
+	console.log('Taille du buffer :', (await data.toBuffer()).length);
 
     try
 	{
@@ -37,8 +40,8 @@ export async function uploadProfilePictureRoute(fastify)
     if (!userId)
       return reply.status(401).send({ error: 'Not authenticated: userId not found in token' });
 
-    const update = db.prepare('UPDATE users SET profile_picture = ? WHERE id = ?');
-    update.run(`/profile_pictures/${filename}`, userId);
+	const update = db.prepare('UPDATE users SET profile_picture = ? WHERE id = ?');
+	update.run(`/profile_pictures/${filename}`, userId);
 
     return reply.send({
       success: true,

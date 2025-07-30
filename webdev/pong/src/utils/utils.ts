@@ -24,7 +24,8 @@ export function setupPasswordToggle(passwordId: string, toggleBtnId: string, eye
 	});
 }
 
-export function showSuccessPopup(message: string, duration: number = 3500): void {
+export function showSuccessPopup(message: string, duration: number = 3500): void
+{
 	const popup = document.getElementById("successPopup");
 	if (!popup)
 		return;
@@ -42,7 +43,7 @@ export async function receiveProfilePicture(file: File): Promise<void>
   const formData = new FormData();
   formData.append('file', file);
 
-  const response = await fetch('http://localhost:3001/uploadProfilePicture', {
+  const response = await fetch('api/auth/uploadProfilePicture', {
     method: 'POST',
     body: formData, //because it's a picture
     credentials: 'include',

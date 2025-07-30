@@ -28,7 +28,7 @@ export function initRegistration()
 		if (!username || !password || !confirmPassword || !mail)
 			return registrationMsg!.textContent = `All fields has to be filled to create an account.`;
 		if (isValidEmail(mail) === false)
-			return registrationMsg!.textContent = `The mail format is not correct.`;			
+			return registrationMsg!.textContent = `The mail format is not correct.`;
 			
 		fetch('/api/auth/register', {
 		method: 'POST',
