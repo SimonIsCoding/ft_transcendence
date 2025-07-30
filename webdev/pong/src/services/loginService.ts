@@ -10,9 +10,6 @@ export function initLogin()
 		const login = (document.getElementById("login") as HTMLInputElement).value;
 		const password = (document.getElementById("password") as HTMLInputElement).value;
 
-		// const res = await fetch("http://localhost:3001/api/private/info", { credentials: "include" });
-		// const user = await res.json();
-
 		fetch('/api/auth/login', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
