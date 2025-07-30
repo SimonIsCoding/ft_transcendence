@@ -10,9 +10,6 @@ export function initLogin()
 		const login = (document.getElementById("login") as HTMLInputElement).value;
 		const password = (document.getElementById("password") as HTMLInputElement).value;
 
-		// const res = await fetch("http://localhost:3001/api/private/info", { credentials: "include" });
-		// const user = await res.json();
-
 		fetch('/api/auth/login', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
@@ -20,6 +17,7 @@ export function initLogin()
 		credentials: 'include'
 		})
 		.then(res => res.json())
+		// .then(user => {console.log("Does this shows the user's token? current user:", user);})
 		.then(data =>
 		{
 			localStorage.setItem('login', login);
@@ -50,8 +48,10 @@ export function initLogin()
 				if (connectionBtn)
 					connectionBtn.insertAdjacentElement("afterend", connectionMsg);
 			}
-
+			
+			// console.log("backend data sent :", data);
+			// return fetch('/api/userLogged', { credentials: 'include' });
 			});
 			console.log("login: ", login, "Password:", password);// to erase for PROD
-	});
+		});
 }

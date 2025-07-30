@@ -34,6 +34,8 @@ services:
     build: requirements/auth-service
     ports:
       - "3001:3001"
+    volumes:
+      - pong:/var/www/html/pong
 
   service-b:
     container_name: service-b

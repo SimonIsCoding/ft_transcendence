@@ -68,7 +68,7 @@ export const userLoggedSidebar = {
 		</button>
 		<!-- Hidden submenu -->
 		<div id="profileSubmenu" class="submenu h-screen absolute left-1/24 top-0 w-48 bg-[#fbd11b] border border-black flex items-center flex-col overflow-hidden max-h-0 transition-[max-height] duration-450 z-50 space-y-5">
-			<p id=" " class="font-bold text-center pt-5">Profile</p>
+			<p id="submenuProfileName" class="font-bold text-center pt-5">Profile</p>
 			<hr class="border-t-1.5 border-black w-full" />
 			<input type="file" id="uploadProfilePictureInput" accept="image/*" class="hidden">
 			<button id="uploadPictureBtn" class="relative w-24 h-24 bg-black rounded-full flex items-center justify-center border border-transparent hover:border-black group hover:bg-[#fbd11b] transition">
