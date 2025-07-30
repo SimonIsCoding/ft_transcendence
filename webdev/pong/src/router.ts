@@ -4,14 +4,20 @@ import { registerView } from './views/registerView';
 import { GameView } from './views/game';
 import { userLogged } from './views/userLogged.ts';
 import { gameController } from './controllers/gameController';
+import { initTwoFAController } from './controllers/twofaController';
 
 export class Router {
   private static app = document.getElementById('app');
-public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'game' | 'userLogged' , addToHistory = true): void {
-  if (!this.app) {
-    console.error('App container not found');
-    return;
-  }
+
+  public static navigate(
+    page: 'home' | 'login' | 'register' | 'info' | 'game' | 'userLogged' | 'twofa',
+    params?: { email?: string },  // Changed from login to email
+    addToHistory = true
+  ): void {
+    if (!this.app) {
+      console.error('App container not found');
+      return;
+    }
 
   // Handle route protection + rendering
   const gameArea = document.getElementById('gameArea') as HTMLDivElement | null;
@@ -45,7 +51,18 @@ public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'game' | '
 	  gameArea!.innerHTML = userLogged.render();
 	  userLogged.init();
       break;
-  }
+
+	case 'twofa':
+        if (!params?.email) {
+          console.error('email parameter required for twofa route');
+          this.navigate('login');
+          return;
+        }
+        gameArea!.innerHTML = '';
+        gameArea!.appendChild(initTwoFAController(params.email));
+        break;
+    }
+
 
   if (addToHistory)
     history.pushState({}, '', page === 'home' ? '/' : `/${page}`);
@@ -61,7 +78,9 @@ public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'game' | '
 	  path.includes('game') ? 'game' :
 	  path.includes('info') ? 'info' :
 	  path.includes('userLogged') ? 'userLogged' :
-	  'home' , false);
+      path.includes('twofa') ? 'twofa' :
+	  'home', undefined,
+	  false);
     });
 
     // Handle back/forward navigation
@@ -73,7 +92,10 @@ public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'game' | '
 	  path.includes('game') ? 'game' :
 	  path.includes('info') ? 'info' : 
 	  path.includes('userLogged') ? 'userLogged' :
-	  'home' , false);
+      path.includes('twofa') ? 'twofa' :
+	  'home' ,
+	  undefined,
+	  false);
     });
   }
 }
