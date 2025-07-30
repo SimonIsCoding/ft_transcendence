@@ -36,7 +36,7 @@ app.decorate('auth', async (request, reply) => {
   try
   {
 	  await request.jwtVerify();
-	  console.log("✅ User Authentificated :", request.user);//try to add token, for the moment there is not. Only: id, login, mail,profile_picture, iat, exp => check below
+	  console.log("User Authentificated :", request.user);//try to add token, for the moment there is not. Only: id, login, mail,profile_picture, iat, exp => check below
   }
   catch (err)
   {
