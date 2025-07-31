@@ -38,6 +38,18 @@ export function showSuccessPopup(message: string, duration: number = 3500): void
 	}, duration);
 }
 
+export function showErrorPopup(message: string) {
+  const popup = document.getElementById("successPopup");
+  if (popup)
+  {
+    popup.classList.remove("bg-green-600");
+    popup.classList.add("bg-red-600");
+    popup.textContent = message;
+    popup.classList.remove("hidden");
+    setTimeout(() => popup.classList.add("hidden"), 3000);
+  }
+}
+
 export async function receiveProfilePicture(file: File): Promise<void>
 {
   const formData = new FormData();

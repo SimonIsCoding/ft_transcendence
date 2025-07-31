@@ -1,5 +1,6 @@
 import { playButton } from "./playButton";
-import { userUnloggedSidebar } from "./sidebarBehavior";
+// import { userUnloggedSidebar } from "./sidebarBehavior";
+import { handleSidebar } from "./sidebarBehavior";
 
 interface User {
   login: string;
@@ -13,11 +14,13 @@ export const HomeView = {
   currentUser: null as User | null,
   isLogin: true,
 
+//   ${userUnloggedSidebar.render()}
  render(): string {
 	return `
 	<div class="w-screen h-screen flex bg-[#fbd11b] overflow-hidden">
 
-      ${userUnloggedSidebar.render()}
+		<div id="sidebar" class="bg-[#fbd11b] h-screen flex flex-col overflow-hidden transition-all duration-500 ease-in-out w-1/24">
+		</div>
 
       ${playButton.render()}
 
@@ -25,9 +28,10 @@ export const HomeView = {
   `;
   },
 
-  init(): void
+  async init(): Promise<void>
   {
-	userUnloggedSidebar.init();
+	await handleSidebar();
+	// userUnloggedSidebar.init();
 
 	playButton.init();
   }

@@ -1,14 +1,16 @@
 import { initLogin } from '../services/loginService';
 import { setupPasswordToggle } from '../utils/utils';
 import { Router } from '../router.ts';
-import { userUnloggedSidebar } from './sidebarBehavior.ts';
+import { handleSidebar /*, userUnloggedSidebar*/ } from './sidebarBehavior.ts';
 
 export const loginView = {
+	// ${userUnloggedSidebar.render()}
   render: (): string => `
   	<div class="w-screen h-screen flex bg-[#fbd11b] overflow-hidden">
   
-		${userUnloggedSidebar.render()}
-  
+		<div id="sidebar" class="w-1/24 bg-[#fbd11b] flex flex-col transition-all duration-500 ease-in-out overflow-hidden group" style="min-height: 100vh">
+		</div>
+		
 		<!-- Game Area -->
 		<main id="gameArea" class="flex-1 bg-black flex items-center justify-center bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center w-full h-full" style="background-image: url('/pongBackgroundPlay.png');">
 
@@ -31,9 +33,10 @@ export const loginView = {
     </div>
   `,
 
-  init(): void 
+  async init(): Promise<void>
   {
-	userUnloggedSidebar.init();
+	await handleSidebar();
+	// userUnloggedSidebar.init();
 
 	setupPasswordToggle("password", "togglePasswordLogin", "eyeIconClosedLogin", "eyeIconOpenedLogin");
 	initLogin();

@@ -1,7 +1,8 @@
 import { receiveProfilePicture } from "../utils/utils";
 import { playButton } from "./playButton";
-import { userLoggedSidebar } from "./sidebarBehavior";
+// import { userLoggedSidebar } from "./sidebarBehavior";
 import { initLogout } from '../services/logoutService';
+import { handleSidebar } from "./sidebarBehavior";
 
 interface User {
   login: string;
@@ -14,13 +15,15 @@ export const userLogged = {
   currentUser: null as User | null,
   isLogin: true,
 
+//   ${userLoggedSidebar.render()}
  render(): string {
 	return `
 	<div class="w-screen h-screen flex bg-[#fbd11b] overflow-hidden">
-	<div id="successPopup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50">
-	</div>
+		<div id="successPopup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50">
+		</div>
 	
-	${userLoggedSidebar.render()}
+		<div id="sidebar" class="bg-[#fbd11b] h-screen flex flex-col overflow-hidden transition-all duration-500 ease-in-out w-1/24">
+		</div>
 	
 	${playButton.render()}
 
@@ -28,9 +31,10 @@ export const userLogged = {
   `;
   },
 
-  init(): void
+  async init(): Promise<void>
   {
-	userLoggedSidebar.init();
+	// userLoggedSidebar.init();
+	await handleSidebar();
 
 	loadExistingProfilePicture();
 	uploadProfilePicture();
