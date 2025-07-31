@@ -1,7 +1,7 @@
-import { Router } from "../router";
 import { receiveProfilePicture } from "../utils/utils";
 import { playButton } from "./playButton";
 import { userLoggedSidebar } from "./sidebarBehavior";
+import { initLogout } from '../services/logoutService';
 
 interface User {
   login: string;
@@ -37,8 +37,7 @@ export const userLogged = {
 
 	playButton.init();
 
-	const logoutSidebarBtn = document.getElementById('logoutSidebarBtn') as HTMLButtonElement | null;
-	logoutSidebarBtn!.addEventListener('click', () => Router.navigate('home'));
+	initLogout();
   }
 };
 

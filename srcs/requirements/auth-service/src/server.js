@@ -1,12 +1,15 @@
 import fastify from 'fastify';
 import { loginRoute } from '../routes/loginRoute.js';
 import { registerRoute } from '../routes/registerRoute.js';
+import { auth } from '../plugins/auth.js';
 import fastifyJwt from '@fastify/jwt';
 import fastifyCookie from '@fastify/cookie';
 import fastifyCors from '@fastify/cors';
 import multipart from '@fastify/multipart';
 import fastifyStatic from '@fastify/static';
 import { uploadProfilePictureRoute } from '../routes/uploadProfilePictureRoute.js';
+import { logoutRoute } from '../routes/logoutRoute.js';
+// import { infoUserRoute } from '../routes/infoUserRoute.js'
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -16,7 +19,7 @@ const app = fastify();
 await app.register(multipart);//to receive images
 
 app.register(fastifyCookie, {
-  secret: 'super-secret-key',
+  secret: 'super-secret-key', //to sign ur cookie
 });
 
 app.register(fastifyCors, {
@@ -32,17 +35,19 @@ app.register(fastifyJwt, {
   }
 });
 
-app.decorate('auth', async (request, reply) => {
-  try
-  {
-	  await request.jwtVerify();
-	  console.log("User Authentificated :", request.user);//try to add token, for the moment there is not. Only: id, login, mail,profile_picture, iat, exp => check below
-  }
-  catch (err)
-  {
-    reply.status(401).send({ error: 'Unauthorized' });
-  }
-});
+app.decorate('auth', auth);
+
+// app.decorate('auth', async (request, reply) => {
+//   try
+//   {
+// 	  await request.jwtVerify();
+// 	  console.log("✅ User Authentificated :", request.user);//try to add token, for the moment there is not. Only: id, login, mail,profile_picture, iat, exp => check below
+//   }
+//   catch (err)
+//   {
+//     reply.status(401).send({ error: 'Unauthorized' });
+//   }
+// });
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -54,8 +59,9 @@ app.register(fastifyStatic, {
 
 app.register(loginRoute);
 app.register(registerRoute);
-await uploadProfilePictureRoute(app);
 // app.register(infoUserRoute);
+await uploadProfilePictureRoute(app);
+await logoutRoute(app);
 
 app.get('/info', { preHandler: [app.auth] }, async (request, reply) => {
   const user = request.user;
@@ -64,7 +70,8 @@ app.get('/info', { preHandler: [app.auth] }, async (request, reply) => {
     userId: user.userId,
     login: user.login,
     mail: user.mail,
-	profile_picture: user.profile_picture
+	profile_picture: user.profile_picture, 
+	token: user.token
   };
 });//if you can add/get the token, it will be wonderful
 
