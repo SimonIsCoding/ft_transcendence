@@ -1,25 +1,26 @@
 import fastify from 'fastify';
-import { loginRoute } from '../routes/loginRoute.js';
-import { registerRoute } from '../routes/registerRoute.js';
-import { auth } from '../plugins/auth.js';
 import fastifyJwt from '@fastify/jwt';
 import fastifyCookie from '@fastify/cookie';
 import fastifyCors from '@fastify/cors';
 import multipart from '@fastify/multipart';
 import fastifyStatic from '@fastify/static';
-import { uploadProfilePictureRoute } from '../routes/uploadProfilePictureRoute.js';
-import { logoutRoute } from '../routes/logoutRoute.js';
-// import { infoUserRoute } from '../routes/infoUserRoute.js'
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import { loginRoute } from '../routes/loginRoute.js';
+import { registerRoute } from '../routes/registerRoute.js';
+import { auth } from '../plugins/auth.js';
+import { uploadProfilePictureRoute } from '../routes/uploadProfilePictureRoute.js';
+import { logoutRoute } from '../routes/logoutRoute.js';
+import { infoUserRoute } from '../routes/infoUserRoute.js';
+import { statusRoute } from '../routes/userLoggedRoute.js';
 
 const app = fastify();
 
 await app.register(multipart);//to receive images
 
 app.register(fastifyCookie, {
-  secret: 'super-secret-key', //to sign ur cookie
+  secret: 'super-secret-key', //to sign ur cookie // you should put it in a env file
 });
 
 app.register(fastifyCors, {
@@ -28,7 +29,7 @@ app.register(fastifyCors, {
 });
 
 app.register(fastifyJwt, {
-  secret: 'super-secret-key',
+  secret: 'super-secret-key',// you should put it in a env file
   cookie: {
     cookieName: 'token',
     signed: false,
@@ -36,18 +37,6 @@ app.register(fastifyJwt, {
 });
 
 app.decorate('auth', auth);
-
-// app.decorate('auth', async (request, reply) => {
-//   try
-//   {
-// 	  await request.jwtVerify();
-// 	  console.log("✅ User Authentificated :", request.user);//try to add token, for the moment there is not. Only: id, login, mail,profile_picture, iat, exp => check below
-//   }
-//   catch (err)
-//   {
-//     reply.status(401).send({ error: 'Unauthorized' });
-//   }
-// });
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -59,9 +48,10 @@ app.register(fastifyStatic, {
 
 app.register(loginRoute);
 app.register(registerRoute);
-// app.register(infoUserRoute);
 await uploadProfilePictureRoute(app);
+await infoUserRoute(app);
 await logoutRoute(app);
+await statusRoute(app);
 
 app.get('/info', { preHandler: [app.auth] }, async (request, reply) => {
   const user = request.user;
@@ -73,18 +63,12 @@ app.get('/info', { preHandler: [app.auth] }, async (request, reply) => {
 	profile_picture: user.profile_picture, 
 	token: user.token
   };
-});//if you can add/get the token, it will be wonderful
+});
 
 app.post('/', async (request, reply) => {
   const data = request.body;
   console.log(data);// to use data
   return { status: "status ok" };
-});
-
-app.get('/debug-token', async (request, reply) => {
-  const token = request.cookies.token;
-  console.log("JWToken :", token);
-  return { token };
 });
 
 app.listen({ port: 3001, host: '0.0.0.0' }, err => {

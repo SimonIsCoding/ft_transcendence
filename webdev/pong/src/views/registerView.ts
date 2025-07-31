@@ -1,18 +1,22 @@
 import { Router } from '../router';
 import { setupPasswordToggle } from '../utils/utils';
 import { initRegistration } from '../services/registrationService';
-import { userUnloggedSidebar } from './sidebarBehavior.ts';
+import { handleSidebar/*userUnloggedSidebar*/ } from './sidebarBehavior.ts';
 
 export const registerView = {
+	// ${userUnloggedSidebar.render()}
   render: (): string => `
 	<div class="w-screen h-screen flex bg-[#fbd11b] overflow-hidden">
-  
-		${userUnloggedSidebar.render()}
+
+		<div id="sidebar" class="w-1/24 bg-[#fbd11b] flex flex-col transition-all duration-500 ease-in-out overflow-hidden group" style="min-height: 100vh">
+		</div>
   
 		<!-- Game Area -->
 		<main id="gameArea" class="flex-1 bg-black flex items-center justify-center bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center w-full h-full" style="background-image: url('/pongBackgroundPlay.png');">
 
 			<div id="registerForm" class="flex flex-col justify-center items-center w-full space-y-10">
+				<div id="successPopup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50">
+				</div>
 				<div class="relative">
 					<input id="newUsername" placeholder="Username" class="text-white px-4 py-2 text-xl border border-white rounded w-80"/><br/>
 				</div>
@@ -43,9 +47,10 @@ export const registerView = {
     </div>
   `,
 
-  init(): void 
+  async init(): Promise<void>
   {
-	userUnloggedSidebar.init();
+	await handleSidebar();
+	// userUnloggedSidebar.init();
 
 	setupPasswordToggle("newPassword", "togglePassword", "eyeIconClosed", "eyeIconOpened");
 	setupPasswordToggle("confirmPassword", "toggleConfirmPassword", "confirmEyeIconClosed", "confirmEyeIconOpened");

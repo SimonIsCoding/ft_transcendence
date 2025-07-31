@@ -1,12 +1,26 @@
 import { Router } from '../router';
 import { showSuccessPopup } from '../utils/utils';
 // import { hashPassword } from '../../../../srcs/requirements/auth-service/routes/registerRoute.js'
+import { showErrorPopup } from '../utils/utils';
 
 // --- form to log in
 export function initLogin()
 {
 	const submitBtn = document.getElementById("connectionBtn") as HTMLButtonElement;
 	submitBtn.addEventListener("click", async () => {
+
+		// const status = await fetch('/api/auth/status', { credentials: 'include' })
+                    //  .then(res => res.json());
+
+		const statusRes = await fetch('/api/auth/status', { credentials: 'include' });
+		const status = await statusRes.json();
+
+		if (status.authenticated)
+		{
+			showErrorPopup("You are already connected. Firstly disconnect from your account.");
+			// Router.navigate('home');
+			return;
+		}
 
 		const login = (document.getElementById("login") as HTMLInputElement).value;
 		const password = (document.getElementById("password") as HTMLInputElement).value;
@@ -20,7 +34,6 @@ export function initLogin()
 		credentials: 'include'
 		})
 		.then(res => res.json())
-		// .then(user => {console.log("Does this shows the user's token? current user:", user);})
 		.then(data =>
 		{
 			localStorage.setItem('login', login);
@@ -36,14 +49,13 @@ export function initLogin()
 				.then(res => {
 					if (res.ok)
 					{
-						// let loggedIcon = document.getElementById("loggedIcon") as HTMLAnchorElement | null;
-						// if (loggedIcon)
-						// {
-						// 	loggedIcon.classList.remove("hidden");
-						// 	loggedIcon.title = `Logged as ${username}`;
-						// }
-						
-						//you can also print the data that you receive through the fetch with res.ok
+						fetch('/api/auth/infoUser', { credentials: 'include' })
+						.then(res => res.json())
+						.then(data => {
+							console.log("User infos from token:", data.user);
+							console.log("data.authenticated:", data.authenticated);
+						});
+
 						//redirection to userLogged page
 						Router.navigate('userLogged');
 						showSuccessPopup("You are logged");
