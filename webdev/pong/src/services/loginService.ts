@@ -1,5 +1,6 @@
 import { Router } from '../router';
 import { showSuccessPopup } from '../utils/utils';
+// import { hashPassword } from '../../../../srcs/requirements/auth-service/routes/registerRoute.js'
 
 // --- form to log in
 export function initLogin()
@@ -9,6 +10,8 @@ export function initLogin()
 
 		const login = (document.getElementById("login") as HTMLInputElement).value;
 		const password = (document.getElementById("password") as HTMLInputElement).value;
+		// const encryptedPassword = await hashPassword(password);
+		// you have to encrypt before fetch. One question: while using bcrypt.compare, I will have 2 hashed psswd. Is it a pb using this function that way ?
 
 		fetch('/api/auth/login', {
 		method: 'POST',
@@ -27,16 +30,25 @@ export function initLogin()
 			let connectionMsg = document.getElementById(connectionMsgId) as HTMLParagraphElement | null;
 			if (username && data.success === true)
 			{
-				let loggedIcon = document.getElementById("loggedIcon") as HTMLAnchorElement | null;
-				if (loggedIcon)
-				{
-					loggedIcon.classList.remove("hidden");
-					loggedIcon.title = `Logged as ${username}`;
-				}
-
-				//redirection to userLogged page
-				Router.navigate('userLogged');
-				showSuccessPopup("You are logged");
+				fetch('/api/auth/info', {
+					credentials: 'include'
+				})
+				.then(res => {
+					if (res.ok)
+					{
+						// let loggedIcon = document.getElementById("loggedIcon") as HTMLAnchorElement | null;
+						// if (loggedIcon)
+						// {
+						// 	loggedIcon.classList.remove("hidden");
+						// 	loggedIcon.title = `Logged as ${username}`;
+						// }
+						
+						//you can also print the data that you receive through the fetch with res.ok
+						//redirection to userLogged page
+						Router.navigate('userLogged');
+						showSuccessPopup("You are logged");
+					}
+				});
 			}
 			else if (!connectionMsg)
 			{
@@ -54,4 +66,6 @@ export function initLogin()
 			});
 			console.log("login: ", login, "Password:", password);// to erase for PROD
 		});
+
+
 }
