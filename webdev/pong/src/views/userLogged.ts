@@ -52,29 +52,36 @@ export async function uploadProfilePicture() : Promise<void>
 	const preview = document.getElementById('previewProfilePicture') as HTMLImageElement;
 	const uploadIcon = document.getElementById('uploadIcon')!;
 
-	uploadBtn!.addEventListener('click', () => {
-		uploadInput!.click();
-	});
+	return new Promise((resolve, reject) => {
+		uploadBtn!.addEventListener('click', () => {
+			uploadInput!.click();
+		});
+	uploadInput!.addEventListener('change', async () => {
+	const file = uploadInput.files?.[0];
+	if (!file)
+	{
+		reject();
+		return;
+	}
 
-	uploadInput!.addEventListener('change', () => {
-		const file = uploadInput.files?.[0];
-		if (uploadInput?.files && uploadInput.files[0])
-			receiveProfilePicture(uploadInput.files[0]);
-		else
-			alert('No file selected.');
-		if (file && file.type.startsWith('image/'))
-		{
-			const reader = new FileReader();
-			reader.onload = (e) => {
-				const result = e.target!.result as string;
-				preview.src = result;
-				preview.classList.remove('hidden');
-				uploadIcon.classList.add('hidden');
-			};
-			reader.readAsDataURL(file);
-		}
+	if (file.type.startsWith('image/')) {
+		const reader = new FileReader();
+		reader.onload = (e) => {
+			const result = e.target!.result as string;
+			preview.src = result;
+			preview.classList.remove('hidden');
+			uploadIcon.classList.add('hidden');
+		};
+		reader.readAsDataURL(file);
+	}
+
+	await receiveProfilePicture(file);
+	resolve();
+	// await loadExistingProfilePicture(); // <== 🔁 nouveau fetch backend
+	});
 	});
 }
+
 
 export async function loadExistingProfilePicture(): Promise<void>
 {
@@ -91,9 +98,15 @@ export async function loadExistingProfilePicture(): Promise<void>
 			return; // not connected
 
 		const data = await res.json();
+		console.log("in loadExistingProfilePicture(), data: ", data);
+		// const res2 = await fetch('/api/auth/uploadProfilePicture', { credentials: 'include'});
+		const data2 = await receiveProfilePicture();
+		console.log("\n data2 from the receiveProfilePicture:", data2);
 		if (data && data.profile_picture)
 		{
 			preview.src = `https://localhost:4443/${data.profile_picture}`;
+			console.log("https://localhost:4443/${data.profile_picture}");
+			console.log("https://localhost:4443/",data.profile_picture );
 			preview.classList.remove('hidden');
 			uploadIcon.classList.add('hidden');
 		}

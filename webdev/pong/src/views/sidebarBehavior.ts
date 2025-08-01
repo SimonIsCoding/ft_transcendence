@@ -155,9 +155,9 @@ export async function handleSidebar()
 		console.log("✅ Connected");
 		sidebar!.innerHTML = userLoggedSidebar.render();
 		userLoggedSidebar.init();
-		await uploadProfilePicture();
-		await loadExistingProfilePicture();
 		initLogout();
+		uploadProfilePicture();
+		loadExistingProfilePicture();
 	}
 	else
 	{
