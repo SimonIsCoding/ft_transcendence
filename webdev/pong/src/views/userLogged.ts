@@ -1,7 +1,7 @@
 import { receiveProfilePicture } from "../utils/utils";
+// import { initLogout } from '../services/logoutService';
 import { playButton } from "./playButton";
 // import { userLoggedSidebar } from "./sidebarBehavior";
-import { initLogout } from '../services/logoutService';
 import { handleSidebar } from "./sidebarBehavior";
 
 interface User {
@@ -36,16 +36,16 @@ export const userLogged = {
 	// userLoggedSidebar.init();
 	await handleSidebar();
 
-	loadExistingProfilePicture();
-	uploadProfilePicture();
+	// loadExistingProfilePicture();
+	// uploadProfilePicture();
+	// initLogout();
 
 	playButton.init();
 
-	initLogout();
   }
 };
 
-export function uploadProfilePicture() : void
+export async function uploadProfilePicture() : Promise<void>
 {
 	const uploadBtn = document.getElementById('uploadPictureBtn');
 	const uploadInput = document.getElementById('uploadProfilePictureInput') as HTMLInputElement;

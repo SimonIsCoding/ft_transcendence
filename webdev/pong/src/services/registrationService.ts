@@ -1,7 +1,7 @@
 import { Router } from '../router.ts';
 import { isValidEmail } from '../utils/utils.ts';
 import { showSuccessPopup } from '../utils/utils';
-// import { showErrorPopup } from '../utils/utils';
+import { showErrorPopup } from '../utils/utils';
 
 // --- form to create account
 export function initRegistration()
@@ -13,8 +13,8 @@ export function initRegistration()
 
 		if (status.authenticated)
 		{
-			// showErrorPopup("You are already connected. Firstly disconnect from your account.");
-			Router.navigate('home');
+			showErrorPopup("You are already connected. Firstly disconnect from your account.");
+			// Router.navigate('home');
 			return;
 		}
 
@@ -30,7 +30,7 @@ export function initRegistration()
 		{
 			registrationMsg = document.createElement("p");
 			registrationMsg.id = "registrationMsg";
-			registrationMsg.classList.add("font-seven", "text-white", "px-1", "py-1", "text-2xl");
+			registrationMsg.classList.add("text-white", "px-1", "py-1", "text-2xl");
 			if (createAccountBtn)
 				createAccountBtn.insertAdjacentElement("afterend", registrationMsg);
 		}
