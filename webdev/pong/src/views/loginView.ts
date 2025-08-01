@@ -8,11 +8,10 @@ export const loginView = {
   render: (): string => `
   	<div class="w-screen h-screen flex bg-[#fbd11b] overflow-hidden">
   
-		<div id="sidebar" class="w-1/24 bg-[#fbd11b] flex flex-col transition-all duration-500 ease-in-out overflow-hidden group" style="min-height: 100vh">
+		<div id="sidebar" class="bg-[#fbd11b] h-screen flex flex-col overflow-hidden transition-all duration-500 ease-in-out w-1/24">
 		</div>
 		
-		<!-- Game Area -->
-		<main id="gameArea" class="flex-1 bg-black flex items-center justify-center bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center w-full h-full" style="background-image: url('/pongBackgroundPlay.png');">
+			<main id="gameArea" class="flex-1 bg-black flex items-center justify-center bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center w-full h-full" style="background-image: url('/pongBackgroundPlay.png');">
 
 			<div id="loginCredentials" class="flex flex-col justify-center items-center w-full space-y-10">
 			<div id="successPopup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50">

@@ -1,6 +1,8 @@
 import { Router } from "../router";
 import { friendsListView } from "./friendsList"
 import { initSidebarBehavior } from "../services/sidebar"
+import { loadExistingProfilePicture, uploadProfilePicture } from "./userLogged";
+import { initLogout } from '../services/logoutService';
 
 interface User {
   login: string;
@@ -17,7 +19,6 @@ export const userUnloggedSidebar = {
 	<!-- Sidebar 
       <div id="sidebar" class="w-1/24 bg-[#fbd11b] flex flex-col transition-all duration-500 ease-in-out overflow-hidden group" style="min-height: 100vh">-->
         <img src="/pong-logo.png" alt="PONG Logo" class="h-auto w-auto pl-2 pr-2 pt-2"/>
-
 
 		<div class="flex flex-col mt-auto items-center space-y-2 pb-6">
 			<button id="loginBtn" class="w-12 border border-black rounded-lg text-sm text-black font-semibold py-2 rounded hover:bg-black hover:text-yellow-400 transition">Login</button>
@@ -154,6 +155,9 @@ export async function handleSidebar()
 		console.log("✅ Connected");
 		sidebar!.innerHTML = userLoggedSidebar.render();
 		userLoggedSidebar.init();
+		await uploadProfilePicture();
+		await loadExistingProfilePicture();
+		initLogout();
 	}
 	else
 	{
