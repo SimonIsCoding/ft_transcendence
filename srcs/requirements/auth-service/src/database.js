@@ -7,7 +7,8 @@ db.exec(`
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	login TEXT UNIQUE,
 	password TEXT,
-	alias TEXT
+	mail TEXT UNIQUE,
+	profile_picture TEXT
   );
 `);
 

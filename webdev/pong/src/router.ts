@@ -1,74 +1,79 @@
 import { HomeView } from './views/home';
-import { DashboardView } from './views/dashboard.ts';
-import { LoginView } from './views/login.ts';
+import { loginView } from './views/loginView';
+import { registerView } from './views/registerView';
+import { GameView } from './views/game';
+import { userLogged } from './views/userLogged.ts';
+import { gameController } from './controllers/gameController';
 
 export class Router {
   private static app = document.getElementById('app');
+public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'game' | 'userLogged' , addToHistory = true): void {
+  if (!this.app) {
+    console.error('App container not found');
+    return;
+  }
 
-  public static navigate(page: 'home' | 'dashboard' | 'login'): void {
-    if (!this.app) {
-      console.error('App container not found');
-      return;
-    }
+  // Handle route protection + rendering
+  const gameArea = document.getElementById('gameArea') as HTMLDivElement | null;
+  switch (page) {
+    case 'home':
+      this.app.innerHTML = HomeView.render();
+      HomeView.init();
+      break;
 
-    // Clear previous view
-    this.app.innerHTML = '';
+    case 'info':
+      //TODO
+      break;
+	
+	case 'login':
+      gameArea!.innerHTML = loginView.render();
+	  loginView.init();
+      break;
+	
+	case 'register':
+	  gameArea!.innerHTML = registerView.render();
+	  registerView.init();
+      break;
 
-    // Handle route protection
-    if (page === 'dashboard' && !this.isAuthenticated()) {
-      console.warn('Redirecting to home: not authenticated');
-      return this.navigate('home');
-    }
+	case 'game':
+	  gameArea!.innerHTML = GameView.renderGameCanvas();
+	  GameView.initGameCanvas();
+	  gameController.init();
+      break;
 
-    switch (page) {
-      case 'home':
-        if (this.isAuthenticated()) {
-          return this.navigate('dashboard'); // Redirect if already logged in
-        }
-        this.app.innerHTML = HomeView.render();
-		HomeView.init();
-        break;
+	case 'userLogged':
+	  gameArea!.innerHTML = userLogged.render();
+	  userLogged.init();
+      break;
+  }
 
-      case 'dashboard':
-        const dashboard = new DashboardView();
-        dashboard.initialize();
-        break;
-
-	  case 'login':
-        this.app.innerHTML = LoginView.render();
-        LoginView.init();
-        break;
-    }
-
-    // Update browser history
+  if (addToHistory)
     history.pushState({}, '', page === 'home' ? '/' : `/${page}`);
-  }
-
-  private static isAuthenticated(): boolean {
-    return localStorage.getItem('authToken') !== null;
-  }
+}
 
   public static init(): void {
     // Handle initial load
     window.addEventListener('load', () => {
       const path = window.location.pathname;
 	  this.navigate(
-	    path.includes('dashboard') ? 'dashboard' :
-	    path.includes('login') ? 'login' :
-	    'home'
-	  );
-
+	  path.includes('login') ? 'login' :
+	  path.includes('register') ? 'register' :
+	  path.includes('game') ? 'game' :
+	  path.includes('info') ? 'info' :
+	  path.includes('userLogged') ? 'userLogged' :
+	  'home' , false);
     });
 
     // Handle back/forward navigation
     window.addEventListener('popstate', () => {
       const path = window.location.pathname;
 	  this.navigate(
-	  path.includes('dashboard') ? 'dashboard' :
 	  path.includes('login') ? 'login' :
-	  'home'
-	  );
-
+	  path.includes('register') ? 'register' :
+	  path.includes('game') ? 'game' :
+	  path.includes('info') ? 'info' : 
+	  path.includes('userLogged') ? 'userLogged' :
+	  'home' , false);
     });
   }
 }

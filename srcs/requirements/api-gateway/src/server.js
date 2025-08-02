@@ -3,8 +3,6 @@ import fetch from 'node-fetch';  // Explicit import
 import fastifyHttpProxy from '@fastify/http-proxy';
 import fs from 'fs';
 import fastifyCors from '@fastify/cors';
-import fastifyStatic from '@fastify/static';
-import path from 'path';
 
 const fastify = Fastify({
   logger: true,
@@ -29,25 +27,45 @@ fastify.register(fastifyCors, {
 
 // Route to demonstrate gateway routing
 fastify.get('/api', async (request, reply) => {
-  return { message: "API Gateway → Try /api/a or /api/b" };
+  return { message: "API Gateway" };
 });
 
 // Proxy to Auth Service
 fastify.register(fastifyHttpProxy, {
   upstream: 'http://auth-service:3001',
   prefix: '/api/auth',
-  rewritePrefix: '/'
+  rewritePrefix: '/',
+    http2: false,
+  replyOptions: {
+    rewriteRequestHeaders: (originalReq, headers) => {
+      return {
+        ...headers,
+        host: 'auth-service',
+      };
+    },
+  },
 });
 
-// Proxy to Service B
-fastify.get('/api/b', async (request, reply) => {
-  const response = await fetch('http://service-b:3002/');
-  return response.json();
-});
-
-fastify.register(fastifyStatic, {
-  root: path.join(process.cwd(), 'app/webdev/pong'), // chemin absolu vers ton dossier frontend
-  prefix: '/', // sert les fichiers à la racine
+fastify.register(fastifyHttpProxy, {
+  upstream: 'http://2fa-service:3003',
+  prefix: '/api/2fa',
+  rewritePrefix: '/api/2fa',
+    http2: false,
+  replyOptions: {
+    rewriteRequestHeaders: (originalReq, headers) => {
+      return {
+        ...headers,
+        host: '2fa-service',
+		'x-real-ip': originalReq.headers['x-real-ip'] || originalReq.ip,
+        'x-forwarded-for': originalReq.headers['x-forwarded-for'] 
+        	? `${originalReq.headers['x-forwarded-for']}, ${originalReq.ip}`
+        	: originalReq.ip,
+      // Forward other security headers
+        'x-forwarded-proto': originalReq.headers['x-forwarded-proto'] || 'http',
+      };
+    },
+  },
+  proxyPayload: true,
 });
 
 
