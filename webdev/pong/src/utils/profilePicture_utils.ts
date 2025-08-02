@@ -1,39 +1,4 @@
-import { receiveProfilePicture } from "../utils/utils";
-import { playButton } from "./playButton";
-import { handleSidebar } from "./sidebarBehavior";
-
-interface User {
-  login: string;
-  password: string;
-  mail: string;
-  token: string;
-}
-
-export const userLogged = {
-  currentUser: null as User | null,
-  isLogin: true,
-
- render(): string {
-	return `
-	<div class="w-screen h-screen flex bg-[#fbd11b] overflow-hidden">
-		<div id="successPopup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50">
-		</div>
-	
-		<div id="sidebar" class="bg-[#fbd11b] h-screen flex flex-col overflow-hidden transition-all duration-500 ease-in-out w-1/24">
-		</div>
-	
-	${playButton.render()}
-
-	</div>
-  `;
-  },
-
-  async init(): Promise<void>
-  {
-	await handleSidebar();
-	playButton.init();
-  }
-};
+import { receiveProfilePicture } from "./utils";
 
 export async function uploadProfilePicture() : Promise<void>
 {

@@ -1,7 +1,7 @@
 import { Router } from "../router";
 import { friendsListView } from "./friendsList"
 import { isConnected } from "../services/sidebar"
-import { loadExistingProfilePicture, uploadProfilePicture } from "./userLogged";
+import { loadExistingProfilePicture, uploadProfilePicture } from "../utils/profilePicture_utils";
 import { initLogout } from '../services/logoutService';
 
 interface User {
