@@ -1,12 +1,10 @@
-import { AuthView } from './authView';
-import { GameView } from './game';
-import { SettingsView } from './settings';
-import { authService } from '../services/authService';
-import { gameController } from '../controllers/gameController';
-import { authController } from '../controllers/authController';
+import { Router } from "../router";
+import { userUnloggedSidebar } from "./sidebarBehavior";
 
 interface User {
-  email: string;
+  login: string;
+  password: string;
+  mail: string;
   token: string;
 }
 
@@ -15,49 +13,27 @@ export const HomeView = {
   isLogin: true,
 
  render(): string {
-  return `
-    <div class="flex flex-col min-h-screen bg-[#fbd11b] text-black">
+	return `
+	<div class="w-screen h-screen flex bg-[#fbd11b] overflow-hidden">
 
-      <!-- Header with Pong Logo -->
-      <header class="flex justify-center items-center h-24 bg-[#fbd11b]">
-        <img src="/pong-logo.png" alt="PONG Logo" class="h-16">
-      </header>
+      ${userUnloggedSidebar.render()}
 
-      <!-- Game Canvas Area -->
-	<main class="flex-1 flex items-center justify-center bg-[#fbd11b] overflow-y-auto min-h-[450px]">
-        ${GameView.renderGameCanvas()}
-      </main>
-
-      <!-- Control Panel -->
-      <footer class="bg-[#fbd11b] p-4">
-        ${SettingsView.renderGameSettings()}
-      </footer>
+      <!-- Game Area -->
+		<main id="gameArea" class="flex-1 bg-black flex items-center justify-center bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center w-full h-full" style="background-image: url('/pongBackgroundPlay.png');">
+			<button id="playBtn" class="text-yellow-400 text-5xl rounded-lg border border-yellow-400 px-12 py-6 rounded-lg hover:bg-[#fbd11b] hover:text-black transition">
+			PLAY
+			</button>
+		</main>
 
     </div>
-    `;
+  `;
   },
 
+  init(): void
+  {
+	userUnloggedSidebar.init();
 
-  renderAuth(): string {
-    const user = authService.getCurrentUser(); // Use service instead of direct localStorage
-    return user 
-      ? AuthView.renderProfile(user.email)
-      : AuthView.renderAuthForm(this.isLogin);
-  },
-
-  init(): void {
-    this.currentUser = authService.getCurrentUser();
-    GameView.initGameCanvas();
-    gameController.init();
-
-    authController.init();
-
-	SettingsView.initSettings();
-
-    // Add this if you need to re-render when auth state changes
-    authService.onAuthStateChanged(() => {
-      this.currentUser = authService.getCurrentUser();
-      document.getElementById('auth-container')!.innerHTML = this.renderAuth();
-    });
+	const playBtn = document.getElementById('playBtn') as HTMLButtonElement | null;
+	playBtn!.addEventListener('click', () => { Router.navigate('game'); })
   }
 };
