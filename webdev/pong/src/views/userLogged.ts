@@ -1,7 +1,5 @@
 import { receiveProfilePicture } from "../utils/utils";
-// import { initLogout } from '../services/logoutService';
 import { playButton } from "./playButton";
-// import { userLoggedSidebar } from "./sidebarBehavior";
 import { handleSidebar } from "./sidebarBehavior";
 
 interface User {
@@ -15,7 +13,6 @@ export const userLogged = {
   currentUser: null as User | null,
   isLogin: true,
 
-//   ${userLoggedSidebar.render()}
  render(): string {
 	return `
 	<div class="w-screen h-screen flex bg-[#fbd11b] overflow-hidden">
@@ -33,15 +30,8 @@ export const userLogged = {
 
   async init(): Promise<void>
   {
-	// userLoggedSidebar.init();
 	await handleSidebar();
-
-	// loadExistingProfilePicture();
-	// uploadProfilePicture();
-	// initLogout();
-
 	playButton.init();
-
   }
 };
 
@@ -79,7 +69,6 @@ export async function uploadProfilePicture() : Promise<void>
 
 	await receiveProfilePicture(file);
 	resolve();
-	// await loadExistingProfilePicture(); // <== 🔁 nouveau fetch backend
 	});
 	});
 }
@@ -99,18 +88,10 @@ export async function loadExistingProfilePicture(): Promise<void>
 		if (!res.ok)
 			return; // not connected
 
-		//a cette partie la du code on voudrait savoir si l'image a ete uploadé ou pas, pour ne pas a avoir a rafraichir la db
-
 		const data = await res.json();
-		console.log("in loadExistingProfilePicture(), data: ", data);
-		// const res2 = await fetch('/api/auth/uploadProfilePicture', { credentials: 'include'});
-		// const data2 = await receiveProfilePicture();
-		// console.log("\n data2 from the receiveProfilePicture:", data2);
 		if (data && data.profile_picture)
 		{
 			preview.src = `https://localhost:4443/${data.profile_picture}`;
-			console.log("https://localhost:4443/${data.profile_picture}");
-			console.log("https://localhost:4443/",data.profile_picture );
 			preview.classList.remove('hidden');
 			uploadIcon.classList.add('hidden');
 		}

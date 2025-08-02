@@ -29,12 +29,6 @@ export const HomeView = {
   async init(): Promise<void>
   {
 	await handleSidebar();
-
-	// loadExistingProfilePicture();
-	// uploadProfilePicture();
-	// initLogout();
-
 	playButton.init();
-
   }
 };

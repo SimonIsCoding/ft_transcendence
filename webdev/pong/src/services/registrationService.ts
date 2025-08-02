@@ -4,19 +4,18 @@ import { showSuccessPopup } from '../utils/utils';
 import { showErrorPopup } from '../utils/utils';
 
 // --- form to create account
-export function initRegistration()
+export async function initRegistration()
 {
+	const status = await fetch('/api/auth/status', { credentials: 'include' })
+				 .then(res => res.json());
+	if (status.authenticated)
+	{
+		Router.navigate('home');
+		showErrorPopup("You are already connected. You can't access to the register page.");
+		return;
+	}
+
 	document.getElementById("createAccountBtn")?.addEventListener("click", async () => {
-
-		const status = await fetch('/api/auth/status', { credentials: 'include' })
-					 .then(res => res.json());
-
-		if (status.authenticated)
-		{
-			showErrorPopup("You are already connected. Firstly disconnect from your account.");
-			// Router.navigate('home');
-			return;
-		}
 
 		const username = (document.getElementById("newUsername") as HTMLInputElement).value;
 		const password = (document.getElementById("newPassword") as HTMLInputElement).value;
