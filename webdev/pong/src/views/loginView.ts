@@ -1,10 +1,9 @@
 import { initLogin } from '../services/loginService';
 import { setupPasswordToggle } from '../utils/utils';
 import { Router } from '../router.ts';
-import { handleSidebar /*, userUnloggedSidebar*/ } from './sidebarBehavior.ts';
+import { handleSidebar } from './sidebarBehavior.ts';
 
 export const loginView = {
-	// ${userUnloggedSidebar.render()}
   render: (): string => `
   	<div class="w-screen h-screen flex bg-[#fbd11b] overflow-hidden">
   

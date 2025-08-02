@@ -4,23 +4,20 @@ import { showSuccessPopup } from '../utils/utils';
 import { showErrorPopup } from '../utils/utils';
 
 // --- form to log in
-export function initLogin()
+export async function initLogin()
 {
+
+	const status = await fetch('/api/auth/status', { credentials: 'include' })
+				 .then(res => res.json());
+	if (status.authenticated)
+	{
+		Router.navigate('home');
+		showErrorPopup("You are already connected. You can't access to the login page.");
+		return;
+	}
+
 	const submitBtn = document.getElementById("connectionBtn") as HTMLButtonElement;
 	submitBtn.addEventListener("click", async () => {
-
-		// const status = await fetch('/api/auth/status', { credentials: 'include' })
-                    //  .then(res => res.json());
-
-		const statusRes = await fetch('/api/auth/status', { credentials: 'include' });
-		const status = await statusRes.json();
-
-		if (status.authenticated)
-		{
-			showErrorPopup("You are already connected. Firstly disconnect from your account.");
-			// Router.navigate('home');
-			return;
-		}
 
 		const login = (document.getElementById("login") as HTMLInputElement).value;
 		const password = (document.getElementById("password") as HTMLInputElement).value;
@@ -51,10 +48,10 @@ export function initLogin()
 					{
 						fetch('/api/auth/infoUser', { credentials: 'include' })
 						.then(res => res.json())
-						.then(data => {
-							console.log("User infos from token:", data.user);
-							console.log("data.authenticated:", data.authenticated);
-						});
+						// .then(data => {
+							// console.log("User infos from token:", data.user);
+							// console.log("data.authenticated:", data.authenticated);
+						// });
 
 						//redirection to userLogged page
 						Router.navigate('userLogged');
@@ -73,8 +70,6 @@ export function initLogin()
 					connectionBtn.insertAdjacentElement("afterend", connectionMsg);
 			}
 			
-			// console.log("backend data sent :", data);
-			// return fetch('/api/userLogged', { credentials: 'include' });
 			});
 			console.log("login: ", login, "Password:", password);// to erase for PROD
 		});
