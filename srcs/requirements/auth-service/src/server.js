@@ -14,6 +14,7 @@ import { uploadProfilePictureRoute } from '../routes/uploadProfilePictureRoute.j
 import { logoutRoute } from '../routes/logoutRoute.js';
 import { infoUserRoute } from '../routes/infoUserRoute.js';
 import { statusRoute } from '../routes/userLoggedRoute.js';
+import db from './database.js';
 
 const app = fastify();
 
@@ -53,16 +54,20 @@ await infoUserRoute(app);
 await logoutRoute(app);
 await statusRoute(app);
 
+//maybe you could put it in a specific file 
 app.get('/info', { preHandler: [app.auth] }, async (request, reply) => {
-  const user = request.user;
-  return {
-    message: `Welcome ${user.login}`,
-    userId: user.userId,
-    login: user.login,
-    mail: user.mail,
-	profile_picture: user.profile_picture, 
-	token: user.token
-  };
+    const userId = request.user?.id;
+
+    if (!userId)
+      return reply.status(401).send({ error: 'Not authenticated' });
+
+    const stmt = db.prepare('SELECT id, login, mail, profile_picture FROM users WHERE id = ?');
+    const user = stmt.get(userId);
+
+    if (!user)
+      return reply.status(404).send({ error: 'User not found' });
+
+    return reply.send(user);
 });
 
 app.post('/', async (request, reply) => {

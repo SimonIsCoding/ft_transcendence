@@ -78,6 +78,4 @@ export function initLogin()
 			});
 			console.log("login: ", login, "Password:", password);// to erase for PROD
 		});
-
-
 }
