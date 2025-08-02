@@ -55,7 +55,8 @@ export async function uploadProfilePicture() : Promise<void>
 	return new Promise((resolve, reject) => {
 		uploadBtn!.addEventListener('click', () => {
 			uploadInput!.click();
-		});
+	});
+
 	uploadInput!.addEventListener('change', async () => {
 	const file = uploadInput.files?.[0];
 	if (!file)
@@ -64,7 +65,8 @@ export async function uploadProfilePicture() : Promise<void>
 		return;
 	}
 
-	if (file.type.startsWith('image/')) {
+	if (file.type.startsWith('image/'))
+	{
 		const reader = new FileReader();
 		reader.onload = (e) => {
 			const result = e.target!.result as string;
@@ -97,11 +99,13 @@ export async function loadExistingProfilePicture(): Promise<void>
 		if (!res.ok)
 			return; // not connected
 
+		//a cette partie la du code on voudrait savoir si l'image a ete uploadé ou pas, pour ne pas a avoir a rafraichir la db
+
 		const data = await res.json();
 		console.log("in loadExistingProfilePicture(), data: ", data);
 		// const res2 = await fetch('/api/auth/uploadProfilePicture', { credentials: 'include'});
-		const data2 = await receiveProfilePicture();
-		console.log("\n data2 from the receiveProfilePicture:", data2);
+		// const data2 = await receiveProfilePicture();
+		// console.log("\n data2 from the receiveProfilePicture:", data2);
 		if (data && data.profile_picture)
 		{
 			preview.src = `https://localhost:4443/${data.profile_picture}`;

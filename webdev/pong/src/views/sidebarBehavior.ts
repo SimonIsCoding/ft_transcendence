@@ -1,6 +1,6 @@
 import { Router } from "../router";
 import { friendsListView } from "./friendsList"
-import { initSidebarBehavior } from "../services/sidebar"
+import { isConnected } from "../services/sidebar"
 import { loadExistingProfilePicture, uploadProfilePicture } from "./userLogged";
 import { initLogout } from '../services/logoutService';
 
@@ -148,7 +148,7 @@ export const userLoggedSidebar = {
 
 export async function handleSidebar()
 {
-	const isAuthenticated = await initSidebarBehavior();
+	const isAuthenticated = await isConnected();
 	const sidebar = document.getElementById("sidebar");
 	if (isAuthenticated)
 	{

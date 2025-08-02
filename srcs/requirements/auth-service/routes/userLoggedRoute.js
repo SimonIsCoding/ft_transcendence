@@ -4,14 +4,16 @@ export async function statusRoute(fastify) {
   fastify.get('/status', async (request, reply) => {
     const token = request.cookies.token;
 
-    if (!token) {
+    if (!token)
       return reply.send({ authenticated: false });
-    }
 
-    try {
+    try
+	{
       const decoded = fastify.jwt.verify(token);//jwt.verify(token, 'super-secret-key'); doesn't work well :|
       return reply.send({ authenticated: true, user: decoded });
-    } catch (err) {
+    }
+	catch (err)
+	{
       return reply.send({ authenticated: false });
     }
   });

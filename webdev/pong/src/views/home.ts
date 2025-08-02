@@ -1,5 +1,4 @@
 import { playButton } from "./playButton";
-// import { userUnloggedSidebar } from "./sidebarBehavior";
 import { handleSidebar } from "./sidebarBehavior";
 
 interface User {
@@ -14,7 +13,6 @@ export const HomeView = {
   currentUser: null as User | null,
   isLogin: true,
 
-//   ${userUnloggedSidebar.render()}
  render(): string {
 	return `
 	<div class="w-screen h-screen flex bg-[#fbd11b] overflow-hidden">

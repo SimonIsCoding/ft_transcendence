@@ -1,4 +1,4 @@
-export async function initSidebarBehavior(): Promise<boolean>
+export async function isConnected(): Promise<boolean>
 {
 	const res = await fetch('/api/auth/status', {
 			method: 'GET',

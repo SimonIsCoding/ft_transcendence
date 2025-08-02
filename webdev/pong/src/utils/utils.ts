@@ -62,6 +62,8 @@ export async function receiveProfilePicture(file: File): Promise<void>
   });
 
   const result = await response.json();
+  console.log("in receiveProfilePicture");
+  console.log("result = ", result);
 
   if (!response.ok || !result.success)
   {
