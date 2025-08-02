@@ -6,7 +6,6 @@ import { showErrorPopup } from '../utils/utils';
 // --- form to log in
 export async function initLogin()
 {
-
 	const status = await fetch('/api/auth/status', { credentials: 'include' })
 				 .then(res => res.json());
 	if (status.authenticated)
@@ -48,13 +47,7 @@ export async function initLogin()
 					{
 						fetch('/api/auth/infoUser', { credentials: 'include' })
 						.then(res => res.json())
-						// .then(data => {
-							// console.log("User infos from token:", data.user);
-							// console.log("data.authenticated:", data.authenticated);
-						// });
-
-						//redirection to userLogged page
-						Router.navigate('userLogged');
+						Router.navigate('home');
 						showSuccessPopup("You are logged");
 					}
 				});

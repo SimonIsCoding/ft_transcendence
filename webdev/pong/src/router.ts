@@ -2,7 +2,6 @@ import { HomeView } from './views/home';
 import { loginView } from './views/loginView';
 import { registerView } from './views/registerView';
 import { GameView } from './views/game';
-import { userLogged } from './views/userLogged.ts';
 import { gameController } from './controllers/gameController';
 
 interface User {
@@ -16,7 +15,7 @@ interface User {
 export class Router {
   private static app = document.getElementById('app');
   public static currentUser: User | null;
-  public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'game' | 'userLogged' , addToHistory = true): void {
+  public static navigate(page: 'home' | 'login' | 'register' | 'game' , addToHistory = true): void {
   if (!this.app) {
     console.error('App container not found');
     return;
@@ -29,10 +28,6 @@ export class Router {
       HomeView.init();
       break;
 
-    case 'info':
-      //TODO
-      break;
-	
 	case 'login':
       this.app.innerHTML = loginView.render();
 	  loginView.init();
@@ -48,11 +43,6 @@ export class Router {
 	  GameView.initGameCanvas();
 	  gameController.init();
       break;
-
-	case 'userLogged':
-	  this.app.innerHTML = userLogged.render();
-	  userLogged.init();
-      break;
   }
 
   if (addToHistory)
@@ -67,8 +57,6 @@ export class Router {
 	  path.includes('login') ? 'login' :
 	  path.includes('register') ? 'register' :
 	  path.includes('game') ? 'game' :
-	  path.includes('info') ? 'info' :
-	  path.includes('userLogged') ? 'userLogged' :
 	  'home' , false);
     });
 
@@ -79,8 +67,6 @@ export class Router {
 	  path.includes('login') ? 'login' :
 	  path.includes('register') ? 'register' :
 	  path.includes('game') ? 'game' :
-	  path.includes('info') ? 'info' : 
-	  path.includes('userLogged') ? 'userLogged' :
 	  'home' , false);
     });
   }
