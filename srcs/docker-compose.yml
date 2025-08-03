@@ -32,8 +32,6 @@ services:
   auth-service:
     container_name: auth-service
     build: requirements/auth-service
-    ports:
-    - "3001:3001"
     volumes:
       - pong:/var/www/html/pong
       - $PWD/srcs/data/pong:/app/database #share db file
@@ -72,10 +70,6 @@ services:
     restart: unless-stopped
     healthcheck:
       disable: true
-
-  service-b:
-    container_name: service-b
-    build: requirements/service-b
 
 networks:
   default:
