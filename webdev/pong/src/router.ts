@@ -2,15 +2,23 @@ import { HomeView } from './views/home';
 import { loginView } from './views/loginView';
 import { registerView } from './views/registerView';
 import { GameView } from './views/game';
-import { userLogged } from './views/userLogged.ts';
 import { gameController } from './controllers/gameController';
 import { initTwoFAController } from './controllers/twofaController';
 
+interface User {
+  login: string;
+  password: string;
+  mail: string;
+  photo: string,
+  token: string;
+}
+
 export class Router {
   private static app = document.getElementById('app');
-
+  public static currentUser: User | null;
+  
   public static navigate(
-    page: 'home' | 'login' | 'register' | 'info' | 'game' | 'userLogged' | 'twofa',
+    page: 'home' | 'login' | 'register' | 'game' | 'twofa',
     params?: { email?: string },  // Changed from login to email
     addToHistory = true
   ): void {
@@ -20,36 +28,26 @@ export class Router {
     }
 
   // Handle route protection + rendering
-  const gameArea = document.getElementById('gameArea') as HTMLDivElement | null;
   switch (page) {
     case 'home':
       this.app.innerHTML = HomeView.render();
       HomeView.init();
       break;
 
-    case 'info':
-      //TODO
-      break;
-	
 	case 'login':
-      gameArea!.innerHTML = loginView.render();
+      this.app.innerHTML = loginView.render();
 	  loginView.init();
       break;
 	
 	case 'register':
-	  gameArea!.innerHTML = registerView.render();
+	  this.app.innerHTML = registerView.render();
 	  registerView.init();
       break;
 
 	case 'game':
-	  gameArea!.innerHTML = GameView.renderGameCanvas();
+	  this.app.innerHTML = GameView.renderGameCanvas();
 	  GameView.initGameCanvas();
 	  gameController.init();
-      break;
-
-	case 'userLogged':
-	  gameArea!.innerHTML = userLogged.render();
-	  userLogged.init();
       break;
 
 	case 'twofa':
@@ -63,7 +61,6 @@ export class Router {
         break;
     }
 
-
   if (addToHistory)
     history.pushState({}, '', page === 'home' ? '/' : `/${page}`);
 }
@@ -76,8 +73,6 @@ export class Router {
 	  path.includes('login') ? 'login' :
 	  path.includes('register') ? 'register' :
 	  path.includes('game') ? 'game' :
-	  path.includes('info') ? 'info' :
-	  path.includes('userLogged') ? 'userLogged' :
       path.includes('twofa') ? 'twofa' :
 	  'home', undefined,
 	  false);
@@ -90,8 +85,6 @@ export class Router {
 	  path.includes('login') ? 'login' :
 	  path.includes('register') ? 'register' :
 	  path.includes('game') ? 'game' :
-	  path.includes('info') ? 'info' : 
-	  path.includes('userLogged') ? 'userLogged' :
       path.includes('twofa') ? 'twofa' :
 	  'home' ,
 	  undefined,
