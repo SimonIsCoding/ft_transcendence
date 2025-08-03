@@ -8,7 +8,7 @@ all:
 	  sudo cp -r dist/* ../../srcs/data/pong
 	# docker compose -f $(COMPOSE_FILE) up -d --build
 	docker compose -f $(COMPOSE_FILE) build --no-cache
-	docker compose -f $(COMPOSE_FILE) up -d
+	docker compose -f $(COMPOSE_FILE) up -d --remove-orphans
 	sleep 2
 	docker ps
 
@@ -22,7 +22,7 @@ webupdate:
 	  docker exec nginx /usr/sbin/nginx -s reload
 
 auth-service:
-	cd srcs && docker-compose up -d --build auth-service && cd -
+	cd srcs && docker compose up -d --build auth-service && cd -
 #to rebuild and restart the auth-service container - useful for User Management module
 
 stop:
