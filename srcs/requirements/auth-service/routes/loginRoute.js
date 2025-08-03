@@ -15,15 +15,15 @@ export async function loginRoute(fastify)
 	const user = stmt.get(login);
 	const match = user ? await bcrypt.compare(password, user.password) : false;
 	
-	const SECRET = 'super-secret-key';
+	const SECRET = 'super-secret-key';// you should put it in a env file
 	if(user && match)
 	{
-		const token = jwt.sign({ id: user.id, login: user.login, mail: user.mail, profile_picture: user.profile_picture }, SECRET, { expiresIn: '1h' });// try to comment profile picture to know if we can receive it only thanks to app.get('/api/auth/info'
+		const token = jwt.sign({ id: user.id, login: user.login, mail: user.mail, profile_picture: user.profile_picture }, SECRET, { expiresIn: '24h' });// try to comment profile picture to know if we can receive it only thanks to app.get('/api/auth/info'
 		reply.setCookie('token', token, {
 			httpOnly: true, //ALWAYS PUT TRUE FOR PROD
 			secure: true,
 			sameSite: 'strict',
-			maxAge: 7 * 24 * 60 * 60 * 1000,
+			maxAge: 24 * 60 * 60 * 1000,
 			path: '/', // important !
 		})
 		.send({ success: true, message: 'Login succeed', id: user.id, login: user.login, mail: user.mail, token: token });	

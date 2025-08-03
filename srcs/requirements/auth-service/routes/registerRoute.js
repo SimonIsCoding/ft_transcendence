@@ -19,11 +19,11 @@ export async function registerRoute(fastify)
 	//to create an account
 	fastify.post('/register', async (request, reply) => {
 		const { login, password, mail } = request.body;
-		const avatarPath = getRandomAvatar();
-
+		
 		if (!login || !password || !mail)
 			return reply.status(400).send({ success: false, error: "All fields required" });
 		const encryptedPassword = await hashPassword(password);
+		const avatarPath = getRandomAvatar();
 		try
 		{
 			const stmt = db.prepare("INSERT INTO users (login, password, mail, profile_picture) VALUES (?, ?, ?, ?)");

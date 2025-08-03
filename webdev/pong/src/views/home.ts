@@ -1,10 +1,11 @@
-import { Router } from "../router";
-import { userUnloggedSidebar } from "./sidebarBehavior";
+import { playButton } from "./playButton";
+import { handleSidebar } from "./sidebarBehavior";
 
 interface User {
   login: string;
   password: string;
   mail: string;
+  photo: string,
   token: string;
 }
 
@@ -16,24 +17,18 @@ export const HomeView = {
 	return `
 	<div class="w-screen h-screen flex bg-[#fbd11b] overflow-hidden">
 
-      ${userUnloggedSidebar.render()}
+		<div id="sidebar" class="bg-[#fbd11b] h-screen flex flex-col overflow-hidden transition-all duration-500 ease-in-out w-1/24">
+		</div>
 
-      <!-- Game Area -->
-		<main id="gameArea" class="flex-1 bg-black flex items-center justify-center bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center w-full h-full" style="background-image: url('/pongBackgroundPlay.png');">
-			<button id="playBtn" class="text-yellow-400 text-5xl rounded-lg border border-yellow-400 px-12 py-6 rounded-lg hover:bg-[#fbd11b] hover:text-black transition">
-			PLAY
-			</button>
-		</main>
+      ${playButton.render()}
 
     </div>
   `;
   },
 
-  init(): void
+  async init(): Promise<void>
   {
-	userUnloggedSidebar.init();
-
-	const playBtn = document.getElementById('playBtn') as HTMLButtonElement | null;
-	playBtn!.addEventListener('click', () => { Router.navigate('game'); })
+	await handleSidebar();
+	playButton.init();
   }
 };

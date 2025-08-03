@@ -24,7 +24,8 @@ export function setupPasswordToggle(passwordId: string, toggleBtnId: string, eye
 	});
 }
 
-export function showSuccessPopup(message: string, duration: number = 3500): void {
+export function showSuccessPopup(message: string, duration: number = 3500): void
+{
 	const popup = document.getElementById("successPopup");
 	if (!popup)
 		return;
@@ -35,6 +36,18 @@ export function showSuccessPopup(message: string, duration: number = 3500): void
 	setTimeout(() => {
 		popup.classList.add("hidden");
 	}, duration);
+}
+
+export function showErrorPopup(message: string) {
+  const popup = document.getElementById("successPopup");
+  if (popup)
+  {
+    popup.classList.remove("bg-green-600");
+    popup.classList.add("bg-red-600");
+    popup.textContent = message;
+    popup.classList.remove("hidden");
+    setTimeout(() => popup.classList.add("hidden"), 3000);
+  }
 }
 
 export async function receiveProfilePicture(file: File): Promise<void>
@@ -49,7 +62,6 @@ export async function receiveProfilePicture(file: File): Promise<void>
   });
 
   const result = await response.json();
-
   if (!response.ok || !result.success)
   {
     console.error("Error on upload:", result);
