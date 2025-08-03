@@ -36,7 +36,7 @@ services:
       - "3001:3001"
     volumes:
       - pong:/var/www/html/pong
-      - $PWD/data/pong:/app/database #share db file
+      - $PWD/srcs/data/pong:/app/database #share db file
 
   service-b:
     container_name: service-b
@@ -52,7 +52,7 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: $PWD/data/pong
+      device: $PWD/srcs/data/pong
       o: bind
 
 secrets:
