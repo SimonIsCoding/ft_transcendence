@@ -1,10 +1,9 @@
 import { Router } from '../router';
 import { setupPasswordToggle } from '../utils/utils';
 import { initRegistration } from '../services/registrationService';
-import { handleSidebar/*userUnloggedSidebar*/ } from './sidebarBehavior.ts';
+import { handleSidebar } from './sidebarBehavior.ts';
 
 export const registerView = {
-	// ${userUnloggedSidebar.render()}
   render: (): string => `
 	<div class="w-screen h-screen flex bg-[#fbd11b] overflow-hidden">
 
@@ -49,7 +48,6 @@ export const registerView = {
   async init(): Promise<void>
   {
 	await handleSidebar();
-	// userUnloggedSidebar.init();
 
 	setupPasswordToggle("newPassword", "togglePassword", "eyeIconClosed", "eyeIconOpened");
 	setupPasswordToggle("confirmPassword", "toggleConfirmPassword", "confirmEyeIconClosed", "confirmEyeIconOpened");
