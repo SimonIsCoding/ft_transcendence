@@ -1,8 +1,8 @@
-import { Router } from "../router";
+import { Router } from "../../router";
 // import { friendsListView } from "./friendsList"
-import { isConnected } from "../services/sidebar"
-import { loadExistingProfilePicture, uploadProfilePicture } from "../utils/profilePicture_utils";
-import { initLogout } from '../services/logoutService';
+import { isConnected } from "../../services/sidebar"
+import { loadExistingProfilePicture, uploadProfilePicture } from "../../utils/profilePicture_utils";
+import { initLogout } from '../../services/logoutService';
 
 interface User {
   login: string;
@@ -51,10 +51,14 @@ export const userLoggedSidebar = {
 		</button>
 		<!-- Hidden submenu -->
 		<div id="playSubmenu" class="submenu h-screen absolute left-1/24 top-0 w-48 bg-[#fbd11b] border border-black flex items-center flex-col overflow-hidden max-h-0 transition-[max-height] duration-450 z-50 space-y-5">
-			<p id="submenuName" class="text-center pt-5">Play</p>
-			<button id="oneVsOneBtn" class="border border-black rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit ">1 vs 1</button>
-			<button id="oneVsAiBtn" class="border border-black rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit ">1 vs AI</button>
-			<button id="tournamentBtn" class="border border-black rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit ">Tournament</button>
+			<p id="submenuName" class="font-bold text-center pt-5">Play</p>
+			<hr class="w-full border-t-1.5 border-black" />
+			<button id="oneVsOneBtn" class="font-bold rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit ">1 vs 1</button>
+			<hr class="border-t-1 border-black w-20" />
+			<button id="oneVsAiBtn" class="font-bold rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit ">1 vs AI</button>
+			<hr class="border-t-1 border-black w-20" />
+			<button id="tournamentBtn" class="font-bold rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit">Tournament</button>
+
 		</div>
 
 		<button id="profileSidebarBtn" data-target="profileSubmenu" class="group mx-2 my-2 border border-black rounded-lg px-2 py-1 text-black text-sm hover:bg-black hover:text-[#fbd11b] transition">
@@ -90,16 +94,16 @@ export const userLoggedSidebar = {
 		
 	</div>
 
-	<div id="largeSubmenu" class="submenu h-screen absolute left-1/24 top-0 w-48 bg-[#fbd11b] border border-black flex items-center flex-col overflow-hidden max-h-0 transition-[max-height] duration-450 z-50 space-y-5">
+	<div id="largeSubmenu" class="submenu h-screen absolute left-1/24 top-0 w-96 bg-[#fbd11b] border border-black flex flex-col overflow-hidden max-h-0 transition-[max-height] duration-450 z-50 space-y-5">
 
 	<!-- Settings submenu -->
-		<div id="settingsSubmenu" class="submenu h-screen absolute left-1/24 top-0 w-48 bg-[#fbd11b] border border-black flex items-center flex-col overflow-hidden max-h-0 transition-[max-height] duration-450 z-50 space-y-5">
+		<div id="settingsSubmenu" class="submenu h-screen w-full absolute top-0 bg-[#fbd11b] flex flex-col overflow-hidden max-h-0 transition-[max-height] duration-450 z-50 space-y-5">
 			<p id="submenuSettingsName" class="font-bold text-center pt-5">Game Settings</p>
-			<hr class="border-t-1.5 border-black w-full" />
+			<hr class="border-t-1.5 border-black" />
 			<div class="flex items-center space-x-3">
-			<label for="ballSpeedSlider" class="whitespace-nowrap text-sm pl-2">Ball Speed</label>
-			<input id="ballSpeedSlider" type="range" min="1" max="10" value="5" class="flex-1 h-1 rounded cursor-pointer w-1/2" />
-			<span id="ballSpeedValue" class="w-8 text-center font-mono">5</span>
+				<label for="ballSpeedSlider" class="whitespace-nowrap text-sm pl-2">Ball Speed</label>
+				<input id="ballSpeedSlider" type="range" min="1" max="10" value="5" class="flex-1 h-1 rounded cursor-pointer w-1/2" />
+				<span id="ballSpeedValue" class="w-8 text-center font-mono">5</span>
 			</div>
 			<input id="ballSpeedSlider" type="range" min="1" max="10" value="5" class="w-2/3 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-yellow-400 space-y-2"/>
 			<input id="ballSpeedSlider" type="range" min="1" max="10" value="5" class="w-2/3 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-yellow-400 space-y-2"/>
@@ -124,58 +128,58 @@ export const userLoggedSidebar = {
 	const dataTargetButtons = document.querySelectorAll('button[data-target]');
 	const submenus = document.querySelectorAll<HTMLElement>('.submenu');
 	
-		dataTargetButtons.forEach(button => {
-			button.addEventListener('click', () => {
-				const targetId = button.getAttribute('data-target');
-	
-				submenus.forEach(menu => {
-					if (menu.id === targetId)
-					{
-						menu.classList.toggle('max-h-0');
-						menu.classList.toggle('max-h-screen');
-					}
-					else
-					{
-						menu.classList.add('max-h-0');
-						menu.classList.remove('max-h-screen');
-					}
-				});
+	dataTargetButtons.forEach(button => {
+		button.addEventListener('click', () => {
+			const targetId = button.getAttribute('data-target');
+
+			submenus.forEach(menu => {
+				if (menu.id === targetId)
+				{
+					menu.classList.toggle('max-h-0');
+					menu.classList.toggle('max-h-screen');
+				}
+				else
+				{
+					menu.classList.add('max-h-0');
+					menu.classList.remove('max-h-screen');
+				}
 			});
 		});
-
+	});
+		
 	const dashboardBtn = document.getElementById("DashboardBtn");
 	const friendsBtn = document.getElementById("friendsListBtn");
+	const settingsSidebarBtn = document.getElementById("settingsSidebarBtn");
 
 	[dashboardBtn, friendsBtn].forEach(btn => {
 		if (!btn) return;
 		btn.addEventListener("click", () => {
-			submenus.forEach(menu => {
-				menu.classList.add('max-h-0');
-				menu.classList.remove('max-h-screen');
-			});
+		submenus.forEach(menu => {
+			menu.classList.add('max-h-0');
+			menu.classList.remove('max-h-screen');
+		});
 
-			const largeMenu = document.getElementById("largeSubmenu");
-			if (largeMenu)
-			{
-				largeMenu.classList.remove("max-h-0");
-				largeMenu.classList.add("max-h-screen");
-				largeMenu.classList.remove("w-48");
-				largeMenu.classList.add("w-96");
-			}
 		});
 	});
+	const largeMenu = document.getElementById("largeSubmenu");
+	if (largeMenu)
+	{
+		largeMenu.classList.remove("max-h-0");
+		largeMenu.classList.add("max-h-screen");
+	}
 
-	const settingsSidebarBtn = document.getElementById("settingsSidebarBtn");
-	settingsSidebarBtn!.addEventListener("click", () => {
-	const settingsSubmenu = document.getElementById("settingsSubmenu");
-		if (settingsSubmenu)
+	settingsSidebarBtn!.addEventListener('click', () => {
+		if (settingsSidebarBtn)
 		{
-			settingsSubmenu.classList.remove("max-h-0");
-			settingsSubmenu.classList.add("max-h-screen");
+			largeMenu!.classList.toggle('max-h-0');
+			largeMenu!.classList.toggle('max-h-screen');
+		}
+		else
+		{
+			largeMenu!.classList.add('max-h-0');
+			largeMenu!.classList.remove('max-h-screen');
 		}
 	});
-
-	// friendsListView.init();
   }
 }
 
@@ -187,6 +191,7 @@ export async function handleSidebar()
 	{
 		console.log("✅ Connected");
 		sidebar!.innerHTML = userLoggedSidebar.render();
+		
 		userLoggedSidebar.init();
 		initLogout();
 		uploadProfilePicture();

@@ -1,5 +1,5 @@
 import { playButton } from "./playButton";
-import { handleSidebar } from "./sidebarBehavior";
+import { handleSidebar } from "./sidebar/sidebarBehavior";
 
 interface User {
   login: string;
