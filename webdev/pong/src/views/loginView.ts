@@ -1,7 +1,7 @@
 import { initLogin } from '../services/loginService';
 import { setupPasswordToggle } from '../utils/utils';
 import { Router } from '../router.ts';
-import { handleSidebar } from './sidebarBehavior.ts';
+import { handleSidebar } from './sidebar/sidebarBehavior.ts';
 
 export const loginView = {
   render: (): string => `

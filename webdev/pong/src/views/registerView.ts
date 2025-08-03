@@ -1,7 +1,7 @@
 import { Router } from '../router';
 import { setupPasswordToggle } from '../utils/utils';
 import { initRegistration } from '../services/registrationService';
-import { handleSidebar } from './sidebarBehavior.ts';
+import { handleSidebar } from './sidebar/sidebarBehavior.ts';
 
 export const registerView = {
   render: (): string => `
