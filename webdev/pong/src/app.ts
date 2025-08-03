@@ -7,7 +7,10 @@ window.addEventListener('load', () => {
 	path.includes('login') ? 'login' :
 	path.includes('register') ? 'register' :
 	path.includes('game') ? 'game' :
-	'home' , false);
+	'home' , 
+	undefined,
+    false
+  );
 });
 
 // Handle browser back/forward
@@ -17,5 +20,7 @@ window.addEventListener('popstate', () => {
 	path.includes('login') ? 'login' :
 	path.includes('register') ? 'register' :
 	path.includes('game') ? 'game' :
-	'home' , false);
+	'home' ,
+    undefined,
+    false);
 });
