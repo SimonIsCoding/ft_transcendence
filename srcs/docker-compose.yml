@@ -27,16 +27,51 @@ services:
     build: requirements/api-gateway
     depends_on:
       - auth-service
-      - service-b
+      - 2fa-service
 
   auth-service:
     container_name: auth-service
     build: requirements/auth-service
     ports:
-      - "3001:3001"
+    - "3001:3001"
     volumes:
       - pong:/var/www/html/pong
       - $PWD/srcs/data/pong:/app/database #share db file
+  
+  2fa-service:
+    container_name: 2fa-service
+    build: requirements/2fa-service
+    secrets:
+      - email_user
+      - email_password
+    environment:
+      - NODE_ENV=production
+      - PORT=3003
+      - CORS_ORIGINS=http://localhost:4443
+      - EMAIL_USER_FILE=/run/secrets/email_user
+      - EMAIL_PASSWORD_FILE=/run/secrets/email_password
+    restart: unless-stopped
+    volumes:
+      - 2fa_data:/usr/src/app/data
+
+  # New WebSocket service
+  ws-server:
+    container_name: ws-server
+    build: requirements/ws-server
+    secrets:
+      - server_cert  # Share the same certs as nginx
+      - server_key
+    environment:
+      - NODE_ENV=production
+      - CERT_PATH=/run/secrets/server_cert
+      - KEY_PATH=/run/secrets/server_key
+    ports:
+      - "3002:3002"  # Internal port for WebSocket server
+    depends_on:
+      - auth-service  # If you need authentication
+    restart: unless-stopped
+    healthcheck:
+      disable: true
 
   service-b:
     container_name: service-b
@@ -52,8 +87,10 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: $PWD/srcs/data/pong
+      device: ./data/pong
       o: bind
+  2fa_data:
+    driver: local
 
 secrets:
   server_cert:
@@ -64,4 +101,8 @@ secrets:
     file: ./secrets/apicert.pem
   api_key:
     file: ./secrets/apikey.pem
+  email_user:
+    file: ./secrets/email_user.txt
+  email_password:
+    file: ./secrets/email_password.txt
 
