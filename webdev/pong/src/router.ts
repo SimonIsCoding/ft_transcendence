@@ -3,6 +3,7 @@ import { loginView } from './views/loginView';
 import { registerView } from './views/registerView';
 import { GameView } from './views/game';
 import { gameController } from './controllers/gameController';
+import { initTwoFAController } from './controllers/twofaController';
 
 interface User {
   login: string;
@@ -15,13 +16,19 @@ interface User {
 export class Router {
   private static app = document.getElementById('app');
   public static currentUser: User | null;
-  public static navigate(page: 'home' | 'login' | 'register' | 'game' , addToHistory = true): void {
-  if (!this.app) {
-    console.error('App container not found');
-    return;
-  }
+
+  public static navigate(
+    page: 'home' | 'login' | 'register' | 'game' | 'twofa',
+    params?: { email?: string },  // Changed from login to email
+    addToHistory = true
+  ): void {
+    if (!this.app) {
+      console.error('App container not found');
+      return;
+    }
 
   // Handle route protection + rendering
+  const gameArea = document.getElementById('gameArea') as HTMLDivElement | null;
   switch (page) {
     case 'home':
       this.app.innerHTML = HomeView.render();
@@ -43,7 +50,18 @@ export class Router {
 	  GameView.initGameCanvas();
 	  gameController.init();
       break;
-  }
+
+	case 'twofa':
+        if (!params?.email) {
+          console.error('email parameter required for twofa route');
+          this.navigate('login');
+          return;
+        }
+        gameArea!.innerHTML = '';
+        gameArea!.appendChild(initTwoFAController(params.email));
+        break;
+    }
+
 
   if (addToHistory)
     history.pushState({}, '', page === 'home' ? '/' : `/${page}`);
@@ -57,7 +75,9 @@ export class Router {
 	  path.includes('login') ? 'login' :
 	  path.includes('register') ? 'register' :
 	  path.includes('game') ? 'game' :
-	  'home' , false);
+      path.includes('twofa') ? 'twofa' :
+	  'home', undefined,
+	  false);
     });
 
     // Handle back/forward navigation
@@ -67,7 +87,10 @@ export class Router {
 	  path.includes('login') ? 'login' :
 	  path.includes('register') ? 'register' :
 	  path.includes('game') ? 'game' :
-	  'home' , false);
+      path.includes('twofa') ? 'twofa' :
+	  'home' ,
+	  undefined,
+	  false);
     });
   }
 }
