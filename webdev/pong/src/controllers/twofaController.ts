@@ -53,7 +53,7 @@ async function handleFormSubmit(e: Event): Promise<void> {
   try {
     const result = await twoFAService.verifyCode(currentEmail, code);
     if (result.success) {
-      Router.navigate('userLogged');
+      Router.navigate('home');
     } else {
       twofaView.showTwoFAError(result.message || "Invalid verification code");
     }

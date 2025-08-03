@@ -27,6 +27,7 @@ export class Router {
       return;
     }
 
+  const gameArea = document.getElementById('gameArea') as HTMLDivElement | null;
   // Handle route protection + rendering
   switch (page) {
     case 'home':
