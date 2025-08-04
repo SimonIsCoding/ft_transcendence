@@ -36,6 +36,5 @@ export function gameSettingsSubmenuRender():string
 				</span>
 			</div>
 		</div>
-	</div>
 	`
 }

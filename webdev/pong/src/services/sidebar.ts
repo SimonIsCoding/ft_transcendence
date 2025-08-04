@@ -14,3 +14,30 @@ export async function isConnected(): Promise<boolean>
 	console.log("data.authenticated = ", data.authenticated);
 	return false;
 }
+
+export async function getUserInfo()
+{
+	fetch("/api/auth/info")
+	.then(res => res.json())
+	.then(data => {
+		const profileName = document.getElementById("profileName");
+		if (profileName && data.login)
+			profileName.textContent = data.login;
+		else
+			profileName!.textContent = `Profile Name`;
+
+		const mail = document.getElementById("mailInProfileSubmenu");
+		if (mail && data.mail)
+			mail.textContent = data.mail;
+		else
+			mail!.textContent = `contact@mail.com`;
+
+		//here we should add the stats of the matchs won
+		// but we have to fecth another db which is the stats one
+		// const stats = document.getElementById("statsInProfileSubmenu");
+		// if (stats && )
+		// 	stats.textContent = ;
+		// else
+		// 	stats!.textContent = `12/15 matchs won`;
+	});
+}

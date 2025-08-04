@@ -1,3 +1,5 @@
+import { getUserInfo } from '../../services/sidebar'
+
 // for button 'playSidebarBtn' & 'profileSidebarBtn', this function open and close the submenu
 export function toggleMenuVisibility(targetId: string | null, submenus: NodeListOf<HTMLElement>)
 {
@@ -45,6 +47,7 @@ export function playSidebarBehavior()
 
 export function profileSidebarBehavior()
 {
+	getUserInfo();
 	const submenus = document.querySelectorAll<HTMLElement>('.submenu');
 	const playSidebarBtn = document.getElementById('profileSidebarBtn');
 	playSidebarBtn?.addEventListener('click', () => {
