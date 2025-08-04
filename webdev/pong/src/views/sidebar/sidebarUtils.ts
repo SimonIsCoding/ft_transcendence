@@ -34,32 +34,6 @@ export function closeAllMenus(submenus: NodeListOf<HTMLElement>)
 	});
 }
 
-//open and close settingsSubmenu
-export function settingsSidebarBehavior()
-{
-	const submenus = document.querySelectorAll<HTMLElement>('.submenu');
-	const settingsSidebarBtn = document.getElementById("settingsSidebarBtn");
-	const largeMenu = document.getElementById('largeSubmenu');
-	const settingsSubmenu = document.getElementById('settingsSubmenu');
-
-	settingsSidebarBtn?.addEventListener('click', () => {
-
-		if (largeMenu?.classList.contains('max-h-screen'))
-		{
-			largeMenu.classList.add('max-h-0');
-			largeMenu.classList.remove('max-h-screen');
-			settingsSubmenu?.classList.add('max-h-0');
-			settingsSubmenu?.classList.remove('max-h-screen');
-		}
-		else
-		{
-			closeAllMenus(submenus);
-			openMenu('largeSubmenu');
-			openMenu('settingsSubmenu');
-		}
-	});
-}
-
 export function playSidebarBehavior()
 {
 	const submenus = document.querySelectorAll<HTMLElement>('.submenu');
@@ -80,20 +54,46 @@ export function profileSidebarBehavior()
 	const dashboardBtn = document.getElementById("DashboardBtn");
 	const friendsBtn = document.getElementById("friendsListBtn");
 
-	dashboardBtn?.addEventListener('click', () => {
-		openMenu('largeSubmenu');
-	});
-
-	friendsBtn?.addEventListener('click', () => {
-		openMenu('largeSubmenu');
-	});
-
-	// [dashboardBtn, friendsBtn].forEach(btn => {
-	// 	btn?.addEventListener('click', () => {
-	// 		// closeAllMenus(submenus);
-	// 		openMenu('largeSubmenu');
-	// 	});
+	// dashboardBtn?.addEventListener('click', () => {
+	// 	openMenu('largeSubmenu');
 	// });
+
+	// friendsBtn?.addEventListener('click', () => {
+	// 	openMenu('largeSubmenu');
+	// });
+
+	[dashboardBtn, friendsBtn].forEach(btn => {
+		btn?.addEventListener('click', () => {
+			// closeAllMenus(submenus);
+			openMenu('largeSubmenu');
+		});
+	});
+}
+
+//open and close settingsSubmenu
+export function settingsSidebarBehavior()
+{
+	const submenus = document.querySelectorAll<HTMLElement>('.submenu');
+	const settingsSidebarBtn = document.getElementById("settingsSidebarBtn");
+	const largeMenu = document.getElementById('largeSubmenu');
+	const settingsSubmenu = document.getElementById('settingsSubmenu');
+
+	settingsSidebarBtn?.addEventListener('click', () => {
+
+		if (settingsSubmenu?.classList.contains('max-h-screen'))
+		{
+			largeMenu?.classList.add('max-h-0');
+			largeMenu?.classList.remove('max-h-screen');
+			settingsSubmenu.classList.add('max-h-0');
+			settingsSubmenu.classList.remove('max-h-screen');
+		}
+		else
+		{
+			closeAllMenus(submenus);
+			openMenu('largeSubmenu');
+			openMenu('settingsSubmenu');
+		}
+	});
 }
 
 export function setupMenuHandlers()
