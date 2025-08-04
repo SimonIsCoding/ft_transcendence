@@ -61,7 +61,6 @@ export const userLoggedSidebar = {
 		<path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
 		</svg>
 		</button>
-		
 		${profileSubmenuRender()}
 
 		<button id="settingsSidebarBtn" class="group mx-2 my-2 border border-black rounded-lg px-2 py-1 text-black text-sm hover:bg-black hover:text-[#fbd11b] transition">
@@ -73,8 +72,9 @@ export const userLoggedSidebar = {
 	</div>
 
 	<div id="largeSubmenu" class="submenu h-screen absolute left-1/24 top-0 w-96 bg-[#fbd11b] border border-black flex flex-col overflow-hidden max-h-0 transition-[max-height] duration-450 z-50 space-y-5">
+		${gameSettingsSubmenuRender()}
+	</div>
 
-	${gameSettingsSubmenuRender()}
 
 	${logoutButtonRender()}
   `;
@@ -94,7 +94,6 @@ export async function handleSidebar()
 	{
 		console.log("✅ Connected");
 		sidebar!.innerHTML = userLoggedSidebar.render();
-		
 		userLoggedSidebar.init();
 		initLogout();
 		uploadProfilePicture();

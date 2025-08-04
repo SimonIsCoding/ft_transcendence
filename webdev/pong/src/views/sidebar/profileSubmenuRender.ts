@@ -1,7 +1,7 @@
 export function profileSubmenuRender():string
 {
 	return `
-	<div id="profileSubmenu" class="submenu h-screen absolute left-1/24 top-0 w-48 bg-[#fbd11b] border border-black flex items-center flex-col overflow-hidden max-h-0 transition-[max-height] duration-450 z-50 space-y-5">
+	<div id="profileSubmenu" class="submenu h-screen absolute left-1/24 top-0 w-48 bg-[#fbd11b] border border-black flex items-center flex-col overflow-hidden max-h-0 transition-[max-height] duration-450 z-50 space-y-3.5">
 		<p id="submenuProfileName" class="font-bold text-center pt-5">Profile</p>
 		<hr class="border-t-1.5 border-black w-full" />
 		<input type="file" id="uploadProfilePictureInput" accept="image/*" class="hidden">
@@ -12,6 +12,11 @@ export function profileSubmenuRender():string
 			<span class="absolute bottom-0 right-0 z-20 bg-[#fbd11b] text-black rounded-full w-5 h-5 flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md">+</span>
 			<img id="previewProfilePicture" class="absolute w-24 h-24 rounded-full object-cover hidden" />
 		</button>
+		<div class="flex flex-col items-center space-y-1">
+			<p id="profileName" class="font-bold">Profile Name</p>
+			<p id="mailInProfileSubmenu" class="">contact@mail.com</p>
+			<p id="statsInProfileSubmenu" class="text-gray-500 text-[13px] font-bold">12/15 matchs won</p>
+		</div>
 		<hr class="border-t-1 border-black w-20" />
 		<button id="DashboardBtn" class="font-bold rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit ">Dashboard</button>
 		<hr class="border-t-1 border-black w-20" />
