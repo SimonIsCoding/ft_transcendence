@@ -1,3 +1,4 @@
+// for button 'playSidebarBtn' & 'profileSidebarBtn', this function open and close the submenu
 export function toggleMenuVisibility(targetId: string | null, submenus: NodeListOf<HTMLElement>)
 {
 	submenus.forEach(menu => {
@@ -24,6 +25,7 @@ export function openMenu(menuId: string)
 	}
 }
 
+//close all submenus
 export function closeAllMenus(submenus: NodeListOf<HTMLElement>)
 {
 	submenus.forEach(menu => {
@@ -32,32 +34,15 @@ export function closeAllMenus(submenus: NodeListOf<HTMLElement>)
 	});
 }
 
-export function setupMenuHandlers()
+//open and close settingsSubmenu
+export function settingsSidebarBehavior()
 {
 	const submenus = document.querySelectorAll<HTMLElement>('.submenu');
-	const dataTargetButtons = document.querySelectorAll('button[data-target]');
-
-	dataTargetButtons.forEach(button => {
-		button.addEventListener('click', () => {
-			const targetId = button.getAttribute('data-target');
-			toggleMenuVisibility(targetId, submenus);
-		});
-	});
-
-	const dashboardBtn = document.getElementById("DashboardBtn");
-	const friendsBtn = document.getElementById("friendsListBtn");
 	const settingsSidebarBtn = document.getElementById("settingsSidebarBtn");
-
-	[dashboardBtn, friendsBtn].forEach(btn => {
-		btn?.addEventListener('click', () => {
-			closeAllMenus(submenus);
-			openMenu('largeSubmenu');
-		});
-	});
+	const largeMenu = document.getElementById('largeSubmenu');
+	const settingsSubmenu = document.getElementById('settingsSubmenu');
 
 	settingsSidebarBtn?.addEventListener('click', () => {
-		const largeMenu = document.getElementById('largeSubmenu');
-		const settingsSubmenu = document.getElementById('settingsSubmenu');
 
 		if (largeMenu?.classList.contains('max-h-screen'))
 		{
@@ -73,4 +58,47 @@ export function setupMenuHandlers()
 			openMenu('settingsSubmenu');
 		}
 	});
+}
+
+export function playSidebarBehavior()
+{
+	const submenus = document.querySelectorAll<HTMLElement>('.submenu');
+	const playSidebarBtn = document.getElementById('playSidebarBtn');
+	playSidebarBtn?.addEventListener('click', () => {
+		toggleMenuVisibility('playSubmenu', submenus);
+	});
+}
+
+export function profileSidebarBehavior()
+{
+	const submenus = document.querySelectorAll<HTMLElement>('.submenu');
+	const playSidebarBtn = document.getElementById('profileSidebarBtn');
+	playSidebarBtn?.addEventListener('click', () => {
+		toggleMenuVisibility('profileSubmenu', submenus);
+	});
+
+	const dashboardBtn = document.getElementById("DashboardBtn");
+	const friendsBtn = document.getElementById("friendsListBtn");
+
+	dashboardBtn?.addEventListener('click', () => {
+		openMenu('largeSubmenu');
+	});
+
+	friendsBtn?.addEventListener('click', () => {
+		openMenu('largeSubmenu');
+	});
+
+	// [dashboardBtn, friendsBtn].forEach(btn => {
+	// 	btn?.addEventListener('click', () => {
+	// 		// closeAllMenus(submenus);
+	// 		openMenu('largeSubmenu');
+	// 	});
+	// });
+}
+
+export function setupMenuHandlers()
+{
+	playSidebarBehavior();
+	profileSidebarBehavior();
+	settingsSidebarBehavior();
 }

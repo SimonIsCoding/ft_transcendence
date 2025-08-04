@@ -1,7 +1,6 @@
 export function profileSubmenuRender():string
 {
 	return `
-	<!-- Hidden submenu -->
 	<div id="profileSubmenu" class="submenu h-screen absolute left-1/24 top-0 w-48 bg-[#fbd11b] border border-black flex items-center flex-col overflow-hidden max-h-0 transition-[max-height] duration-450 z-50 space-y-5">
 		<p id="submenuProfileName" class="font-bold text-center pt-5">Profile</p>
 		<hr class="border-t-1.5 border-black w-full" />
