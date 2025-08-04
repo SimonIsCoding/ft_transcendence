@@ -57,20 +57,23 @@ export function profileSidebarBehavior()
 	const dashboardBtn = document.getElementById("DashboardBtn");
 	const friendsBtn = document.getElementById("friendsListBtn");
 
-	// dashboardBtn?.addEventListener('click', () => {
-	// 	openMenu('largeSubmenu');
-	// });
-
-	// friendsBtn?.addEventListener('click', () => {
-	// 	openMenu('largeSubmenu');
-	// });
-
-	[dashboardBtn, friendsBtn].forEach(btn => {
-		btn?.addEventListener('click', () => {
-			// closeAllMenus(submenus);
-			openMenu('largeSubmenu');
-		});
+	dashboardBtn?.addEventListener('click', () => {
+		openMenu('largeSubmenu');
+		openMenu('dashboardSubmenu');
 	});
+
+	friendsBtn?.addEventListener('click', () => {
+		openMenu('largeSubmenu');
+		openMenu('friendsSubmenu');
+	});
+
+	// [dashboardBtn, friendsBtn].forEach(btn => {
+	// 	btn?.addEventListener('click', () => {
+	// 		// closeAllMenus(submenus);
+	// 		openMenu('largeSubmenu');
+
+	// 	});
+	// });
 }
 
 //open and close settingsSubmenu
