@@ -49,31 +49,23 @@ export function profileSidebarBehavior()
 {
 	getUserInfo();
 	const submenus = document.querySelectorAll<HTMLElement>('.submenu');
+	
 	const playSidebarBtn = document.getElementById('profileSidebarBtn');
 	playSidebarBtn?.addEventListener('click', () => {
 		toggleMenuVisibility('profileSubmenu', submenus);
 	});
 
 	const dashboardBtn = document.getElementById("DashboardBtn");
-	const friendsBtn = document.getElementById("friendsListBtn");
-
 	dashboardBtn?.addEventListener('click', () => {
 		openMenu('largeSubmenu');
 		openMenu('dashboardSubmenu');
 	});
-
+	
+	const friendsBtn = document.getElementById("friendsListBtn");
 	friendsBtn?.addEventListener('click', () => {
 		openMenu('largeSubmenu');
 		openMenu('friendsSubmenu');
 	});
-
-	// [dashboardBtn, friendsBtn].forEach(btn => {
-	// 	btn?.addEventListener('click', () => {
-	// 		// closeAllMenus(submenus);
-	// 		openMenu('largeSubmenu');
-
-	// 	});
-	// });
 }
 
 //open and close settingsSubmenu
