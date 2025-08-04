@@ -1,4 +1,4 @@
-export function gameSettingsRender():string 
+export function gameSettingsSubmenuRender():string 
 {
 	return `
 	<!-- Settings submenu -->

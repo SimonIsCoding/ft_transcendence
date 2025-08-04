@@ -4,7 +4,10 @@ import { isConnected } from "../../services/sidebar"
 import { loadExistingProfilePicture, uploadProfilePicture } from "../../utils/profilePictureUtils";
 import { initLogout } from '../../services/logoutService';
 import { setupMenuHandlers } from './sidebarUtils';
-import { gameSettingsRender } from './gameSettingsRender';
+import { gameSettingsSubmenuRender } from './gameSettingsSubmenuRender';
+import { logoutButtonRender } from './logoutButtonRender';
+import { profileSubmenuRender } from './profileSubmenuRender'
+import { playSubmenuRender } from './playSubmenuRender'
 
 interface User {
   login: string;
@@ -51,42 +54,15 @@ export const userLoggedSidebar = {
 		<path d="M8 5v14l11-7z"/>
 		</svg>
 		</button>
-		<!-- Hidden submenu -->
-		<div id="playSubmenu" class="submenu h-screen absolute left-1/24 top-0 w-48 bg-[#fbd11b] border border-black flex items-center flex-col overflow-hidden max-h-0 transition-[max-height] duration-450 z-50 space-y-5">
-			<p id="submenuName" class="font-bold text-center pt-5">Play</p>
-			<hr class="w-full border-t-1.5 border-black" />
-			<button id="oneVsOneBtn" class="font-bold rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit ">1 vs 1</button>
-			<hr class="border-t-1 border-black w-20" />
-			<button id="oneVsAiBtn" class="font-bold rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit ">1 vs AI</button>
-			<hr class="border-t-1 border-black w-20" />
-			<button id="tournamentBtn" class="font-bold rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit">Tournament</button>
-
-		</div>
+		${playSubmenuRender()}
 
 		<button id="profileSidebarBtn" data-target="profileSubmenu" class="group mx-2 my-2 border border-black rounded-lg px-2 py-1 text-black text-sm hover:bg-black hover:text-[#fbd11b] transition">
 		<svg xmlns="http://www.w3.org/2000/svg" fill="black" viewBox="0 0 24 24" class="w-5 h-5 fill-black group-hover:fill-[#fbd11b] transition">
 		<path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
 		</svg>
 		</button>
-		<!-- Hidden submenu -->
-		<div id="profileSubmenu" class="submenu h-screen absolute left-1/24 top-0 w-48 bg-[#fbd11b] border border-black flex items-center flex-col overflow-hidden max-h-0 transition-[max-height] duration-450 z-50 space-y-5">
-			<p id="submenuProfileName" class="font-bold text-center pt-5">Profile</p>
-			<hr class="border-t-1.5 border-black w-full" />
-			<input type="file" id="uploadProfilePictureInput" accept="image/*" class="hidden">
-			<button id="uploadPictureBtn" class="relative w-24 h-24 bg-black rounded-full flex items-center justify-center border border-transparent hover:border-black group hover:bg-[#fbd11b] transition">
-				<svg id="uploadIcon" xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-[#fbd11b] group-hover:text-black transition" fill="currentColor" viewBox="0 0 24 24">
-					<path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
-				</svg>
-				<span class="absolute bottom-0 right-0 z-20 bg-[#fbd11b] text-black rounded-full w-5 h-5 flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md">+</span>
-				<img id="previewProfilePicture" class="absolute w-24 h-24 rounded-full object-cover hidden" />
-			</button>
-			<hr class="border-t-1 border-black w-20" />
-			<button id="DashboardBtn" class="font-bold rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit ">Dashboard</button>
-			<hr class="border-t-1 border-black w-20" />
-			<button id="friendsListBtn" class="font-bold rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit ">Friends list</button>
-			<hr class="border-t-1 border-black w-20" />
-			<button id="editProfileBtn" class="font-bold rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit ">Edit Profile</button>
-		</div>
+		
+		${profileSubmenuRender()}
 
 		<button id="settingsSidebarBtn" class="group mx-2 my-2 border border-black rounded-lg px-2 py-1 text-black text-sm hover:bg-black hover:text-[#fbd11b] transition">
 		<svg xmlns="http://www.w3.org/2000/svg" fill="black" viewBox="0 0 24 24" class="w-5 h-5 fill-black group-hover:fill-[#fbd11b] transition">
@@ -98,17 +74,9 @@ export const userLoggedSidebar = {
 
 	<div id="largeSubmenu" class="submenu h-screen absolute left-1/24 top-0 w-96 bg-[#fbd11b] border border-black flex flex-col overflow-hidden max-h-0 transition-[max-height] duration-450 z-50 space-y-5">
 
-	${gameSettingsRender()}
+	${gameSettingsSubmenuRender()}
 
-	<div id="sidebarLowPart" class="flex flex-col mt-auto items-center space-y-2 pb-6">
-		<button id="logoutSidebarBtn" class="group mx-2 my-2 border border-black rounded-lg px-2 py-1 hover:bg-black transition">
-		<svg xmlns="http://www.w3.org/2000/svg" 
-			viewBox="0 0 24 24" 
-			class="w-5 h-5 fill-black group-hover:fill-[#fbd11b] transition">
-			<path d="M16 13v-2H7V8l-5 4 5 4v-3h9zm4-10H8a2 2 0 0 0-2 2v4h2V5h12v14H8v-4H6v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z"/>
-		</svg>
-		</button>
-	</div>
+	${logoutButtonRender()}
   `;
   },
 
