@@ -34,7 +34,7 @@ services:
     build: requirements/auth-service
     volumes:
       - pong:/var/www/html/pong
-      - $PWD/data/pong:/app/database #share db file
+      - $PWD/srcs/data/pong:/app/database #share db file
   
   2fa-service:
     container_name: 2fa-service
@@ -85,7 +85,7 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: $PWD/data/pong
+      device: $PWD/srcs/data/pong
       o: bind
   2fa_data:
     driver: local
