@@ -63,6 +63,7 @@ export function profileSidebarBehavior()
 	const submenus = document.querySelectorAll<HTMLElement>('.submenu');
 	const friendsSubmenu = document.getElementById("friendsSubmenu");
 	const dashboardSubmenu = document.getElementById("dashboardSubmenu");
+	const gameHistorySubmenu = document.getElementById("gameHistorySubmenu");
 
 	const playSidebarBtn = document.getElementById('profileSidebarBtn');
 	playSidebarBtn?.addEventListener('click', () => {
@@ -72,6 +73,7 @@ export function profileSidebarBehavior()
 	const dashboardBtn = document.getElementById("DashboardBtn");
 	dashboardBtn?.addEventListener('click', () => {
 		friendsSubmenu?.classList.add('hidden');
+		gameHistorySubmenu?.classList.add('hidden');
 		dashboardSubmenu?.classList.remove('hidden');
 		openMenu('largeSubmenu');
 		openMenu('dashboardSubmenu');
@@ -85,6 +87,7 @@ export function profileSidebarBehavior()
 	const friendsBtn = document.getElementById("friendsListBtn");
 	friendsBtn?.addEventListener('click', () => {
 		dashboardSubmenu?.classList.add('hidden');
+		gameHistorySubmenu?.classList.add('hidden');
 		friendsSubmenu?.classList.remove('hidden');
 		openMenu('largeSubmenu');
 		openMenu('friendsSubmenu');
@@ -94,6 +97,21 @@ export function profileSidebarBehavior()
 			toggleMenuVisibility('profileSubmenu', submenus);
 		});
 	});
+
+	const gameHistoryBtn = document.getElementById("gameHistoryBtn");
+	gameHistoryBtn?.addEventListener('click', () => {
+		dashboardSubmenu?.classList.add('hidden');
+		friendsSubmenu?.classList.add('hidden');
+		gameHistorySubmenu?.classList.remove('hidden');
+		openMenu('largeSubmenu');
+		openMenu('gameHistorySubmenu');
+		const backBtnGameHistorySubmenu = document.getElementById("backBtnGameHistorySubmenu");
+		backBtnGameHistorySubmenu?.addEventListener('click', () => {
+			closeAllMenus(submenus);
+			toggleMenuVisibility('profileSubmenu', submenus);
+		});
+	});
+
 }
 
 //open and close settingsSubmenu

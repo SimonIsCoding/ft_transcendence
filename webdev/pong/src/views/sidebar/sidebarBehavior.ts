@@ -10,6 +10,7 @@ import { profileSubmenuRender } from './profileSubmenuRender'
 import { playSubmenuRender } from './playSubmenuRender'
 import { friendsSubmenuRender } from './friendsSubmenuRender'
 import { dashboardSubmenuRender } from './dashboardSubmenuRender'
+import { gameHistorySubmenuRender } from './gameHistorySubmenuRender'
 
 interface User {
   login: string;
@@ -76,6 +77,7 @@ export const userLoggedSidebar = {
 	<div id="largeSubmenu" class="submenu h-screen absolute left-1/24 top-0 w-96 bg-[#fbd11b] border border-black flex flex-col overflow-hidden max-h-0 transition-[max-height] duration-450 z-50 space-y-5">
 		${dashboardSubmenuRender()}
 		${friendsSubmenuRender()}
+		${gameHistorySubmenuRender()}
 		${gameSettingsSubmenuRender()}
 	</div>
 
