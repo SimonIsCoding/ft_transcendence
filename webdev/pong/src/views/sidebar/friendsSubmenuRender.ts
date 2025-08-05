@@ -4,11 +4,11 @@ import { renderBackButton } from './sidebarUtils.ts'
 export function followRequestCard(): string
 {
 	return `
-	<div class="flex flex-col rounded-2xl max-w-md space-y-5 shadow-base shadow-gray-600 pr-3 pl-3 pt-2 pb-2 bg-black">
+	<div class="flex flex-col rounded-2xl max-full space-y-5 shadow-base shadow-gray-600 pr-5 pl-5 pt-2 pb-2 bg-black">
 		<div class="flex items-center space-x-2">
 			<img src="chemin/vers/image.jpg" class="w-10 h-10 rounded-full object-cover border border-black bg-[#fbd11b] text-black flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md" />
 			
-			<div class="flex flex-col">
+			<div class="flex flex-col justify-center">
 				<p class="font-bold text-sm text-[#fbd11b]">FriendUsername</p>
 				<p class="text-sm text-[#fbd11b]">email@exemple.com</p>
 			</div>
@@ -29,11 +29,11 @@ export function followRequestCard(): string
 export function friendsCard(): string
 {
 	return `
-	<div class="flex flex-col rounded-2xl max-w-md space-y-3 shadow-lg shadow-gray-600 p-4 bg-black">
-		<div class="flex items-center space-x-4">
-			<img src="chemin/vers/image.jpg" class="w-13 h-13 rounded-full object-cover border border-black bg-[#fbd11b] text-black flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md" />
+	<div class="flex flex-col rounded-2xl max-full space-y-5 shadow-base shadow-gray-600 pr-3 pl-3 pt-2 pb-2 bg-black">
+		<div class="flex items-center space-x-2">
+			<img src="chemin/vers/image.jpg" class="w-10 h-10 rounded-full object-cover border border-black bg-[#fbd11b] text-black flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md" />
 			
-			<div class="flex flex-col">
+			<div class="space-x-2">
 				<p class="font-bold text-sm text-[#fbd11b]">FriendUsername</p>
 				<p class="text-sm text-[#fbd11b]">email@exemple.com</p>
 			</div>
