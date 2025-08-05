@@ -1,4 +1,5 @@
 import { getUserInfo } from '../../services/sidebar'
+import { playSidebarBehavior } from './playSidebarBehavior';
 
 export function renderBackButton(id: string): string
 {
@@ -45,24 +46,6 @@ export function closeAllMenus(submenus: NodeListOf<HTMLElement>)
 	submenus.forEach(menu => {
 		menu.classList.add('max-h-0');
 		menu.classList.remove('max-h-screen');
-	});
-}
-
-export function playSidebarBehavior()
-{
-	const submenus = document.querySelectorAll<HTMLElement>('.submenu');
-	const playSidebarBtn = document.getElementById('playSidebarBtn');
-	playSidebarBtn?.addEventListener('click', () => {
-		toggleMenuVisibility('playSubmenu', submenus);
-
-		const oneVsOneBtn = document.getElementById("oneVsOneBtn");
-		const gameArea = document.getElementById("gameArea");
-		const OneVsOneArea = document.getElementById("OneVsOneArea");
-		oneVsOneBtn?.addEventListener('click', () => {
-			gameArea?.classList.add('hidden');
-			OneVsOneArea?.classList.remove('hidden');
-
-		});
 	});
 }
 

@@ -32,9 +32,9 @@ export function friendsCard(): string
 		<div class="flex items-center space-x-2">
 			<img src="" class="w-10 h-10 rounded-full object-cover border border-black bg-[#fbd11b] text-black flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md" />
 			<div class="space-x-2">
-			<p class="font-bold text-sm text-[#fbd11b]">FriendUsername</p>
-			<p class="text-sm text-[#fbd11b]">email@exemple.com</p>
-			<hr class="w-55"/>
+				<p class="font-bold text-sm text-[#fbd11b]">FriendUsername</p>
+				<p class="text-sm text-[#fbd11b]">email@exemple.com</p>
+				<hr class="w-55"/>
 			</div>
 			<div id="friendsStatus" class="top-1 right-1 w-3 h-3 bg-red-500 rounded-full border border-black"><button id="Offline" title="Offline"></button></div>
 		</div>

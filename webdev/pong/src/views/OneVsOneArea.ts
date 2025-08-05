@@ -1,4 +1,5 @@
-import { Router } from "../router";
+// import { Router } from "../router";
+import { oneVsOneAreaInit } from "./sidebar/playSidebarBehavior";
 
 interface User {
   login: string;
@@ -7,27 +8,23 @@ interface User {
   token: string;
 }
 
-export const OneVsOneArea = {
+export const oneVsOneArea = {
   currentUser: null as User | null,
   isLogin: true,
 
 	render(): string {
 	return `
-	<main id="OneVsOneArea" class="hidden flex-1 bg-black flex items-center justify-center bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center w-full h-full" style="background-image: url('/pongBackgroundPlay.png');">
-		<div id="successPopup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50">
+	<main id="oneVsOneArea" class="hidden flex-1 bg-black flex items-center justify-center bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center w-full h-full" style="background-image: url('/pongBackgroundPlay.png');">
+		<div id="oneVsOneAreaPopup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50">
 		</div>
 		<div class="flex flex-col justify-center items-center h-screen">
 			<h1 class="text-[#fbd11b]/50 font-bold text-4xl pb-20">1 VS 1</h1>
-			<input id="username1" type="text" placeholder="Player 1" class="text-[#fbd11b]/50 px-4 py-2 text-xl border border-[#fbd11b] font-bold text-center rounded-xl w-60" />
-
+			<input id="player1" type="text" placeholder="Player 1" class="px-4 py-2 text-xl border border-[#fbd11b] font-bold text-center rounded-xl w-60 text-[#fbd11b] placeholder-opacity-50 placeholder-[#fbd11b]/50" />
 			<button id="swapBtn" class="inline-block text-yellow-400 hover:text-black hover:bg-yellow-400 transition-colors duration-300 border border-[#fbd11b] rounded-lg my-4 p-2.75">
-				<!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-15 h-15">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 10h12M10 6l6 4-6 4M20 14H8m6 4l-6-4 6-4" />
-				</svg> -->
 				${swapSvg()}
 			</button>
-			
-			<input id="usernameV1" type="text" placeholder="Player 2" class="text-[#fbd11b]/50 px-4 py-2 text-xl border border-[#fbd11b] font-bold text-center rounded-xl w-60" />
+			<input id="player2" type="text" placeholder="Player 2" class="px-4 py-2 text-xl border border-[#fbd11b] font-bold text-center rounded-xl w-60 text-[#fbd11b] placeholder-opacity-50 placeholder-[#fbd11b]/50 mb-10" />
+			<button id="playOneVsOneBtn" class="inline-block text-yellow-400 hover:text-black hover:bg-yellow-400 transition-colors duration-300 border border-[#fbd11b] rounded-lg my-4 p-2.75 font-bold w-40 text-xl">Play</button>
 		</div>
 	 </main>
 	`;
@@ -35,8 +32,7 @@ export const OneVsOneArea = {
 
   init(): void
   {
-	const playBtn = document.getElementById('playBtn') as HTMLButtonElement | null;
-	playBtn!.addEventListener('click', () => { Router.navigate('game'); })
+	oneVsOneAreaInit();
   }
 }
 
