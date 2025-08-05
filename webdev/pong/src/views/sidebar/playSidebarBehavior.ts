@@ -22,6 +22,7 @@ export function oneVsOneAreaInit()
 	const oneVsOneArea = document.getElementById("oneVsOneArea");
 	oneVsOneBtn?.addEventListener('click', () => {
 		gameArea?.classList.add('hidden');
+		gameArea?.classList.add('hidden');
 		oneVsOneArea?.classList.remove('hidden');
 		document.getElementById("swapBtn")?.addEventListener("click", () => {
 			swapPlayer();
@@ -35,6 +36,31 @@ export function oneVsOneAreaInit()
 		if (!player1.value.trim() || !player2.value.trim())
 		{
 			showErrorPopup("You need 2 players to play.", "oneVsOneAreaPopup");
+			return ;
+		}
+		Router.navigate('game'); 
+	});
+}
+
+export function oneVsAIAreaInit()
+{
+	const oneVsAIBtn = document.getElementById("oneVsAIBtn");
+	const gameArea = document.getElementById("gameArea");
+	const oneVsAIArea = document.getElementById("oneVsAIArea");
+	oneVsAIBtn?.addEventListener('click', () => {
+		gameArea?.classList.add('hidden');
+		oneVsAIArea?.classList.remove('hidden');
+		document.getElementById("swapBtn")?.addEventListener("click", () => {
+			swapPlayer();
+		});
+	});
+
+	const playBtn = document.getElementById('playOneVsAIBtn') as HTMLButtonElement | null;
+	playBtn!.addEventListener('click', () => { 
+		const player1 = document.getElementById("player1") as HTMLInputElement;
+		if (!player1.value.trim())
+		{
+			showErrorPopup("You need 1 players to play.", "oneVsAIAreaPopup");
 			return ;
 		}
 		Router.navigate('game'); 

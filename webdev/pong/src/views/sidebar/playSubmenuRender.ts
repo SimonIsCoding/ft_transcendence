@@ -6,7 +6,7 @@ export function playSubmenuRender(): string
 		<hr class="w-full border-t-1.5 border-black" />
 		<button id="oneVsOneBtn" class="font-bold rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit">1 vs 1</button>
 		<hr class="border-t-1 border-black w-20" />
-		<button id="oneVsAiBtn" class="font-bold rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit">1 vs AI</button>
+		<button id="oneVsAIBtn" class="font-bold rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit">1 vs AI</button>
 		<hr class="border-t-1 border-black w-20" />
 		<button id="tournamentBtn" class="font-bold rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit">Tournament</button>
 	</div>
