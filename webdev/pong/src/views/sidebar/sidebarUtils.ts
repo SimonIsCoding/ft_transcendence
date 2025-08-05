@@ -54,6 +54,15 @@ export function playSidebarBehavior()
 	const playSidebarBtn = document.getElementById('playSidebarBtn');
 	playSidebarBtn?.addEventListener('click', () => {
 		toggleMenuVisibility('playSubmenu', submenus);
+
+		const oneVsOneBtn = document.getElementById("oneVsOneBtn");
+		const gameArea = document.getElementById("gameArea");
+		const OneVsOneArea = document.getElementById("OneVsOneArea");
+		oneVsOneBtn?.addEventListener('click', () => {
+			gameArea?.classList.add('hidden');
+			OneVsOneArea?.classList.remove('hidden');
+
+		});
 	});
 }
 
