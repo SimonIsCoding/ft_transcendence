@@ -17,7 +17,7 @@ export const HomeView = {
 	return `
 	<div class="w-screen h-screen flex bg-[#fbd11b] overflow-hidden">
 
-		<div id="sidebar" class="bg-[#fbd11b] h-screen flex flex-col overflow-hidden transition-all duration-500 ease-in-out w-1/24">
+		<div id="sidebar" class="bg-[#fbd11b] h-screen flex flex-col overflow-hidden transition-all duration-500 ease-in-out w-[64px]">
 		</div>
 
       ${playButton.render()}
