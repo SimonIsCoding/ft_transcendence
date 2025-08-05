@@ -74,7 +74,7 @@ export const userLoggedSidebar = {
 		
 	</div>
 
-	<div id="largeSubmenu" class="submenu h-screen absolute left-1/24 top-0 w-96 bg-[#fbd11b] border border-black flex flex-col overflow-hidden max-h-0 transition-[max-height] duration-450 z-50 space-y-5">
+	<div id="largeSubmenu" class="submenu h-screen absolute left-[64px] top-0 w-96 bg-[#fbd11b] border border-black flex flex-col overflow-hidden max-h-0 transition-[max-height] duration-450 z-50 space-y-5">
 		${dashboardSubmenuRender()}
 		${friendsSubmenuRender()}
 		${gameHistorySubmenuRender()}
