@@ -36,7 +36,7 @@ export function friendsCard(): string
 			<p class="text-sm text-[#fbd11b]">email@exemple.com</p>
 			<hr class="w-55"/>
 			</div>
-			<div id="friendsStatus" class="top-1 right-1 w-3 h-3 bg-red-500 rounded-full border border-black"></div>
+			<div id="friendsStatus" class="top-1 right-1 w-3 h-3 bg-red-500 rounded-full border border-black"><button id="Offline" title="Offline"></button></div>
 		</div>
 	</div>
 	`
