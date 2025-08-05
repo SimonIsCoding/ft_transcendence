@@ -1,11 +1,13 @@
+import { renderBackButton } from './sidebarUtils.ts'
+
 export function friendsSubmenuRender():string 
 {
 	return `
 	<div id="friendsSubmenu" class="submenu h-screen w-full top-0 bg-[#fbd11b] flex items-center flex-col max-h-0 transition-[max-height] duration-450 z-50 space-y-5">
-		<p id="submenuFriendsName" class="font-bold text-center">Friends List</p>
+		${renderBackButton("backBtnFriendsSubmenu")}
+		<p id="submenuFriendsName" class="font-bold text-center pt-5">Friends List</p>
 		<hr class="w-full border-t-1.5 border-black" />
 		<button id="addFriendsBtn" class="border text-center font-semibold rounded-full text-base w-70 hover:bg-black hover:text-yellow-400 transition">+ Add Friends</button>
-		
 		<div>
 			<p id="followRequest" class="pl-4 self-start font-semibold text-sm">Follow Request</p>
 			<div class="flex flex-col rounded-2xl max-w-md space-y-3 shadow-lg shadow-gray-600 p-4">
