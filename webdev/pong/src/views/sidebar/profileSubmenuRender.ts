@@ -22,6 +22,8 @@ export function profileSubmenuRender():string
 		<hr class="border-t-1 border-black w-20" />
 		<button id="friendsListBtn" class="font-bold rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit ">Friends list</button>
 		<hr class="border-t-1 border-black w-20" />
+		<button id="gameHistoryBtn" class="font-bold rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit ">Game History</button>
+		<hr class="border-t-1 border-black w-20" />
 		<button id="editProfileBtn" class="font-bold rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit ">Edit Profile</button>
 	</div>
 	`
