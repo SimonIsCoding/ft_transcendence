@@ -12,7 +12,6 @@ export function renderBackButton(id: string): string
   `;
 }
 
-
 // for button 'playSidebarBtn' & 'profileSidebarBtn', this function open and close the submenu
 export function toggleMenuVisibility(targetId: string | null, submenus: NodeListOf<HTMLElement>)
 {
