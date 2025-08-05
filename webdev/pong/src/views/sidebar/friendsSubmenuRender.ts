@@ -1,12 +1,11 @@
 import { renderBackButton } from './sidebarUtils.ts'
-// <button id="addFriendsBtn" class="border text-center font-semibold rounded-full text-base w-70 hover:bg-black hover:text-yellow-400 transition">+ Add Friends</button>
 
 export function followRequestCard(): string
 {
 	return `
 	<div class="flex flex-col rounded-2xl w-full space-y-5 shadow-base shadow-gray-600 pr-5 pl-5 pt-2 pb-2 bg-black">
 		<div class="flex items-center space-x-2">
-			<img src="chemin/vers/image.jpg" class="w-10 h-10 rounded-full object-cover border border-black bg-[#fbd11b] text-black flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md" />
+			<img src="" class="w-10 h-10 rounded-full object-cover border border-black bg-[#fbd11b] text-black flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md" />
 			
 			<div class="flex flex-col justify-center">
 				<p class="font-bold text-sm text-[#fbd11b]">FriendUsername</p>
@@ -31,13 +30,13 @@ export function friendsCard(): string
 	return `
 	<div class="flex flex-col rounded-2xl w-full space-y-5 shadow-base shadow-gray-600 pr-5 pl-5 pt-2 pb-2 bg-black">
 		<div class="flex items-center space-x-2">
-			<img src="chemin/vers/image.jpg" class="w-10 h-10 rounded-full object-cover border border-black bg-[#fbd11b] text-black flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md" />
-			
+			<img src="" class="w-10 h-10 rounded-full object-cover border border-black bg-[#fbd11b] text-black flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md" />
 			<div class="space-x-2">
-				<p class="font-bold text-sm text-[#fbd11b]">FriendUsername</p>
-				<p class="text-sm text-[#fbd11b]">email@exemple.com</p>
-				<hr class="w-60" />
+			<p class="font-bold text-sm text-[#fbd11b]">FriendUsername</p>
+			<p class="text-sm text-[#fbd11b]">email@exemple.com</p>
+			<hr class="w-55"/>
 			</div>
+			<div id="friendsStatus" class="top-1 right-1 w-3 h-3 bg-red-500 rounded-full border border-black"></div>
 		</div>
 	</div>
 	`
@@ -46,7 +45,23 @@ export function friendsCard(): string
 export function othersFriendsCard(): string
 {
 	return `
-	
+	<div class="flex flex-col rounded-2xl w-full space-y-5 shadow-base shadow-gray-600 pr-5 pl-5 pt-2 pb-2 bg-black">
+		<div class="flex items-center space-x-2">
+			<img src="" class="w-10 h-10 rounded-full object-cover border border-black bg-[#fbd11b] text-black flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md" />
+			
+			<div class="flex flex-col justify-center">
+				<p class="font-bold text-sm text-[#fbd11b]">FriendUsername</p>
+				<p class="text-sm text-[#fbd11b]">email@exemple.com</p>
+				<hr class="w-60"/>
+			</div>
+		</div>
+
+		<div class="flex justify-center space-x-2">
+			<button class="px-2 py-1 rounded-full border border-[#fbd11b] text-[#fbd11b] bg-black hover:bg-[#fbd11b] hover:text-black transition font-bold text-sm w-full">
+				Add as a friend
+			</button>
+		</div>
+	</div>
 	`
 }
 
@@ -62,9 +77,11 @@ export function friendsSubmenuRender():string
 			${followRequestCard()}
 		</div>
 		<div id="friendsListDiv">
+			<p id="friendsListP" class="pl-4 self-start font-semibold text-sm">Friends</p>
 			${friendsCard()}
 		</div>
 		<div id="othersFriendsDiv">
+			<p id="othersFriendsP" class="pl-4 self-start font-semibold text-sm">Others Users</p>
 			${othersFriendsCard()}
 		</div>
 	</div>
