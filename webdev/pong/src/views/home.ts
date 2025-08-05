@@ -1,6 +1,6 @@
 import { playButton } from "./playButton";
 import { handleSidebar } from "./sidebar/sidebarBehavior";
-import { OneVsOneArea } from "./OneVsOneArea";
+import { oneVsOneArea } from "./OneVsOneArea";
 
 interface User {
   login: string;
@@ -22,7 +22,7 @@ export const HomeView = {
 		</div>
 
       ${playButton.render()}
-      ${OneVsOneArea.render()}
+      ${oneVsOneArea.render()}
 
     </div>
   `;

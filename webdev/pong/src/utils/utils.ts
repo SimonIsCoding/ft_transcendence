@@ -24,9 +24,9 @@ export function setupPasswordToggle(passwordId: string, toggleBtnId: string, eye
 	});
 }
 
-export function showSuccessPopup(message: string, duration: number = 3500): void
+export function showSuccessPopup(message: string, duration: number = 3500, id: string): void
 {
-	const popup = document.getElementById("successPopup");
+	const popup = document.getElementById(id);
 	if (!popup)
 		return;
 	
@@ -38,15 +38,16 @@ export function showSuccessPopup(message: string, duration: number = 3500): void
 	}, duration);
 }
 
-export function showErrorPopup(message: string) {
-  const popup = document.getElementById("successPopup");
+export function showErrorPopup(message: string, id: string)
+{
+  const popup = document.getElementById(id);
   if (popup)
   {
     popup.classList.remove("bg-green-600");
     popup.classList.add("bg-red-600");
     popup.textContent = message;
     popup.classList.remove("hidden");
-    setTimeout(() => popup.classList.add("hidden"), 3000);
+    setTimeout(() => popup.classList.add("hidden"), 3500);
   }
 }
 
