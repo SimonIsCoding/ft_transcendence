@@ -57,12 +57,14 @@ export function profileSidebarBehavior()
 
 	const dashboardBtn = document.getElementById("DashboardBtn");
 	dashboardBtn?.addEventListener('click', () => {
+		// closeAllMenus(submenus);
 		openMenu('largeSubmenu');
 		openMenu('dashboardSubmenu');
 	});
 	
 	const friendsBtn = document.getElementById("friendsListBtn");
 	friendsBtn?.addEventListener('click', () => {
+		// closeAllMenus(submenus);
 		openMenu('largeSubmenu');
 		openMenu('friendsSubmenu');
 	});
