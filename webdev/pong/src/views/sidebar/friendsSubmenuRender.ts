@@ -1,8 +1,8 @@
 export function friendsSubmenuRender():string 
 {
 	return `
-	<div id="friendsSubmenu" class="submenu h-screen w-full absolute top-0 bg-[#fbd11b] flex items-center flex-col max-h-0 transition-[max-height] duration-450 z-50 space-y-5">
-		<p id="submenuFriendsName" class="font-bold text-center pt-5">Friends List</p>
+	<div id="friendsSubmenu" class="submenu h-screen w-full top-0 bg-[#fbd11b] flex items-center flex-col max-h-0 transition-[max-height] duration-450 z-50 space-y-5">
+		<p id="submenuFriendsName" class="font-bold text-center">Friends List</p>
 		<hr class="w-full border-t-1.5 border-black" />
 		<button id="addFriendsBtn" class="border text-center font-semibold rounded-full text-base w-70 hover:bg-black hover:text-yellow-400 transition">+ Add Friends</button>
 		
@@ -28,10 +28,6 @@ export function friendsSubmenuRender():string
 				</div>
 			</div>
 		</div>
-
-		
-
-
 	</div>
 	`
 }
