@@ -78,11 +78,11 @@ export const oneVsAIArea = {
 		</div>
 		<div class="flex flex-col justify-center items-center h-screen">
 			<h1 class="text-[#fbd11b]/50 font-bold text-4xl pb-20">1 VS AI</h1>
-			<input id="player1" type="text" placeholder="Player 1" class="px-4 py-2 text-xl border border-[#fbd11b] font-bold text-center rounded-xl w-60 text-[#fbd11b] placeholder-opacity-50 placeholder-[#fbd11b]/50" />
+			<input id="player1VSAI" type="text" placeholder="Player 1" class="px-4 py-2 text-xl border border-[#fbd11b] font-bold text-center rounded-xl w-60 text-[#fbd11b] placeholder-opacity-50 placeholder-[#fbd11b]/50" />
 			<button id="swapBtn" class="inline-block text-yellow-400 hover:text-black hover:bg-yellow-400 transition-colors duration-300 border border-[#fbd11b] rounded-lg my-4 p-2.75">
 				${swapSvg()}
-			</button>
-			<button id="AI" placeholder="AI" class="flex items-center justify-center text-yellow-400 hover:text-black hover:bg-yellow-400 transition-colors duration-300 border border-[#fbd11b] rounded-lg px-26 py-1.5 rounded-xl inline-block mb-10">
+			</button> 
+			<button id="AIPlayer" placeholder="AI" class="flex items-center justify-center text-yellow-400 hover:text-black hover:bg-yellow-400 transition-colors duration-300 border border-[#fbd11b] rounded-lg px-26 py-1.5 rounded-xl inline-block mb-10">
 				${AIsvg()}
 			</button>
 			<button id="playOneVsAIBtn" class="inline-block text-yellow-400 hover:text-black hover:bg-yellow-400 transition-colors duration-300 border border-[#fbd11b] rounded-lg my-4 p-2.75 font-bold w-40 text-xl">Play</button>
