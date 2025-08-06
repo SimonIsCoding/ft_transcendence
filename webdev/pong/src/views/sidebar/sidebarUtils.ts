@@ -142,6 +142,7 @@ export function editProfileBehavior()
 	const profileSidebarBtn = document.getElementById("profileSidebarBtn");
 	const editProfileBtn = document.getElementById("editProfileBtn");
 	const submenus = document.querySelectorAll<HTMLElement>('.submenu');
+	const backBtnEditProfileSubmenu = document.getElementById("backBtnEditProfileSubmenu");
 
 	editProfileBtn?.addEventListener('click', () => {
 		console.log("entered in Display editProfileBtn");
@@ -149,6 +150,11 @@ export function editProfileBehavior()
 		editProfileSubmenu?.classList.remove("max-h-0");
 		editProfileSubmenu?.classList.remove("hidden");
 		console.log("editProfileSubmenu classes:", editProfileSubmenu?.classList.value);
+
+		backBtnEditProfileSubmenu?.addEventListener('click', () => {
+			editProfileSubmenu?.classList.add("max-h-0");
+			editProfileSubmenu?.classList.remove("max-h-screen");
+		});
 	});
 
 	profileSidebarBtn?.addEventListener('click', () => {
