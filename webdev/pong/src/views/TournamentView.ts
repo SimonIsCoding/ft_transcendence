@@ -1,21 +1,26 @@
-// import { TournamentModel } from "../models/TournamentModel";
-// import '../controllers/TournamentController';
+import { TournamentController } from '../controllers/TournamentController';
+import { userUnloggedSidebar } from './sidebarBehavior';
+import { playButton } from './playButton';
+import { TournamentModel } from '../models/TournamentModel';
+// import { GameView } from '../views/game';
 
-export class TournamentView {
-    render(): string {
-        // const app = document.getElementById('app'); // Asegúrate de que este ID exista en tu HTML principal
-        // if (app) {
-            return `
-                <h3>Participantes:</h3>
-                <ul id="players-list"></ul>
+const controller = new TournamentController(new TournamentModel());
 
-                <h3>Partidas:</h3>
-                <div id="matches-list"></div>
-
-                <h3>Estado:</h3>
-                <div id="status"></div>
-            `;
-        // }
-        // return ''; // Return an empty string if app is not found
+export const TournamentView = {
+  render(): string {
+    return `
+      <div class="w-screen h-screen flex bg-[#fbd11b] overflow-hidden">
+        ${userUnloggedSidebar.render()}
+        <div class="flex flex-col items-center justify-center w-full">
+             ${playButton.init()}
+        </div>
+        `;
+    },
+    
+    init(): void {
+        controller.iniciarTorneo();
+        console.log('entraa')
     }
-}
+};
+
+// ${playButton.render()} esto da error con el game para el torneo

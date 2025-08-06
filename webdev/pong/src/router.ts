@@ -4,6 +4,9 @@ import { registerView } from './views/registerView';
 import { GameView } from './views/game';
 import { userLogged } from './views/userLogged.ts';
 import { gameController } from './controllers/gameController';
+// import { TournamentView } from './views/TournamentView.ts';
+import { TournamentController } from './controllers/TournamentController.ts';
+import { TournamentModel } from './models/TournamentModel.ts';
 
 interface User {
   login: string;
@@ -16,7 +19,7 @@ interface User {
 export class Router {
   private static app = document.getElementById('app');
   public static currentUser: User | null;
-  public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'game' | 'userLogged' , addToHistory = true): void {
+  public static navigate(page: 'home' | 'login' | 'register' | 'info' | 'game' | 'userLogged' | 'tournament' , addToHistory = true): void {
   if (!this.app) {
     console.error('App container not found');
     return;
@@ -53,7 +56,19 @@ export class Router {
 	  this.app.innerHTML = userLogged.render();
 	  userLogged.init();
       break;
+  case 'tournament':
+    this.app.innerHTML = GameView.renderGameCanvas();
+    console.log('antes de iniciar el juego')
+    GameView.initGameCanvas();
+    console.log('despues de iniciar el juego')
+    const controller = new TournamentController(new TournamentModel());
+    controller.iniciarTorneo();
+    gameController.init();
+    // this.app.innerHTML = TournamentView.render();
+    // TournamentView.init();
+    break;
   }
+    
 
   if (addToHistory)
     history.pushState({}, '', page === 'home' ? '/' : `/${page}`);
@@ -69,6 +84,7 @@ export class Router {
 	  path.includes('game') ? 'game' :
 	  path.includes('info') ? 'info' :
 	  path.includes('userLogged') ? 'userLogged' :
+	  path.includes('tournament') ? 'tournament' :
 	  'home' , false);
     });
 
@@ -81,6 +97,7 @@ export class Router {
 	  path.includes('game') ? 'game' :
 	  path.includes('info') ? 'info' : 
 	  path.includes('userLogged') ? 'userLogged' :
+	  path.includes('tournament') ? 'tournament' :
 	  'home' , false);
     });
   }
