@@ -142,5 +142,10 @@ export const userLoggedSidebar = {
 			});
 		});
 	friendsListView.init();
+
+	const tournamentBtn = document.getElementById('tournamentBtn');
+	tournamentBtn?.addEventListener('click', () => {
+		Router.navigate('tournament')
+	});
   }
 }

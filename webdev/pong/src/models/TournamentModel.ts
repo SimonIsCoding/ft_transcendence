@@ -1,63 +1,79 @@
 export type Player = {
-    id: string;
-    username: string;
-  };
-  
-  export type Match = {
-    player1: Player;
-    player2: Player;
-    result: 'pending' | 'player1' | 'player2';
-  };
-  
-  export class TournamentModel {
-    private players: Player[] = [];
-    private matches: Match[] = [];
-    private currentMatchIndex = 0;
-  
-    addPlayer(player: Player) {
-      this.players.push(player);
-    }
-  
-    getPlayers() {
-      return [...this.players];
-    }
-  
-    getPlayerCount() {
-      return this.players.length;
-    }
-  
-    generateMatches() {
-      const matches: Match[] = [];
-      for (let i = 0; i < this.players.length; i++) {
-        for (let j = i + 1; j < this.players.length; j++) {
-          matches.push({
-            player1: this.players[i],
-            player2: this.players[j],
-            result: 'pending'
-          });
-        }
-      }
-      this.matches = matches;
-      this.currentMatchIndex = 0;
-    }
-  
-    getCurrentMatch(): Match | null {
-      return this.matches[this.currentMatchIndex] ?? null;
-    }
-  
-    reportMatchResult(winner: Player) {
-      const match = this.getCurrentMatch();
-      if (!match) return;
-      match.result = match.player1.id === winner.id ? 'player1' : 'player2';
-      this.currentMatchIndex++;
-    }
-  
-    getAllMatches() {
-      return [...this.matches];
-    }
-  
-    hasMoreMatches() {
-      return this.currentMatchIndex < this.matches.length;
-    }
+  alias: string;
+};
+
+export type Match = {
+  player1: Player;
+  player2: Player;
+  winner: Player | null;
+};
+
+export class TournamentModel {
+  players: Player[] = [];
+  semifinal1: Match | null = null;
+  semifinal2: Match | null = null;
+  finalMatch: Match | null = null;
+  winner: Player | null = null;
+
+  addPlayer(alias: string) {
+    this.players.push({ alias });
+  }
+
+  isReady(): boolean {
+    return this.players.length === 4;
+  }
+
+  generateFirstMatch() {
+    this.semifinal1 = {
+      player1: { ...this.players[0] }, 
+      player2: { ...this.players[1] },
+      winner: null
+    };
+    console.log('semifinal1: ' + this.semifinal1)
+    // this.semifinal2 = {
+    //     player1: { ...this.players[2] },
+    //     player2: { ...this.players[3] },
+    //     winner: null
+    // };
+    // console.log('semifinal2: ' + this.semifinal2)
   }
   
+  generateSecondMatch() {
+    // this.semifinal1 = {
+    //   player1: { ...this.players[0] }, 
+    //   player2: { ...this.players[1] },
+    //   winner: null
+    // };
+    // console.log('semifinal1: ' + this.semifinal1)
+    this.semifinal2 = {
+        player1: { ...this.players[2] },
+        player2: { ...this.players[3] },
+        winner: null
+    };
+    console.log('semifinal2: ' + this.semifinal2)
+  }
+
+  generateFinal() {
+    if (this.semifinal1?.winner && this.semifinal2?.winner) {
+      this.finalMatch = {
+        player1: this.semifinal1.winner,
+        player2: this.semifinal2.winner,
+        winner: null
+      };
+    }
+  }
+
+  setWinner(winner: Player) {
+    this.winner = winner;
+  }
+
+  saveToLocalStorage() {
+    const historial = JSON.parse(localStorage.getItem('torneos') || '[]');
+    historial.push({
+      jugadores: this.players.map(p => p.alias),
+      ganador: this.winner?.alias,
+      fecha: new Date().toISOString()
+    });
+    localStorage.setItem('torneos', JSON.stringify(historial));
+  }
+}
