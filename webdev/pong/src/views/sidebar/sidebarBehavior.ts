@@ -10,6 +10,7 @@ import { playSubmenuRender } from './playSubmenuRender'
 import { friendsSubmenuRender } from './friendsSubmenuRender'
 import { dashboardSubmenuRender } from './dashboardSubmenuRender'
 import { gameHistorySubmenuRender } from './gameHistorySubmenuRender'
+import { editProfileSubmenuRender } from './editProfileSubmenuRender'
 
 interface User {
   login: string;
@@ -79,7 +80,7 @@ export const userLoggedSidebar = {
 		${gameHistorySubmenuRender()}
 		${gameSettingsSubmenuRender()}
 	</div>
-
+		${editProfileSubmenuRender()}
 
 	${logoutButtonRender()}
   `;
