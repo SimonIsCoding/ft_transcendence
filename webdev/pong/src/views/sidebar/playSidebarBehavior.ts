@@ -15,28 +15,28 @@ function swapPlayer(id1: string, id2: string): void
 	}
 }
 
-function swapElements(id1: string, id2: string){
-  const el1 = document.getElementById(id1);
-  const el2 = document.getElementById(id2);
+function swapElements(id1: string, id2: string)
+{
+	const el1 = document.getElementById(id1);
+	const el2 = document.getElementById(id2);
 
-  if (!el1 || !el2) return;
+	if (!el1 || !el2)
+		return;
 
-  const parent = el1.parentNode;
-  const next1 = el1.nextSibling;
-  const next2 = el2.nextSibling;
+	const parent = el1.parentNode;
+	const next1 = el1.nextSibling;
+	const next2 = el2.nextSibling;
 
-  if (next1 === el2) {
-    parent!.insertBefore(el2, el1);
-  }
-  else if (next2 === el1) {
-    parent!.insertBefore(el1, el2);
-  }
-  else {
-    parent!.insertBefore(el1, next2);
-    parent!.insertBefore(el2, next1);
-  }
+	if (next1 === el2)
+		parent!.insertBefore(el2, el1);
+	else if (next2 === el1)
+		parent!.insertBefore(el1, el2);
+	else
+	{
+		parent!.insertBefore(el1, next2);
+		parent!.insertBefore(el2, next1);
+	}
 }
-
 
 export function oneVsOneAreaInit()
 {
@@ -48,9 +48,9 @@ export function oneVsOneAreaInit()
 		gameArea?.classList.add('hidden');
 		oneVsOneArea?.classList.remove('hidden');
 		oneVsAIArea?.classList.add('hidden');
-		document.getElementById("swapBtn")?.addEventListener("click", () => {
-			swapPlayer("player1", "player2");
-		});
+	});
+	document.getElementById("swapBtn")?.addEventListener("click", () => {
+		swapPlayer("player1", "player2");
 	});
 
 	const playBtn = document.getElementById('playOneVsOneBtn') as HTMLButtonElement | null;
@@ -76,9 +76,9 @@ export function oneVsAIAreaInit()
 		gameArea?.classList.add('hidden');
 		oneVsOneArea?.classList.add('hidden');
 		oneVsAIArea?.classList.remove('hidden');
-		document.getElementById("swapAIBtn")?.addEventListener("click", () => {
-			swapElements("player1VSAI", "AIPlayer");
-		});
+	});
+	document.getElementById("swapAIBtn")?.addEventListener("click", () => {
+		swapElements("player1VSAI", "AIPlayer");
 	});
 
 	const playBtn = document.getElementById('playOneVsAIBtn') as HTMLButtonElement | null;
