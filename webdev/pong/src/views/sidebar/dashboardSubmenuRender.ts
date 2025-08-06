@@ -40,7 +40,7 @@ export function dashboardSubmenuRender():string
 				<div class="w-1/2 rounded-2xl flex flex-col justify-between mr-0.5">
 					<div class="w-full h-1/2 bg-black rounded-2xl mb-0.5">
 						<div class="flex flex-col items-center justify-center text-center mt-2">${barChartSVG()}</div>
-						<p id="gameWon" class="text-yellow-400 font-bold text-center justify-center text-base px-4 mb-2">7 games won</p>
+						<p id="gameWon" class="text-yellow-400 font-bold text-center justify-center text-base px-4 mb-2">7 wins</p>
 					</div>
 					<div class="w-full h-1/2 bg-black rounded-2xl mt-0.5">
 						<div class="flex flex-col items-center justify-center text-center mt-4">
@@ -51,8 +51,14 @@ export function dashboardSubmenuRender():string
 				</div>
 				<!-- this is the second column -->
 				<div class="w-1/2 rounded-2xl flex flex-col justify-between ml-0.5">
-					<div class="w-full h-1/2 bg-black rounded-2xl mb-0.5"></div>
-					<div class="w-full h-1/2 bg-black rounded-2xl mt-0.5"></div>
+					<div class="w-full h-1/2 bg-black rounded-2xl mb-0.5">
+						<div class="flex flex-col items-center justify-center text-center mt-2">${barChartSVG()}</div>
+						<p id="gameWon" class="text-yellow-400 font-bold text-center justify-center text-base px-4 mb-2">2 losses</p>
+					</div>
+					<div class="w-full h-1/2 bg-black rounded-2xl mt-0.5">
+						<div class="flex flex-col items-center justify-center text-center mt-2">${barChartSVG()}</div>
+						<p id="gameWon" class="text-yellow-400 font-bold text-center justify-center text-base px-4">87 points scored</p>
+					</div>
 				</div>
 			</div>
 			<div class="w-full h-1/3 bg-black rounded-2xl"></div>
