@@ -56,6 +56,7 @@ export function profileSidebarBehavior()
 	const friendsSubmenu = document.getElementById("friendsSubmenu");
 	const dashboardSubmenu = document.getElementById("dashboardSubmenu");
 	const gameHistorySubmenu = document.getElementById("gameHistorySubmenu");
+	// const editProfileSubmenu = document.getElementById("editProfileSubmenu");
 
 	const playSidebarBtn = document.getElementById('profileSidebarBtn');
 	playSidebarBtn?.addEventListener('click', () => {
@@ -104,6 +105,33 @@ export function profileSidebarBehavior()
 		});
 	});
 
+	// const editProfileBtn = document.getElementById("editProfileBtn");
+	// editProfileBtn?.addEventListener('click', () => {
+	// 	dashboardSubmenu?.classList.add('hidden');
+	// 	friendsSubmenu?.classList.add('hidden');
+	// 	gameHistorySubmenu?.classList.add('hidden');
+	// 	editProfileSubmenu?.classList.remove('hidden');
+	// 	openMenu('editProfileSubmenu');
+		// openMenu('largeSubmenu');
+		// const backBtnGameHistorySubmenu = document.getElementById("backBtnGameHistorySubmenu");
+		// backBtnGameHistorySubmenu?.addEventListener('click', () => {
+		// 	closeAllMenus(submenus);
+		// 	toggleMenuVisibility('profileSubmenu', submenus);
+		// });
+	// });
+	editProfileSubmenuBehavior();
+}
+
+export function editProfileSubmenuBehavior()
+{
+	const submenus = document.querySelectorAll<HTMLElement>('.submenu');
+	const editProfileBtn = document.getElementById("editProfileBtn");
+	const editProfileSubmenu = document.getElementById("editProfileSubmenu");
+
+	editProfileBtn?.addEventListener('click', () => {
+		toggleMenuVisibility('editProfileSubmenu', submenus);
+		editProfileSubmenu?.classList.remove("hidden");
+	});
 }
 
 //open and close settingsSubmenu
