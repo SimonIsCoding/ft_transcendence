@@ -46,20 +46,6 @@ export const oneVsOneArea = {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function AIsvg(): string
 {
 	return `
