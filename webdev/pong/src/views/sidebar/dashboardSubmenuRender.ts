@@ -40,11 +40,12 @@ export function dashboardSubmenuRender():string
 				<div class="w-1/2 rounded-2xl flex flex-col justify-between mr-0.5">
 					<div class="w-full h-1/2 bg-black rounded-2xl mb-0.5">
 						<div class="flex flex-col items-center justify-center text-center mt-2">${barChartSVG()}</div>
-						<p id="gameWon" class="text-yellow-400 font-bold text-center justify-center text-base px-4 pb-2">7 games won</p>
+						<p id="gameWon" class="text-yellow-400 font-bold text-center justify-center text-base px-4 mb-2">7 games won</p>
 					</div>
 					<div class="w-full h-1/2 bg-black rounded-2xl mt-0.5">
-						<div class="flex flex-col items-center justify-center text-center mt-2">
+						<div class="flex flex-col items-center justify-center text-center mt-4">
 						${nbFriendsSVG()}
+						<p id="nbFriends" class="text-yellow-400 font-bold text-center justify-center text-base px-4 mb-2">2 Friends</p>
 						</div>
 					</div>
 				</div>
