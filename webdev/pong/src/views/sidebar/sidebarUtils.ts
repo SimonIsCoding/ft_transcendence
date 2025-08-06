@@ -16,6 +16,7 @@ export function renderBackButton(id: string): string
 // for button 'playSidebarBtn' & 'profileSidebarBtn', this function open and close the submenu
 export function toggleMenuVisibility(targetId: string | null, submenus: NodeListOf<HTMLElement>)
 {
+	console.log(`[${new Date().toLocaleTimeString()}] clicked on toggleMenuVisibility`);
 	submenus.forEach(menu => {
 		if (menu.id === targetId)
 		{
@@ -139,7 +140,16 @@ export function editProfileBehavior()
 	const profileSubmenu = document.getElementById("profileSubmenu");
 	const editProfileSubmenu = document.getElementById("editProfileSubmenu");
 	const profileSidebarBtn = document.getElementById("profileSidebarBtn");
+	const editProfileBtn = document.getElementById("editProfileBtn");
 	const submenus = document.querySelectorAll<HTMLElement>('.submenu');
+
+	editProfileBtn?.addEventListener('click', () => {
+		console.log("entered in Display editProfileBtn");
+		editProfileSubmenu?.classList.add("max-h-screen");
+		editProfileSubmenu?.classList.remove("max-h-0");
+		editProfileSubmenu?.classList.remove("hidden");
+		console.log("editProfileSubmenu classes:", editProfileSubmenu?.classList.value);
+	});
 
 	profileSidebarBtn?.addEventListener('click', () => {
 		console.log("Profile Btn clicked");
@@ -160,16 +170,13 @@ export function editProfileBehavior()
 				menu.classList.add("max-h-0");
 				// menu.classList.add("hidden");
 			});
-
-			editProfileSubmenu?.classList.add("hidden");
 		}
 		else
 		{
 			console.log("entered in else => opening profileSubmenu");
 			toggleMenuVisibility('profileSubmenu', submenus);
-			// profileSubmenu?.classList.remove("hidden");
-			// profileSubmenu?.classList.remove("max-h-0");
-			// profileSubmenu?.classList.add("max-h-screen");
+			editProfileSubmenu?.classList.add("max-h-0");
+			editProfileSubmenu?.classList.remove("max-h-screen");
 		}
 
 		console.log("final");
