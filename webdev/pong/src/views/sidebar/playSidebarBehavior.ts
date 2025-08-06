@@ -2,7 +2,8 @@ import{ toggleMenuVisibility } from './sidebarUtils'
 import { Router } from '../../router';
 import { showErrorPopup } from '../../utils/utils';
 
-function swapPlayer(id1: string, id2: string): void {
+function swapPlayer(id1: string, id2: string): void
+{
 	const input1 = document.getElementById(id1) as HTMLInputElement | null;
 	const input2 = document.getElementById(id2) as HTMLInputElement | null;
 
@@ -13,6 +14,29 @@ function swapPlayer(id1: string, id2: string): void {
 		input2.value = tmp;
 	}
 }
+
+function swapElements(id1: string, id2: string){
+  const el1 = document.getElementById(id1);
+  const el2 = document.getElementById(id2);
+
+  if (!el1 || !el2) return;
+
+  const parent = el1.parentNode;
+  const next1 = el1.nextSibling;
+  const next2 = el2.nextSibling;
+
+  if (next1 === el2) {
+    parent!.insertBefore(el2, el1);
+  }
+  else if (next2 === el1) {
+    parent!.insertBefore(el1, el2);
+  }
+  else {
+    parent!.insertBefore(el1, next2);
+    parent!.insertBefore(el2, next1);
+  }
+}
+
 
 export function oneVsOneAreaInit()
 {
@@ -52,8 +76,8 @@ export function oneVsAIAreaInit()
 		gameArea?.classList.add('hidden');
 		oneVsOneArea?.classList.add('hidden');
 		oneVsAIArea?.classList.remove('hidden');
-		document.getElementById("swapBtn")?.addEventListener("click", () => {
-			swapPlayer("player1VSAI", "AIPlayer");
+		document.getElementById("swapAIBtn")?.addEventListener("click", () => {
+			swapElements("player1VSAI", "AIPlayer");
 		});
 	});
 
