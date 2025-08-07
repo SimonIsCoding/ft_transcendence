@@ -29,10 +29,6 @@ app.register(fastifyCors, {
   credentials: true,
 });
 
-app.register(fastifyCors, {
-  origin: 'https://localhost:4443',
-  credentials: true,
-});
 
 app.register(fastifyJwt, {
   secret: 'super-secret-key',// you should put it in a env file
