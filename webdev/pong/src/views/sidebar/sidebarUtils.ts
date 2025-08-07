@@ -57,12 +57,6 @@ export function profileSidebarBehavior()
 	const friendsSubmenu = document.getElementById("friendsSubmenu");
 	const dashboardSubmenu = document.getElementById("dashboardSubmenu");
 	const gameHistorySubmenu = document.getElementById("gameHistorySubmenu");
-	// const editProfileSubmenu = document.getElementById("editProfileSubmenu");
-
-	// const profileSidebarBtn = document.getElementById('profileSidebarBtn');
-	// profileSidebarBtn?.addEventListener('click', () => {
-	// 	toggleMenuVisibility('profileSubmenu', submenus);
-	// });
 
 	const dashboardBtn = document.getElementById("DashboardBtn");
 	dashboardBtn?.addEventListener('click', () => {
@@ -106,34 +100,8 @@ export function profileSidebarBehavior()
 		});
 	});
 
-	// const editProfileBtn = document.getElementById("editProfileBtn");
-	// editProfileBtn?.addEventListener('click', () => {
-	// 	dashboardSubmenu?.classList.add('hidden');
-	// 	friendsSubmenu?.classList.add('hidden');
-	// 	gameHistorySubmenu?.classList.add('hidden');
-	// 	editProfileSubmenu?.classList.remove('hidden');
-	// 	openMenu('editProfileSubmenu');
-		// openMenu('largeSubmenu');
-		// const backBtnGameHistorySubmenu = document.getElementById("backBtnGameHistorySubmenu");
-		// backBtnGameHistorySubmenu?.addEventListener('click', () => {
-		// 	closeAllMenus(submenus);
-		// 	toggleMenuVisibility('profileSubmenu', submenus);
-		// });
-	// });
 	editProfileBehavior();
 }
-
-// export function editProfileSubmenuBehavior()
-// {
-// 	const submenus = document.querySelectorAll<HTMLElement>('.submenu');
-// 	const editProfileBtn = document.getElementById("editProfileBtn");
-// 	const editProfileSubmenu = document.getElementById("editProfileSubmenu");
-
-// 	editProfileBtn?.addEventListener('click', () => {
-// 		toggleMenuVisibility('editProfileSubmenu', submenus);
-// 		editProfileSubmenu?.classList.remove("hidden");
-// 	});
-// }
 
 export function editProfileBehavior()
 {
@@ -145,11 +113,9 @@ export function editProfileBehavior()
 	const backBtnEditProfileSubmenu = document.getElementById("backBtnEditProfileSubmenu");
 
 	editProfileBtn?.addEventListener('click', () => {
-		console.log("entered in Display editProfileBtn");
 		editProfileSubmenu?.classList.add("max-h-screen");
 		editProfileSubmenu?.classList.remove("max-h-0");
 		editProfileSubmenu?.classList.remove("hidden");
-		console.log("editProfileSubmenu classes:", editProfileSubmenu?.classList.value);
 
 		backBtnEditProfileSubmenu?.addEventListener('click', () => {
 			editProfileSubmenu?.classList.add("max-h-0");
@@ -158,36 +124,22 @@ export function editProfileBehavior()
 	});
 
 	profileSidebarBtn?.addEventListener('click', () => {
-		console.log("Profile Btn clicked");
-
-		// LOG état actuel des classes
-		console.log("profileSubmenu classes:", profileSubmenu?.classList.value);
-		console.log("editProfileSubmenu classes:", editProfileSubmenu?.classList.value);
-
 		const isProfileOpen = profileSubmenu?.classList.contains("max-h-screen");
 		const isEditProfileOpen = editProfileSubmenu?.classList.contains("max-h-screen");
 
 		if (isProfileOpen || isEditProfileOpen)
 		{
-			console.log("entered in isOpen condition");
-
 			submenus.forEach(menu => {
 				menu.classList.remove("max-h-screen");
 				menu.classList.add("max-h-0");
-				// menu.classList.add("hidden");
 			});
 		}
 		else
 		{
-			console.log("entered in else => opening profileSubmenu");
 			toggleMenuVisibility('profileSubmenu', submenus);
 			editProfileSubmenu?.classList.add("max-h-0");
 			editProfileSubmenu?.classList.remove("max-h-screen");
 		}
-
-		console.log("final");
-		console.log("profileSubmenu classes:", profileSubmenu?.classList.value);
-
 	});
 }
 
