@@ -1,5 +1,5 @@
 import { TournamentController } from '../controllers/TournamentController';
-import { userUnloggedSidebar } from './sidebarBehavior';
+import { userUnloggedSidebar } from './sidebar/sidebarBehavior';
 import { playButton } from './playButton';
 import { TournamentModel } from '../models/TournamentModel';
 // import { GameView } from '../views/game';
