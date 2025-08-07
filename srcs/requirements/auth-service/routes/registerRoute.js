@@ -1,7 +1,7 @@
 import db from '../src/database.js';
 import bcrypt from 'bcrypt';
 
-async function hashPassword(password)
+export async function hashPassword(password)
 {
   const saltRounds = 10;
   const hash = await bcrypt.hash(password, saltRounds);

@@ -48,7 +48,7 @@ export async function getUserInfo()
 	});
 }
 
-import { showErrorPopup } from "../utils/utils";
+import { showErrorPopup, isValidEmail } from "../utils/utils";
 
 export async function editProfileService()
 {
@@ -70,12 +70,21 @@ export async function editProfileService()
 		return ; //depending which page is shown - is a bit repetitive but well - the popup could be put outside the <main> tag as well
 	}
 
+	if ((changeMail && changeMail.trim() !== "") && isValidEmail(changeMail) === false)
+	{
+		showErrorPopup("The mail format is not valid.", "successPopup");
+		showErrorPopup("The mail format is not valid.", "oneVsOneAreaPopup");
+		showErrorPopup("The mail format is not valid.", "oneVsAIAreaPopup");
+		return ;
+	}
+
 	console.log("entered in editProfileService <=> fetch on /changeInfo");
+	console.log("currentPassword = ", currentPassword);
 	fetch('/api/auth/changeInfo', {
 		method: 'POST',
 		credentials: 'include',
 		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ currentPassword: currentPassword, changePassword: changePassword, repeatPassword: repeatPassword, changeMail: changeMail })
+		body: JSON.stringify({ login: login, currentPassword: currentPassword, changePassword: changePassword, changeMail: changeMail })
 
 	})
 	.then(res => res.json())
