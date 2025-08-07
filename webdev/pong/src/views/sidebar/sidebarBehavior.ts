@@ -3,14 +3,14 @@ import { isConnected } from "../../services/sidebar"
 import { loadExistingProfilePicture, uploadProfilePicture } from "../../utils/profilePictureUtils";
 import { initLogout } from '../../services/logoutService';
 import { setupMenuHandlers } from './sidebarUtils';
-import { gameSettingsSubmenuRender } from './gameSettingsSubmenuRender';
+import { gameSettingsSubmenuRender } from './settingsBtn/gameSettingsSubmenuRender';
 import { logoutButtonRender } from './logoutButtonRender';
-import { profileSubmenuRender } from './profileSubmenuRender'
-import { playSubmenuRender } from './playSubmenuRender'
-import { friendsSubmenuRender } from './friendsSubmenuRender'
-import { dashboardSubmenuRender } from './dashboardSubmenuRender'
-import { gameHistorySubmenuRender } from './gameHistorySubmenuRender'
-import { editProfileSubmenuRender } from './editProfileSubmenuRender'
+import { profileSubmenuRender } from './profileBtn/profileSubmenuRender'
+import { playSubmenuRender } from './playBtn/playSubmenuRender'
+import { friendsSubmenuRender } from './profileBtn/friendsSubmenuRender'
+import { dashboardSubmenuRender } from './profileBtn/dashboardSubmenuRender'
+import { gameHistorySubmenuRender } from './profileBtn/gameHistorySubmenuRender'
+import { editProfileSubmenuRender } from './profileBtn/editProfileSubmenuRender'
 
 interface User {
   login: string;

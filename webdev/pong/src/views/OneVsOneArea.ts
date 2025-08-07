@@ -1,6 +1,5 @@
 // import { Router } from "../router";
-import { oneVsOneAreaInit } from "./sidebar/playSidebarBehavior";
-import { oneVsAIAreaInit } from "./sidebar/playSidebarBehavior";
+import { oneVsOneAreaInit, oneVsAIAreaInit } from "./sidebar/playBtn/playSidebarBehavior";
 
 interface User {
   login: string;
