@@ -36,24 +36,35 @@ export async function initLogin() {
       if (loginData.requires2FA) {
         const loginForm = document.getElementById("loginCredentials");
         const twofaContainer = document.getElementById("twofa-container");
-  
+ 
+		console.log('Pre-Check:', {
+  		  loginFormExists: !!loginForm,
+  		  twofaContainerExists: !!twofaContainer,
+  		  loginData: loginData
+  		});
+
         if (loginForm && twofaContainer) {
           loginForm.classList.add('hidden');
           twofaContainer.classList.remove('hidden');
           
           if (!twofaContainer.firstChild) {
+	
+			console.log('Attempting TwoFAController creation');
+
             twofaContainer.appendChild(
               new TwoFAController(
                 loginData.mail,
                 'login',
                 loginData.token,
                 () => {
+			      console.log('2FA Success callback triggered');
                   loginForm.classList.add('hidden');
                   twofaContainer.classList.add('hidden');
                   handleSuccessfulLogin(loginData.login);
                 },
                 twofaContainer,
                 (message, isFinal) => {
+				  console.log(`2FA Error: ${message}`, isFinal);
                   showErrorPopup(message);
                   if (isFinal) {
                     sessionStorage.setItem('loginError', message);
@@ -69,6 +80,8 @@ export async function initLogin() {
                 }
               ).init()
             );
+			console.log('Controller instance init:');
+
           }
         }
       } else {
