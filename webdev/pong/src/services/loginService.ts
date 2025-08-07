@@ -1,69 +1,119 @@
 import { Router } from '../router';
-import { showSuccessPopup } from '../utils/utils';
-// import { hashPassword } from '../../../../srcs/requirements/auth-service/routes/registerRoute.js'
-import { showErrorPopup } from '../utils/utils';
+import { showSuccessPopup, showErrorPopup } from '../utils/utils';
+import { TwoFAController } from '../controllers/twofaController';
 
-// --- form to log in
-export async function initLogin()
-{
-	const status = await fetch('/api/auth/status', { credentials: 'include' })
-				 .then(res => res.json());
-	if (status.authenticated)
-	{
-		Router.navigate('home');
-		showErrorPopup("You are already connected. You can't access to the login page.");
-		return;
-	}
+export async function initLogin() {
+  const status = await fetch('/api/auth/status', { credentials: 'include' })
+    .then(res => res.json());
+  
+  if (status.authenticated) {
+    Router.navigate('home');
+    showErrorPopup("You are already connected. You can't access the login page.");
+    return;
+  }
 
-	const submitBtn = document.getElementById("connectionBtn") as HTMLButtonElement;
-	submitBtn.addEventListener("click", async () => {
+  const submitBtn = document.getElementById("connectionBtn") as HTMLButtonElement;
+  submitBtn.addEventListener("click", async () => {
+    const login = (document.getElementById("login") as HTMLInputElement).value;
+    const password = (document.getElementById("password") as HTMLInputElement).value;
+    submitBtn.disabled = true;
 
-		const login = (document.getElementById("login") as HTMLInputElement).value;
-		const password = (document.getElementById("password") as HTMLInputElement).value;
-		// const encryptedPassword = await hashPassword(password);
-		// you have to encrypt before fetch. One question: while using bcrypt.compare, I will have 2 hashed psswd. Is it a pb using this function that way ?
+    try {
+      const loginResponse = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ login, password }),
+        credentials: 'include'
+      });
 
-		fetch('/api/auth/login', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ login: login, password: password }),
-		credentials: 'include'
-		})
-		.then(res => res.json())
-		.then(data =>
-		{
-			localStorage.setItem('login', login);
-			const username = localStorage.getItem('login');
+      const loginData = await loginResponse.json();
 
-			const connectionMsgId = "connectionMsg";
-			let connectionMsg = document.getElementById(connectionMsgId) as HTMLParagraphElement | null;
-			if (username && data.success === true)
-			{
-				fetch('/api/auth/info', {
-					credentials: 'include'
-				})
-				.then(res => {
-					if (res.ok)
-					{
-						fetch('/api/auth/infoUser', { credentials: 'include' })
-						.then(res => res.json())
-						Router.navigate('home');
-						showSuccessPopup("You are logged");
-					}
-				});
-			}
-			else if (!connectionMsg)
-			{
-				connectionMsg = document.createElement("p");
-				connectionMsg.id = "connectionMsg";//in order to avoid duplicates
-				connectionMsg.classList.add("text-white", "px-1", "py-1", "text-xl");
-				connectionMsg.textContent = `Sorry. Your credentials doesn't match`;
-				const connectionBtn = document.getElementById("connectionBtn");
-				if (connectionBtn)
-					connectionBtn.insertAdjacentElement("afterend", connectionMsg);
-			}
-			
-			});
-			console.log("login: ", login, "Password:", password);// to erase for PROD
-		});
+      if (!loginResponse.ok) {
+        showLoginError(loginData.message || "Login failed");
+        return;
+      }
+
+      if (loginData.requires2FA) {
+        const loginForm = document.getElementById("loginCredentials");
+        const twofaContainer = document.getElementById("twofa-container");
+  
+        if (loginForm && twofaContainer) {
+          loginForm.classList.add('hidden');
+          twofaContainer.classList.remove('hidden');
+          
+          if (!twofaContainer.firstChild) {
+            twofaContainer.appendChild(
+              new TwoFAController(
+                loginData.mail,
+                'login',
+                loginData.token,
+                () => {
+                  loginForm.classList.add('hidden');
+                  twofaContainer.classList.add('hidden');
+                  handleSuccessfulLogin(loginData.login);
+                },
+                twofaContainer,
+                (message, isFinal) => {
+                  showErrorPopup(message);
+                  if (isFinal) {
+                    sessionStorage.setItem('loginError', message);
+                    fetch('/api/auth/invalidate', {
+                      method: 'POST',
+                      credentials: 'include'
+                    }).finally(() => {
+                      (document.getElementById('password') as HTMLInputElement).value = '';
+                      loginForm.classList.remove('hidden');
+                      twofaContainer.classList.add('hidden');
+                    });
+                  }
+                }
+              ).init()
+            );
+          }
+        }
+      } else {
+        handleSuccessfulLogin(login);
+      }
+    } catch (error) {
+      showLoginError("Network error during login");
+      console.error("Login error:", error);
+    } finally {
+      submitBtn.disabled = false;
+    }
+  });
+}
+
+function handleSuccessfulLogin(username: string): void {
+  localStorage.setItem('login', username);
+  
+  fetch('/api/auth/info', { credentials: 'include' })
+    .then(res => {
+      if (res.ok) {
+        return fetch('/api/auth/infoUser', { credentials: 'include' });
+      }
+      throw new Error("Failed to get user info");
+    })
+    .then(() => {
+      Router.navigate('home');
+      showSuccessPopup("You are logged in");
+    })
+    .catch(error => {
+      console.error("User info error:", error);
+      showErrorPopup("Login complete but couldn't load user data");
+      Router.navigate('home');
+    });
+}
+
+function showLoginError(message: string): void {
+  let errorMsg = document.getElementById("connectionMsg");
+  if (!errorMsg) {
+    errorMsg = document.createElement("p");
+    errorMsg.id = "connectionMsg";
+    errorMsg.classList.add("text-white", "px-1", "py-1", "text-xl");
+    const connectionBtn = document.getElementById("connectionBtn");
+    if (connectionBtn) {
+      connectionBtn.insertAdjacentElement("afterend", errorMsg);
+    }
+  }
+  errorMsg.textContent = message;
 }

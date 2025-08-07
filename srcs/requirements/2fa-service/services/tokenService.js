@@ -31,9 +31,20 @@ export const verifyToken = async (email, token) => {
 };
 
 export const deleteToken = async (email) => {
-  db.prepare('DELETE FROM tokens WHERE email = ?').run(email);
+  try {
+    db.prepare('DELETE FROM tokens WHERE email = ?').run(email);
+  } catch (error) {
+    console.error(`Failed to delete token for ${email}:`, error);
+    // Fail silently for delete operations
+  }
 };
 
-// Alternative if you prefer default export:
-// export default { generateToken, storeToken, verifyToken, deleteToken };
-
+// Optional cleanup of expired tokens
+export const cleanupExpiredTokens = async () => {
+  try {
+    db.prepare('DELETE FROM tokens WHERE expires_at <= ?')
+      .run(Math.floor(Date.now() / 1000));
+  } catch (error) {
+    console.error('Failed to cleanup expired tokens:', error);
+  }
+};

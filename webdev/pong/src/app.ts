@@ -8,7 +8,6 @@ window.addEventListener('load', () => {
 	path.includes('register') ? 'register' :
 	path.includes('game') ? 'game' :
 	'home' , 
-	undefined,
     false
   );
 });
@@ -21,6 +20,5 @@ window.addEventListener('popstate', () => {
 	path.includes('register') ? 'register' :
 	path.includes('game') ? 'game' :
 	'home' ,
-    undefined,
     false);
 });
