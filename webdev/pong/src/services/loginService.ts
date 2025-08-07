@@ -3,6 +3,8 @@ import { showSuccessPopup, showErrorPopup } from '../utils/utils';
 import { TwoFAController } from '../controllers/twofaController';
 
 export async function initLogin() {
+  console.log('1 - Login service initialized'); // Basic log
+
   const status = await fetch('/api/auth/status', { credentials: 'include' })
     .then(res => res.json());
   
@@ -28,6 +30,10 @@ export async function initLogin() {
 
       const loginData = await loginResponse.json();
 
+	  console.log('login info:', {
+  		  loginData: loginData
+  	  });
+
       if (!loginResponse.ok) {
         showLoginError(loginData.message || "Login failed");
         return;
@@ -46,8 +52,17 @@ export async function initLogin() {
         if (loginForm && twofaContainer) {
           loginForm.classList.add('hidden');
           twofaContainer.classList.remove('hidden');
-          
-          if (!twofaContainer.firstChild) {
+console.log('Container State:', {
+  outerHTML: twofaContainer.outerHTML,
+  children: twofaContainer.children.length,
+  querySelector: twofaContainer.querySelector('*'),
+  childNodes: Array.from(twofaContainer.childNodes).map(node => ({
+    type: node.nodeType,
+    name: node.nodeName,
+    content: node.nodeValue?.trim()
+  }))
+}); 
+          if (twofaContainer.querySelector('*') === null) {
 	
 			console.log('Attempting TwoFAController creation');
 

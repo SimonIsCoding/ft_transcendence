@@ -29,8 +29,19 @@ export class TwoFAController {
 
   public init(): HTMLElement {
     // Use twofaView.render() instead of local render method
+  console.log('Rendering 2FA template for:', this.email); // Add this
+
     const view = document.createElement('div');
     view.innerHTML = twofaView.render(this.email);
+  // DEBUG: Check if template rendered
+  if (!view.innerHTML.includes('twofaForm')) {
+    console.error('Template failed to render!', {
+      templateOutput: twofaView.render(this.email),
+      email: this.email
+    });
+    throw new Error('2FA template error');
+  }
+
     this.setupEventListeners(view);
     return view;
   }
