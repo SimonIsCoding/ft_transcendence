@@ -26,6 +26,6 @@ export const playButton = {
   init(): void
   {
 	const playBtn = document.getElementById('playBtn') as HTMLButtonElement | null;
-	playBtn!.addEventListener('click', () => { Router.navigate('game'); })
+	playBtn?.addEventListener('click', () => { Router.navigate('game'); })
   }
 }

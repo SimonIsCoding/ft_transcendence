@@ -17,14 +17,32 @@ class Game {
   private keysPressed: Record<string, boolean> = {};
   private showCollisionZones = false;
   private maxPoints: number = 11;
+  private onFinishCallback: ((winner: string) => void) | null = null;
+  private player1Name: string = "";
+  private player2Name: string = "";
 
-  init() {
+  init(player1Alias = "Jugador 1", player2Alias = "Jugador 2", onFinish?: (winner: string) => void) {
+    this.player1Name = player1Alias;
+    this.player2Name = player2Alias;
+    console.log(this.player1Name)
+    console.log(this.player2Name)
+    this.onFinishCallback = onFinish ?? null;
     this.canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
     this.ctx = this.canvas.getContext('2d')!;
     this.resizeCanvas();
 //	GameSounds.init();
     window.addEventListener('resize', () => this.resizeCanvas());
     this.startLoop();
+  }
+
+  public setPlayersAndCallback(player1Alias: string, player2Alias: string, onFinish?: (winner: string) => void) {
+    this.player1Name = player1Alias;
+    this.player2Name = player2Alias;
+    this.onFinishCallback = onFinish ?? null;
+    // Si necesitas reiniciar solo el marcador y la bola, hazlo aquí:
+    this.scorePlayer1 = 0;
+    this.scorePlayer2 = 0;
+    // ...y cualquier otro estado del juego que quieras resetear
   }
 
   private resizeCanvas() {
@@ -101,6 +119,16 @@ class Game {
     }
 
     if (this.scorePlayer1 >= this.maxPoints || this.scorePlayer2 >= this.maxPoints) {
+      const winner = this.scorePlayer1 > this.scorePlayer2
+      ? this.player1Name
+      : this.player2Name;
+
+      
+
+      if (this.onFinishCallback) {
+        this.onFinishCallback(winner);
+        // alert(`${winner} ha ganado esta partida`);
+      }
       this.scorePlayer1 = 0;
       this.scorePlayer2 = 0;
     }
@@ -188,6 +216,20 @@ class Game {
   }
 
   private drawScore() {
+
+    this.ctx.font = `${this.virtualCanvas.toPhysicalSize(24)}px monospace`;
+    this.ctx.fillText(
+      this.player1Name,
+      this.virtualCanvas.toPhysicalX(GAME_CONFIG.BASE_WIDTH / 4),
+      this.virtualCanvas.toPhysicalY(100)
+    );
+
+    this.ctx.fillText(
+      this.player2Name,
+      this.virtualCanvas.toPhysicalX((GAME_CONFIG.BASE_WIDTH * 3) / 4),
+      this.virtualCanvas.toPhysicalY(100)
+    );
+
     const fontSize = this.virtualCanvas.toPhysicalSize(48);
     this.ctx.font = `${fontSize}px 'DSEG7ClassicMini', monospace`;
     this.ctx.textAlign = 'center';
@@ -255,10 +297,14 @@ const gameInstance = new Game();
 
 export const GameView = {
   renderGameCanvas: () => gameInstance.render(),
-  initGameCanvas: () => gameInstance.init(),
+  initGameCanvas: (player1Alias?: string,
+    player2Alias?: string,
+    onFinish?: (winner: string) => void) => gameInstance.init(player1Alias, player2Alias, onFinish),
   stop: () => gameInstance.stop(),
   setBallSpeedMultiplier: (multiplier: number) => gameInstance.setBallSpeedMultiplier(multiplier),
   setPaddleSize: (size: number) => gameInstance.setPaddleSize(size),
+  setPlayersAndCallback: (player1Alias: string, player2Alias: string, onFinish?: (winner: string) => void) =>
+    gameInstance.setPlayersAndCallback(player1Alias, player2Alias, onFinish),
   setMaxPoints: (points: number) => gameInstance.setMaxPoints(points),
   setPlayerType(playerId: string, type: 'me' | 'alias' | 'remote' | 'ia'): void {
     // Implementation here
