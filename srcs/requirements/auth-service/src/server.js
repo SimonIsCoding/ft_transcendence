@@ -13,7 +13,8 @@ import { auth } from '../plugins/auth.js';
 import { uploadProfilePictureRoute } from '../routes/uploadProfilePictureRoute.js';
 import { logoutRoute } from '../routes/logoutRoute.js';
 import { infoUserRoute } from '../routes/infoUserRoute.js';
-import { statusRoute } from '../routes/userLoggedRoute.js';
+import { statusRoute, userLoggedRoute } from '../routes/userLoggedRoute.js';
+import { editProfileRoute } from '../routes/editProfileRoute.js';
 import db from './database.js';
 
 const app = fastify();
@@ -54,6 +55,8 @@ await uploadProfilePictureRoute(app);
 await infoUserRoute(app);
 await logoutRoute(app);
 await statusRoute(app);
+await userLoggedRoute(app);
+app.register(editProfileRoute);
 
 //maybe you could put it in a specific file 
 app.get('/info', { preHandler: [app.auth] }, async (request, reply) => {
