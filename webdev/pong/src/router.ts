@@ -4,6 +4,9 @@ import { registerView } from './views/registerView';
 import { GameView } from './views/game';
 import { gameController } from './controllers/gameController';
 import { initTwoFAController } from './controllers/twofaController';
+// import { TournamentView } from './views/TournamentView.ts';
+import { TournamentController } from './controllers/TournamentController.ts';
+import { TournamentModel } from './models/TournamentModel.ts';
 
 interface User {
   login: string;
@@ -18,7 +21,7 @@ export class Router {
   public static currentUser: User | null;
 
   public static navigate(
-    page: 'home' | 'login' | 'register' | 'game' | 'twofa',
+    page: 'home' | 'login' | 'register' | 'game' | 'twofa' | 'tournament',
     params?: { email?: string },  // Changed from login to email
     addToHistory = true
   ): void {
@@ -60,8 +63,20 @@ export class Router {
         gameArea!.innerHTML = '';
         gameArea!.appendChild(initTwoFAController(params.email));
         break;
-    }
 
+  case 'tournament':
+    this.app.innerHTML = GameView.renderGameCanvas();
+    console.log('antes de iniciar el juego')
+    GameView.initGameCanvas();
+    console.log('despues de iniciar el juego')
+    const controller = new TournamentController(new TournamentModel());
+    controller.iniciarTorneo();
+    gameController.init();
+    // this.app.innerHTML = TournamentView.render();
+    // TournamentView.init();
+    break;
+  }
+    
 
   if (addToHistory)
     history.pushState({}, '', page === 'home' ? '/' : `/${page}`);
@@ -76,6 +91,7 @@ export class Router {
 	  path.includes('register') ? 'register' :
 	  path.includes('game') ? 'game' :
       path.includes('twofa') ? 'twofa' :
+	  path.includes('tournament') ? 'tournament' :
 	  'home', undefined,
 	  false);
     });
@@ -88,6 +104,7 @@ export class Router {
 	  path.includes('register') ? 'register' :
 	  path.includes('game') ? 'game' :
       path.includes('twofa') ? 'twofa' :
+	  path.includes('tournament') ? 'tournament' :
 	  'home' ,
 	  undefined,
 	  false);
