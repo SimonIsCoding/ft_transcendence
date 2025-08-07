@@ -1,97 +1,137 @@
 import { twofaView } from '../views/twofaView';
-import { twoFAService } from '../services/twofaService';
 import { Router } from '../router';
 
-let resendTimer: number;
-let currentEmail: string;
+export class TwoFAController {
+  private attempts = 0;
+  private readonly maxAttempts = 3;
+  private readonly email: string;
+  private readonly flowType: 'login' | 'register';
+  private readonly authToken: string;
+  private readonly onSuccess: () => void;
+  private readonly container: HTMLElement;
+  private readonly onFailure?: (message: string, isFinal: boolean) => void;
 
-export function initTwoFAController(email: string): HTMLElement { 
-  currentEmail = email;  // Store email instead of login
-  const container = document.createElement('div');
-  container.innerHTML = twofaView.createTwoFAView(email);
-  setupEventListeners(container);
-  startTwoFAFlow();
-  return container;
-}
-
-function setupEventListeners(container: HTMLElement): void {
-  const form = container.querySelector('#twofaForm') as HTMLFormElement;
-  form.addEventListener('submit', handleFormSubmit);
-
-  const resendBtn = container.querySelector('#resendBtn') as HTMLButtonElement;
-  resendBtn.addEventListener('click', handleResendCode);
-}
-
-async function startTwoFAFlow(): Promise<void> {
-  twofaView.updateTwoFAMessage("Sending verification code...");
-  twofaView.setResendButtonState(false, 60);
-  startResendTimer(60);
-  
-  try {
-    await twoFAService.requestCode(currentEmail);
-    twofaView.updateTwoFAMessage(`Code sent to ${currentEmail}`);
-  } catch (error) {
-    twofaView.updateTwoFAMessage("Failed to send code. Please try again.", true);
-    console.error("2FA request error:", error);
-  }
-}
-
-async function handleFormSubmit(e: Event): Promise<void> {
-  e.preventDefault();
-  twofaView.clearTwoFAError();
-  
-  const codeInput = document.getElementById('twofaCode') as HTMLInputElement;
-  const code = codeInput.value.trim();
-
-  if (!code || code.length !== 6) {
-    twofaView.showTwoFAError("Please enter a valid 6-digit code");
-    return;
+  constructor(
+    email: string,
+    flowType: 'login' | 'register',
+    authToken: string,
+    onSuccess: () => void,
+    container: HTMLElement,
+    onFailure?: (message: string, isFinal: boolean) => void
+   ) {
+    this.email = email;
+    this.flowType = flowType;
+    this.authToken = authToken;
+    this.onSuccess = onSuccess;
+    this.container = container;
+    this.onFailure = onFailure || this.defaultFailureHandler;
   }
 
-  twofaView.setVerifyButtonState(true);
-  
-  try {
-    const result = await twoFAService.verifyCode(currentEmail, code);
-    if (result.success) {
-      Router.navigate('home');
-    } else {
-      twofaView.showTwoFAError(result.message || "Invalid verification code");
+  public init(): HTMLElement {
+    // Use twofaView.render() instead of local render method
+    const view = document.createElement('div');
+    view.innerHTML = twofaView.render(this.email);
+    this.setupEventListeners(view);
+    return view;
+  }
+
+  private setupEventListeners(container: HTMLElement): void {
+    const form = container.querySelector('#twofaForm') as HTMLFormElement;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const codeInput = container.querySelector('#twofaCode') as HTMLInputElement;
+      await this.verifyCode(codeInput.value.trim());
+    });
+
+    const resendBtn = container.querySelector('#resendBtn') as HTMLButtonElement;
+    resendBtn.addEventListener('click', () => this.resendCode());
+  }
+
+  private async verifyCode(code: string): Promise<void> {
+    if (!/^\d{6}$/.test(code)) {
+      this.showError('Please enter a valid 6-digit code');
+      return;
     }
-  } catch (error) {
-    twofaView.showTwoFAError("Verification failed. Please try again.");
-    console.error("2FA verification error:", error);
-  } finally {
-    twofaView.setVerifyButtonState(false);
-  }
-}
 
-async function handleResendCode(): Promise<void> {
-  twofaView.setResendButtonState(false, 60);
-  startResendTimer(60);
-  twofaView.clearTwoFAError();
-  
-  try {
-    await twoFAService.requestCode(currentEmail);
-    twofaView.updateTwoFAMessage(`New code sent to ${currentEmail}`);
-  } catch (error) {
-    twofaView.updateTwoFAMessage("Failed to resend code", true);
-    console.error("2FA resend error:", error);
-  }
-}
+    this.attempts++;
 
-function startResendTimer(seconds: number): void {
-  if (resendTimer) clearInterval(resendTimer);
-  
-  let remaining = seconds;
-  twofaView.setResendButtonState(false, remaining);
-  
-  resendTimer = window.setInterval(() => {
-    remaining--;
-    twofaView.setResendButtonState(false, remaining);
-    
-    if (remaining <= 0) {
-      clearInterval(resendTimer);
-      twofaView.setResendButtonState(true);
+    try {
+      const response = await fetch('/api/2fa/verify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.authToken}`
+        },
+        body: JSON.stringify({ code })
+      });
+
+      if (response.ok) {
+        this.onSuccess();
+      } else {
+        await this.handleFailedAttempt(response);
+      }
+    } catch (error) {
+      await this.handleFailedAttempt();
     }
-  }, 1000);
+  }
+
+  private async handleFailedAttempt(response?: Response): Promise<void> {
+    const remaining = this.maxAttempts - this.attempts;
+    const isFinal = remaining <= 0;
+    let errorMessage = 'Verification failed';
+
+    if (response) {
+      try {
+        const data = await response.json();
+        errorMessage = data.message || errorMessage;
+      } catch (_) {}
+    }
+
+    errorMessage += isFinal 
+      ? '. Maximum attempts reached.' 
+      : ` (${remaining} ${remaining === 1 ? 'attempt' : 'attempts'} remaining)`;
+
+    if (this.onFailure) {
+      this.onFailure(errorMessage, isFinal);
+    }
+
+    if (isFinal) {
+      await this.invalidateSession();
+      setTimeout(() => Router.navigate(this.flowType), 3000);
+    }
+  }
+
+  private async invalidateSession(): Promise<void> {
+    await fetch('/api/auth/invalidate', {
+      credentials: 'include'
+    });
+  }
+
+  private async resendCode(): Promise<void> {
+    try {
+      await fetch('/api/2fa/resend', {
+        headers: {
+          'Authorization': `Bearer ${this.authToken}`
+        }
+      });
+      this.showError('New code sent successfully');
+    } catch (error) {
+      this.showError('Failed to resend code');
+    }
+  }
+
+  private showError(message: string): void {
+    const errorEl = this.container.querySelector('#twofaError');
+    if (errorEl) {
+      errorEl.textContent = message;
+      errorEl.classList.remove('hidden');
+    }
+  }
+
+  private defaultFailureHandler = (message: string, isFinal: boolean): void => {
+    this.showError(message);
+    if (isFinal) {
+      this.container.querySelector('button[type="submit"]')?.setAttribute('disabled', 'true');
+    }
+  };
 }
