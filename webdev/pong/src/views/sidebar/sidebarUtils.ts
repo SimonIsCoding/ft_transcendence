@@ -1,5 +1,5 @@
 import { getUserInfo } from '../../services/sidebar'
-import { playSidebarBehavior } from './playSidebarBehavior';
+import { playSidebarBehavior } from './playBtn/playSidebarBehavior';
 
 export function renderBackButton(id: string): string
 {
@@ -16,7 +16,6 @@ export function renderBackButton(id: string): string
 // for button 'playSidebarBtn' & 'profileSidebarBtn', this function open and close the submenu
 export function toggleMenuVisibility(targetId: string | null, submenus: NodeListOf<HTMLElement>)
 {
-	console.log(`[${new Date().toLocaleTimeString()}] clicked on toggleMenuVisibility`);
 	submenus.forEach(menu => {
 		if (menu.id === targetId)
 		{
