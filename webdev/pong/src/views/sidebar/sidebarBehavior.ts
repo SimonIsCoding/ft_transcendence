@@ -1,5 +1,5 @@
 import { Router } from "../../router";
-import { isConnected } from "../../services/sidebar"
+import { isConnected } from "../../services/sidebarService"
 import { loadExistingProfilePicture, uploadProfilePicture } from "../../utils/profilePictureUtils";
 import { initLogout } from '../../services/logoutService';
 import { setupMenuHandlers } from './sidebarUtils';

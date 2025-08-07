@@ -6,6 +6,7 @@ import { showErrorPopup } from '../utils/utils';
 // --- form to log in
 export async function initLogin()
 {
+	//for message popup - in case we are already connected and the user want to access to the login page
 	const status = await fetch('/api/auth/status', { credentials: 'include' })
 				 .then(res => res.json());
 	if (status.authenticated)

@@ -1,5 +1,6 @@
-import { getUserInfo } from '../../services/sidebar'
+import { getUserInfo } from '../../services/sidebarService'
 import { playSidebarBehavior } from './playBtn/playSidebarBehavior';
+import { userChangingInfo } from './profileBtn/userChangingInfo';
 
 export function renderBackButton(id: string): string
 {
@@ -99,10 +100,11 @@ export function profileSidebarBehavior()
 		});
 	});
 
-	editProfileBehavior();
+	editProfileSubmenuBehavior();
+	userChangingInfo();
 }
 
-export function editProfileBehavior()
+export function editProfileSubmenuBehavior()
 {
 	const profileSubmenu = document.getElementById("profileSubmenu");
 	const editProfileSubmenu = document.getElementById("editProfileSubmenu");
