@@ -4,8 +4,6 @@ import { editProfileService } from "../../../services/sidebarService";
 export function userChangingInfo()
 {
 	console.log("entered in userChangingInfo");
-	// editProfileService();
-	//call the backend to know what is the current password -> unhashed it
 	const saveBtnEditProfile = document.getElementById("saveBtnEditProfile");
 	saveBtnEditProfile?.addEventListener('click', () => {
 		editProfileService();

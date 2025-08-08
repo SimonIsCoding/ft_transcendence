@@ -8,11 +8,11 @@ export async function editProfileRoute(fastify)
 	fastify.post('/changeInfo', async (request, reply) => {
 		console.log("entered in fastify.post('/changeInfo'");
 		const { login, currentPassword, changePassword, changeMail } = request.body;
+		const stmt = db.prepare("SELECT * FROM users WHERE login = ?");
+		const user = stmt.get(login);
 		if (currentPassword && currentPassword.trim() !== "")
 		{
 			console.log("there is a currentPassword");
-			const stmt = db.prepare("SELECT * FROM users WHERE login = ?");
-			const user = stmt.get(login);
 			console.log("user.password = ", user.password);
 			const match = user ? await bcrypt.compare(currentPassword, user.password) : false;
 			if (!match)
@@ -27,15 +27,17 @@ export async function editProfileRoute(fastify)
 				stmt.run(encryptedPassword, user.login);
 				if (changeMail && changeMail.trim() !== "")
 				{
+					console.log("user.mail = ", user.mail);
 					console.log("changing the mail in db");
 					const stmt2 = db.prepare("UPDATE users SET mail = ? WHERE login = ?");
-					stmt2.run(changeMail, user.mail);
+					stmt2.run(changeMail, user.login);
 					return reply.status(200).send({ success: true, message: "Password & mail modified" });
 				}
 				return reply.status(200).send({ success: true, message: "Password modified" });
 			}
 			catch (err)
 			{
+				//you have to check if the mail is not already use - here you don't check it for the moment
 				if (err && typeof err === 'object' && 'code' in err && err.code === 'SQLITE_CONSTRAINT_UNIQUE')
 				{
 					if (err.message.includes('mail'))
@@ -51,8 +53,12 @@ export async function editProfileRoute(fastify)
 		{
 			try
 			{
-				const stmt3 = db.prepare("INSERT INTO users mail VALUES ?");
-				stmt3.run(changeMail);
+				console.log("in changing mail only");
+				//you have to check if the mail is not already use - here you don't check it for the moment
+				console.log("changeMail received = ", changeMail);
+				console.log("user.login = ", user.login);
+				const stmt3 = db.prepare("UPDATE users SET mail = ? WHERE login = ?");
+				stmt3.run(changeMail, user.login);
 				return reply.status(200).send({ success: true, message: "Mail modified" });
 			}
 			catch (err)

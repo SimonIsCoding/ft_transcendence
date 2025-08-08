@@ -48,7 +48,28 @@ export async function getUserInfo()
 	});
 }
 
-import { showErrorPopup, isValidEmail } from "../utils/utils";
+export async function reloadUserInfo(): Promise<void>
+{
+	try
+	{
+		const res = await fetch("/api/auth/info", {
+			credentials: "include"
+		});
+
+		if (!res.ok)
+			return console.error("Error fetching user info:", res.status);
+
+		const data = await res.json();
+		document.getElementById("mailInProfileSubmenu")!.textContent = data.mail;
+		// you have to reload the mail in Friends list as well 
+	}
+	catch (err)
+	{
+		console.error("Network error:", err);
+	}
+}
+
+import { showErrorPopup, isValidEmail, showSuccessPopup } from "../utils/utils";
 
 export async function editProfileService()
 {
@@ -85,11 +106,37 @@ export async function editProfileService()
 		credentials: 'include',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ login: login, currentPassword: currentPassword, changePassword: changePassword, changeMail: changeMail })
-
 	})
-	.then(res => res.json())
+	.then(async res => {
+		const backend_answer = await res.json();
+		if (res.status === 409)
+		{
+			switch (backend_answer.error)
+			{
+				case 'Current password is not matching the real password.':
+					showErrorPopup("Your current password is not matching the real password." , "successPopup");
+					break;
+				case 'Email already used':
+					showErrorPopup("Email already used." , "successPopup");
+					break;
+			}
+		}
+		else if (res.status === 200)
+		{
+			console.log("res.status === 200");
+			if (backend_answer.message === "Password & mail modified")
+				showSuccessPopup("Password & mail modified", 3500, "successPopup");
+			else if (backend_answer.message === "Password modified")
+				showSuccessPopup("Password modified", 3500, "successPopup");
+			else if (backend_answer.message === "Mail modified")
+				showSuccessPopup("Mail modified", 3500, "successPopup");
+			//recall backend to reload user info
+			reloadUserInfo();
+		}
+	})
 	.then(data =>
 	{
+		console.log("sidebarService.ts, editProfileService data =");
 		console.log(data);
 		// I want to send the email to the database if it was filled
 		// For the password:
