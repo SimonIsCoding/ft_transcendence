@@ -1,7 +1,7 @@
 import { Router } from "../../router";
-import { isConnected } from "../../services/sidebarService"
+import { isConnected } from "../../services/sidebarService/utilsSidebarService"
 import { loadExistingProfilePicture, uploadProfilePicture } from "../../utils/profilePictureUtils";
-import { initLogout } from '../../services/logoutService';
+import { initLogout } from '../../services/sidebarService/logoutService';
 import { setupMenuHandlers } from './sidebarUtils';
 import { gameSettingsSubmenuRender } from './settingsBtn/gameSettingsSubmenuRender';
 import { logoutButtonRender } from './logoutButtonRender';
