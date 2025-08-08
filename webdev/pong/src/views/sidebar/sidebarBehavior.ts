@@ -11,6 +11,8 @@ import { friendsSubmenuRender } from './profileBtn/friendsSubmenuRender'
 import { dashboardSubmenuRender } from './profileBtn/dashboardSubmenuRender'
 import { gameHistorySubmenuRender } from './profileBtn/gameHistorySubmenuRender'
 import { editProfileSubmenuRender } from './profileBtn/editProfileSubmenuRender'
+import { TournamentModel } from "../../models/TournamentModel";
+import { setTournament } from "../../models/TournamentStore";
 
 interface User {
   login: string;
@@ -91,6 +93,19 @@ export const userLoggedSidebar = {
 	setupMenuHandlers();
 	const tournamentBtn = document.getElementById('tournamentBtn');
 	tournamentBtn?.addEventListener('click', () => {
+		const alias1 = (document.getElementById("alias1") as HTMLInputElement).value;
+		const alias2 = (document.getElementById("alias2") as HTMLInputElement).value;
+		const alias3 = (document.getElementById("alias3") as HTMLInputElement).value;
+		const alias4 = (document.getElementById("alias4") as HTMLInputElement).value;
+		// const aliases = [alias1, alias2, alias3, alias4];
+		const torneo = new TournamentModel();
+		torneo.addPlayer(alias1);
+		torneo.addPlayer(alias2);
+		torneo.addPlayer(alias3);
+		torneo.addPlayer(alias4);
+		console.log('torneo' + torneo)
+		setTournament(torneo);
+		// model.addPlayer(aliases);
 		Router.navigate('tournament')
 	});
   }
