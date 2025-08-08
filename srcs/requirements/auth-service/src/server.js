@@ -15,6 +15,7 @@ import { logoutRoute } from '../routes/logoutRoute.js';
 import { infoUserRoute } from '../routes/infoUserRoute.js';
 import { statusRoute/*, userLoggedRoute*/ } from '../routes/userLoggedRoute.js';
 import { editProfileRoute } from '../routes/editProfileRoute.js';
+import { eraseAccountRoute } from '../routes/eraseAccountRoute.js';
 import db from './database.js';
 
 const app = fastify();
@@ -57,6 +58,7 @@ await logoutRoute(app);
 await statusRoute(app);
 // await userLoggedRoute(app);
 app.register(editProfileRoute);
+app.register(eraseAccountRoute);
 
 //maybe you could put it in a specific file 
 app.get('/info', { preHandler: [app.auth] }, async (request, reply) => {
