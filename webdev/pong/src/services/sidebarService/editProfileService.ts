@@ -32,6 +32,9 @@ export async function editProfileService()
 	const repeatPassword = (document.getElementById("repeatPasswordEditProfile") as HTMLInputElement).value;
 	const changeMail = (document.getElementById("changeMailEditProfile") as HTMLInputElement).value;
 	
+	if ((!changeMail && changeMail.trim() === "") && (!currentPassword && currentPassword.trim() === ""))
+		return showErrorPopup("You have to fill more fields to update your informations.", "popup");
+
 	if (changePassword !== repeatPassword)
 		return showErrorPopup("The new passwords are not the same.", "popup");
 
