@@ -16,6 +16,11 @@ export async function eraseAccountService()
 	.then(async res => {
 		if (res.status === 200)
 		{
+			//You also have to erase the user's data in the other db like friendsDB
+			await fetch('/api/auth/logout', {
+				method: 'GET',
+				credentials: 'include'
+			});
 			Router.navigate('home');
 			showSuccessPopup("You have been disconnected and your account has been deleted", 3500, "popup");
 		}
