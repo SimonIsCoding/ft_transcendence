@@ -1,6 +1,3 @@
-import { Router } from "../../router";
-import { showSuccessPopup } from "../../utils/utils";
-
 export async function eraseAccountService()
 {
 	const login = await fetch("/api/auth/info")
@@ -21,8 +18,6 @@ export async function eraseAccountService()
 				method: 'GET',
 				credentials: 'include'
 			});
-			Router.navigate('home');
-			showSuccessPopup("You have been disconnected and your account has been deleted", 3500, "popup");
 		}
 	})
 }
