@@ -52,6 +52,7 @@ export async function initLogin() {
         if (loginForm && twofaContainer) {
           loginForm.classList.add('hidden');
           twofaContainer.classList.remove('hidden');
+
 console.log('Container State:', {
   outerHTML: twofaContainer.outerHTML,
   children: twofaContainer.children.length,
@@ -66,8 +67,7 @@ console.log('Container State:', {
 	
 			console.log('Attempting TwoFAController creation');
 
-            twofaContainer.appendChild(
-              new TwoFAController(
+             const controller = new TwoFAController(
                 loginData.mail,
                 'login',
                 loginData.token,
@@ -93,9 +93,15 @@ console.log('Container State:', {
                     });
                   }
                 }
-              ).init()
-            );
-			console.log('Controller instance init:');
+              );
+			  // DEBUG: Verify controller creation
+ 			  console.log('Controller instance:', controller);
+			  		 
+ 			  const view = controller.init();
+ 			  console.log('View content:', view.outerHTML); // Check HTML exists
+			  		 
+ 			  twofaContainer.appendChild(view);
+ 			  console.log('Container after append:', twofaContainer.innerHTML); // Verify insertionsole.log('Controller instance init:');
 
           }
         }
