@@ -30,6 +30,9 @@ export function showSuccessPopup(message: string, duration: number = 3500, id: s
 	if (!popup)
 		return;
 	
+	popup.classList.remove("bg-red-600");
+    popup.classList.add("bg-green-600");
+	
 	popup.textContent = message;
 	popup.classList.remove("hidden");
 

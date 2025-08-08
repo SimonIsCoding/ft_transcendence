@@ -22,22 +22,21 @@ export async function editProfileRoute(fastify)
 			console.log("encryptedPassword = ", encryptedPassword);
 			try
 			{
-				console.log("changing the password in db");
-				const stmt = db.prepare("UPDATE users SET password = ? WHERE login = ?");
-				stmt.run(encryptedPassword, user.login);
 				if (changeMail && changeMail.trim() !== "")
 				{
 					console.log("user.mail = ", user.mail);
 					console.log("changing the mail in db");
-					const stmt2 = db.prepare("UPDATE users SET mail = ? WHERE login = ?");
-					stmt2.run(changeMail, user.login);
+					const stmt = db.prepare("UPDATE users SET password = ?, mail = ? WHERE login = ?");
+					stmt.run(encryptedPassword, changeMail, user.login);
 					return reply.status(200).send({ success: true, message: "Password & mail modified" });
 				}
+				console.log("changing the password in db");
+				const stmt2 = db.prepare("UPDATE users SET password = ? WHERE login = ?");
+				stmt2.run(encryptedPassword, user.login);
 				return reply.status(200).send({ success: true, message: "Password modified" });
 			}
 			catch (err)
 			{
-				//you have to check if the mail is not already use - here you don't check it for the moment
 				if (err && typeof err === 'object' && 'code' in err && err.code === 'SQLITE_CONSTRAINT_UNIQUE')
 				{
 					if (err.message.includes('mail'))
@@ -45,16 +44,12 @@ export async function editProfileRoute(fastify)
 				}
 				return reply.status(500).send({ success: false, error: "Database error in editProfileRoute" });
 			}
-			// console.log("reached return line");
-			//change mail if needed
-			// return reply.status(200).send({message: 'status 200 send => on return line'});
 		}
 		if (changeMail && changeMail.trim() !== "")
 		{
 			try
 			{
 				console.log("in changing mail only");
-				//you have to check if the mail is not already use - here you don't check it for the moment
 				console.log("changeMail received = ", changeMail);
 				console.log("user.login = ", user.login);
 				const stmt3 = db.prepare("UPDATE users SET mail = ? WHERE login = ?");
