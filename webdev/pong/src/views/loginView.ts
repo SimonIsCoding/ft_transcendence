@@ -6,7 +6,7 @@ import { handleSidebar } from './sidebar/sidebarBehavior.ts';
 export const loginView = {
   render: (): string => `
   	<div class="w-screen h-screen flex bg-[#fbd11b] overflow-hidden">
-  
+	
 		<div id="sidebar" class="bg-[#fbd11b] h-screen flex flex-col overflow-hidden transition-all duration-500 ease-in-out w-[64px]">
 		</div>
 		
