@@ -1,5 +1,5 @@
-import { Router } from "../router";
-import { showSuccessPopup } from "../utils/utils";
+import { Router } from "../../router";
+import { showSuccessPopup } from "../../utils/utils";
 
 export async function eraseAccountService()
 {

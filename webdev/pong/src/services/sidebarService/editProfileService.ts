@@ -1,52 +1,4 @@
-export async function isConnected(): Promise<boolean>
-{
-	const res = await fetch('/api/auth/status', {
-			method: 'GET',
-  			credentials: 'include' 
-	})
-
-	const data = await res.json();
-	if (data.authenticated === true)
-	{
-		console.log("data.authenticated = ", data.authenticated);
-		return true;
-	}
-	console.log("data.authenticated = ", data.authenticated);
-	return false;
-}
-
-export async function getUserInfo()
-{
-	fetch("/api/auth/info")
-	.then(res => res.json())
-	.then(data => {
-		const profileName = document.getElementById("profileName");
-		if (profileName && data.login)
-			profileName.textContent = data.login;
-		else
-			profileName!.textContent = `Profile Name`;
-
-		const mail = document.getElementById("mailInProfileSubmenu");
-		if (mail && data.mail)
-			mail.textContent = data.mail;
-		else
-			mail!.textContent = `contact@mail.com`;
-
-		//here we should add the stats of the matchs won
-		// but we have to fecth another db which is the stats one
-		// const stats = document.getElementById("statsInProfileSubmenu");
-		// if (stats && )
-		// 	stats.textContent = ;
-		// else
-		// 	stats!.textContent = `12/15 matchs won`;
-
-		const playerNameDashboard = document.getElementById("playerNameDashboard");
-		if (playerNameDashboard && data.login)
-			playerNameDashboard.textContent = data.login;
-		else
-			playerNameDashboard!.textContent = "Username";
-	});
-}
+import { showErrorPopup, isValidEmail, showSuccessPopup } from "../../utils/utils";
 
 export async function reloadUserInfo(): Promise<void>
 {
@@ -69,14 +21,11 @@ export async function reloadUserInfo(): Promise<void>
 	}
 }
 
-import { showErrorPopup, isValidEmail, showSuccessPopup } from "../utils/utils";
-
 export async function editProfileService()
 {
 	const login = await fetch("/api/auth/info")
 	.then(res => res.json())
 	.then(data => { return data.login });
-	console.log("login is ==== ", login);
 
 	const currentPassword = (document.getElementById("currentPasswordEditProfile") as HTMLInputElement).value;
 	const changePassword = (document.getElementById("changePasswordEditProfile") as HTMLInputElement).value;
@@ -89,8 +38,6 @@ export async function editProfileService()
 	if ((changeMail && changeMail.trim() !== "") && isValidEmail(changeMail) === false)
 		return showErrorPopup("The mail format is not valid.", "popup");
 
-	console.log("entered in editProfileService <=> fetch on /changeInfo");
-	console.log("currentPassword = ", currentPassword);
 	fetch('/api/auth/changeInfo', {
 		method: 'POST',
 		credentials: 'include',
@@ -113,14 +60,12 @@ export async function editProfileService()
 		}
 		else if (res.status === 200)
 		{
-			console.log("res.status === 200");
 			if (backend_answer.message === "Password & mail modified")
 				showSuccessPopup("Password & mail modified", 3500, "popup");
 			else if (backend_answer.message === "Password modified")
 				showSuccessPopup("Password modified", 3500, "popup");
 			else if (backend_answer.message === "Mail modified")
 				showSuccessPopup("Mail modified", 3500, "popup");
-			//recall backend to reload user info
 			reloadUserInfo();
 		}
 	})

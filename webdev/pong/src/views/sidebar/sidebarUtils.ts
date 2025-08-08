@@ -1,4 +1,4 @@
-import { getUserInfo } from '../../services/sidebarService'
+import { getUserInfo } from '../../services/sidebarService/utilsSidebarService'
 import { playSidebarBehavior } from './playBtn/playSidebarBehavior';
 import { userChangingInfo } from './profileBtn/userChangingInfo';
 

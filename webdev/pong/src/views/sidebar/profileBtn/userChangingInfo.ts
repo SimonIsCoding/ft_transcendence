@@ -1,5 +1,5 @@
-import { editProfileService } from "../../../services/sidebarService";
-import { eraseAccountService } from "../../../services/eraseAccountService"; 
+import { editProfileService } from "../../../services/sidebarService/editProfileService";
+import { eraseAccountService } from "../../../services/sidebarService/eraseAccountService"; 
 
 //we are currently working with the editProfileSubmenu -> in the sidebar
 export function userChangingInfo()
