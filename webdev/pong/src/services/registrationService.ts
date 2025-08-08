@@ -11,7 +11,7 @@ export async function initRegistration()
 	if (status.authenticated)
 	{
 		Router.navigate('home');
-		showErrorPopup("You are already connected. You can't access to the register page.", "successPopup");
+		showErrorPopup("You are already connected. You can't access to the register page.", "popup");
 		return;
 	}
 
@@ -53,7 +53,7 @@ export async function initRegistration()
 
 		//redirection on login page
 		Router.navigate('login');
-		showSuccessPopup("Your account has been created", 3500, "successPopup");
+		showSuccessPopup("Your account has been created", 3500, "popup");
 
 
 		})

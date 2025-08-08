@@ -84,20 +84,10 @@ export async function editProfileService()
 	const changeMail = (document.getElementById("changeMailEditProfile") as HTMLInputElement).value;
 	
 	if (changePassword !== repeatPassword)
-	{
-		showErrorPopup("The new passwords are not the same.", "successPopup");
-		showErrorPopup("The new passwords are not the same.", "oneVsOneAreaPopup");
-		showErrorPopup("The new passwords are not the same.", "oneVsAIAreaPopup");
-		return ; //depending which page is shown - is a bit repetitive but well - the popup could be put outside the <main> tag as well
-	}
+		return showErrorPopup("The new passwords are not the same.", "popup");
 
 	if ((changeMail && changeMail.trim() !== "") && isValidEmail(changeMail) === false)
-	{
-		showErrorPopup("The mail format is not valid.", "successPopup");
-		showErrorPopup("The mail format is not valid.", "oneVsOneAreaPopup");
-		showErrorPopup("The mail format is not valid.", "oneVsAIAreaPopup");
-		return ;
-	}
+		return showErrorPopup("The mail format is not valid.", "popup");
 
 	console.log("entered in editProfileService <=> fetch on /changeInfo");
 	console.log("currentPassword = ", currentPassword);
@@ -114,10 +104,10 @@ export async function editProfileService()
 			switch (backend_answer.error)
 			{
 				case 'Current password is not matching the real password.':
-					showErrorPopup("Your current password is not matching the real password." , "successPopup");
+					showErrorPopup("Your current password is not matching the real password." , "popup");
 					break;
 				case 'Email already used':
-					showErrorPopup("Email already used.", "successPopup");
+					showErrorPopup("Email already used.", "popup");
 					break;
 			}
 		}
@@ -125,11 +115,11 @@ export async function editProfileService()
 		{
 			console.log("res.status === 200");
 			if (backend_answer.message === "Password & mail modified")
-				showSuccessPopup("Password & mail modified", 3500, "successPopup");
+				showSuccessPopup("Password & mail modified", 3500, "popup");
 			else if (backend_answer.message === "Password modified")
-				showSuccessPopup("Password modified", 3500, "successPopup");
+				showSuccessPopup("Password modified", 3500, "popup");
 			else if (backend_answer.message === "Mail modified")
-				showSuccessPopup("Mail modified", 3500, "successPopup");
+				showSuccessPopup("Mail modified", 3500, "popup");
 			//recall backend to reload user info
 			reloadUserInfo();
 		}
