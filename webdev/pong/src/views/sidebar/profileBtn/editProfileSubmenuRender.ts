@@ -26,7 +26,25 @@ export function editProfileSubmenuRender()
 		<hr class="border-t-1.5 border-black w-20"/>
 		<p>Change mail</p>
 		<input id="changeMailEditProfile" type="text" placeholder="Change email" class="border border-black w-[80%] rounded-xl text-black flex felx-col justify-center text-center placeholder-black/50 placeholder:text-sm h-[4%]">
-		<button id="saveBtnEditProfile" class="text-gray-500 underline">Save</button>
+		<button id="saveBtnEditProfile" class="font-bold rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit">Save</button>
+		<button id="eraseAccountBtn" class="absolute bottom-4 font-bold border rounded px-2 py-1 text-sm hover:bg-red-500 w-fit">Erase account</button>
+	</div>
+	${eraseAccountConfirmationPopupRender()}
+	`
+}
+
+export function eraseAccountConfirmationPopupRender(): string
+{
+	return `
+	<div id="confirmPopup" class="hidden bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style="background-image: url('/pongBackgroundPlay.png');">
+		<div class="bg-white rounded-lg shadow-lg p-6 w-80">
+			<p id="popupMessage" class="text-gray-800 text-center">Do you really want to delete your account ?</p>
+			<p class="text-gray-800 text-center text-base mb-4">You will lose all your informations</p>
+			<div class="flex justify-center space-x-4">
+			<button id="popupYes" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">Yes</button>
+			<button id="popupNo" class="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded">No</button>
+			</div>
+		</div>
 	</div>
 	`
 }
