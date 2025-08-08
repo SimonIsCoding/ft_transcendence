@@ -13,7 +13,7 @@ export const registerView = {
 			<main id="gameArea" class="flex-1 bg-black flex items-center justify-center bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center w-full h-full" style="background-image: url('/pongBackgroundPlay.png');">
 
 			<div id="registerForm" class="flex flex-col justify-center items-center w-full space-y-10">
-				<div id="successPopup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50">
+				<div id="popup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50">
 				</div>
 				<div class="relative">
 					<input id="newUsername" placeholder="Username" class="text-white px-4 py-2 text-xl border border-white rounded w-80"/><br/>

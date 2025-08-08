@@ -24,8 +24,8 @@ export const oneVsOneArea = {
 	render(): string {
 	return `
 	<main id="oneVsOneArea" class="hidden flex-1 bg-black flex items-center justify-center bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center w-full h-full" style="background-image: url('/pongBackgroundPlay.png');">
-		<div id="oneVsOneAreaPopup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50">
-		</div>
+		<!-- <div id="oneVsOneAreaPopup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50">
+		</div> -->
 		<div class="flex flex-col justify-center items-center h-screen">
 			<h1 class="text-[#fbd11b]/50 font-bold text-4xl pb-20">1 VS 1</h1>
 			<input id="player1" type="text" placeholder="Player 1" class="px-4 py-2 text-xl border border-[#fbd11b] font-bold text-center rounded-xl w-60 text-[#fbd11b] placeholder-opacity-50 placeholder-[#fbd11b]/50" />
@@ -59,8 +59,8 @@ export const oneVsAIArea = {
 	render(): string {
 	return `
 	<main id="oneVsAIArea" class="hidden flex-1 bg-black flex items-center justify-center bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center w-full h-full" style="background-image: url('/pongBackgroundPlay.png');">
-		<div id="oneVsAIAreaPopup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50">
-		</div>
+		<!-- <div id="oneVsAIAreaPopup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50">
+		</div> -->
 		<div class="flex flex-col justify-center items-center h-screen">
 			<h1 class="text-[#fbd11b]/50 font-bold text-4xl pb-20">1 VS AI</h1>
 			<input id="player1VSAI" type="text" placeholder="Player 1" class="px-4 py-2 text-xl border border-[#fbd11b] font-bold text-center rounded-xl w-60 text-[#fbd11b] placeholder-opacity-50 placeholder-[#fbd11b]/50" />

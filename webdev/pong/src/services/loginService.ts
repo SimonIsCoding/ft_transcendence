@@ -12,7 +12,7 @@ export async function initLogin()
 	if (status.authenticated)
 	{
 		Router.navigate('home');
-		showErrorPopup("You are already connected. You can't access to the login page.", "successPopup");
+		showErrorPopup("You are already connected. You can't access to the login page.", "popup");
 		return;
 	}
 
@@ -49,7 +49,7 @@ export async function initLogin()
 						fetch('/api/auth/infoUser', { credentials: 'include' })
 						.then(res => res.json())
 						Router.navigate('home');
-						showSuccessPopup("You are logged", 3500, "successPopup");
+						showSuccessPopup("You are logged", 3500, "popup");
 					}
 				});
 			}
