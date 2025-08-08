@@ -7,8 +7,7 @@ import { showErrorPopup } from '../utils/utils';
 export async function initLogin()
 {
 	//for message popup - in case we are already connected and the user want to access to the login page
-	const status = await fetch('/api/auth/status', { credentials: 'include' })
-				 .then(res => res.json());
+	const status = await fetch('/api/auth/status', { credentials: 'include' }).then(res => res.json());
 	if (status.authenticated)
 	{
 		Router.navigate('home');
@@ -24,6 +23,9 @@ export async function initLogin()
 		// const encryptedPassword = await hashPassword(password);
 		// you have to encrypt before fetch. One question: while using bcrypt.compare, I will have 2 hashed psswd. Is it a pb using this function that way ?
 
+		if ((!login && login.trim() === "") || (!password && password.trim() === ""))
+			return showErrorPopup("You need a login and a password to log in", "popup");
+
 		fetch('/api/auth/login', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
@@ -33,12 +35,7 @@ export async function initLogin()
 		.then(res => res.json())
 		.then(data =>
 		{
-			localStorage.setItem('login', login);
-			const username = localStorage.getItem('login');
-
-			const connectionMsgId = "connectionMsg";
-			let connectionMsg = document.getElementById(connectionMsgId) as HTMLParagraphElement | null;
-			if (username && data.success === true)
+			if (data.success === true)
 			{
 				fetch('/api/auth/info', {
 					credentials: 'include'
@@ -53,17 +50,8 @@ export async function initLogin()
 					}
 				});
 			}
-			else if (!connectionMsg)
-			{
-				connectionMsg = document.createElement("p");
-				connectionMsg.id = "connectionMsg";//in order to avoid duplicates
-				connectionMsg.classList.add("text-white", "px-1", "py-1", "text-xl");
-				connectionMsg.textContent = `Sorry. Your credentials doesn't match`;
-				const connectionBtn = document.getElementById("connectionBtn");
-				if (connectionBtn)
-					connectionBtn.insertAdjacentElement("afterend", connectionMsg);
-			}
-			
+			else
+				showErrorPopup("Sorry. Your credentials doesn't match", "popup");
 			});
 			console.log("login: ", login, "Password:", password);// to erase for PROD
 		});
