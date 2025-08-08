@@ -2,6 +2,8 @@ import { Router } from '../router';
 import { setupPasswordToggle } from '../utils/utils';
 import { initRegistration } from '../services/registrationService';
 import { handleSidebar } from './sidebar/sidebarBehavior.ts';
+import { isValidEmail } from '../utils/utils.ts';
+import { showErrorPopup } from '../utils/utils';
 
 export const registerView = {
   render: (): string => `
@@ -51,7 +53,24 @@ export const registerView = {
 
 	setupPasswordToggle("newPassword", "togglePassword", "eyeIconClosed", "eyeIconOpened");
 	setupPasswordToggle("confirmPassword", "toggleConfirmPassword", "confirmEyeIconClosed", "confirmEyeIconOpened");
-	initRegistration();
+
+	document.getElementById("createAccountBtn")?.addEventListener("click", async () => {
+		const username = (document.getElementById("newUsername") as HTMLInputElement).value;
+		const password = (document.getElementById("newPassword") as HTMLInputElement).value;
+		const confirmPassword = (document.getElementById("confirmPassword") as HTMLInputElement).value;
+		const mail = (document.getElementById("newMail") as HTMLInputElement).value.toLowerCase();
+
+		if ((!username && username.trim() === "") || (!password && password.trim() === "") || (!confirmPassword && confirmPassword.trim() === "") || (!mail && mail.trim() === ""))
+			return showErrorPopup("All fields has to be filled to create an account", "popup");
+
+		if (confirmPassword !== password)
+			return showErrorPopup("The passwords are not matching.", "popup");
+	
+		if (isValidEmail(mail) === false)
+			return showErrorPopup("The mail format is not correct.", "popup");
+		
+		initRegistration(username, password, mail);
+	});
 
 	const backToLogin = document.getElementById('backToLogin') as HTMLButtonElement | null;
 	backToLogin!.addEventListener('click', () => { Router.navigate('login'); })
