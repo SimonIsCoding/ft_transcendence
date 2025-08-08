@@ -117,7 +117,7 @@ export async function editProfileService()
 					showErrorPopup("Your current password is not matching the real password." , "successPopup");
 					break;
 				case 'Email already used':
-					showErrorPopup("Email already used." , "successPopup");
+					showErrorPopup("Email already used.", "successPopup");
 					break;
 			}
 		}
@@ -134,21 +134,4 @@ export async function editProfileService()
 			reloadUserInfo();
 		}
 	})
-	.then(data =>
-	{
-		console.log("sidebarService.ts, editProfileService data =");
-		console.log(data);
-		// I want to send the email to the database if it was filled
-		// For the password:
-			// I want to check if currentPassword is the same
-				// true => we change the password
-				// false => we send an error message
-		
-	});
-	
-	// fetch("/api/auth/me")
-	// .then(res => res.json)
-	// .then(data => {
-	// 	console.log(`going to print data = `, data);
-	// });
 }
