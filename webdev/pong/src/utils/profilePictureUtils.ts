@@ -38,7 +38,6 @@ export async function uploadProfilePicture() : Promise<void>
 	});
 }
 
-
 export async function loadExistingProfilePicture(): Promise<void>
 {
 	const preview = document.getElementById('previewProfilePicture') as HTMLImageElement;
