@@ -1,21 +1,38 @@
 export const twofaView = {
   render(email: string): string {
     return `
-      <div class="twofa-container">
-        <h2>Two-Factor Authentication</h2>
-        <p class="twofa-message">Enter verification code sent to ${email}</p>
-        <form id="twofaForm" class="twofa-form">
-          <input type="text" id="twofaCode" 
-                 class="twofa-input" 
-                 maxlength="6" 
-                 placeholder="6-digit code"
-                 inputmode="numeric"
-                 pattern="\\d{6}"
-                 required>
-          <button type="submit" id="verifyBtn" class="twofa-button">Verify</button>
+      <div class="flex flex-col justify-center items-center w-full space-y-10">
+        <h2 class="text-white text-2xl font-bold mb-4">Two-Factor Authentication</h2>
+        <p class="text-white mb-6">Enter verification code sent to ${email}</p>
+        
+        <form id="twofaForm" class="w-80">
+          <input 
+            type="text" 
+            id="twofaCode" 
+            class="text-white px-4 py-2 text-xl border border-white rounded w-full mb-4"
+            maxlength="6" 
+            placeholder="6-digit code"
+            inputmode="numeric"
+            pattern="\\d{6}"
+            required
+          >
+          <button 
+            type="submit" 
+            id="verifyBtn" 
+            class="text-white px-4 py-2 text-xl border border-white rounded w-full"
+          >
+            Verify
+          </button>
         </form>
-        <p id="twofaError" class="twofa-error hidden"></p>
-        <button id="resendBtn" class="twofa-resend">Resend Code</button>
+        
+        <p id="twofaError" class="text-red-400 hidden mt-2"></p>
+        
+        <button 
+          id="resendBtn" 
+          class="text-white px-2 py-1 text-xl underline"
+        >
+          Resend Code
+        </button>
       </div>
     `;
   },
