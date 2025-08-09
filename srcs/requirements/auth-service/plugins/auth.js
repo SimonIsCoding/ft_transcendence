@@ -1,4 +1,7 @@
 import jwt from 'jsonwebtoken';
+// import { loadSecretKey } from '../utils/loadSecretKey.js';
+
+// const cookieSecretKey = loadSecretKey('SECRET_KEY_FILE');
 
 export async function auth(request, reply)
 {

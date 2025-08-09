@@ -32,9 +32,13 @@ services:
   auth-service:
     container_name: auth-service
     build: requirements/auth-service
+    secrets:
+      - secret_key
     volumes:
       - pong:/var/www/html/pong
       - $PWD/srcs/data/pong:/app/database #share db file
+    environment:
+      - SECRET_KEY_FILE=/run/secrets/secret_key
   
   2fa-service:
     container_name: 2fa-service
@@ -103,4 +107,7 @@ secrets:
     file: ./secrets/email_user.txt
   email_password:
     file: ./secrets/email_password.txt
+  secret_key:
+    file: ./secrets/secret_key.txt
+  
 
