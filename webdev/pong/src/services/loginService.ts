@@ -1,6 +1,5 @@
 import { Router } from '../router';
 import { showSuccessPopup } from '../utils/utils';
-// import { hashPassword } from '../../../../srcs/requirements/auth-service/routes/registerRoute.js'
 import { showErrorPopup } from '../utils/utils';
 
 // --- form to log in
@@ -20,8 +19,6 @@ export async function initLogin()
 
 		const login = (document.getElementById("login") as HTMLInputElement).value;
 		const password = (document.getElementById("password") as HTMLInputElement).value;
-		// const encryptedPassword = await hashPassword(password);
-		// you have to encrypt before fetch. One question: while using bcrypt.compare, I will have 2 hashed psswd. Is it a pb using this function that way ?
 
 		if ((!login && login.trim() === "") || (!password && password.trim() === ""))
 			return showErrorPopup("You need a login and a password to log in", "popup");
@@ -53,6 +50,5 @@ export async function initLogin()
 			else
 				showErrorPopup("Sorry. Your credentials doesn't match", "popup");
 			});
-			console.log("login: ", login, "Password:", password);// to erase for PROD
 		});
 }
