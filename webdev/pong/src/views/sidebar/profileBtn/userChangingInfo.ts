@@ -29,8 +29,10 @@ export function eraseAccount()
 	
 	const popupYes = document.getElementById("popupYes");
 	popupYes?.addEventListener('click', async () => {
-		eraseAccountService();
+		await eraseAccountService();
+		console.log("just erased the account");
 		await handleSidebar();
+		console.log("just after having executed handleSidebar()");
 		Router.navigate('home');
 		showSuccessPopup("You have been disconnected and your account has been deleted", 3500, "popup");
 	});
