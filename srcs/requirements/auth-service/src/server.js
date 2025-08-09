@@ -17,13 +17,15 @@ import { statusRoute/*, userLoggedRoute*/ } from '../routes/userLoggedRoute.js';
 import { editProfileRoute } from '../routes/editProfileRoute.js';
 import { eraseAccountRoute } from '../routes/eraseAccountRoute.js';
 import db from './database.js';
+import { loadSecretKey } from '../utils/loadSecretKey.js';
 
 const app = fastify();
+const cookieSecretKey = loadSecretKey('SECRET_KEY_FILE');
 
 await app.register(multipart);//to receive images
 
 app.register(fastifyCookie, {
-  secret: 'super-secret-key', //to sign ur cookie // you should put it in a env file
+  secret: cookieSecretKey, //to sign ur cookie // you should put it in a env file
 });
 
 app.register(fastifyCors, {
@@ -33,7 +35,7 @@ app.register(fastifyCors, {
 
 
 app.register(fastifyJwt, {
-  secret: 'super-secret-key',// you should put it in a env file
+  secret: cookieSecretKey,// you should put it in a env file
   cookie: {
     cookieName: 'token',
     signed: false,
