@@ -1,6 +1,9 @@
 import db from '../src/database.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { loadSecretKey } from '../utils/loadSecretKey.js';
+
+const cookieSecretKey = loadSecretKey('SECRET_KEY_FILE');
 
 export async function loginRoute(fastify)
 {
@@ -15,7 +18,7 @@ export async function loginRoute(fastify)
 	const user = stmt.get(login);
 	const match = user ? await bcrypt.compare(password, user.password) : false;
 	
-	const SECRET = 'super-secret-key';// you should put it in a env file
+	const SECRET = cookieSecretKey;
 	if(user && match)
 	{
 		const token = jwt.sign({ id: user.id, login: user.login, mail: user.mail, profile_picture: user.profile_picture }, SECRET, { expiresIn: '24h' });// try to comment profile picture to know if we can receive it only thanks to app.get('/api/auth/info'
