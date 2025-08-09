@@ -42,10 +42,10 @@ export function friendsCard(): string
 	`
 }
 
-export function othersFriendsCard(): string
+export function othersFriendsCard(id: string): string
 {
 	return `
-	<div class="flex flex-col rounded-2xl w-full space-y-5 shadow-base shadow-gray-600 pr-5 pl-5 pt-2 pb-2 bg-black">
+	<div id=${id} class="flex flex-col rounded-2xl w-full space-y-5 shadow-base shadow-gray-600 pr-5 pl-5 pt-2 pb-2 bg-black">
 		<div class="flex items-center space-x-2">
 			<img src="" class="w-10 h-10 rounded-full object-cover border border-black bg-[#fbd11b] text-black flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md" />
 			
@@ -82,7 +82,8 @@ export function friendsSubmenuRender():string
 		</div>
 		<div id="othersFriendsDiv">
 			<p id="othersFriendsP" class="pl-4 self-start font-semibold text-sm">Others Users</p>
-			${othersFriendsCard()}
+			<div id="othersFriendsCard">
+			</div>
 		</div>
 	</div>
 	`

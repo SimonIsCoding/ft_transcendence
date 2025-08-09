@@ -18,6 +18,7 @@ import { editProfileRoute } from '../routes/editProfileRoute.js';
 import { eraseAccountRoute } from '../routes/eraseAccountRoute.js';
 import db from './database.js';
 import { loadSecretKey } from '../utils/loadSecretKey.js';
+import { countTotalUsers } from '../routes/manageFriends.js';
 
 const app = fastify();
 const cookieSecretKey = loadSecretKey('SECRET_KEY_FILE');
@@ -56,6 +57,7 @@ app.register(loginRoute);
 app.register(registerRoute);
 await uploadProfilePictureRoute(app);
 await infoUserRoute(app);
+await countTotalUsers(app);
 await logoutRoute(app);
 await statusRoute(app);
 // await userLoggedRoute(app);
