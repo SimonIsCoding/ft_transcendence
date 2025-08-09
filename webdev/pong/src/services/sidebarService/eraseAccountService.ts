@@ -4,20 +4,19 @@ export async function eraseAccountService()
 	.then(res => res.json())
 	.then(data => { return data.login });
 
-	fetch("/api/auth/eraseAccount", {
-		method: 'POST',
-		credentials: 'include',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ login: login })
+	const res = await fetch('/api/auth/logout', {
+		method: 'GET',
+		credentials: 'include'
 	})
-	.then(async res => {
-		if (res.status === 200)
-		{
-			//You also have to erase the user's data in the other db like friendsDB
-			await fetch('/api/auth/logout', {
-				method: 'GET',
-				credentials: 'include'
-			});
-		}
-	})
+
+	const logoutAnswer = await res.json();
+	if (logoutAnswer.success === true)
+	{
+		fetch("/api/auth/eraseAccount", {
+			method: 'POST',
+			credentials: 'include',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ login: login })
+		})
+	}
 }

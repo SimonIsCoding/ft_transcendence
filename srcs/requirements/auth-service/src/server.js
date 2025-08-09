@@ -25,7 +25,7 @@ const cookieSecretKey = loadSecretKey('SECRET_KEY_FILE');
 await app.register(multipart);//to receive images
 
 app.register(fastifyCookie, {
-  secret: cookieSecretKey, //to sign ur cookie // you should put it in a env file
+  secret: cookieSecretKey, //to sign ur cookie
 });
 
 app.register(fastifyCors, {
@@ -35,7 +35,7 @@ app.register(fastifyCors, {
 
 
 app.register(fastifyJwt, {
-  secret: cookieSecretKey,// you should put it in a env file
+  secret: cookieSecretKey,
   cookie: {
     cookieName: 'token',
     signed: false,

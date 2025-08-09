@@ -9,7 +9,7 @@ export async function statusRoute(fastify) {
 
     try
 	{
-      const decoded = fastify.jwt.verify(token);//jwt.verify(token, 'super-secret-key'); doesn't work well :|
+      const decoded = fastify.jwt.verify(token);
       return reply.send({ authenticated: true, user: decoded });
     }
 	catch (err)
