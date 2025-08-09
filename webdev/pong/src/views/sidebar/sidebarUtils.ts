@@ -1,6 +1,7 @@
 import { getUserInfo } from '../../services/sidebarService/utilsSidebarService'
 import { playSidebarBehavior } from './playBtn/playSidebarBehavior';
 import { userChangingInfo } from './profileBtn/userChangingInfo';
+import { seeFriendsList } from './profileBtn/manageFriendsSubmenu';
 
 export function renderBackButton(id: string): string
 {
@@ -74,16 +75,7 @@ export function profileSidebarBehavior()
 	
 	const friendsBtn = document.getElementById("friendsListBtn");
 	friendsBtn?.addEventListener('click', () => {
-		dashboardSubmenu?.classList.add('hidden');
-		gameHistorySubmenu?.classList.add('hidden');
-		friendsSubmenu?.classList.remove('hidden');
-		openMenu('largeSubmenu');
-		openMenu('friendsSubmenu');
-		const backBtnFriendsSubmenu = document.getElementById("backBtnFriendsSubmenu");
-		backBtnFriendsSubmenu?.addEventListener('click', () => {
-			closeAllMenus(submenus);
-			toggleMenuVisibility('profileSubmenu', submenus);
-		});
+		seeFriendsList(submenus, dashboardSubmenu, gameHistorySubmenu, friendsSubmenu);
 	});
 
 	const gameHistoryBtn = document.getElementById("gameHistoryBtn");
