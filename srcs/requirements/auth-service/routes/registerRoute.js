@@ -21,7 +21,7 @@ export async function registerRoute(fastify)
 		const { login, password, mail } = request.body;
 		
 		if (!login || !password || !mail)
-			return reply.status(400).send({ success: false, error: "All fields required" });
+			return reply.status(409).send({ success: false, error: "All fields required" });
 		const encryptedPassword = await hashPassword(password);
 		const avatarPath = getRandomAvatar();
 		try
@@ -39,8 +39,6 @@ export async function registerRoute(fastify)
 				if (err.message.includes('mail'))
 					return reply.status(409).send({ success: false, error: "Email already used" });
 			}
-			console.log("body received:", request.body);
-			console.error("SQL Error:", err);
 			return reply.status(500).send({ success: false, error: "Database error" });
 		}
 	});

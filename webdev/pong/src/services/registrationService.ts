@@ -22,7 +22,6 @@ export async function initRegistration(username: string, password: string, mail:
 		const data = await res.json();
 		if (!res.ok)
 			throw new Error(data.error);
-		//redirection on login page
 		Router.navigate('login');
 		showSuccessPopup("Your account has been created", 3500, "popup");
 	})
