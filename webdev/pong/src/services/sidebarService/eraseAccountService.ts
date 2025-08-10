@@ -1,14 +1,16 @@
+import { getUserLogin } from "../../utils/utils";
+import { manageOthersFriendsCard } from "../../views/sidebar/profileBtn/manageFriendsSubmenu";
+
 export async function eraseAccountService()
 {
-	const login = await fetch("/api/auth/info")
-	.then(res => res.json())
-	.then(data => { return data.login });
+	const login = await getUserLogin();
 
 	await fetch('/api/auth/logout', {
 		method: 'GET',
 		credentials: 'include'
 	})
-
+	
+	manageOthersFriendsCard.reset();
 	await fetch("/api/auth/eraseAccount", {
 		method: 'POST',
 		credentials: 'include',

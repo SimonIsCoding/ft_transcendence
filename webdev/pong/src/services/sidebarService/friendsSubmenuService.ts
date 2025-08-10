@@ -9,3 +9,4 @@ export async function getTotalUser()
 	const data = await res.json();
 	return data;
 }
+

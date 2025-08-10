@@ -136,7 +136,6 @@ export function editProfileSubmenuBehavior()
 	});
 }
 
-
 //open and close settingsSubmenu
 export function settingsSidebarBehavior()
 {
