@@ -33,13 +33,22 @@ export const manageOthersFriendsCard = (() => {
 		let max: number = totalUsers - 1 > 2 ? 2 : totalUsers - 1;
 		if (totalUsers == 2)
 			max = 1;
-		console.log("totalUsers = ", totalUsers);
+		let randomUser: User;
+		let listOthersFriends: User[] = [];
 		while (i <= max)
 		{
-			let randomUser: User = await getRandomOtherUser();
-			console.log("randomUser = ", randomUser.login);
+			randomUser = await getRandomOtherUser();
+			listOthersFriends.push(randomUser);
+			if (i > 1)
+			{
+				while (listOthersFriends[0].login === listOthersFriends[1].login)
+				{
+					listOthersFriends.pop();
+					randomUser = await getRandomOtherUser();
+					listOthersFriends.push(randomUser);
+				}
+			}
 			let name: string = `othersUsers_${randomUser.login}_card`;
-			console.log("name = ", name);
 			const container = document.getElementById("othersFriendsCard");
 			if (container)
 			{

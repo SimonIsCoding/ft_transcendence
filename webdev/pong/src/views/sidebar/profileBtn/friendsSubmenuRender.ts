@@ -12,7 +12,7 @@ interface User {
 export function followRequestCard(): string
 {
 	return `
-	<div class="flex flex-col rounded-2xl w-full space-y-5 shadow-base shadow-gray-600 pr-5 pl-5 pt-2 pb-2 bg-black">
+	<div class="flex flex-col rounded-2xl w-full space-y-1 shadow-base shadow-gray-600 pr-5 pl-5 pt-2 pb-2 bg-black">
 		<div class="flex items-center space-x-2">
 			<img src="" class="w-10 h-10 rounded-full object-cover border border-black bg-[#fbd11b] text-black flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md" />
 			
@@ -57,7 +57,7 @@ export const othersUsersCard = {
 
 	render(id: string, login: string): string {
 	return `
-	<div id="${id}" class="flex flex-col rounded-2xl w-full space-y-5 shadow-base shadow-gray-600 px-5 py-2 bg-black my-3">
+	<div id="${id}" class="flex flex-col rounded-2xl w-full space-y-1 shadow-base shadow-gray-600 px-5 py-2 bg-black my-3">
 		<div class="flex items-center space-x-2">
 			<img id="othersUsersPhoto_${login}" class="w-10 h-10 rounded-full object-cover border border-black bg-[#fbd11b] text-black flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md" />
 			
@@ -80,9 +80,6 @@ export const othersUsersCard = {
 	//check in db randomly x(=getTotalUsers:number) users
 	//if the user is not itself && not beyond the friends && not beyond the requested_friends && not the one already in the section OthersUsers (if there is)
 		//display it with name and photo
-	// else
-		// redo the process
-	//go to the following
 	const othersUsersUsername = document.getElementById(`othersUsersUsername_${otherUser.login}`);
 	if (othersUsersUsername)
 		othersUsersUsername.textContent = otherUser.login;
@@ -101,15 +98,15 @@ export function friendsSubmenuRender():string
 		${renderBackButton("backBtnFriendsSubmenu")}
 		<p id="submenuFriendsName" class="font-bold text-center pt-5">Friends List</p>
 		<hr class="w-full border-t-1.5 border-black" />
-		<div id="followRequestDiv">
+		<div id="followRequestDiv" class="w-[85%]">
 			<p id="followRequest" class="pl-4 self-start font-semibold text-sm">Follow Request</p>
 			${followRequestCard()}
 		</div>
-		<div id="friendsListDiv">
+		<div id="friendsListDiv" class="w-[85%]">
 			<p id="friendsListP" class="pl-4 self-start font-semibold text-sm">Friends</p>
 			${friendsCard()}
 		</div>
-		<div id="othersFriendsDiv">
+		<div id="othersFriendsDiv" class="w-[85%]">
 			<p id="othersUsersP" class="pl-4 self-start font-semibold text-sm">Others Users</p>
 			<div id="othersFriendsCard">
 			</div>

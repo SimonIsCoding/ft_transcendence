@@ -5,7 +5,6 @@ export async function getTotalUser()
 		method: 'GET',
 		credentials: 'include'
 	})
-
 	const data = await res.json();
 	return data;
 }
