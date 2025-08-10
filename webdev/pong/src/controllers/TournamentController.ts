@@ -4,43 +4,28 @@ import { GameView } from '../views/game';
 import { currentTournament } from '../models/TournamentStore';
 
 export class TournamentController {
-    private model;
-
-    constructor(model: any) {
-        this.model = model;
-    }
 
     iniciarTorneo() {
-        // this.model.players = [];
-
-        // for (let i = 1; i <= 4; i++) {
-        //     let alias = '';
-        //     while (!alias) {
-        //         alias = prompt(`Introduce el alias del jugador ${i}:`)?.trim() || '';
-        //     }
-        //     this.model.addPlayer(alias);
-        // }
-        if (currentTournament?.isReady())
-        {
-            this.model.generateMatches();
-        }
-        this.jugarPartido(this.model.semifinal1!, () => {
-            alert(`${this.model.semifinal1.winner.alias} ha ganado esta partida`);
-            this.jugarPartido(this.model.semifinal2!, () => {
-                alert(`${this.model.semifinal2.winner.alias} ha ganado esta partida`);
-                if (this.model.semifinal1!.winner && this.model.semifinal2!.winner) {
-                    this.model.generateFinal();
-                    this.jugarPartido(this.model.finalMatch!, () => {
-                        const ganador = this.model.finalMatch!.winner!;
-                          alert(`🏆 Ganador del torneo: ${ganador.alias}`);
-                        this.model.setWinner(ganador);
-                        this.model.saveToLocalStorage();
-                        // enviar al home temporalmente
-                        Router.navigate('home')
-                    });
-                }
+        if (currentTournament?.isReady()) {
+            currentTournament?.generateMatches();
+            this.jugarPartido(currentTournament?.semifinal1!, () => {
+                alert(`${currentTournament?.semifinal1?.winner?.alias} ha ganado esta partida`);
+                this.jugarPartido(currentTournament?.semifinal2!, () => {
+                    alert(`${currentTournament?.semifinal2?.winner?.alias} ha ganado esta partida`);
+                    if (currentTournament?.semifinal1!.winner && currentTournament?.semifinal2!.winner) {
+                        currentTournament?.generateFinal();
+                        this.jugarPartido(currentTournament?.finalMatch!, () => {
+                            const ganador = currentTournament?.finalMatch!.winner!;
+                            alert(`🏆 Ganador del torneo: ${ganador.alias}`);
+                            currentTournament?.setWinner(ganador);
+                            currentTournament?.saveToLocalStorage();
+                            // enviar al home temporalmente !!!
+                            Router.navigate('home')
+                        });
+                    }
+                });
             });
-        });
+        }
     }
     private jugarPartido(match: Match, callback: () => void) {
         GameView.setPlayersAndCallback(
