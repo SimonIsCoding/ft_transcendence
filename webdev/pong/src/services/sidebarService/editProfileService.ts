@@ -1,4 +1,5 @@
 import { showErrorPopup, isValidEmail, showSuccessPopup } from "../../utils/utils";
+import { getUserLogin } from "../../utils/utils";
 
 export async function reloadUserInfo(): Promise<void>
 {
@@ -23,15 +24,13 @@ export async function reloadUserInfo(): Promise<void>
 
 export async function editProfileService()
 {
-	const login = await fetch("/api/auth/info")
-	.then(res => res.json())
-	.then(data => { return data.login });
+	const login = await getUserLogin();
 
 	const currentPassword = (document.getElementById("currentPasswordEditProfile") as HTMLInputElement).value;
 	const changePassword = (document.getElementById("changePasswordEditProfile") as HTMLInputElement).value;
 	const repeatPassword = (document.getElementById("repeatPasswordEditProfile") as HTMLInputElement).value;
 	const changeMail = (document.getElementById("changeMailEditProfile") as HTMLInputElement).value;
-	
+
 	if ((!changeMail && changeMail.trim() === "") && (!currentPassword && currentPassword.trim() === ""))
 		return showErrorPopup("You have to fill more fields to update your informations.", "popup");
 
