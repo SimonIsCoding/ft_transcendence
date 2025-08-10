@@ -9,10 +9,6 @@ export function playSubmenuRender(): string
 		<button id="oneVsAIBtn" class="font-bold rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit">1 vs AI</button>
 		<hr class="border-t-1 border-black w-20" />
 		<button id="tournamentBtn" class="font-bold rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit">Tournament</button>
-		<input class="border border-black rounded-[14px] text-center" type="text" id="alias1" name="player1" value="" />
-		<input class="border border-black rounded-[14px] text-center" type="text" id="alias2" name="player2" value="" />
-		<input class="border border-black rounded-[14px] text-center" type="text" id="alias3" name="player3" value="" />
-		<input class="border border-black rounded-[14px] text-center" type="text" id="alias4" name="player4" value="" />
 	</div>
 	`
 }

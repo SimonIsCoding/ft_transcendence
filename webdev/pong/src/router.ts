@@ -6,7 +6,7 @@ import { gameController } from './controllers/gameController';
 import { initTwoFAController } from './controllers/twofaController';
 // import { TournamentView } from './views/TournamentView.ts';
 import { TournamentController } from './controllers/TournamentController.ts';
-import { TournamentModel } from './models/TournamentModel.ts';
+// import { TournamentModel } from './models/TournamentModel.ts';
 
 interface User {
   login: string;
@@ -69,7 +69,7 @@ export class Router {
     console.log('antes de iniciar el juego')
     GameView.initGameCanvas();
     console.log('despues de iniciar el juego')
-    const controller = new TournamentController(new TournamentModel());
+    const controller = new TournamentController();
     controller.iniciarTorneo();
     gameController.init();
     // this.app.innerHTML = TournamentView.render();
