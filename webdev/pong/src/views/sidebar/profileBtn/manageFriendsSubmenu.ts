@@ -13,37 +13,47 @@ interface User {
 
 //You can encapsulate i in a closure or a class.
 export const manageOthersFriendsCard = (() => {
-  let i = 0; // variable privée
+  let i = 1;
 
-  async function main() {
-    const othersFriendsDiv = document.getElementById("othersFriendsDiv");
-    const othersUsersP = document.getElementById("othersUsersP");
-    const totalUsers = await getTotalUser();
+  async function main()
+  {
+	const othersFriendsDiv = document.getElementById("othersFriendsDiv");
+	const othersUsersP = document.getElementById("othersUsersP");
+	const totalUsers = await getTotalUser();
 
-    if (totalUsers <= 1) {
-      othersFriendsDiv?.classList.add("hidden");
-      othersUsersP?.classList.add("hidden");
-    } else {
-      othersFriendsDiv?.classList.remove("hidden");
-      othersUsersP?.classList.remove("hidden");
-      const max: number = totalUsers - 1 > 2 ? 2 : totalUsers - 1;
-
-      while (i <= max) {
-        const randomUser: User = await getRandomOtherUser();
-        let name: string = `othersUsers_${randomUser.login}_card`;
-        const container = document.getElementById("othersFriendsCard");
-
-        if (container) {
-          container.insertAdjacentHTML("beforeend", othersUsersCard.render(name));
-          othersUsersCard.init(randomUser);
-        }
-        i++;
-      }
+	if (totalUsers <= 1)
+	{
+		othersFriendsDiv?.classList.add("hidden");
+		othersUsersP?.classList.add("hidden");
+	}
+	else
+	{
+		othersFriendsDiv?.classList.remove("hidden");
+		othersUsersP?.classList.remove("hidden");
+		let max: number = totalUsers - 1 > 2 ? 2 : totalUsers - 1;
+		if (totalUsers == 2)
+			max = 1;
+		console.log("totalUsers = ", totalUsers);
+		while (i <= max)
+		{
+			let randomUser: User = await getRandomOtherUser();
+			console.log("randomUser = ", randomUser.login);
+			let name: string = `othersUsers_${randomUser.login}_card`;
+			console.log("name = ", name);
+			const container = document.getElementById("othersFriendsCard");
+			if (container)
+			{
+				container.insertAdjacentHTML("beforeend", othersUsersCard.render(name, randomUser.login));
+				othersUsersCard.init(randomUser);
+			}
+			i++;
+		}
     }
   }
 
-  function reset() {
-    i = 0;
+  function reset()
+  {
+	i = 1;
   }
 
   return { main, reset };
@@ -109,11 +119,10 @@ export async function getRandomOtherUser(): Promise<User>
 
 export async function manageCardInit()
 {
-	console.log("entered in manageCardInit");
 	await manageOthersFriendsCard.main();
 }
 
-export function seeFriendsList(submenus:NodeListOf<HTMLElement>, dashboardSubmenu:HTMLElement | null, gameHistorySubmenu:HTMLElement | null, friendsSubmenu: HTMLElement | null,)
+export function seeFriendsList(submenus:NodeListOf<HTMLElement>, dashboardSubmenu:HTMLElement | null, gameHistorySubmenu:HTMLElement | null, friendsSubmenu: HTMLElement | null)
 {
 
 	const backBtnFriendsSubmenu = document.getElementById("backBtnFriendsSubmenu");
