@@ -55,14 +55,14 @@ export const othersUsersCard = {
 //   currentUser: null as User | null,
 //   isLogin: true,
 
-	render(id: string): string {
+	render(id: string, login: string): string {
 	return `
 	<div id="${id}" class="flex flex-col rounded-2xl w-full space-y-5 shadow-base shadow-gray-600 px-5 py-2 bg-black my-3">
 		<div class="flex items-center space-x-2">
-			<img id="othersUsersPhoto" class="w-10 h-10 rounded-full object-cover border border-black bg-[#fbd11b] text-black flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md" />
+			<img id="othersUsersPhoto_${login}" class="w-10 h-10 rounded-full object-cover border border-black bg-[#fbd11b] text-black flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md" />
 			
 			<div class="flex flex-col justify-center">
-				<p id="othersUsersUsername" class="font-bold text-sm text-[#fbd11b]">FriendUsername</p>
+				<p id="othersUsersUsername_${login}" class="font-bold text-sm text-[#fbd11b]">FriendUsername</p>
 			</div>
 		</div>
 
@@ -83,11 +83,11 @@ export const othersUsersCard = {
 	// else
 		// redo the process
 	//go to the following
-	const othersUsersUsername = document.getElementById("othersUsersUsername");
+	const othersUsersUsername = document.getElementById(`othersUsersUsername_${otherUser.login}`);
 	if (othersUsersUsername)
 		othersUsersUsername.textContent = otherUser.login;
 
-	const othersUsersPhoto = document.getElementById("othersUsersPhoto") as HTMLImageElement;
+	const othersUsersPhoto = document.getElementById(`othersUsersPhoto_${otherUser.login}`) as HTMLImageElement;
 	if (othersUsersPhoto)
   		othersUsersPhoto.src = `https://localhost:4443/${otherUser.profile_picture}`;
 	
