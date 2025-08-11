@@ -78,9 +78,6 @@ export const othersUsersCard = {
 
   async init(otherUser: User): Promise<void>
   {
-	//check in db randomly x(=getTotalUsers:number) users
-	//if the user is not itself && not beyond the friends && not beyond the requested_friends && not the one already in the section OthersUsers (if there is)
-		//display it with name and photo
 	const othersUsersUsername = document.getElementById(`othersUsersUsername_${otherUser.login}`);
 	if (othersUsersUsername)
 		othersUsersUsername.textContent = otherUser.login;
@@ -94,26 +91,10 @@ export const othersUsersCard = {
 	addFriendBtn?.addEventListener('click', () => {
 		fadeOutAndRemove(othersUsersCard);
 		showSuccessPopup("Invitation sent", 3500, "popup");
-		setTimeout(() => othersUsersCard?.remove(), 1000);
+		//you have to call the backend to change status about friendList
 	});
   }
 };
-
-export function fadeOutAndRemove(el: HTMLElement | null, durationClass = 'duration-750'): void
-{
-	if (!el)
-		return;
-
-	el.classList.remove('hidden', 'opacity-0');
-	el.classList.add('opacity-100', 'transition-opacity', 'duration-1000', 'ease-out');
-
-	void el.offsetWidth;
-	el.classList.remove('opacity-100');
-	el.classList.add('opacity-0');
-	const durationMs = durationClass === 'duration-1000' ? 1000 : 300;
-	setTimeout(() => el.remove(), durationMs + 20);
-}
-
 
 export function friendsSubmenuRender():string 
 {
@@ -137,4 +118,19 @@ export function friendsSubmenuRender():string
 		</div>
 	</div>
 	`
+}
+
+export function fadeOutAndRemove(el: HTMLElement | null, durationClass = 'duration-750'): void
+{
+	if (!el)
+		return;
+
+	el.classList.remove('hidden', 'opacity-0');
+	el.classList.add('opacity-100', 'transition-opacity', 'duration-1000', 'ease-out');
+
+	void el.offsetWidth;
+	el.classList.remove('opacity-100');
+	el.classList.add('opacity-0');
+	const durationMs = durationClass === 'duration-1000' ? 1000 : 300;
+	setTimeout(() => el.remove(), durationMs + 20);
 }
