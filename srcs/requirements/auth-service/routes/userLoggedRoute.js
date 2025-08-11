@@ -1,37 +1,61 @@
-// import { auth } from '../plugins/auth.js';
-
 export async function statusRoute(fastify) {
   fastify.get('/status', async (request, reply) => {
-    const token = request.cookies.token;
-
-    if (!token)
-      return reply.send({ authenticated: false });
-
-    try
-	{
-      const decoded = fastify.jwt.verify(token);//jwt.verify(token, 'super-secret-key'); doesn't work well :|
-      return reply.send({ authenticated: true, user: decoded });
+    // 1. Check for auth token cookie
+    const token = request.cookies.auth_token;
+    
+    if (!token) {
+      return reply.send({ 
+        authenticated: false,
+        requires2FA: process.env.ENABLE_2FA === 'true'
+      });
     }
-	catch (err)
-	{
-      return reply.send({ authenticated: false });
+
+    try {
+      // 2. Verify token
+      const decoded = await request.jwtVerify(token);
+      
+      // 3. Return standardized response
+      return reply.send({
+        authenticated: true,
+        requires2FA: process.env.ENABLE_2FA === 'true' && !decoded.is2FAVerified,
+        user: {
+          id: decoded.userId,  // Matches your JWT claims
+          is2FAVerified: decoded.is2FAVerified || false
+          // No sensitive data in the token
+        }
+      });
+      
+    } catch (err) {
+      fastify.log.error('JWT verification failed:', err);
+      // 4. Clear invalid token
+      reply.clearCookie('auth_token');
+      return reply.send({ 
+        authenticated: false,
+        requires2FA: process.env.ENABLE_2FA === 'true'
+      });
     }
   });
 }
 
-// useless for the moment - but useful when I will add a profile page
-export async function userLoggedRoutes(app)
-{
-	app.get('/me', { preHandler: [app.auth] }, async (request, reply) => {
-		return {
-			success: true,
-			user: {
-				id: request.user.id,
-				login: request.user.login,
-				email: request.user.mail,
-				profile_picture: request.user.profile_picture,
-				token: request.user.token,
-			}
-		};
-	});
+// Updated userLoggedRoutes
+export async function userLoggedRoutes(app) {
+  app.get('/me', { preHandler: [app.auth] }, async (request, reply) => {
+    try {
+      const user = await app.db.get(
+        'SELECT id, login, mail as email, profile_picture FROM users WHERE id = ?',
+        [request.user.id]
+      );
+      
+      return {
+        success: true,
+        user: {
+          ...user,
+          is_2fa_verified: request.user.is_2fa_verified || false
+        }
+      };
+    } catch (err) {
+      app.log.error(err);
+      return reply.code(500).send({ success: false });
+    }
+  });
 }

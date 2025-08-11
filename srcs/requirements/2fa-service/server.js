@@ -1,15 +1,20 @@
 // requirements/2fa-service/server.js
 import fastify from 'fastify';
+import fastifyJwt from '@fastify/jwt';
 import helmet from '@fastify/helmet';
 import rateLimit from '@fastify/rate-limit';
 import cors from '@fastify/cors';
 import { config } from './config.js';
-import authRoutes from './routes/authRoutes.js';
+import authRoutes from './routes/twofaRoutes.js';
 
 // Initialize Fastify
 const server = fastify({ 
   logger: true,
   trustProxy: true 
+});
+
+app.register(fastifyJwt, {
+  secret: 'super-secret-key',// you should put it in a env file
 });
 
 // Security Middleware

@@ -1,5 +1,5 @@
 import fp from 'fastify-plugin';
-import { initiate2FA, verify2FA } from '../services/authService.js';
+import { initiate2FA, verify2FA, resend2FA } from '../services/twofaService.js';
 
 export default fp(async (fastify) => {
   // Request 2FA Token
@@ -36,32 +36,38 @@ export default fp(async (fastify) => {
       }
     }
   }, async (request, reply) => {
-	try {
+    try {
       const { email, token } = request.body;
-      const result = await verify2FA(email, token);
-    
-      if (!result.success) {
-        reply.code(401).send(result);
-        return;
+      
+      // 1. Verify 2FA code
+      const verification = await verify2FA(email, token);
+      if (!verification.success) {
+        return reply.code(401).send(verification);
       }
-    
-      reply.send(result);
-	} catch (error) {
+
+      // 2. Upgrade auth phase (instead of issuing token)
+      reply
+        .setCookie('auth_phase', '2fa_verified', {
+          httpOnly: true,
+          secure: true,
+          sameSite: 'strict',
+          path: '/',
+          maxAge: 300_000 // 5 minutes
+        })
+        .send({ 
+          success: true,
+          userId: verification.user.id // Frontend needs this for /generate-token
+        });
+
+    } catch (error) {
       fastify.log.error(error);
-      reply.code(500).send({ error: 'Failed to verify 2FA code' });
+      reply.code(500).send({ error: '2FA verification failed' });
     }
   });
 
   // Resend 2FA Token
   fastify.post('/resend', {
     schema: {
-      headers: {
-        type: 'object',
-        required: ['authorization'],
-        properties: {
-          authorization: { type: 'string' }
-        }
-      },
       body: {
         type: 'object',
         required: ['email'],
@@ -69,22 +75,14 @@ export default fp(async (fastify) => {
           email: { type: 'string', format: 'email' }
         }
       }
-    },
-    preHandler: fastify.auth([fastify.verifyJWT])
+    }
   }, async (request, reply) => {
-    const { email } = request.body;
-    
     try {
-      // Verify the email matches the JWT subject
-      if (email !== request.user.email) {
-        return reply.code(403).send({ error: 'Unauthorized' });
-      }
-
-      const result = await resend2FA(email);
+      const result = await resend2FA(request.body.email);
       reply.send(result);
     } catch (error) {
       fastify.log.error(error);
-      reply.code(500).send({ error: 'Failed to resend 2FA code' });
+      reply.code(500).send({ error: 'Failed to resend code' });
     }
   });
 });
