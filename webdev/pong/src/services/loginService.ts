@@ -67,30 +67,27 @@ console.log('Container State:', {
 	
 			console.log('Attempting TwoFAController creation');
 
-             const controller = new TwoFAController(
-                loginData.mail,
-                'login',
-                loginData.token,
-                () => {
-			      console.log('2FA Success callback triggered');
-                  loginForm.classList.add('hidden');
-                  twofaContainer.classList.add('hidden');
-                  handleSuccessfulLogin(loginData.login);
-                },
-                twofaContainer,
-                (message, isFinal) => {
+          const controller = new TwoFAController(
+		    loginData.mail,
+		    'login',
+		    async () => { 
+		      console.log('2FA Success callback triggered');
+		  		  
+		      loginForm.classList.add('hidden');
+		      twofaContainer.classList.add('hidden');
+		      handleSuccessfulLogin(loginData.login, loginData.userId);
+		    },
+		    twofaContainer,
+      		(message, isFinal) => {
 				  console.log(`2FA Error: ${message}`, isFinal);
                   showErrorPopup(message);
                   if (isFinal) {
+					document.cookie = 'auth_phase=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    				document.cookie = 'auth_token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
                     sessionStorage.setItem('loginError', message);
-                    fetch('/api/auth/invalidate', {
-                      method: 'POST',
-                      credentials: 'include'
-                    }).finally(() => {
-                      (document.getElementById('password') as HTMLInputElement).value = '';
-                      loginForm.classList.remove('hidden');
-                      twofaContainer.classList.add('hidden');
-                    });
+                    (document.getElementById('password') as HTMLInputElement).value = '';
+                    if (loginForm) loginForm.classList.remove('hidden');
+                    if (twofaContainer) twofaContainer.classList.add('hidden');
                   }
                 }
               );
@@ -106,7 +103,7 @@ console.log('Container State:', {
           }
         }
       } else {
-        handleSuccessfulLogin(login);
+        handleSuccessfulLogin(login, loginData.userId);
       }
     } catch (error) {
       showLoginError("Network error during login");
@@ -117,25 +114,35 @@ console.log('Container State:', {
   });
 }
 
-function handleSuccessfulLogin(username: string): void {
-  localStorage.setItem('login', username);
-  
-  fetch('/api/auth/info', { credentials: 'include' })
-    .then(res => {
-      if (res.ok) {
-        return fetch('/api/auth/infoUser', { credentials: 'include' });
-      }
-      throw new Error("Failed to get user info");
-    })
-    .then(() => {
-      Router.navigate('home');
-      showSuccessPopup("You are logged in");
-    })
-    .catch(error => {
-      console.error("User info error:", error);
-      showErrorPopup("Login complete but couldn't load user data");
-      Router.navigate('home');
+async function handleSuccessfulLogin(username: string, userId: string): Promise<void> {
+  try {
+    // 1. Generate token (works for both 2FA and non-2FA flows)
+    const tokenRes = await fetch('/api/auth/generate-token', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId })
     });
+
+    if (!tokenRes.ok) {
+      throw new Error('Token generation failed');
+    }
+
+    // 2. Store username and fetch user info
+    localStorage.setItem('login', username);
+    
+    const userInfoRes = await fetch('/api/auth/info', { credentials: 'include' });
+    if (!userInfoRes.ok) throw new Error("Failed to get user info");
+
+    // 3. Navigate to home
+    Router.navigate('home');
+    showSuccessPopup("You are logged in");
+
+  } catch (error) {
+    console.error("Login completion error:", error);
+    showErrorPopup("Login complete but couldn't load session");
+    Router.navigate('home');
+  }
 }
 
 function showLoginError(message: string): void {

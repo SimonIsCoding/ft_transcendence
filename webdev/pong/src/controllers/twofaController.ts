@@ -6,7 +6,6 @@ export class TwoFAController {
   private readonly maxAttempts = 3;
   private readonly email: string;
   private readonly flowType: 'login' | 'register';
-  private readonly authToken: string;
   private readonly onSuccess: () => void;
   private readonly container: HTMLElement;
   private readonly onFailure?: (message: string, isFinal: boolean) => void;
@@ -14,33 +13,32 @@ export class TwoFAController {
   constructor(
     email: string,
     flowType: 'login' | 'register',
-    authToken: string,
     onSuccess: () => void,
     container: HTMLElement,
     onFailure?: (message: string, isFinal: boolean) => void
-   ) {
+  ) {
     this.email = email;
     this.flowType = flowType;
-    this.authToken = authToken;
     this.onSuccess = onSuccess;
     this.container = container;
     this.onFailure = onFailure || this.defaultFailureHandler;
+
+    console.log('2FA Controller initialized for:', email);
   }
 
   public init(): HTMLElement {
-    // Use twofaView.render() instead of local render method
-  console.log('Rendering 2FA template for:', this.email); // Add this
-
+    console.log('Rendering 2FA template for:', this.email);
     const view = document.createElement('div');
     view.innerHTML = twofaView.render(this.email);
-  // DEBUG: Check if template rendered
-  if (!view.innerHTML.includes('twofaForm')) {
-    console.error('Template failed to render!', {
-      templateOutput: twofaView.render(this.email),
-      email: this.email
-    });
-    throw new Error('2FA template error');
-  }
+
+    // Debug template rendering
+    if (!view.innerHTML.includes('twofaForm')) {
+      console.error('Template rendering failed!', {
+        templateOutput: twofaView.render(this.email),
+        container: this.container
+      });
+      throw new Error('2FA template error');
+    }
 
     this.setupEventListeners(view);
     return view;
@@ -59,22 +57,27 @@ export class TwoFAController {
   }
 
   private async verifyCode(code: string): Promise<void> {
+    console.log('Verifying 2FA code:', code);
     if (!/^\d{6}$/.test(code)) {
       this.showError('Please enter a valid 6-digit code');
       return;
     }
 
     this.attempts++;
+    console.log(`Attempt ${this.attempts}/${this.maxAttempts}`);
 
     try {
       const response = await fetch('/api/2fa/verify', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.authToken}`
-        },
-        body: JSON.stringify({ code })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          email: this.email,
+          token: code 
+        }),
+        credentials: 'include' // Crucial for cookies
       });
+
+      console.log('Verification response:', response.status, await response.text());
 
       if (response.ok) {
         this.onSuccess();
@@ -82,6 +85,7 @@ export class TwoFAController {
         await this.handleFailedAttempt(response);
       }
     } catch (error) {
+      console.error('Verification error:', error);
       await this.handleFailedAttempt();
     }
   }
@@ -95,12 +99,17 @@ export class TwoFAController {
       try {
         const data = await response.json();
         errorMessage = data.message || errorMessage;
-      } catch (_) {}
+        console.log('Failure details:', data);
+      } catch (e) {
+        console.error('Failed to parse error response:', e);
+      }
     }
 
     errorMessage += isFinal 
       ? '. Maximum attempts reached.' 
       : ` (${remaining} ${remaining === 1 ? 'attempt' : 'attempts'} remaining)`;
+
+    console.log(`Attempt failed. Message: ${errorMessage}`);
 
     if (this.onFailure) {
       this.onFailure(errorMessage, isFinal);
@@ -113,25 +122,36 @@ export class TwoFAController {
   }
 
   private async invalidateSession(): Promise<void> {
+    console.log('Invalidating session...');
     await fetch('/api/auth/invalidate', {
+      method: 'POST',
       credentials: 'include'
     });
   }
 
   private async resendCode(): Promise<void> {
+    console.log('Resending 2FA code to:', this.email);
     try {
-      await fetch('/api/2fa/resend', {
-        headers: {
-          'Authorization': `Bearer ${this.authToken}`
-        }
+      const response = await fetch('/api/2fa/resend', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: this.email }),
+        credentials: 'include'
       });
-      this.showError('New code sent successfully');
+
+      if (response.ok) {
+        this.showError('New code sent successfully');
+      } else {
+        throw new Error('Failed to resend');
+      }
     } catch (error) {
+      console.error('Resend failed:', error);
       this.showError('Failed to resend code');
     }
   }
 
   private showError(message: string): void {
+    console.log('Displaying error:', message);
     const errorEl = this.container.querySelector('#twofaError');
     if (errorEl) {
       errorEl.textContent = message;
@@ -142,7 +162,8 @@ export class TwoFAController {
   private defaultFailureHandler = (message: string, isFinal: boolean): void => {
     this.showError(message);
     if (isFinal) {
-      this.container.querySelector('button[type="submit"]')?.setAttribute('disabled', 'true');
+      const submitBtn = this.container.querySelector('button[type="submit"]');
+      if (submitBtn) submitBtn.setAttribute('disabled', 'true');
     }
   };
 }
