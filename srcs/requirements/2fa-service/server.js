@@ -13,7 +13,7 @@ const server = fastify({
   trustProxy: true 
 });
 
-app.register(fastifyJwt, {
+await server.register(fastifyJwt, {
   secret: 'super-secret-key',// you should put it in a env file
 });
 
