@@ -1,9 +1,11 @@
 import{ toggleMenuVisibility } from '../sidebarUtils'
 import { Router } from '../../../router';
 import { showErrorPopup } from '../../../utils/utils';
-import { TournamentModel } from '../../../models/TournamentModel';
-import { setTournament } from '../../../models/TournamentStore';
-import { playersName } from '../../tournamentStart';
+// import { tournamentAreaInit } from './TournamentArea';
+// import { TournamentModel } from '../../../models/TournamentModel';
+// import { setTournament } from '../../../models/TournamentStore';
+// import { playersName } from '../../tournamentStart';
+import { TournamentArea } from '../../TournamentArea';
 
 function swapPlayer(id1: string, id2: string): void
 {
@@ -74,7 +76,7 @@ export function oneVsOneAreaInit()
 
 export function tournamentAreaInit()
 {
-	console.log('siii')
+	
 	const tournamentBtn = document.getElementById("tournamentBtn");
 	const gameArea = document.getElementById("gameArea");
 	const tournamentArea = document.getElementById("tournamentArea");
@@ -85,28 +87,6 @@ export function tournamentAreaInit()
 		oneVsOneArea?.classList.add('hidden');
 		oneVsAIArea?.classList.add('hidden');
 		tournamentArea?.classList.remove('hidden');
-	});
-
-	const playtournamentBtn = document.getElementById('playtournamentBtn') as HTMLButtonElement | null;
-	playtournamentBtn!.addEventListener('click', () => {
-		const player1 = (document.getElementById("alias1") as HTMLInputElement).value;
-		const player2 = (document.getElementById("alias2") as HTMLInputElement).value;
-		const player3 = (document.getElementById("alias3") as HTMLInputElement).value;
-		const player4 = (document.getElementById("alias4") as HTMLInputElement).value;
-
-		if (!player1.trim() || !player2.trim() || !player3.trim() || !player4.trim())
-		{
-			showErrorPopup("You need 4 players to start a tournament.", "tournamentAreaPopup");
-			return ;
-		}
-		const torneo = new TournamentModel();
-		torneo.addPlayer(player1);
-		torneo.addPlayer(player2);
-		torneo.addPlayer(player3);
-		torneo.addPlayer(player4);
-		setTournament(torneo);
-		playersName();
-		Router.navigate('tournament');
 	});
 }
 
@@ -148,5 +128,6 @@ export function playSidebarBehavior()
 		oneVsOneAreaInit();
 		oneVsAIAreaInit();
 		tournamentAreaInit();
+		TournamentArea.init();
 	});
 }

@@ -89,23 +89,6 @@ export const userLoggedSidebar = {
   init(): void
   {
 	setupMenuHandlers();
-	// const tournamentBtn = document.getElementById('tournamentBtn');
-	// tournamentBtn?.addEventListener('click', () => {
-	// 	const alias1 = (document.getElementById("alias1") as HTMLInputElement).value;
-	// 	const alias2 = (document.getElementById("alias2") as HTMLInputElement).value;
-	// 	const alias3 = (document.getElementById("alias3") as HTMLInputElement).value;
-	// 	const alias4 = (document.getElementById("alias4") as HTMLInputElement).value;
-	// 	// const aliases = [alias1, alias2, alias3, alias4];
-	// 	const torneo = new TournamentModel();
-	// 	torneo.addPlayer(alias1);
-	// 	torneo.addPlayer(alias2);
-	// 	torneo.addPlayer(alias3);
-	// 	torneo.addPlayer(alias4);
-	// 	console.log('torneo' + torneo)
-	// 	setTournament(torneo);
-	// 	// model.addPlayer(aliases);
-	// 	Router.navigate('tournament')
-	// });
   }
 }
 
