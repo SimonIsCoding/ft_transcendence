@@ -131,8 +131,8 @@ async function handleSuccessfulLogin(username: string, userId: string): Promise<
     // 2. Store username and fetch user info
     localStorage.setItem('login', username);
     
-    const userInfoRes = await fetch('/api/auth/info', { credentials: 'include' });
-    if (!userInfoRes.ok) throw new Error("Failed to get user info");
+    //const userInfoRes = await fetch('/api/auth/info', { credentials: 'include' });
+    //if (!userInfoRes.ok) throw new Error("Failed to get user info");
 
     // 3. Navigate to home
     Router.navigate('home');

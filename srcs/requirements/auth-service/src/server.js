@@ -38,7 +38,7 @@ app.register(fastifyCors, {
 app.register(fastifyJwt, {
   secret: process.env.JWT_SECRET || 'super-secret-key',// you should put it in a env file
   cookie: {
-    cookieName: process.env.ENABLE_2FA === 'true' ? 'pre_2fa_token' : 'auth_token',
+    cookieName: 'auth_token',
     signed: false,
   }
 });
@@ -60,29 +60,6 @@ await infoUserRoute(app);
 await logoutRoute(app);
 await statusRoute(app);
 
-// Token Exchange Endpoint (for 2FA)
-app.post('/token-exchange', { preHandler: [app.auth] }, async (request, reply) => {
-  if (process.env.ENABLE_2FA !== 'true') {
-    return reply.code(400).send({ error: '2FA not enabled' });
-  }
-
-  const newToken = await reply.jwtSign({
-    ...request.user,
-    is_2fa_verified: true
-  }, {
-    expiresIn: '24h'
-  });
-
-  reply
-    .setCookie('auth_token', newToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
-      path: '/'
-    })
-    .clearCookie('pre_2fa_token')
-    .send({ success: true });
-});
 
 //maybe you could put it in a specific file 
 app.get('/info', { preHandler: [app.auth] }, async (request, reply) => {
