@@ -1,4 +1,5 @@
 // import { getUserPic/*, getUserLogin, getUserMail*/ } from '../../../utils/utils.ts';
+import { showSuccessPopup } from '../../../utils/utils.ts';
 import { renderBackButton } from '../sidebarUtils.ts'
 
 interface User {
@@ -57,7 +58,7 @@ export const othersUsersCard = {
 
 	render(id: string, login: string): string {
 	return `
-	<div id="${id}" class="flex flex-col rounded-2xl w-full space-y-1 shadow-base shadow-gray-600 px-5 py-2 bg-black mb-3">
+	<div id="${id}" class="flex flex-col rounded-2xl w-full space-y-1 shadow-base shadow-gray-600 px-5 py-2 bg-black mb-3 opacity-100 transition-opacity">
 		<div class="flex items-center space-x-2">
 			<img id="othersUsersPhoto_${login}" class="w-10 h-10 rounded-full object-cover border border-black bg-[#fbd11b] text-black flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md" />
 			
@@ -67,7 +68,7 @@ export const othersUsersCard = {
 		</div>
 
 		<div class="flex justify-center space-x-2">
-			<button class="px-2 py-1 rounded-full border border-[#fbd11b] text-[#fbd11b] bg-black hover:bg-[#fbd11b] hover:text-black transition font-bold text-sm w-full">
+			<button id="addFriendBtn_${login}" class="px-2 py-1 rounded-full border border-[#fbd11b] text-[#fbd11b] bg-black hover:bg-[#fbd11b] hover:text-black transition font-bold text-sm w-full">
 				Add as a friend
 			</button>
 		</div>
@@ -88,8 +89,31 @@ export const othersUsersCard = {
 	if (othersUsersPhoto)
   		othersUsersPhoto.src = `https://localhost:4443/${otherUser.profile_picture}`;
 	
+	const addFriendBtn = document.getElementById(`addFriendBtn_${otherUser.login}`);
+	const othersUsersCard = document.getElementById(`othersUsers_${otherUser.login}_card`);
+	addFriendBtn?.addEventListener('click', () => {
+		fadeOutAndRemove(othersUsersCard);
+		showSuccessPopup("Invitation sent", 3500, "popup");
+		setTimeout(() => othersUsersCard?.remove(), 1000);
+	});
   }
 };
+
+export function fadeOutAndRemove(el: HTMLElement | null, durationClass = 'duration-750'): void
+{
+	if (!el)
+		return;
+
+	el.classList.remove('hidden', 'opacity-0');
+	el.classList.add('opacity-100', 'transition-opacity', 'duration-1000', 'ease-out');
+
+	void el.offsetWidth;
+	el.classList.remove('opacity-100');
+	el.classList.add('opacity-0');
+	const durationMs = durationClass === 'duration-1000' ? 1000 : 300;
+	setTimeout(() => el.remove(), durationMs + 20);
+}
+
 
 export function friendsSubmenuRender():string 
 {
