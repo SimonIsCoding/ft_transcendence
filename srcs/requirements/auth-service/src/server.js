@@ -61,22 +61,6 @@ await logoutRoute(app);
 await statusRoute(app);
 
 
-//maybe you could put it in a specific file 
-app.get('/info', { preHandler: [app.auth] }, async (request, reply) => {
-    const userId = request.user?.id;
-
-    if (!userId)
-      return reply.status(401).send({ error: 'Not authenticated' });
-
-    const stmt = db.prepare('SELECT id, login, mail, profile_picture FROM users WHERE id = ?');
-    const user = stmt.get(userId);
-
-    if (!user)
-      return reply.status(404).send({ error: 'User not found' });
-
-    return reply.send(user);
-});
-
 // Health Check
 app.get('/health', async () => ({ status: 'OK' }));
 
