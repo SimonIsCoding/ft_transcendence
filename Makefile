@@ -26,6 +26,9 @@ auth-service:
 	docker compose -f $(COMPOSE_FILE) up -d --build auth-service
 #to rebuild and restart the auth-service container - useful for User Management module
 
+2fa-service:
+	docker compose -f $(COMPOSE_FILE) up -d --build 2fa-service
+
 stop:
 	docker compose -f $(COMPOSE_FILE) down
 
@@ -47,5 +50,5 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all stop clean fclean re auth-service
+.PHONY: all stop clean fclean re auth-service 2fa-service
 

@@ -3,10 +3,10 @@ export async function logoutRoute(app) {
     // Clear both authentication cookies
     ['auth_token', 'auth_phase'].forEach(cookieName => {
       reply.clearCookie(cookieName, {
-        path: '/',
-        secure: true,
         httpOnly: true,
-        sameSite: 'strict'
+        secure: true,
+	sameSite: 'None',
+        path: '/'
       });
     });
 

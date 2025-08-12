@@ -74,6 +74,8 @@ export async function loginRoute(fastify) {
       .setCookie('auth_token', token, { 
         httpOnly: true,
         secure: true,
+	sameSite: 'None',
+	path: '/',
         maxAge: 86400000 // 24h
       })
       .clearCookie('auth_phase') // Cleanup
