@@ -15,9 +15,6 @@ export function initLogout() {
       const response = await fetch('/api/auth/logout', {
         method: 'POST', // Changed to POST (more appropriate for logout)
         credentials: 'include', // Necessary for cookies
-        headers: {
-          'Content-Type': 'application/json',
-        }
       });
 
       if (!response.ok) {

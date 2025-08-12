@@ -1,21 +1,38 @@
 export async function statusRoute(fastify) {
-  fastify.get('/status', { 
-    preHandler: [fastify.auth], 
-    // Override the default 401 behavior
-    errorHandler: (error, request, reply) => {
-      reply.send({ 
+  fastify.get('/status', async (request, reply) => {
+    try {
+      // 1. Verify JWT exists and is valid
+      const token = request.cookies.auth_token;
+      if (!token) throw new Error('Missing token');
+      
+      const decoded = await request.jwtVerify(token);
+      if (!decoded.userId) throw new Error('Invalid payload');
+
+      // 2. Calculate auth states
+      const needs2FA = process.env.ENABLE_2FA === 'true' && !decoded.is2FAVerified;
+      const fullyAuthed = !needs2FA;
+
+      // 3. Return status (NEVER clear cookie during 2FA flow)
+      return reply.send({
+        authenticated: fullyAuthed,
+        requires2FA: needs2FA,
+        user: {
+          id: decoded.userId,
+          is2FAVerified: decoded.is2FAVerified || false
+        }
+      });
+
+    } catch (error) {
+      // 4. Only clear cookie for INVALID tokens (not 2FA cases)
+      if (error.message.includes('Invalid') || !request.cookies.auth_token) {
+        reply.clearCookie('auth_token');
+      }
+      
+      return reply.code(401).send({
         authenticated: false,
-        requires2FA: process.env.ENABLE_2FA === 'true' 
+        requires2FA: process.env.ENABLE_2FA === 'true'
       });
     }
-  }, async (request, reply) => {
-    // Only executed if auth succeeds
-    reply.send({
-      authenticated: true,
-      requires2FA: process.env.ENABLE_2FA === 'true' && 
-                 !request.user.is2FAVerified,
-      user: request.user
-    });
   });
 }
 
