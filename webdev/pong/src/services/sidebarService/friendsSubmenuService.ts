@@ -1,4 +1,7 @@
+import { getCurrentUser } from "../../utils/utils";
+
 interface User {
+  id: number;
   login: string;
 //   password: string;
   mail: string;
@@ -17,6 +20,21 @@ export async function getTotalUser()
 	return data;
 }
 
+export async function getUserById(userId: number)
+{
+	console.log("in getUserById, friendRequest.from_user_id = ", userId);
+	const user: User = await fetch('/api/auth/getUserById', {
+	method: 'POST',
+	headers: { 'Content-Type': 'application/json' },
+	body: JSON.stringify({ userId: userId }),
+	credentials: 'include'
+	})
+	.then(res => res.json())
+	.then(data => { return data })
+	console.log("in getUserById, user = ", user);
+	return (user);
+}
+
 //you have to create an endpoint foruer_a sending Inveitation request to user_b
 export async function sendFriendRequestOtherUser(currentUser: User, otherUser: User)
 {
@@ -27,10 +45,36 @@ export async function sendFriendRequestOtherUser(currentUser: User, otherUser: U
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ currentUser: currentUser, otherUser: otherUser }),
 		credentials: 'include'
-		})
+	})
+	.then(res => res.json())
+	.then(data => 
+	{
+		console.log("/api/auth/sendFriendRequest data received = ", data);
+	})
+}
+
+type FriendRequest = {
+	from_user_id: number;
+	to_user_id: number;
+};
+
+export async function isRequestFriendExists(): Promise<User | null>
+{
+	const friendRequest: FriendRequest | null = await fetch('/api/auth/requestFriendExists', { credentials: 'include' })
 		.then(res => res.json())
-		.then(data => 
-		{
-			console.log("/api/auth/sendFriendRequest data received = ", data);
-		})
+		.then(async (data: FriendRequest[]) => {
+			const currentUser: User = await getCurrentUser();
+			return data.find(item => item.to_user_id === currentUser.id) || null;
+		});
+
+	if (friendRequest)
+	{
+		// Ici il faut aller chercher l'utilisateur correspondant
+		console.log("in isRequestFriendExists, friendRequest.from_user_id = ", friendRequest.from_user_id);
+		const test = await getUserById(friendRequest.from_user_id);
+		console.log("test = ", test);
+		return test;
+	}
+
+	return null;
 }

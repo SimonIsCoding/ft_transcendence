@@ -1,11 +1,11 @@
 import { openMenu, closeAllMenus, toggleMenuVisibility } from "../sidebarUtils";
 import { getTotalUser } from "../../../services/sidebarService/friendsSubmenuService";
-import { othersUsersCard } from "./friendsSubmenuRender";
+import { othersUsersCard, followRequestCard } from "./friendsSubmenuRender";
 import { getUserLogin/*, getUserMail, getUserPic*/ } from "../../../utils/utils";
 
 interface User {
+  id: number;
   login: string;
-//   password: string;
   mail: string;
   profile_picture: string,
   token: string;
@@ -125,10 +125,12 @@ export async function getRandomOtherUser(): Promise<User>
 
 
 
-
-export async function manageCardInit()
+//What I call Card are the black boxes on the Friend List Submenu
+export async function manageCard()
 {
 	await manageOthersFriendsCard.main();
+	followRequestCard.render();
+	followRequestCard.init();
 }
 
 export function seeFriendsList(submenus:NodeListOf<HTMLElement>, dashboardSubmenu:HTMLElement | null, gameHistorySubmenu:HTMLElement | null, friendsSubmenu: HTMLElement | null)
@@ -145,5 +147,5 @@ export function seeFriendsList(submenus:NodeListOf<HTMLElement>, dashboardSubmen
 	friendsSubmenu?.classList.remove('hidden');
 	openMenu('largeSubmenu');
 	openMenu('friendsSubmenu');
-	manageCardInit();
+	manageCard();
 }
