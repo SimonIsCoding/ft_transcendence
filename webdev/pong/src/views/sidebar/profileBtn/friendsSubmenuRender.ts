@@ -14,7 +14,7 @@ interface User {
 export const followRequestCard = {
 	render(/*userRequest: User*/): string {
 	return `
-	<div class="flex flex-col rounded-2xl w-full space-y-1 shadow-base shadow-gray-600 pr-5 pl-5 pt-2 pb-2 bg-black">
+	<div id="newRequests" class="flex flex-col rounded-2xl w-full space-y-1 shadow-base shadow-gray-600 pr-5 pl-5 pt-2 pb-2 bg-black">
 		<div class="flex items-center space-x-2">
 			<img src="" class="w-10 h-10 rounded-full object-cover border border-black bg-[#fbd11b] text-black flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md" />
 			
@@ -37,8 +37,13 @@ export const followRequestCard = {
   async init(/*userRequest: User*/)
   {
 	// const currentUser = await getCurrentUser();
-	if (1)
-		isRequestFriendExists();
+	const newRequests = document.getElementById("newRequests");
+	const userToFriend: User | null = await isRequestFriendExists();
+	if (userToFriend)
+		newRequests?.classList.remove('hidden');
+	else
+		newRequests?.classList.add('hidden');
+
 	// si dans la bdd friends_requests il y a son id et le statut 'pending' alors on affiche cette div
   }
 }
@@ -118,6 +123,7 @@ export function friendsSubmenuRender():string
 		<hr class="w-full border-t-1.5 border-black" />
 		<div id="followRequestDiv" class="w-[85%]">
 			<p id="followRequest" class="pl-4 self-start font-semibold text-sm">Follow Request</p>
+			${followRequestCard.render()}
 		</div>
 		<div id="friendsListDiv" class="w-[85%]">
 			<p id="friendsListP" class="pl-4 self-start font-semibold text-sm">Friends</p>
