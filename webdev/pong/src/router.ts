@@ -4,7 +4,7 @@ import { registerView } from './views/registerView';
 import { GameView } from './views/game';
 import { gameController } from './controllers/gameController';
 import { initTwoFAController } from './controllers/twofaController';
-import { TournamentArea } from './views/TournamentArea';
+// import { TournamentArea } from './views/TournamentArea';
 import { currentTournament, matchInfo } from './models/TournamentStore';
 import { TournamentUIManager } from './views/TournamentUIManager';
 
@@ -79,34 +79,54 @@ export class Router {
         // gameController.init();
         // this.app.innerHTML = TournamentView.render();
         // TournamentView.init();
+        const tournamentArea = document.getElementById('tournamentArea');
+        let gameCanvasContainer = document.getElementById('gameCanvasContainer');
+
+        // Si el contenedor del juego no existe, lo creamos y lo añadimos al DOM una sola vez.
+        // Lo añadimos como hermano de tournamentArea para que no interfiera.
+        if (!gameCanvasContainer && tournamentArea?.parentNode) {
+          gameCanvasContainer = document.createElement('div');
+          gameCanvasContainer.id = 'gameCanvasContainer';
+          gameCanvasContainer.className = 'hidden contents'; // Empieza oculto
+          tournamentArea.parentNode.appendChild(gameCanvasContainer);
+        }
+
+        // Ahora viene la lógica de visibilidad
         if (matchInfo && matchInfo.partidoActivo) {
-          // SI UN PARTIDO ESTÁ ACTIVO -> Renderizamos el juego de Pong.
+          // ---- SI UN PARTIDO ESTÁ ACTIVO -> MOSTRAMOS EL JUEGO ----
 
-          this.app.innerHTML = GameView.renderGameCanvas();
-          GameView.initGameCanvas();
+          // Ocultamos el bracket del torneo
+          tournamentArea?.classList.add('hidden');
+          // Mostramos el contenedor del juego
+          gameCanvasContainer?.classList.remove('hidden');
 
-          // Usamos la información guardada para configurar el juego
+          // Optimizacion: Renderizamos el canvas dentro del contenedor SOLO SI está vacío.
+          // Esto evita recrear el canvas en cada partido del mismo torneo.
+          if (gameCanvasContainer && gameCanvasContainer.innerHTML === '') {
+            gameCanvasContainer.innerHTML = GameView.renderGameCanvas();
+            GameView.initGameCanvas();
+          }
+
+          // Configuramos y lanzamos el juego
           GameView.setPlayersAndCallback(
             matchInfo.player1,
             matchInfo.player2,
-            matchInfo.onMatchEnd // Pasamos el callback
+            matchInfo.onMatchEnd
           );
-          gameController.init(); // Inicia tu juego
+          gameController.init();
 
         } else {
-          // SI NO HAY PARTIDO ACTIVO -> Renderizamos el bracket.
+          // ---- SI NO HAY PARTIDO ACTIVO -> MOSTRAMOS EL BRACKET ----
 
-          this.app.innerHTML = TournamentArea.render();
-          TournamentArea.init(); // init se encarga de los listeners del bracket
+          // Ocultamos el contenedor del juego
+          gameCanvasContainer?.classList.add('hidden');
+          // Mostramos el bracket del torneo
+          tournamentArea?.classList.remove('hidden');
 
-          // Y si ya hay un torneo en curso, actualizamos la vista
+          // ¡AHORA ESTO FUNCIONARÁ!
+          // Como tournamentArea nunca fue eliminado, podemos actualizarlo.
           if (currentTournament) {
             TournamentUIManager.updateBracket(currentTournament);
-
-            // Opcional: Si quieres que el siguiente partido empiece automáticamente
-            // al volver al bracket, puedes llamar al controlador aquí.
-            // const controller = new TournamentController();
-            // controller.iniciarSiguientePartido(); // Esto haría que el flujo fuera continuo
           }
         }
         break;

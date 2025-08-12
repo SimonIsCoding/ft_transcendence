@@ -11,7 +11,11 @@ export class TournamentController {
         if (!currentTournament?.isReady()) return;
         currentTournament?.generateMatches();
         await this.jugarPartido(currentTournament.semifinal1!);
+        // this.mostrarRender();
+        
         TournamentUIManager.updateBracket(currentTournament); // Actualiza la UI con el ganador
+
+        document.getElementById('game-overlay');
         // alert(`${currentTournament.semifinal1?.winner?.alias} ha ganado esta partida`);
 
         // --- JUGAR SEMIFINAL 2 ---
@@ -33,6 +37,14 @@ export class TournamentController {
             currentTournament.saveToLocalStorage();
         }
     }
+
+    // private mostrarRender()
+    // {
+    //     return `<div>
+    //         <h1>Salir render torneo con la puntuación de los jugadores</<h1>
+    //     </div>`
+    // }
+
     private jugarPartido(match: Match): Promise<void> {
         return new Promise(async (resolve) => {
             await TournamentUIManager.showPreGame(match.player1.alias, match.player2.alias);
@@ -54,7 +66,7 @@ export class TournamentController {
                     // Al terminar, marcamos que el partido ya no está activo
                     if (matchInfo) 
                     {
-                    setMatchInfo({ ...matchInfo, partidoActivo: false });
+                    setMatchInfo({ ...matchInfo, partidoActivo: false});
                     }
                     // Volvemos a la misma ruta de torneo para que muestre el bracket
                     Router.navigate('tournament');
