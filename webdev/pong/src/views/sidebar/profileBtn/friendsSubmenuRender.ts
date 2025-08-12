@@ -1,18 +1,18 @@
 import { getCurrentUser } from '../../../utils/utils.ts';
-import { sendFriendRequestOtherUser } from '../../../services/sidebarService/friendsSubmenuService.ts';
+import { sendFriendRequestOtherUser, isRequestFriendExists } from '../../../services/sidebarService/friendsSubmenuService.ts';
 import { showSuccessPopup } from '../../../utils/utils.ts';
 import { renderBackButton } from '../sidebarUtils.ts'
 
 interface User {
+  id: number;
   login: string;
-//   password: string;
   mail: string;
   profile_picture: string,
   token: string;
 }
 
-export function followRequestCard(): string
-{
+export const followRequestCard = {
+	render(/*userRequest: User*/): string {
 	return `
 	<div class="flex flex-col rounded-2xl w-full space-y-1 shadow-base shadow-gray-600 pr-5 pl-5 pt-2 pb-2 bg-black">
 		<div class="flex items-center space-x-2">
@@ -20,7 +20,6 @@ export function followRequestCard(): string
 			
 			<div class="flex flex-col justify-center">
 				<p class="font-bold text-sm text-[#fbd11b]">FriendUsername</p>
-				<p class="text-sm text-[#fbd11b]">email@exemple.com</p>
 			</div>
 		</div>
 
@@ -33,7 +32,15 @@ export function followRequestCard(): string
 			</button>
 		</div>
 	</div>
-	`
+	`;
+  },
+  async init(/*userRequest: User*/)
+  {
+	// const currentUser = await getCurrentUser();
+	if (1)
+		isRequestFriendExists();
+	// si dans la bdd friends_requests il y a son id et le statut 'pending' alors on affiche cette div
+  }
 }
 
 export function friendsCard(): string
@@ -100,7 +107,7 @@ export const othersUsersCard = {
 		sendFriendRequestOtherUser(currentUser, otherUser);
 	});
   }
-};
+}
 
 export function friendsSubmenuRender():string 
 {
@@ -111,7 +118,6 @@ export function friendsSubmenuRender():string
 		<hr class="w-full border-t-1.5 border-black" />
 		<div id="followRequestDiv" class="w-[85%]">
 			<p id="followRequest" class="pl-4 self-start font-semibold text-sm">Follow Request</p>
-			${followRequestCard()}
 		</div>
 		<div id="friendsListDiv" class="w-[85%]">
 			<p id="friendsListP" class="pl-4 self-start font-semibold text-sm">Friends</p>

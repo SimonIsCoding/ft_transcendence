@@ -18,7 +18,7 @@ import { editProfileRoute } from '../routes/editProfileRoute.js';
 import { eraseAccountRoute } from '../routes/eraseAccountRoute.js';
 import db from './database.js';
 import { loadSecretKey } from '../utils/loadSecretKey.js';
-import { countTotalUsers, randomOtherUser } from '../routes/manageFriends.js';
+import { countTotalUsers, randomOtherUser, requestFriendExistsRoute, getUserByIdRoute } from '../routes/manageFriends.js';
 import { sendFriendRequestRoute } from '../routes/manageFriends.js';
 
 const app = fastify();
@@ -62,10 +62,12 @@ await countTotalUsers(app);
 await randomOtherUser(app);
 await logoutRoute(app);
 await statusRoute(app);
+await requestFriendExistsRoute(app);
 // await userLoggedRoute(app);
 app.register(editProfileRoute);
 app.register(eraseAccountRoute);
 app.register(sendFriendRequestRoute);
+app.register(getUserByIdRoute);
 
 
 //maybe you could put it in a specific file 
@@ -84,6 +86,7 @@ app.get('/info', { preHandler: [app.auth] }, async (request, reply) => {
     return reply.send(user);
 });
 
+//might be useless
 app.post('/', async (request, reply) => {
   const data = request.body;
   console.log(data);// to use data

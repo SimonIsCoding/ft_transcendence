@@ -1,6 +1,6 @@
 interface User {
+  id: number;
   login: string;
-//   password: string;
   mail: string;
   profile_picture: string,
   token: string;
@@ -109,8 +109,13 @@ export async function getUserPic(): Promise<string>
 
 export async function getCurrentUser(): Promise<User>
 {
-	const currentUser = await fetch("/api/auth/info")
-	.then(res => res.json())
-	.then(data => { return data });
-	return currentUser;
+	// const currentUser = await fetch("/api/auth/info")
+	// .then(res => res.json() as Promise<User>)
+	// .then(data => { console.log("in getCurrentUser");console.log(data.login);return data });
+	// return currentUser;
+	const res = await fetch("/api/auth/info");
+    const data: User = await res.json();
+    console.log("in getCurrentUser login: ", data.login);
+	console.log("in getCurrentUser  data: ", data);
+    return data;
 }
