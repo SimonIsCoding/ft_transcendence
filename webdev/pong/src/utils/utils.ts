@@ -1,3 +1,11 @@
+interface User {
+  login: string;
+//   password: string;
+  mail: string;
+  profile_picture: string,
+  token: string;
+}
+
 export function isValidEmail(email: string): boolean
 {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -97,4 +105,12 @@ export async function getUserPic(): Promise<string>
 	.then(res => res.json())
 	.then(data => { return data.profile_picture });
 	return profilePic;
+}
+
+export async function getCurrentUser(): Promise<User>
+{
+	const currentUser = await fetch("/api/auth/info")
+	.then(res => res.json())
+	.then(data => { return data });
+	return currentUser;
 }

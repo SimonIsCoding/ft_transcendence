@@ -19,6 +19,7 @@ import { eraseAccountRoute } from '../routes/eraseAccountRoute.js';
 import db from './database.js';
 import { loadSecretKey } from '../utils/loadSecretKey.js';
 import { countTotalUsers, randomOtherUser } from '../routes/manageFriends.js';
+import { sendFriendRequestRoute } from '../routes/manageFriends.js';
 
 const app = fastify();
 const cookieSecretKey = loadSecretKey('SECRET_KEY_FILE');
@@ -64,6 +65,7 @@ await statusRoute(app);
 // await userLoggedRoute(app);
 app.register(editProfileRoute);
 app.register(eraseAccountRoute);
+app.register(sendFriendRequestRoute);
 
 
 //maybe you could put it in a specific file 
