@@ -1,4 +1,5 @@
-// import { getUserPic/*, getUserLogin, getUserMail*/ } from '../../../utils/utils.ts';
+import { getCurrentUser } from '../../../utils/utils.ts';
+import { sendFriendRequestOtherUser } from '../../../services/sidebarService/friendsSubmenuService.ts';
 import { showSuccessPopup } from '../../../utils/utils.ts';
 import { renderBackButton } from '../sidebarUtils.ts'
 
@@ -88,10 +89,15 @@ export const othersUsersCard = {
 	
 	const addFriendBtn = document.getElementById(`addFriendBtn_${otherUser.login}`);
 	const othersUsersCard = document.getElementById(`othersUsers_${otherUser.login}_card`);
-	addFriendBtn?.addEventListener('click', () => {
+	addFriendBtn?.addEventListener('click', async () => {
 		fadeOutAndRemove(othersUsersCard);
 		showSuccessPopup("Invitation sent", 3500, "popup");
 		//you have to call the backend to change status about friendList
+		// you have to send OtherUser (which is user_b) and currentUser (that you can have with 'api/auth/info') => for both you have to send the whole Promise
+		const currentUser:User = await getCurrentUser();
+		console.log("Printing currentUser = ", currentUser);
+		console.log("Printing otherUser = ", otherUser);
+		sendFriendRequestOtherUser(currentUser, otherUser);
 	});
   }
 };

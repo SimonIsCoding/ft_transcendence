@@ -16,6 +16,7 @@ export async function loginRoute(fastify)
 	
 	const stmt = db.prepare("SELECT * FROM users WHERE login = ?");
 	const user = stmt.get(login);
+	console.log("AVOID TO SHOW PASSWORD IN FETCH: in loginRoute user = ", user);
 	const match = user ? await bcrypt.compare(password, user.password) : false;
 	
 	const SECRET = cookieSecretKey;
