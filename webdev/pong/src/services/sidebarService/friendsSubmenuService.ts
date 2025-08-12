@@ -22,7 +22,6 @@ export async function getTotalUser()
 
 export async function getUserById(userId: number)
 {
-	console.log("in getUserById, friendRequest.from_user_id = ", userId);
 	const user: User = await fetch('/api/auth/getUserById', {
 	method: 'POST',
 	headers: { 'Content-Type': 'application/json' },
@@ -31,7 +30,6 @@ export async function getUserById(userId: number)
 	})
 	.then(res => res.json())
 	.then(data => { return data })
-	console.log("in getUserById, user = ", user);
 	return (user);
 }
 
@@ -61,20 +59,13 @@ type FriendRequest = {
 export async function isRequestFriendExists(): Promise<User | null>
 {
 	const friendRequest: FriendRequest | null = await fetch('/api/auth/requestFriendExists', { credentials: 'include' })
-		.then(res => res.json())
-		.then(async (data: FriendRequest[]) => {
-			const currentUser: User = await getCurrentUser();
-			return data.find(item => item.to_user_id === currentUser.id) || null;
-		});
+	.then(res => res.json())
+	.then(async (data: FriendRequest[]) => {
+		const currentUser: User = await getCurrentUser();
+		return data.find(item => item.to_user_id === currentUser.id) || null;
+	});
 
 	if (friendRequest)
-	{
-		// Ici il faut aller chercher l'utilisateur correspondant
-		console.log("in isRequestFriendExists, friendRequest.from_user_id = ", friendRequest.from_user_id);
-		const test = await getUserById(friendRequest.from_user_id);
-		console.log("test = ", test);
-		return test;
-	}
-
+		return await getUserById(friendRequest.from_user_id);
 	return null;
 }

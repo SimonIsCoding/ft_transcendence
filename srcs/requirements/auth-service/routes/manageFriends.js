@@ -40,7 +40,6 @@ export async function getUserByIdRoute(fastify)
 		const { userId } = request.body;
 		const stmt = db.prepare("SELECT id, login, mail, profile_picture FROM users WHERE id = ?");
 		const user = stmt.get(userId);
-		console.log("in getUserByIdRoute, user = ", user);
 		return user;
 	})
 }
