@@ -1,4 +1,5 @@
-COMPOSE_FILE = ./srcs/docker-compose.yml
+PWD := $(shell pwd)
+COMPOSE_FILE = ${PWD}/srcs/docker-compose.yml
 
 all:
 	mkdir -p srcs/data/pong
@@ -22,7 +23,7 @@ webupdate:
 	  docker exec nginx /usr/sbin/nginx -s reload
 
 auth-service:
-	cd srcs && docker compose up -d --build auth-service && cd -
+	docker compose -f $(COMPOSE_FILE) up -d --build auth-service
 #to rebuild and restart the auth-service container - useful for User Management module
 
 stop:
