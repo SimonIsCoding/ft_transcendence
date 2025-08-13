@@ -1,7 +1,7 @@
 import { openMenu, closeAllMenus, toggleMenuVisibility } from "../sidebarUtils";
-import { getTotalUser, friendsRequest /*isRequestFriendExists*/, howManyFriendsRequests } from "../../../services/sidebarService/friendsSubmenuService";
+import { getTotalUser, friendsRequest /*isRequestFriendExists*/, howManyFriendsRequests, alreadyFriends, friendInvitationSent} from "../../../services/sidebarService/friendsSubmenuService";
 import { othersUsersCard, followRequestCard } from "./friendsSubmenuRender";
-import { getUserLogin/*, getUserMail, getUserPic*/ } from "../../../utils/utils";
+import { getCurrentUser, getUserLogin/*, getUserMail, getUserPic*/ } from "../../../utils/utils";
 
 interface User {
   id: number;
@@ -50,7 +50,12 @@ export const manageOthersFriendsCard = (() => {
 			}
 			let name: string = `othersUsers_${randomUser.login}_card`;
 			const container = document.getElementById("othersFriendsCard");
-			if (container)
+			const currentUser: User = await getCurrentUser();
+			//here you have to check that the randomUser displayed is not beyond the friends AND not beyond the friendsRequests AND hadn't send an invitation yet.
+			console.log("before check");
+			const check: Boolean = await checkRelationship(currentUser, randomUser);
+			console.log("check = ", check);
+			if (check == false && container)
 			{
 				container.insertAdjacentHTML("beforeend", othersUsersCard.render(name, randomUser.login));
 				othersUsersCard.init(randomUser);
@@ -81,6 +86,16 @@ export async function getRandomOtherUser(): Promise<User>
 		return data;
 	else
 		return await getRandomOtherUser();
+}
+
+export async function checkRelationship(currentUser: User, randomUser: User): Promise<Boolean>
+{
+	return await alreadyFriends(currentUser, randomUser) || await friendInvitationSent(currentUser, randomUser);
+		// return true;
+	// return false;
+	//you have to check friendshipStatus
+	// + followRequest status
+	// if both are not -> then you can send false
 }
 
 export async function managefollowRequestCard(userToFriend: User | null)
@@ -141,9 +156,7 @@ export async function managefollowRequestCard(userToFriend: User | null)
 //What I call Card are the black boxes on the Friend List Submenu
 export async function manageCard()
 {
-	await manageOthersFriendsCard.main();
 	const nbFriendsRequests = await howManyFriendsRequests();
-	console.log("nbFriendsRequests = ", nbFriendsRequests);
 	let i = 0;
 	while (i < nbFriendsRequests)
 	{
@@ -151,6 +164,8 @@ export async function manageCard()
 		await managefollowRequestCard(userToFriend);
 		i++;
 	}
+
+	await manageOthersFriendsCard.main();
 }
 
 export function seeFriendsList(submenus:NodeListOf<HTMLElement>, dashboardSubmenu:HTMLElement | null, gameHistorySubmenu:HTMLElement | null, friendsSubmenu: HTMLElement | null)
