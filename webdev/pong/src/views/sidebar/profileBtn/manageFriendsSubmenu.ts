@@ -11,7 +11,7 @@ interface User {
   token: string;
 }
 
-//You can encapsulate i in a closure or a class.
+//You can encapsulate i in a closure or a class. 
 export const manageOthersFriendsCard = (() => {
   let i = 1;
 

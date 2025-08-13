@@ -36,7 +36,7 @@ services:
       - secret_key
     volumes:
       - pong:/var/www/html/pong
-      - $PWD/srcs/data/pong:/app/database #share db file
+      - ${PROJECT_PATH}/srcs/data/pong:/app/database #share db file - PROJECT_PATH defined in Makefile
     environment:
       - SECRET_KEY_FILE=/run/secrets/secret_key
   
