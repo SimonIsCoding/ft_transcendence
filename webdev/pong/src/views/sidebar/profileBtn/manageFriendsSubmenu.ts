@@ -1,6 +1,6 @@
 import { openMenu, closeAllMenus, toggleMenuVisibility } from "../sidebarUtils";
-import { getTotalUser, friendsRequest /*isRequestFriendExists*/, howManyFriendsRequests, alreadyFriends, friendInvitationSent} from "../../../services/sidebarService/friendsSubmenuService";
-import { othersUsersCard, friendRequestCard } from "./friendsSubmenuRender";
+import { getTotalUser, friendsRequest /*isRequestFriendExists*/, howManyFriendsRequests, alreadyFriends, friendInvitationSent, displayFriend, howManyFriends} from "../../../services/sidebarService/friendsSubmenuService";
+import { othersUsersCard, friendRequestCard, friendsCard } from "./friendsSubmenuRender";
 import { getCurrentUser, getUserLogin/*, getUserMail, getUserPic*/ } from "../../../utils/utils";
 
 interface User {
@@ -17,11 +17,12 @@ async function addFriendRequestCard(userToFriend: User | null)
 	if (userToFriend)
 	{
 		friendRequestDiv?.classList.remove("hidden");
-		document.getElementById("friendRequestContainer")?.insertAdjacentHTML("beforeend", friendRequestCard.render(userToFriend));
+		document.getElementById("friendRequestCard")?.insertAdjacentHTML("beforeend", friendRequestCard.render(userToFriend));
 		await friendRequestCard.init(userToFriend);
 	}
 	else
 	{
+		// change the msg bc it is a bit ugly but the logic is there
 		friendRequestDiv?.classList.remove("hidden");
 		const friendRequest = document.getElementById("friendRequest");
 		friendRequest!.textContent = "No Friend Request";
@@ -53,16 +54,51 @@ export const manageFriendsRequestsCard = (() => {
 Begin space for friendsCard
 */
 
+async function displayAllFriends(i: number)
+{
+	console.log("in DisplayAllFriends");
+	const friendsListDiv = document.getElementById("friendsListDiv");
+	const currentUser = await displayFriend(i);
+	console.log("in DisplayAllFriends & currentUser = ", currentUser);
+	if (friendsListDiv)
+	{
+		// console.log("/")
+		friendsListDiv.classList.remove("hidden");
+		//si la db dit qu'il y a des amis =>
+		document.getElementById("friendsCard")?.insertAdjacentHTML("beforeend", friendsCard.render(currentUser));
+		await friendsCard.init(currentUser);
+	}
+	else
+	{
+		// change the msg bc it is a bit ugly but the logic is there
+		// friendRequestDiv?.classList.remove("hidden");
+		// const friendRequest = document.getElementById("friendRequest");
+		// friendRequest!.textContent = "No Friend Request";
+	}
+}
+
 export const manageFriendsCard = (() => {
-	// let i = 0;
+	let i = 0;
 
 	async function main()
 	{
-
+		//${friendsCard()}
+		//getCurrentUser and check in friendships db every line where it is displayed
+		const nbFriends = await howManyFriends();
+		console.log("nbFriends: ", nbFriends);
+		console.log("la valeur de i est: ", i);
+		while (i < nbFriends)
+		{
+			// const userToFriend: User | null = await friendsRequest(i);
+			// await addFriendRequestCard(userToFriend);
+			displayAllFriends(i);
+			// await displayFriend(i);
+			i++;
+		}
 	}
 	function reset()
 	{
-		// i = 0;
+		i = 0;
 	}
 
   return { main, reset };

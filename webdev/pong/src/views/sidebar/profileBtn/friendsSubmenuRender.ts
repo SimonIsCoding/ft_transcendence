@@ -61,21 +61,35 @@ export const friendRequestCard = {
   }
 }
 
-export function friendsCard(): string
-{
+export const friendsCard = {
+	render(currentUser: User): string {
 	return `
-	<div class="flex flex-col rounded-2xl w-full space-y-5 shadow-base shadow-gray-600 pr-5 pl-5 pt-2 pb-2 bg-black">
+	<div id="friendBox_${currentUser.login}" class="flex flex-col rounded-2xl w-full space-y-5 shadow-base shadow-gray-600 pr-5 pl-5 pt-2 pb-2 bg-black mb-2">
 		<div class="flex items-center space-x-2">
-			<img src="" class="w-10 h-10 rounded-full object-cover border border-black bg-[#fbd11b] text-black flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md" />
+			<img id="friendProfilePic_${currentUser.login}" class="w-10 h-10 rounded-full object-cover border border-black bg-[#fbd11b] text-black flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md" />
 			<div class="space-x-2">
-				<p class="font-bold text-sm text-[#fbd11b]">FriendUsername</p>
-				<p class="text-sm text-[#fbd11b]">email@exemple.com</p>
+				<p id="friendUsername_${currentUser.login}" class="font-bold text-sm text-[#fbd11b]">FriendUsername</p>
+				<p id="friendMail_${currentUser.login}" class="text-sm text-[#fbd11b]">email@exemple.com</p>
 				<hr class="w-55"/>
 			</div>
-			<div id="friendsStatus" class="top-1 right-1 w-3 h-3 bg-red-500 rounded-full border border-black"><button id="Offline" title="Offline"></button></div>
+			<div id="friendsStatus_${currentUser.login}" class="top-1 right-1 w-3 h-3 bg-red-500 rounded-full border border-black"><button id="Offline" title="Offline"></button></div>
 		</div>
 	</div>
-	`
+  `;
+  },
+
+  async init(currentUser: User)
+  {
+	// const friendBox = document.getElementById(`friendBox_${currentUser.login}`);
+	const friendImg = document.getElementById(`friendProfilePic_${currentUser.login}`) as HTMLImageElement;
+	const friendUsername = document.getElementById(`friendUsername_${currentUser.login}`);
+	const friendMail = document.getElementById(`friendMail_${currentUser.login}`);
+	// const friendStatus = document.getElementById(`friendsStatus_${currentUser.login}`);
+	// if (friendImg)
+	friendImg.src = `https://localhost:4443/${currentUser.profile_picture}`;
+	friendUsername!.textContent = currentUser.login;
+	friendMail!.textContent = currentUser.mail;
+  }
 }
 
 export const othersUsersCard = {
@@ -131,13 +145,12 @@ export function friendsSubmenuRender():string
 		<hr class="w-full border-t-1.5 border-black" />
 		<div id="friendRequestDiv" class="hidden w-[85%]">
 			<p id="friendRequest" class="pl-4 self-start font-semibold text-sm">Friend Requests</p>
-			<div id="friendRequestContainer">
+			<div id="friendRequestCard">
 			</div>
 		</div>
-		<div id="friendsListDiv" class="w-[85%]">
+		<div id="friendsListDiv" class="hidden w-[85%]">
 			<p id="friendsListP" class="pl-4 self-start font-semibold text-sm">Friends</p>
 			<div id="friendsCard">
-				${friendsCard()}
 			</div>
 		</div>
 		<div id="othersUsersDiv" class="hidden w-[85%]">

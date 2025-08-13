@@ -46,9 +46,8 @@ export async function invitationSentRoute(fastify)
 {
 	fastify.post('/invitationSent', async (request, body) => {
 		const { currentUser, otherUser } = request.body;
-		const [a,b] = currentUser.id < otherUser.id ? [currentUser.id, otherUser.id] : [otherUser.id, currentUser.id];
 		const stmt = db.prepare(`SELECT * FROM friend_requests WHERE from_user_id = ? AND to_user_id = ?`);
-		const invitationSent = stmt.get(a, b);
+		const invitationSent = stmt.get(currentUser.id, otherUser.id);
 		console.log("invitationSent = ", invitationSent);
 		return invitationSent;
 	})
@@ -58,10 +57,9 @@ export async function updateFriendshipStatusRoute(fastify)
 {
 	fastify.post('/updateFriendshipStatus', async (request, reply) => {
 		const { currentUser, otherUser, status } = request.body;
-		const [a,b] = currentUser.id < otherUser.id ? [currentUser.id, otherUser.id] : [otherUser.id, currentUser.id];
 		if (status == true)
 			db.prepare(`INSERT INTO friendships (user_a_id, user_b_id) VALUES (?, ?)`).run(a, b);
-		db.prepare(`DELETE FROM friend_requests WHERE to_user_id = ? AND from_user_id = ?`).run(a, b);
+		db.prepare(`DELETE FROM friend_requests WHERE to_user_id = ? AND from_user_id = ?`).run(currentUser.id, otherUser.id);
 		return reply.status(200).send({success: true});
 	})
 }
@@ -79,8 +77,18 @@ export async function getUserByIdRoute(fastify)
 export async function requestFriendExistsRoute(fastify)
 {
 	fastify.get('/requestFriendExists', async (request, reply) => {
-		const stmt = db.prepare("SELECT from_user_id, to_user_id FROM friend_requests WHERE status = 'pending'");
+		const stmt = db.prepare("SELECT from_user_id, to_user_id FROM friend_requests WHERE status = 'pending'");//you can remove  WHERE status = 'pending'
     	const users = stmt.all();
 		return reply.status(200).send(users);
+	});
+}
+
+export async function getFriendsListRoute(fastify)
+{
+	fastify.post('/getFriends', async (request, reply) => {
+		const { userId } = request.body;
+		const stmt = db.prepare("SELECT user_a_id, user_b_id FROM friendships WHERE user_a_id = ? OR user_b_id = ?");
+    	const friends = stmt.all(userId, userId);
+		return reply.status(200).send(friends);
 	});
 }

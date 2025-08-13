@@ -111,7 +111,5 @@ export async function getCurrentUser(): Promise<User>
 {
 	const res = await fetch("/api/auth/info");
     const data: User = await res.json();
-    // console.log("in getCurrentUser login: ", data.login);
-	// console.log("in getCurrentUser  data: ", data);
     return data;
 }

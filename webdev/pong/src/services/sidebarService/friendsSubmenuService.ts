@@ -135,3 +135,56 @@ export async function updateFriendshipStatus(currentUser: User, otherUser: User 
 	// .then(res => res.json())
 	// .then(data => { return data })
 }
+
+type FriendsConnexion = {
+	user_a_id: number;
+	user_b_id: number;
+};
+
+export async function howManyFriends(): Promise<number>
+{
+	const currentUser = await getCurrentUser();
+	const nbFriends = await fetch('/api/auth/getFriends', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ userId: currentUser.id }),
+		credentials: 'include'
+	})
+	.then(res => res.json())
+	.then(async (data: FriendsConnexion[]) => {
+		const currentUser: User = await getCurrentUser();
+		let nbFriends = data.filter(item => item.user_a_id === currentUser.id).length;
+		console.log("in fetch for howManyFriends & nbFriends 1 = ", nbFriends);
+		if (nbFriends == 0)
+			nbFriends = data.filter(item => item.user_b_id === currentUser.id).length;
+		console.log("in fetch for howManyFriends & nbFriends 2 = ", nbFriends);
+		return nbFriends;
+	});
+	console.log("in frontend howManyFriends, nbFriends = ", nbFriends);
+	return nbFriends;
+}
+
+// getFriends fetch returns:  [ { user_a_id: 2, user_b_id: 3 } ]
+export async function displayFriend(i: number): Promise<User>
+{
+	const currentUser: User = await getCurrentUser();
+	const allFriends: FriendsConnexion[] = await fetch('/api/auth/getFriends', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ userId: currentUser.id }),
+		credentials: 'include'
+	})
+		.then(res => res.json())
+		.then((data: FriendsConnexion[]) => {
+			return data.filter(item =>
+				item.user_a_id === currentUser.id || item.user_b_id === currentUser.id
+			);
+		});
+
+	if (!allFriends || i < 0 || i >= allFriends.length)
+		throw new Error("Invalid index || no friends found");
+
+	const friendId = allFriends[i].user_a_id === currentUser.id ? allFriends[i].user_b_id : allFriends[i].user_a_id;
+
+	return await getUserById(friendId);
+}
