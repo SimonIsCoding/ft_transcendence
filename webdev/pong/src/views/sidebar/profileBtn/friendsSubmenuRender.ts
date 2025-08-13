@@ -11,7 +11,7 @@ interface User {
   token: string;
 }
 
-export const followRequestCard = {
+export const friendRequestCard = {
 	render(userRequest: User): string {
 	return `
 	<div id="newRequestsFrom_${userRequest.login}" class="flex flex-col rounded-2xl w-full space-y-1 shadow-base shadow-gray-600 pr-5 pl-5 pt-2 pb-2 bg-black mb-2">
@@ -129,9 +129,9 @@ export function friendsSubmenuRender():string
 		${renderBackButton("backBtnFriendsSubmenu")}
 		<p id="submenuFriendsName" class="font-bold text-center pt-5">Friends List</p>
 		<hr class="w-full border-t-1.5 border-black" />
-		<div id="followRequestDiv" class="hidden w-[85%]">
-			<p id="followRequest" class="pl-4 self-start font-semibold text-sm">Follow Request</p>
-			<div id="followRequestContainer">
+		<div id="friendRequestDiv" class="hidden w-[85%]">
+			<p id="friendRequest" class="pl-4 self-start font-semibold text-sm">Friend Requests</p>
+			<div id="friendRequestContainer">
 			</div>
 		</div>
 		<div id="friendsListDiv" class="w-[85%]">
