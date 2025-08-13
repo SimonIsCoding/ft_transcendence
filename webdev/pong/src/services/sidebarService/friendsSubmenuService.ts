@@ -33,7 +33,7 @@ export async function getUserById(userId: number)
 	return (user);
 }
 
-//you have to create an endpoint foruer_a sending Inveitation request to user_b
+//you have to create an endpoint for user_a sending Invitation request to user_b
 export async function sendFriendRequestOtherUser(currentUser: User, otherUser: User)
 {
 	console.log("in sendFriendRequestOtherUser, Printing currentUser = ", currentUser);

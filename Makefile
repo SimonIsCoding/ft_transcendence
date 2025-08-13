@@ -1,4 +1,6 @@
 COMPOSE_FILE = ./srcs/docker-compose.yml
+PROJECT_PATH := $(shell pwd)
+export PROJECT_PATH
 
 all:
 	mkdir -p srcs/data/pong
@@ -38,7 +40,7 @@ clean:
 	docker image prune -af
 	docker volume prune -f
 	docker network prune -f
-	sudo rm -rf srcs/data/pong/assets/index-*
+# 	sudo rm -rf srcs/data/pong/assets/index-*
 	cd webdev/pong && \
 	  npm run clean
 
