@@ -56,8 +56,6 @@ export const followRequestCard = {
 			ignoreBtn?.addEventListener('click', async () => {
 			updateFriendshipStatus(currentUser, userRequest, false);
 			fadeOutAndRemove(newRequests);
-			//remove line from db
-			
 		});
 	}
   }

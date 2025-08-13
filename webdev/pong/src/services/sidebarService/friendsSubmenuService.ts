@@ -56,6 +56,49 @@ type FriendRequest = {
 	to_user_id: number;
 };
 
+export async function alreadyFriends(currentUser: User, otherUser: User): Promise<Boolean> 
+{
+	const friends = await fetch('/api/auth/friends', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ currentUser: currentUser, otherUser: otherUser }),
+		credentials: 'include'
+	})
+	.then(async res => {
+		const text = await res.text();
+		if (!text) return null;
+		return JSON.parse(text);
+	})
+	.then(data => { return data })
+	console.log("currentUser = ", currentUser);
+	console.log("otherUser = ", otherUser);
+	console.log("in alreadyFriends frontend and friends = ", friends);
+	console.log("next");
+	if (friends)
+		return true;
+	return false;
+}
+
+export async function friendInvitationSent(currentUser: User, otherUser: User): Promise<Boolean> 
+{
+	const invitationSent = await fetch('/api/auth/invitationSent', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ currentUser: currentUser, otherUser: otherUser }),
+		credentials: 'include'
+	})
+	.then(async res => {
+		const text = await res.text();
+		if (!text) return null;
+		return JSON.parse(text);
+	})
+	.then(data => { return data })
+	console.log("in invitationSent frontend and invitationSent = ", invitationSent);
+	if (invitationSent)
+		return true;
+	return false;
+}
+
 // export async function isRequestFriendExists(): Promise<User | null>
 // {
 // 	const friendRequest: FriendRequest | null = await fetch('/api/auth/requestFriendExists', { credentials: 'include' })

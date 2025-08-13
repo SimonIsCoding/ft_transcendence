@@ -30,13 +30,38 @@ export async function sendFriendRequestRoute(fastify)
 	})
 }
 
+export async function FriendsRoute(fastify)
+{
+	fastify.post('/friends', async (request, body) => {
+		const { currentUser, otherUser } = request.body;
+		const [a,b] = currentUser.id < otherUser.id ? [currentUser.id, otherUser.id] : [otherUser.id, currentUser.id];
+		const stmt = db.prepare(`SELECT * FROM friendships WHERE user_a_id = ? AND user_b_id = ?`);
+		const friendship = stmt.get(a, b);
+		console.log("friendship = ", friendship);
+		return friendship;
+	})
+}
+
+export async function invitationSentRoute(fastify)
+{
+	fastify.post('/invitationSent', async (request, body) => {
+		const { currentUser, otherUser } = request.body;
+		const [a,b] = currentUser.id < otherUser.id ? [currentUser.id, otherUser.id] : [otherUser.id, currentUser.id];
+		const stmt = db.prepare(`SELECT * FROM friend_requests WHERE from_user_id = ? AND to_user_id = ?`);
+		const invitationSent = stmt.get(a, b);
+		console.log("invitationSent = ", invitationSent);
+		return invitationSent;
+	})
+}
+
 export async function updateFriendshipStatusRoute(fastify)
 {
 	fastify.post('/updateFriendshipStatus', async (request, reply) => {
 		const { currentUser, otherUser, status } = request.body;
+		const [a,b] = currentUser.id < otherUser.id ? [currentUser.id, otherUser.id] : [otherUser.id, currentUser.id];
 		if (status == true)
-			db.prepare(`INSERT INTO friendships (user_a_id, user_b_id) VALUES (?, ?)`).run(currentUser.id, otherUser.id);
-		db.prepare(`DELETE FROM friend_requests WHERE to_user_id = ? AND from_user_id = ?`).run(currentUser.id, otherUser.id);
+			db.prepare(`INSERT INTO friendships (user_a_id, user_b_id) VALUES (?, ?)`).run(a, b);
+		db.prepare(`DELETE FROM friend_requests WHERE to_user_id = ? AND from_user_id = ?`).run(a, b);
 		return reply.status(200).send({success: true});
 	})
 }
@@ -53,19 +78,9 @@ export async function getUserByIdRoute(fastify)
 
 export async function requestFriendExistsRoute(fastify)
 {
-	console.log("in db for /requestFriendExists");
 	fastify.get('/requestFriendExists', async (request, reply) => {
-		// console.log("do we reached this line 1?");
-		const userFullInfo = request.user;
-		// console.log("do we reached this line 2?");
-		// console.log("userFullInfo = ", userFullInfo);
-		// const stmt = db.prepare('SELECT fr.*, u.* FROM friend_requests fr JOIN users u ON fr.to_user_id = u.id');//WHERE status = pending
-		// const stmt = db.prepare('SELECT fr.*, u.* FROM friend_requests fr JOIN users u ON fr.to_user_id = u.id');
 		const stmt = db.prepare("SELECT from_user_id, to_user_id FROM friend_requests WHERE status = 'pending'");
     	const users = stmt.all();
-		// const user = stmt.run(userFullInfo);
-		// console	.log("stmt = " , stmt);
-		console.log("in db for /requestFriendExists, user =", users);
 		return reply.status(200).send(users);
 	});
 }
