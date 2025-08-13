@@ -1,6 +1,6 @@
 import { openMenu, closeAllMenus, toggleMenuVisibility } from "../sidebarUtils";
 import { getTotalUser, friendsRequest /*isRequestFriendExists*/, howManyFriendsRequests, alreadyFriends, friendInvitationSent} from "../../../services/sidebarService/friendsSubmenuService";
-import { othersUsersCard, followRequestCard } from "./friendsSubmenuRender";
+import { othersUsersCard, friendRequestCard } from "./friendsSubmenuRender";
 import { getCurrentUser, getUserLogin/*, getUserMail, getUserPic*/ } from "../../../utils/utils";
 
 interface User {
@@ -11,9 +11,29 @@ interface User {
   token: string;
 }
 
+async function getRandomOtherUser(): Promise<User>
+{
+	const login = await getUserLogin();
+	const res = await fetch('/api/auth/randomOtherUser', {
+		method: 'GET',
+		credentials: 'include'
+	})
+
+	const data = await res.json();
+	if (login && data.login !== login)
+		return data;
+	else
+		return await getRandomOtherUser();
+}
+
+async function checkRelationship(currentUser: User, randomUser: User): Promise<Boolean>
+{
+	return await alreadyFriends(currentUser, randomUser) || await friendInvitationSent(currentUser, randomUser);
+}
+
 //You can encapsulate i in a closure or a class. 
-export const manageothersUsersCard = (() => {
-  let i = 1;
+export const manageOthersUsersCard = (() => {
+  let i = 0;
 
   async function main()
   {
@@ -27,7 +47,7 @@ export const manageothersUsersCard = (() => {
 			max = 1;
 		let randomUser: User;
 		let listOthersFriends: User[] = [];
-		while (i <= max)
+		while (i < max)
 		{
 			randomUser = await getRandomOtherUser();
 			listOthersFriends.push(randomUser);
@@ -57,100 +77,63 @@ export const manageothersUsersCard = (() => {
 
   function reset()
   {
-	i = 1;
+	i = 0;
   }
 
   return { main, reset };
 })();
 
-export async function getRandomOtherUser(): Promise<User>
+async function addFriendRequestCard(userToFriend: User | null)
 {
-	const login = await getUserLogin();
-	const res = await fetch('/api/auth/randomOtherUser', {
-		method: 'GET',
-		credentials: 'include'
-	})
-
-	const data = await res.json();
-	if (login && data.login !== login)
-		return data;
-	else
-		return await getRandomOtherUser();
-}
-
-export async function checkRelationship(currentUser: User, randomUser: User): Promise<Boolean>
-{
-	return await alreadyFriends(currentUser, randomUser) || await friendInvitationSent(currentUser, randomUser);
-}
-
-export async function managefollowRequestCard(userToFriend: User | null)
-{
-	const followRequestDiv = document.getElementById("followRequestDiv");
+	const friendRequestDiv = document.getElementById("friendRequestDiv");
 	if (userToFriend)
 	{
-		followRequestDiv?.classList.remove("hidden");
-		document.getElementById("followRequestContainer")?.insertAdjacentHTML("beforeend", followRequestCard.render(userToFriend));
-		await followRequestCard.init(userToFriend);
+		friendRequestDiv?.classList.remove("hidden");
+		document.getElementById("friendRequestContainer")?.insertAdjacentHTML("beforeend", friendRequestCard.render(userToFriend));
+		await friendRequestCard.init(userToFriend);
 	}
 	else
 	{
-		followRequestDiv?.classList.add("hidden");
+		friendRequestDiv?.classList.add("hidden");
 	}
 }
 
+export const manageFriendsRequestsCard = (() => {
+	let i = 0;
+
+	async function main()
+	{
+		const nbFriendsRequests = await howManyFriendsRequests();
+		while (i < nbFriendsRequests)
+		{
+			const userToFriend: User | null = await friendsRequest(i);
+			await addFriendRequestCard(userToFriend);
+			i++;
+		}
+	}
+	function reset()
+	{
+		i = 0;
+	}
+
+  return { main, reset };
+})();
+
+/*
+Begin space for friendsCard
+*/
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/*
+End space for friendsCard
+*/
 
 //What I call Card are the black boxes on the Friend List Submenu
 export async function manageCard()
 {
-	const nbFriendsRequests = await howManyFriendsRequests();
-	let i = 0;
-	while (i < nbFriendsRequests)
-	{
-		const userToFriend: User | null = await friendsRequest(i);
-		await managefollowRequestCard(userToFriend);
-		i++;
-	}
-
-	await manageothersUsersCard.main();
+	manageFriendsRequestsCard.main();
+	manageOthersUsersCard.main();
 }
 
 export function seeFriendsList(submenus:NodeListOf<HTMLElement>, dashboardSubmenu:HTMLElement | null, gameHistorySubmenu:HTMLElement | null, friendsSubmenu: HTMLElement | null)
