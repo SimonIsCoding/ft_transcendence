@@ -1,5 +1,6 @@
 export type Player = {
   alias: string;
+  score?: number;
 };
 
 export type Match = {

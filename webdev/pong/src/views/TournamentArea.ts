@@ -24,7 +24,7 @@ export const TournamentArea = {
       <main id="tournamentArea" class="hidden flex-1 bg-black flex items-center justify-center bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center w-full h-full" style="background-image: url('/pongBackgroundPlay.png');">
 		<div id="tournamentAreaPopup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50">
 		</div>
-		<div class="relative w-full min-h-screen bg-[#1a1a1a] text-white p-4 md:p-8 overflow-hidden">
+		<div id="esquemaTorneo" class="relative w-full min-h-screen bg-[#1a1a1a] text-white p-4 md:p-8 overflow-hidden">
 
     <div class="absolute top-4 left-5 md:top-4 z-7 left-[21%]">
         <h1 class="text-4xl md:text-5xl font-bold tracking-wider text-yellow-400/90">
@@ -37,11 +37,11 @@ export const TournamentArea = {
         <div class="space-y-3">
             <div class="flex items-center justify-between w-52 p-2 border border-yellow-400/80 rounded bg-[#2a2a2a]">
                 <input id="alias1" type="text" placeholder="login" class="bg-transparent focus:outline-none w-full text-white placeholder:text-white/70">
-                <span class="pl-2 text-white/80">0</span>
+                <span id="alias1-point" class="pl-2 text-white/80">0</span>
             </div>
             <div class="flex items-center justify-between w-52 p-2 border border-yellow-400/80 rounded bg-[#2a2a2a]">
                 <input id="alias2" type="text" placeholder="user 2" class="bg-transparent focus:outline-none w-full text-white placeholder:text-white/70">
-                <span class="pl-2 text-white/80">0</span>
+                <span id="alias2-point" class="pl-2 text-white/80">0</span>
             </div>
         </div>
     </div>
@@ -51,11 +51,11 @@ export const TournamentArea = {
         <div class="space-y-3">
             <div class="flex items-center justify-between w-52 p-2 border border-yellow-400/80 rounded bg-[#2a2a2a]">
                 <input id="alias3" type="text" placeholder="user 3" class="bg-transparent focus:outline-none w-full text-white placeholder:text-white/70">
-                <span class="pl-2 text-white/80">0</span>
+                <span id="alias3-point" class="pl-2 text-white/80">0</span>
             </div>
             <div class="flex items-center justify-between w-52 p-2 border border-yellow-400/80 rounded bg-[#2a2a2a]">
                 <input id="alias4" type="text" placeholder="user 4" class="bg-transparent focus:outline-none w-full text-white placeholder:text-white/70">
-                <span class="pl-2 text-white/80">0</span>
+                <span id="alias4-point" class="pl-2 text-white/80">0</span>
             </div>
         </div>
     </div>
@@ -70,12 +70,12 @@ export const TournamentArea = {
             <p class="mb-2 text-sm text-white/60 text-center">Final</p>
             <div class="space-y-3">
                 <div class="flex items-center justify-between w-52 p-2 border border-yellow-400/80 rounded bg-[#2a2a2a]">
-                    <span class="text-white/70">---</span>
-                    <span class="pl-2 text-white/80">0</span>
+                    <span id="final1" class="text-white/70">---</span>
+                    <span id="final1-point" class="pl-2 text-white/80">0</span>
                 </div>
                 <div class="flex items-center justify-between w-52 p-2 border border-yellow-400/80 rounded bg-[#2a2a2a]">
-                    <span class="text-white/70">---</span>
-                    <span class="pl-2 text-white/80">0</span>
+                    <span id="final2" class="text-white/70">---</span>
+                    <span id="final2-point" class="pl-2 text-white/80">0</span>
                 </div>
             </div>
         </div>

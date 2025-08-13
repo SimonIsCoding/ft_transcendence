@@ -14,7 +14,7 @@ export let matchInfo: {
     player1: string, 
     player2: string, 
     partidoActivo: boolean, // <-- LA NUEVA BANDERA
-    onMatchEnd: (winnerAlias: string) => void 
+    onMatchEnd: (winnerAlias: string, player1Score: number, player2Score: number) => void 
 } | null = null;
 
 export function setMatchInfo(info: typeof matchInfo): void {
