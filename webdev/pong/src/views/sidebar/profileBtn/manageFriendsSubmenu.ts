@@ -11,6 +11,67 @@ interface User {
   token: string;
 }
 
+async function addFriendRequestCard(userToFriend: User | null)
+{
+	const friendRequestDiv = document.getElementById("friendRequestDiv");
+	if (userToFriend)
+	{
+		friendRequestDiv?.classList.remove("hidden");
+		document.getElementById("friendRequestContainer")?.insertAdjacentHTML("beforeend", friendRequestCard.render(userToFriend));
+		await friendRequestCard.init(userToFriend);
+	}
+	else
+	{
+		friendRequestDiv?.classList.remove("hidden");
+		const friendRequest = document.getElementById("friendRequest");
+		friendRequest!.textContent = "No Friend Request";
+	}
+}
+
+export const manageFriendsRequestsCard = (() => {
+	let i = 0;
+
+	async function main()
+	{
+		const nbFriendsRequests = await howManyFriendsRequests();
+		while (i < nbFriendsRequests)
+		{
+			const userToFriend: User | null = await friendsRequest(i);
+			await addFriendRequestCard(userToFriend);
+			i++;
+		}
+	}
+	function reset()
+	{
+		i = 0;
+	}
+
+  return { main, reset };
+})();
+
+/*
+Begin space for friendsCard
+*/
+
+export const manageFriendsCard = (() => {
+	// let i = 0;
+
+	async function main()
+	{
+
+	}
+	function reset()
+	{
+		// i = 0;
+	}
+
+  return { main, reset };
+})();
+
+/*
+End space for friendsCard
+*/
+
 async function getRandomOtherUser(): Promise<User>
 {
 	const login = await getUserLogin();
@@ -70,9 +131,21 @@ export const manageOthersUsersCard = (() => {
 				container.insertAdjacentHTML("beforeend", othersUsersCard.render(name, randomUser.login));
 				othersUsersCard.init(randomUser);
 			}
+			else
+			{
+				// change the msg bc it is a bit ugly but the logic is there
+				othersUsersDiv?.classList.remove("hidden");
+				const othersUsersP = document.getElementById("othersUsersP");
+				othersUsersP!.textContent = "No others users to connect with";
+			}
 			i++;
 		}
     }
+	else
+	{
+		const othersUsersP = document.getElementById("othersUsersP");
+		othersUsersP!.textContent = "You are the only player registered in the database. You can't connect with no one.";
+	}
   }
 
   function reset()
@@ -83,56 +156,11 @@ export const manageOthersUsersCard = (() => {
   return { main, reset };
 })();
 
-async function addFriendRequestCard(userToFriend: User | null)
-{
-	const friendRequestDiv = document.getElementById("friendRequestDiv");
-	if (userToFriend)
-	{
-		friendRequestDiv?.classList.remove("hidden");
-		document.getElementById("friendRequestContainer")?.insertAdjacentHTML("beforeend", friendRequestCard.render(userToFriend));
-		await friendRequestCard.init(userToFriend);
-	}
-	else
-	{
-		friendRequestDiv?.classList.add("hidden");
-	}
-}
-
-export const manageFriendsRequestsCard = (() => {
-	let i = 0;
-
-	async function main()
-	{
-		const nbFriendsRequests = await howManyFriendsRequests();
-		while (i < nbFriendsRequests)
-		{
-			const userToFriend: User | null = await friendsRequest(i);
-			await addFriendRequestCard(userToFriend);
-			i++;
-		}
-	}
-	function reset()
-	{
-		i = 0;
-	}
-
-  return { main, reset };
-})();
-
-/*
-Begin space for friendsCard
-*/
-
-
-
-/*
-End space for friendsCard
-*/
-
 //What I call Card are the black boxes on the Friend List Submenu
 export async function manageCard()
 {
 	manageFriendsRequestsCard.main();
+	manageFriendsCard.main();
 	manageOthersUsersCard.main();
 }
 
