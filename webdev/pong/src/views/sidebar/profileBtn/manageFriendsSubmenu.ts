@@ -1,5 +1,5 @@
 import { openMenu, closeAllMenus, toggleMenuVisibility } from "../sidebarUtils";
-import { getTotalUser } from "../../../services/sidebarService/friendsSubmenuService";
+import { getTotalUser, isRequestFriendExists } from "../../../services/sidebarService/friendsSubmenuService";
 import { othersUsersCard, followRequestCard } from "./friendsSubmenuRender";
 import { getUserLogin/*, getUserMail, getUserPic*/ } from "../../../utils/utils";
 
@@ -83,7 +83,20 @@ export async function getRandomOtherUser(): Promise<User>
 		return await getRandomOtherUser();
 }
 
-
+export async function managefollowRequestCard(userToFriend: User | null)
+{
+	const followRequestDiv = document.getElementById("followRequestDiv");
+	if (userToFriend)
+	{
+		followRequestDiv?.classList.remove("hidden");
+		document.getElementById("followRequestContainer")?.insertAdjacentHTML("beforeend", followRequestCard.render(userToFriend));
+		followRequestCard.init(userToFriend);
+	}
+	else
+	{
+		followRequestDiv?.classList.add("hidden");
+	}
+}
 
 
 
@@ -129,8 +142,8 @@ export async function getRandomOtherUser(): Promise<User>
 export async function manageCard()
 {
 	await manageOthersFriendsCard.main();
-	followRequestCard.render();
-	followRequestCard.init();
+	const userToFriend: User | null = await isRequestFriendExists();
+	await managefollowRequestCard(userToFriend);
 }
 
 export function seeFriendsList(submenus:NodeListOf<HTMLElement>, dashboardSubmenu:HTMLElement | null, gameHistorySubmenu:HTMLElement | null, friendsSubmenu: HTMLElement | null)
