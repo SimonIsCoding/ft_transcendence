@@ -91,3 +91,18 @@ export async function friendsRequest(i :number): Promise<User | null>
 	});
 	return await getUserById(allFriendsRequest[i].from_user_id);
 }
+
+export async function updateFriendshipStatus(currentUser: User, otherUser: User , status: Boolean)
+{
+	fetch('/api/auth/updateFriendshipStatus', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ currentUser: currentUser, otherUser: otherUser, status: status }),
+		credentials: 'include'
+	})
+	.then(res => res.json())
+	.then(data => 
+	{
+		console.log("/api/auth/updateFriendshipStatus data received = ", data);
+	})
+}

@@ -19,7 +19,7 @@ import { eraseAccountRoute } from '../routes/eraseAccountRoute.js';
 import db from './database.js';
 import { loadSecretKey } from '../utils/loadSecretKey.js';
 import { countTotalUsers, randomOtherUser, requestFriendExistsRoute, getUserByIdRoute } from '../routes/manageFriends.js';
-import { sendFriendRequestRoute } from '../routes/manageFriends.js';
+import { sendFriendRequestRoute, updateFriendshipStatusRoute } from '../routes/manageFriends.js';
 
 const app = fastify();
 const cookieSecretKey = loadSecretKey('SECRET_KEY_FILE');
@@ -67,6 +67,7 @@ await requestFriendExistsRoute(app);
 app.register(editProfileRoute);
 app.register(eraseAccountRoute);
 app.register(sendFriendRequestRoute);
+app.register(updateFriendshipStatusRoute);
 app.register(getUserByIdRoute);
 
 
