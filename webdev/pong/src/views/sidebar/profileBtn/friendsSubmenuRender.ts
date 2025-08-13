@@ -1,5 +1,5 @@
 import { getCurrentUser } from '../../../utils/utils.ts';
-import { sendFriendRequestOtherUser } from '../../../services/sidebarService/friendsSubmenuService.ts';
+import { sendFriendRequestOtherUser, updateFriendshipStatus } from '../../../services/sidebarService/friendsSubmenuService.ts';
 import { showSuccessPopup } from '../../../utils/utils.ts';
 import { renderBackButton } from '../sidebarUtils.ts'
 
@@ -34,10 +34,11 @@ export const followRequestCard = {
 	</div>
 	`;
   },
-  init(userRequest: User)
+  async init(userRequest: User)
   {
 	if (userRequest)
 	{
+		const currentUser: User = await getCurrentUser();
 		const profilePictureFrom_ = document.getElementById(`profilePictureFrom_${userRequest.login}`) as HTMLImageElement;
 		profilePictureFrom_.src = `https://localhost:4443/${userRequest.profile_picture}`;
 
@@ -54,6 +55,7 @@ export const followRequestCard = {
 			//remove line from db
 		});
 			ignoreBtn?.addEventListener('click', async () => {
+			updateFriendshipStatus(currentUser, userRequest, false);
 			fadeOutAndRemove(newRequests);
 			//remove line from db
 			

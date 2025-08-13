@@ -34,6 +34,16 @@ export async function sendFriendRequestRoute(fastify)
 	})
 }
 
+export async function updateFriendshipStatusRoute(fastify)
+{
+	fastify.post('/updateFriendshipStatus', async (request, reply) => {
+		const { currentUser, otherUser, status } = request.body;
+		if (status == false)
+			db.prepare(`DELETE FROM friend_requests WHERE to_user_id = ? AND from_user_id = ?`).run(currentUser.id, otherUser.id);
+		return reply.status(200).send({success: true});
+	})
+}
+
 export async function getUserByIdRoute(fastify)
 {
 	fastify.post('/getUserById', async (request, reply) => {

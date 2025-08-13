@@ -90,7 +90,7 @@ export async function managefollowRequestCard(userToFriend: User | null)
 	{
 		followRequestDiv?.classList.remove("hidden");
 		document.getElementById("followRequestContainer")?.insertAdjacentHTML("beforeend", followRequestCard.render(userToFriend));
-		followRequestCard.init(userToFriend);
+		await followRequestCard.init(userToFriend);
 	}
 	else
 	{
