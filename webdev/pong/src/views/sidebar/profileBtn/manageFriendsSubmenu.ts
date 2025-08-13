@@ -12,24 +12,16 @@ interface User {
 }
 
 //You can encapsulate i in a closure or a class. 
-export const manageOthersFriendsCard = (() => {
+export const manageothersUsersCard = (() => {
   let i = 1;
 
   async function main()
   {
-	const othersFriendsDiv = document.getElementById("othersFriendsDiv");
-	const othersUsersP = document.getElementById("othersUsersP");
+	const othersUsersDiv = document.getElementById("othersUsersDiv");
 	const totalUsers = await getTotalUser();
 
-	if (totalUsers <= 1)
+	if (totalUsers > 1)
 	{
-		othersFriendsDiv?.classList.add("hidden");
-		othersUsersP?.classList.add("hidden");
-	}
-	else
-	{
-		othersFriendsDiv?.classList.remove("hidden");
-		othersUsersP?.classList.remove("hidden");
 		let max: number = totalUsers - 1 > 2 ? 2 : totalUsers - 1;
 		if (totalUsers == 2)
 			max = 1;
@@ -49,14 +41,12 @@ export const manageOthersFriendsCard = (() => {
 				}
 			}
 			let name: string = `othersUsers_${randomUser.login}_card`;
-			const container = document.getElementById("othersFriendsCard");
+			const container = document.getElementById("othersUsersCard");
 			const currentUser: User = await getCurrentUser();
-			//here you have to check that the randomUser displayed is not beyond the friends AND not beyond the friendsRequests AND hadn't send an invitation yet.
-			console.log("before check");
 			const check: Boolean = await checkRelationship(currentUser, randomUser);
-			console.log("check = ", check);
 			if (check == false && container)
 			{
+				othersUsersDiv?.classList.remove("hidden");
 				container.insertAdjacentHTML("beforeend", othersUsersCard.render(name, randomUser.login));
 				othersUsersCard.init(randomUser);
 			}
@@ -91,11 +81,6 @@ export async function getRandomOtherUser(): Promise<User>
 export async function checkRelationship(currentUser: User, randomUser: User): Promise<Boolean>
 {
 	return await alreadyFriends(currentUser, randomUser) || await friendInvitationSent(currentUser, randomUser);
-		// return true;
-	// return false;
-	//you have to check friendshipStatus
-	// + followRequest status
-	// if both are not -> then you can send false
 }
 
 export async function managefollowRequestCard(userToFriend: User | null)
@@ -165,7 +150,7 @@ export async function manageCard()
 		i++;
 	}
 
-	await manageOthersFriendsCard.main();
+	await manageothersUsersCard.main();
 }
 
 export function seeFriendsList(submenus:NodeListOf<HTMLElement>, dashboardSubmenu:HTMLElement | null, gameHistorySubmenu:HTMLElement | null, friendsSubmenu: HTMLElement | null)

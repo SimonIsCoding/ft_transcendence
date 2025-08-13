@@ -1,5 +1,5 @@
 import { getUserLogin } from "../../utils/utils";
-import { manageOthersFriendsCard } from "../../views/sidebar/profileBtn/manageFriendsSubmenu";
+import { manageothersUsersCard } from "../../views/sidebar/profileBtn/manageFriendsSubmenu";
 
 export async function eraseAccountService()
 {
@@ -10,7 +10,7 @@ export async function eraseAccountService()
 		credentials: 'include'
 	})
 	
-	manageOthersFriendsCard.reset();
+	manageothersUsersCard.reset();
 	await fetch("/api/auth/eraseAccount", {
 		method: 'POST',
 		credentials: 'include',

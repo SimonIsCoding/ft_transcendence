@@ -140,9 +140,9 @@ export function friendsSubmenuRender():string
 				${friendsCard()}
 			</div>
 		</div>
-		<div id="othersFriendsDiv" class="w-[85%]">
+		<div id="othersUsersDiv" class="hidden w-[85%]">
 			<p id="othersUsersP" class="pl-4 self-start font-semibold text-sm">Others Users</p>
-			<div id="othersFriendsCard">
+			<div id="othersUsersCard">
 			</div>
 		</div>
 	</div>

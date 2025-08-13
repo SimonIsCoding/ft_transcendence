@@ -3,7 +3,6 @@ import { getCurrentUser } from "../../utils/utils";
 interface User {
   id: number;
   login: string;
-//   password: string;
   mail: string;
   profile_picture: string,
   token: string;
@@ -36,19 +35,14 @@ export async function getUserById(userId: number)
 //you have to create an endpoint for user_a sending Invitation request to user_b
 export async function sendFriendRequestOtherUser(currentUser: User, otherUser: User)
 {
-	console.log("in sendFriendRequestOtherUser, Printing currentUser = ", currentUser);
-	console.log("in sendFriendRequestOtherUser, Printing otherUser = ", otherUser);
 	fetch('/api/auth/sendFriendRequest', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ currentUser: currentUser, otherUser: otherUser }),
 		credentials: 'include'
 	})
-	.then(res => res.json())
-	.then(data => 
-	{
-		console.log("/api/auth/sendFriendRequest data received = ", data);
-	})
+	// .then(res => res.json())
+	// .then(data => { return data })
 }
 
 type FriendRequest = {
@@ -70,10 +64,6 @@ export async function alreadyFriends(currentUser: User, otherUser: User): Promis
 		return JSON.parse(text);
 	})
 	.then(data => { return data })
-	console.log("currentUser = ", currentUser);
-	console.log("otherUser = ", otherUser);
-	console.log("in alreadyFriends frontend and friends = ", friends);
-	console.log("next");
 	if (friends)
 		return true;
 	return false;
@@ -93,7 +83,6 @@ export async function friendInvitationSent(currentUser: User, otherUser: User): 
 		return JSON.parse(text);
 	})
 	.then(data => { return data })
-	console.log("in invitationSent frontend and invitationSent = ", invitationSent);
 	if (invitationSent)
 		return true;
 	return false;
@@ -143,9 +132,6 @@ export async function updateFriendshipStatus(currentUser: User, otherUser: User 
 		body: JSON.stringify({ currentUser: currentUser, otherUser: otherUser, status: status }),
 		credentials: 'include'
 	})
-	.then(res => res.json())
-	.then(data => 
-	{
-		console.log("/api/auth/updateFriendshipStatus data received = ", data);
-	})
+	// .then(res => res.json())
+	// .then(data => { return data })
 }
