@@ -24,12 +24,8 @@ export async function sendFriendRequestRoute(fastify)
 {
 	fastify.post('/sendFriendRequest', async (request, reply) => {
 		const { currentUser, otherUser } = request.body;
-		console.log("in backend for sendFriendRequest, currentUser = ", currentUser);
-		console.log("in backend for sendFriendRequest, otherUser = ", otherUser);
-		//currentUser send a friend request to otherUser
 		db.prepare(`INSERT INTO friend_requests (from_user_id, to_user_id, status, updated_at)
 		VALUES (?, ?, 'pending', datetime('now'))`).run(currentUser.id, otherUser.id);
-
 		return reply.status(200).send({success: true});
 	})
 }
@@ -38,8 +34,9 @@ export async function updateFriendshipStatusRoute(fastify)
 {
 	fastify.post('/updateFriendshipStatus', async (request, reply) => {
 		const { currentUser, otherUser, status } = request.body;
-		if (status == false)
-			db.prepare(`DELETE FROM friend_requests WHERE to_user_id = ? AND from_user_id = ?`).run(currentUser.id, otherUser.id);
+		if (status == true)
+			db.prepare(`INSERT INTO friendships (user_a_id, user_b_id) VALUES (?, ?)`).run(currentUser.id, otherUser.id);
+		db.prepare(`DELETE FROM friend_requests WHERE to_user_id = ? AND from_user_id = ?`).run(currentUser.id, otherUser.id);
 		return reply.status(200).send({success: true});
 	})
 }

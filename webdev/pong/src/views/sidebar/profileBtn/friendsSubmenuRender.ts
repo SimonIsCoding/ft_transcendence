@@ -50,9 +50,8 @@ export const followRequestCard = {
 		const ignoreBtn = document.getElementById(`ignoreBtn_${userRequest.login}`);
 		const newRequests = document.getElementById(`newRequestsFrom_${userRequest.login}`);
 		acceptBtn?.addEventListener('click', async () => {
+			updateFriendshipStatus(currentUser, userRequest, true);
 			fadeOutAndRemove(newRequests);
-			//send to backend that they are friends
-			//remove line from db
 		});
 			ignoreBtn?.addEventListener('click', async () => {
 			updateFriendshipStatus(currentUser, userRequest, false);
