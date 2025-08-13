@@ -14,7 +14,7 @@ interface User {
 export const followRequestCard = {
 	render(userRequest: User): string {
 	return `
-	<div id="newRequestsFrom_${userRequest.login}" class="flex flex-col rounded-2xl w-full space-y-1 shadow-base shadow-gray-600 pr-5 pl-5 pt-2 pb-2 bg-black">
+	<div id="newRequestsFrom_${userRequest.login}" class="flex flex-col rounded-2xl w-full space-y-1 shadow-base shadow-gray-600 pr-5 pl-5 pt-2 pb-2 bg-black mb-2">
 		<div class="flex items-center space-x-2">
 			<img id="profilePictureFrom_${userRequest.login}" class="w-10 h-10 rounded-full object-cover border border-black bg-[#fbd11b] text-black flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md" />
 			
@@ -24,26 +24,40 @@ export const followRequestCard = {
 		</div>
 
 		<div class="flex justify-center space-x-2">
-			<button class="px-2 py-1 rounded-full border border-[#fbd11b] text-[#fbd11b] bg-black hover:bg-[#fbd11b] hover:text-black transition font-bold text-sm w-40">
+			<button id="acceptBtn_${userRequest.login}" class="px-2 py-1 rounded-full border border-[#fbd11b] text-[#fbd11b] bg-black hover:bg-[#fbd11b] hover:text-black transition font-bold text-sm w-40">
 				Accept
 			</button>
-			<button class="px-2 py-1 rounded-full border border-[#fbd11b] text-[#fbd11b] bg-black hover:bg-[#fbd11b] hover:text-black transition font-bold text-sm w-30">
+			<button id="ignoreBtn_${userRequest.login}" class="px-2 py-1 rounded-full border border-[#fbd11b] text-[#fbd11b] bg-black hover:bg-[#fbd11b] hover:text-black transition font-bold text-sm w-30">
 				Ignore
 			</button>
 		</div>
 	</div>
 	`;
   },
-  init(userToFriend: User)
+  init(userRequest: User)
   {
-	if (userToFriend)
+	if (userRequest)
 	{
-		const profilePictureFrom_ = document.getElementById(`profilePictureFrom_${userToFriend.login}`) as HTMLImageElement;
-		profilePictureFrom_.src = `https://localhost:4443/${userToFriend.profile_picture}`;
+		const profilePictureFrom_ = document.getElementById(`profilePictureFrom_${userRequest.login}`) as HTMLImageElement;
+		profilePictureFrom_.src = `https://localhost:4443/${userRequest.profile_picture}`;
 
-		const requestedFriendUsername_ = document.getElementById(`requestedFriendUsername_${userToFriend.login}`);
+		const requestedFriendUsername_ = document.getElementById(`requestedFriendUsername_${userRequest.login}`);
 		if (requestedFriendUsername_)
-			requestedFriendUsername_.textContent = userToFriend.login;
+			requestedFriendUsername_.textContent = userRequest.login;
+
+		const acceptBtn = document.getElementById(`acceptBtn_${userRequest.login}`);
+		const ignoreBtn = document.getElementById(`ignoreBtn_${userRequest.login}`);
+		const newRequests = document.getElementById(`newRequestsFrom_${userRequest.login}`);
+		acceptBtn?.addEventListener('click', async () => {
+			fadeOutAndRemove(newRequests);
+			//send to backend that they are friends
+			//remove line from db
+		});
+			ignoreBtn?.addEventListener('click', async () => {
+			fadeOutAndRemove(newRequests);
+			//remove line from db
+			
+		});
 	}
   }
 }
@@ -123,7 +137,9 @@ export function friendsSubmenuRender():string
 		</div>
 		<div id="friendsListDiv" class="w-[85%]">
 			<p id="friendsListP" class="pl-4 self-start font-semibold text-sm">Friends</p>
-			${friendsCard()}
+			<div id="friendsCard">
+				${friendsCard()}
+			</div>
 		</div>
 		<div id="othersFriendsDiv" class="w-[85%]">
 			<p id="othersUsersP" class="pl-4 self-start font-semibold text-sm">Others Users</p>

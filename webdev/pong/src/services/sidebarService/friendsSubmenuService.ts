@@ -56,16 +56,38 @@ type FriendRequest = {
 	to_user_id: number;
 };
 
-export async function isRequestFriendExists(): Promise<User | null>
+// export async function isRequestFriendExists(): Promise<User | null>
+// {
+// 	const friendRequest: FriendRequest | null = await fetch('/api/auth/requestFriendExists', { credentials: 'include' })
+// 	.then(res => res.json())
+// 	.then(async (data: FriendRequest[]) => {
+// 		const currentUser: User = await getCurrentUser();
+// 		return data.find(item => item.to_user_id === currentUser.id) || null;
+// 	});
+
+// 	if (friendRequest)
+// 		return await getUserById(friendRequest.from_user_id);
+// 	return null;
+// }
+
+export async function howManyFriendsRequests(): Promise<number>
 {
-	const friendRequest: FriendRequest | null = await fetch('/api/auth/requestFriendExists', { credentials: 'include' })
+	const nbFriendsRequests = await fetch('/api/auth/requestFriendExists', { credentials: 'include' })
 	.then(res => res.json())
 	.then(async (data: FriendRequest[]) => {
 		const currentUser: User = await getCurrentUser();
-		return data.find(item => item.to_user_id === currentUser.id) || null;
+		return data.filter(item => item.to_user_id === currentUser.id).length;
 	});
+	return nbFriendsRequests;
+}
 
-	if (friendRequest)
-		return await getUserById(friendRequest.from_user_id);
-	return null;
+export async function friendsRequest(i :number): Promise<User | null>
+{
+	const allFriendsRequest: FriendRequest[] = await fetch('/api/auth/requestFriendExists', { credentials: 'include' })
+	.then(res => res.json())
+	.then(async (data: FriendRequest[]) => {
+		const currentUser: User = await getCurrentUser();
+		return data.filter(item => item.to_user_id === currentUser.id);
+	});
+	return await getUserById(allFriendsRequest[i].from_user_id);
 }

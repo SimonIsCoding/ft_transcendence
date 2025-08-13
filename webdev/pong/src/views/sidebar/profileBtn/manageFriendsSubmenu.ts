@@ -1,5 +1,5 @@
 import { openMenu, closeAllMenus, toggleMenuVisibility } from "../sidebarUtils";
-import { getTotalUser, isRequestFriendExists } from "../../../services/sidebarService/friendsSubmenuService";
+import { getTotalUser, friendsRequest /*isRequestFriendExists*/, howManyFriendsRequests } from "../../../services/sidebarService/friendsSubmenuService";
 import { othersUsersCard, followRequestCard } from "./friendsSubmenuRender";
 import { getUserLogin/*, getUserMail, getUserPic*/ } from "../../../utils/utils";
 
@@ -142,8 +142,15 @@ export async function managefollowRequestCard(userToFriend: User | null)
 export async function manageCard()
 {
 	await manageOthersFriendsCard.main();
-	const userToFriend: User | null = await isRequestFriendExists();
-	await managefollowRequestCard(userToFriend);
+	const nbFriendsRequests = await howManyFriendsRequests();
+	console.log("nbFriendsRequests = ", nbFriendsRequests);
+	let i = 0;
+	while (i < nbFriendsRequests)
+	{
+		const userToFriend: User | null = await friendsRequest(i);
+		await managefollowRequestCard(userToFriend);
+		i++;
+	}
 }
 
 export function seeFriendsList(submenus:NodeListOf<HTMLElement>, dashboardSubmenu:HTMLElement | null, gameHistorySubmenu:HTMLElement | null, friendsSubmenu: HTMLElement | null)
