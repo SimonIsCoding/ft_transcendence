@@ -17,11 +17,11 @@ class Game {
   private keysPressed: Record<string, boolean> = {};
   private showCollisionZones = false;
   private maxPoints: number = 11;
-  private onFinishCallback: ((winner: string) => void) | null = null;
+  private onFinishCallback: ((winner: string, score1: number, score2: number) => void) | null = null;
   private player1Name: string = "";
   private player2Name: string = "";
 
-  init(player1Alias = "Jugador 1", player2Alias = "Jugador 2", onFinish?: (winner: string) => void) {
+  init(player1Alias = "Jugador 1", player2Alias = "Jugador 2", onFinish?: (winner: string, score1: number, score2: number) => void) {
     this.player1Name = player1Alias;
     this.player2Name = player2Alias;
     console.log(this.player1Name)
@@ -35,7 +35,7 @@ class Game {
     this.startLoop();
   }
 
-  public setPlayersAndCallback(player1Alias: string, player2Alias: string, onFinish?: (winner: string) => void) {
+  public setPlayersAndCallback(player1Alias: string, player2Alias: string, onFinish?: (winner: string, score1: number, score2: number) => void) {
     this.player1Name = player1Alias;
     this.player2Name = player2Alias;
     this.onFinishCallback = onFinish ?? null;
@@ -126,7 +126,7 @@ class Game {
       
 
       if (this.onFinishCallback) {
-        this.onFinishCallback(winner);
+        this.onFinishCallback(winner, this.scorePlayer1, this.scorePlayer2);
         // alert(`${winner} ha ganado esta partida`);
       }
       this.scorePlayer1 = 0;
@@ -299,11 +299,11 @@ export const GameView = {
   renderGameCanvas: () => gameInstance.render(),
   initGameCanvas: (player1Alias?: string,
     player2Alias?: string,
-    onFinish?: (winner: string) => void) => gameInstance.init(player1Alias, player2Alias, onFinish),
+    onFinish?: (winner: string, score1: number, score2: number) => void) => gameInstance.init(player1Alias, player2Alias, onFinish),
   stop: () => gameInstance.stop(),
   setBallSpeedMultiplier: (multiplier: number) => gameInstance.setBallSpeedMultiplier(multiplier),
   setPaddleSize: (size: number) => gameInstance.setPaddleSize(size),
-  setPlayersAndCallback: (player1Alias: string, player2Alias: string, onFinish?: (winner: string) => void) =>
+  setPlayersAndCallback: (player1Alias: string, player2Alias: string, onFinish?: (winner: string, score1: number, score2: number) => void) =>
     gameInstance.setPlayersAndCallback(player1Alias, player2Alias, onFinish),
   setMaxPoints: (points: number) => gameInstance.setMaxPoints(points),
   setPlayerType(playerId: string, type: 'me' | 'alias' | 'remote' | 'ia'): void {
