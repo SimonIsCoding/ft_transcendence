@@ -1,5 +1,5 @@
 import { getCurrentUser } from '../../../utils/utils.ts';
-import { sendFriendRequestOtherUser, isRequestFriendExists } from '../../../services/sidebarService/friendsSubmenuService.ts';
+import { sendFriendRequestOtherUser } from '../../../services/sidebarService/friendsSubmenuService.ts';
 import { showSuccessPopup } from '../../../utils/utils.ts';
 import { renderBackButton } from '../sidebarUtils.ts'
 
@@ -12,14 +12,14 @@ interface User {
 }
 
 export const followRequestCard = {
-	render(/*userRequest: User*/): string {
+	render(userRequest: User): string {
 	return `
-	<div id="newRequests" class="flex flex-col rounded-2xl w-full space-y-1 shadow-base shadow-gray-600 pr-5 pl-5 pt-2 pb-2 bg-black">
+	<div id="newRequestsFrom_${userRequest.login}" class="flex flex-col rounded-2xl w-full space-y-1 shadow-base shadow-gray-600 pr-5 pl-5 pt-2 pb-2 bg-black">
 		<div class="flex items-center space-x-2">
-			<img src="" class="w-10 h-10 rounded-full object-cover border border-black bg-[#fbd11b] text-black flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md" />
+			<img id="profilePictureFrom_${userRequest.login}" class="w-10 h-10 rounded-full object-cover border border-black bg-[#fbd11b] text-black flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md" />
 			
 			<div class="flex flex-col justify-center">
-				<p class="font-bold text-sm text-[#fbd11b]">FriendUsername</p>
+				<p id="requestedFriendUsername_${userRequest.login}" class="font-bold text-sm text-[#fbd11b]">FriendUsername</p>
 			</div>
 		</div>
 
@@ -34,17 +34,17 @@ export const followRequestCard = {
 	</div>
 	`;
   },
-  async init(/*userRequest: User*/)
+  init(userToFriend: User)
   {
-	// const currentUser = await getCurrentUser();
-	const newRequests = document.getElementById("newRequests");
-	const userToFriend: User | null = await isRequestFriendExists();
 	if (userToFriend)
-		newRequests?.classList.remove('hidden');
-	else
-		newRequests?.classList.add('hidden');
+	{
+		const profilePictureFrom_ = document.getElementById(`profilePictureFrom_${userToFriend.login}`) as HTMLImageElement;
+		profilePictureFrom_.src = `https://localhost:4443/${userToFriend.profile_picture}`;
 
-	// si dans la bdd friends_requests il y a son id et le statut 'pending' alors on affiche cette div
+		const requestedFriendUsername_ = document.getElementById(`requestedFriendUsername_${userToFriend.login}`);
+		if (requestedFriendUsername_)
+			requestedFriendUsername_.textContent = userToFriend.login;
+	}
   }
 }
 
@@ -66,9 +66,6 @@ export function friendsCard(): string
 }
 
 export const othersUsersCard = {
-//   currentUser: null as User | null,
-//   isLogin: true,
-
 	render(id: string, login: string): string {
 	return `
 	<div id="${id}" class="flex flex-col rounded-2xl w-full space-y-1 shadow-base shadow-gray-600 px-5 py-2 bg-black mb-3 opacity-100 transition-opacity">
@@ -107,8 +104,6 @@ export const othersUsersCard = {
 		//you have to call the backend to change status about friendList
 		// you have to send OtherUser (which is user_b) and currentUser (that you can have with 'api/auth/info') => for both you have to send the whole Promise
 		const currentUser:User = await getCurrentUser();
-		console.log("Printing currentUser = ", currentUser);
-		console.log("Printing otherUser = ", otherUser);
 		sendFriendRequestOtherUser(currentUser, otherUser);
 	});
   }
@@ -121,9 +116,10 @@ export function friendsSubmenuRender():string
 		${renderBackButton("backBtnFriendsSubmenu")}
 		<p id="submenuFriendsName" class="font-bold text-center pt-5">Friends List</p>
 		<hr class="w-full border-t-1.5 border-black" />
-		<div id="followRequestDiv" class="w-[85%]">
+		<div id="followRequestDiv" class="hidden w-[85%]">
 			<p id="followRequest" class="pl-4 self-start font-semibold text-sm">Follow Request</p>
-			${followRequestCard.render()}
+			<div id="followRequestContainer">
+			</div>
 		</div>
 		<div id="friendsListDiv" class="w-[85%]">
 			<p id="friendsListP" class="pl-4 self-start font-semibold text-sm">Friends</p>
