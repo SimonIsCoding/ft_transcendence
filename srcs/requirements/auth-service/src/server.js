@@ -18,7 +18,7 @@ import { editProfileRoute } from '../routes/editProfileRoute.js';
 import { eraseAccountRoute } from '../routes/eraseAccountRoute.js';
 import db from './database.js';
 import { loadSecretKey } from '../utils/loadSecretKey.js';
-import { countTotalUsers, randomOtherUser, requestFriendExistsRoute, getUserByIdRoute } from '../routes/manageFriends.js';
+import { countTotalUsers, randomOtherUser, requestFriendExistsRoute, getFriendsListRoute, getUserByIdRoute } from '../routes/manageFriends.js';
 import { sendFriendRequestRoute, updateFriendshipStatusRoute, FriendsRoute, invitationSentRoute } from '../routes/manageFriends.js';
 
 const app = fastify();
@@ -68,6 +68,7 @@ app.register(editProfileRoute);
 app.register(eraseAccountRoute);
 app.register(sendFriendRequestRoute);
 app.register(FriendsRoute);
+app.register(getFriendsListRoute);
 app.register(invitationSentRoute);
 app.register(updateFriendshipStatusRoute);
 app.register(getUserByIdRoute);
