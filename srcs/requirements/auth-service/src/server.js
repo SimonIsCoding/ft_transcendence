@@ -12,11 +12,10 @@ import { registerRoute } from '../routes/registerRoute.js';
 import { auth } from '../plugins/auth.js';
 import { uploadProfilePictureRoute } from '../routes/uploadProfilePictureRoute.js';
 import { logoutRoute } from '../routes/logoutRoute.js';
-import { infoUserRoute } from '../routes/infoUserRoute.js';
-import { statusRoute/*, userLoggedRoute*/ } from '../routes/userLoggedRoute.js';
+// import { infoUserRoute } from '../routes/infoUserRoute.js';
+import { statusRoute, currentUserInfoRoute/*, userLoggedRoute*/ } from '../routes/userLoggedRoute.js';
 import { editProfileRoute } from '../routes/editProfileRoute.js';
 import { eraseAccountRoute } from '../routes/eraseAccountRoute.js';
-import db from './database.js';
 import { loadSecretKey } from '../utils/loadSecretKey.js';
 import { countTotalUsers, requestFriendExistsRoute, getFriendsListRoute, getUserByIdRoute, randomEligibleOtherUserRoute, sendFriendRequestRoute, updateFriendshipStatusRoute, FriendsRoute, invitationReceivedRoute } from '../routes/manageFriends.js';
 
@@ -56,12 +55,12 @@ app.register(fastifyStatic, {
 app.register(loginRoute);
 app.register(registerRoute);
 await uploadProfilePictureRoute(app);
-await infoUserRoute(app);
+// await infoUserRoute(app);
 await countTotalUsers(app);
 await logoutRoute(app);
 await statusRoute(app);
 await requestFriendExistsRoute(app);
-// await userLoggedRoute(app);
+await currentUserInfoRoute(app);
 app.register(editProfileRoute);
 app.register(eraseAccountRoute);
 app.register(sendFriendRequestRoute);
@@ -72,29 +71,12 @@ app.register(updateFriendshipStatusRoute);
 app.register(getUserByIdRoute);
 app.register(randomEligibleOtherUserRoute);
 
-
-//maybe you could put it in a specific file 
-app.get('/info', { preHandler: [app.auth] }, async (request, reply) => {
-    const userId = request.user?.id;
-
-    if (!userId)
-      return reply.status(401).send({ error: 'Not authenticated' });
-
-    const stmt = db.prepare('SELECT id, login, mail, profile_picture FROM users WHERE id = ?');
-    const user = stmt.get(userId);
-
-    if (!user)
-      return reply.status(404).send({ error: 'User not found' });
-
-    return reply.send(user);
-});
-
 //might be useless
-app.post('/', async (request, reply) => {
-  const data = request.body;
-  console.log(data);// to use data
-  return { status: "status ok" };
-});
+// app.post('/', async (request, reply) => {
+//   const data = request.body;
+//   console.log(data);// to use data
+//   return { status: "status ok" };
+// });
 
 app.listen({ port: 3001, host: '0.0.0.0' }, err => {
   if (err) {
