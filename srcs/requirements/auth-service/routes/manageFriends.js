@@ -10,16 +10,6 @@ export async function countTotalUsers(fastify)
 	});
 }
 
-export async function randomOtherUser(fastify)
-{
-	fastify.get('/randomOtherUser', async (request, reply) =>
-	{
-		const stmt = db.prepare("SELECT id, login, mail, profile_picture FROM users ORDER BY RANDOM() LIMIT 1");
-		const user = stmt.get();
-		return user;
-	});
-}
-
 export async function sendFriendRequestRoute(fastify)
 {
 	fastify.post('/sendFriendRequest', async (request, reply) => {
