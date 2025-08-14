@@ -110,6 +110,8 @@ export async function randomEligibleOtherUserRoute(fastify)
 			LIMIT 1
 		`);
 		const user = stmt.get(currentUser.id, currentUser.id, currentUser.id, currentUser.id, currentUser.id, currentUser.id, currentUser.id);
-		return user;
+		if (!user)
+			return reply.status(204).send();
+		return reply.send(user);
 	})
 }
