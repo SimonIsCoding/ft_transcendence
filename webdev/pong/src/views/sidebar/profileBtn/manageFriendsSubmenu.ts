@@ -57,23 +57,21 @@ Begin space for friendsCard
 async function displayAllFriends(i: number)
 {
 	console.log("in DisplayAllFriends");
-	const friendRequestDiv = document.getElementById("friendRequestDiv");
 	const friendsListDiv = document.getElementById("friendsListDiv");
-	const currentUser = await displayFriend(i);
-	console.log("in DisplayAllFriends & currentUser = ", currentUser);
+	const userToDisplay = await displayFriend(i);
+	console.log("in DisplayAllFriends & userToDisplay = ", userToDisplay);
 	if (friendsListDiv)
 	{
 		friendsListDiv.classList.remove("hidden");
-		//si la db dit qu'il y a des amis =>
-		document.getElementById("friendsCard")?.insertAdjacentHTML("beforeend", friendsCard.render(currentUser));
-		await friendsCard.init(currentUser);
+		document.getElementById("friendsCard")?.insertAdjacentHTML("beforeend", friendsCard.render(userToDisplay));
+		await friendsCard.init(userToDisplay);
 	}
 	else
 	{
 		// change the msg bc it is a bit ugly but the logic is there
-		friendRequestDiv?.classList.remove("hidden");
-		const friendRequest = document.getElementById("friendRequest");
-		friendRequest!.textContent = "No Friend Request";
+		// friendsListDiv.classList.remove("hidden");
+		// const friendsListP = document.getElementById("friendsListP");
+		// friendsListP!.textContent = "No Friends for the moment - You can add new friends below!";
 	}
 }
 
@@ -82,17 +80,12 @@ export const manageFriendsCard = (() => {
 
 	async function main()
 	{
-		//${friendsCard()}
-		//getCurrentUser and check in friendships db every line where it is displayed
 		const nbFriends = await howManyFriends();
-		console.log("nbFriends: ", nbFriends);
+		console.log("in manageFriendsCard, nbFriends: ", nbFriends);
 		console.log("la valeur de i est: ", i);
 		while (i < nbFriends)
 		{
-			// const userToFriend: User | null = await friendsRequest(i);
-			// await addFriendRequestCard(userToFriend);
 			displayAllFriends(i);
-			// await displayFriend(i);
 			i++;
 		}
 	}

@@ -1,5 +1,5 @@
 import { Router } from "../../router";
-import { manageOthersUsersCard, manageFriendsRequestsCard } from "../../views/sidebar/profileBtn/manageFriendsSubmenu";
+import { manageOthersUsersCard, manageFriendsRequestsCard, manageFriendsCard } from "../../views/sidebar/profileBtn/manageFriendsSubmenu";
 
 export function initLogout()
 {
@@ -10,8 +10,9 @@ export function initLogout()
 		credentials: 'include'
 	});
 	Router.navigate('home');
-	manageOthersUsersCard.reset();
 	manageFriendsRequestsCard.reset();
+	manageFriendsCard.reset();
+	manageOthersUsersCard.reset();
 	});
 
 }
