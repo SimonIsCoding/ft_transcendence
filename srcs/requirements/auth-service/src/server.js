@@ -12,8 +12,7 @@ import { registerRoute } from '../routes/registerRoute.js';
 import { auth } from '../plugins/auth.js';
 import { uploadProfilePictureRoute } from '../routes/uploadProfilePictureRoute.js';
 import { logoutRoute } from '../routes/logoutRoute.js';
-// import { infoUserRoute } from '../routes/infoUserRoute.js';
-import { statusRoute, currentUserInfoRoute/*, userLoggedRoute*/ } from '../routes/userLoggedRoute.js';
+import { statusRoute, currentUserInfoRoute } from '../routes/userLoggedRoute.js';
 import { editProfileRoute } from '../routes/editProfileRoute.js';
 import { eraseAccountRoute } from '../routes/eraseAccountRoute.js';
 import { loadSecretKey } from '../utils/loadSecretKey.js';
@@ -55,7 +54,6 @@ app.register(fastifyStatic, {
 app.register(loginRoute);
 app.register(registerRoute);
 await uploadProfilePictureRoute(app);
-// await infoUserRoute(app);
 await countTotalUsers(app);
 await logoutRoute(app);
 await statusRoute(app);
@@ -70,13 +68,6 @@ app.register(invitationReceivedRoute);
 app.register(updateFriendshipStatusRoute);
 app.register(getUserByIdRoute);
 app.register(randomEligibleOtherUserRoute);
-
-//might be useless
-// app.post('/', async (request, reply) => {
-//   const data = request.body;
-//   console.log(data);// to use data
-//   return { status: "status ok" };
-// });
 
 app.listen({ port: 3001, host: '0.0.0.0' }, err => {
   if (err) {
