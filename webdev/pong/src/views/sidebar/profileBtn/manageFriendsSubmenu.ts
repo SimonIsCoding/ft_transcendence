@@ -1,7 +1,7 @@
 import { openMenu, closeAllMenus, toggleMenuVisibility } from "../sidebarUtils";
-import { getTotalUser, friendsRequest /*isRequestFriendExists*/, howManyFriendsRequests, alreadyFriends, friendInvitationSent, displayFriend, howManyFriends} from "../../../services/sidebarService/friendsSubmenuService";
+import { getTotalUser, friendsRequest, howManyFriendsRequests, displayFriend, howManyFriends, getRandomEligibleOtherUser } from "../../../services/sidebarService/friendsSubmenuService";
 import { othersUsersCard, friendRequestCard, friendsCard } from "./friendsSubmenuRender";
-import { getCurrentUser, getUserLogin/*, getUserMail, getUserPic*/ } from "../../../utils/utils";
+import { getCurrentUser } from "../../../utils/utils";
 
 interface User {
   id: number;
@@ -57,12 +57,12 @@ Begin space for friendsCard
 async function displayAllFriends(i: number)
 {
 	console.log("in DisplayAllFriends");
+	const friendRequestDiv = document.getElementById("friendRequestDiv");
 	const friendsListDiv = document.getElementById("friendsListDiv");
 	const currentUser = await displayFriend(i);
 	console.log("in DisplayAllFriends & currentUser = ", currentUser);
 	if (friendsListDiv)
 	{
-		// console.log("/")
 		friendsListDiv.classList.remove("hidden");
 		//si la db dit qu'il y a des amis =>
 		document.getElementById("friendsCard")?.insertAdjacentHTML("beforeend", friendsCard.render(currentUser));
@@ -71,9 +71,9 @@ async function displayAllFriends(i: number)
 	else
 	{
 		// change the msg bc it is a bit ugly but the logic is there
-		// friendRequestDiv?.classList.remove("hidden");
-		// const friendRequest = document.getElementById("friendRequest");
-		// friendRequest!.textContent = "No Friend Request";
+		friendRequestDiv?.classList.remove("hidden");
+		const friendRequest = document.getElementById("friendRequest");
+		friendRequest!.textContent = "No Friend Request";
 	}
 }
 
@@ -108,71 +108,65 @@ export const manageFriendsCard = (() => {
 End space for friendsCard
 */
 
-async function getRandomOtherUser(): Promise<User>
-{
-	const login = await getUserLogin();
-	const res = await fetch('/api/auth/randomOtherUser', {
-		method: 'GET',
-		credentials: 'include'
-	})
-
-	const data = await res.json();
-	if (login && data.login !== login)
-		return data;
-	else
-		return await getRandomOtherUser();
-}
-
-async function checkRelationship(currentUser: User, randomUser: User): Promise<Boolean>
-{
-	return await alreadyFriends(currentUser, randomUser) || await friendInvitationSent(currentUser, randomUser);
-}
-
 //You can encapsulate i in a closure or a class. 
 export const manageOthersUsersCard = (() => {
   let i = 0;
+  let j = 0;
 
   async function main()
   {
 	const othersUsersDiv = document.getElementById("othersUsersDiv");
 	const totalUsers = await getTotalUser();
+	const currentUser: User = await getCurrentUser();
 
 	if (totalUsers > 1)
 	{
 		let max: number = totalUsers - 1 > 2 ? 2 : totalUsers - 1;
 		if (totalUsers == 2)
 			max = 1;
-		let randomUser: User;
+		let randomUser: User | null;
 		let listOthersFriends: User[] = [];
+		let noOtherFriend = 0;
 		while (i < max)
 		{
-			randomUser = await getRandomOtherUser();
-			listOthersFriends.push(randomUser);
-			if (i > 1)
+			randomUser = await getRandomEligibleOtherUser(currentUser);
+			// if (randomUser) console.log("in OtherUsers, random user = ", randomUser);
+			// console.log("i = ", i);
+			listOthersFriends.push(randomUser!);
+			if (i > 0)
 			{
-				while (listOthersFriends[0].login === listOthersFriends[1].login)
+				while (randomUser && listOthersFriends[0].login === listOthersFriends[1].login)
 				{
 					listOthersFriends.pop();
-					randomUser = await getRandomOtherUser();
-					listOthersFriends.push(randomUser);
+					randomUser = await getRandomEligibleOtherUser(currentUser);
+					listOthersFriends.push(randomUser!);
+					if (j >= totalUsers)
+						randomUser = null;
+					j++;
+
 				}
+				// if (randomUser) console.log("in OtherUsers, random user = ", randomUser);
+				// console.log("2nd i = ", i);
 			}
-			let name: string = `othersUsers_${randomUser.login}_card`;
 			const container = document.getElementById("othersUsersCard");
-			const currentUser: User = await getCurrentUser();
-			const check: Boolean = await checkRelationship(currentUser, randomUser);
-			if (check == false && container)
+			const othersUsersP = document.getElementById("othersUsersP");
+			if (randomUser && container)
 			{
+				// console.log("we add OtherUsers container with randomUser = ", randomUser);
 				othersUsersDiv?.classList.remove("hidden");
+				let name: string = `othersUsers_${randomUser.login}_card`;
 				container.insertAdjacentHTML("beforeend", othersUsersCard.render(name, randomUser.login));
 				othersUsersCard.init(randomUser);
+				othersUsersP!.textContent = "Others Users";
+				noOtherFriend++;
 			}
 			else
 			{
-				// change the msg bc it is a bit ugly but the logic is there
-				othersUsersDiv?.classList.remove("hidden");
-				const othersUsersP = document.getElementById("othersUsersP");
-				othersUsersP!.textContent = "No others users to connect with";
+				if (noOtherFriend == 0)
+				{// change the msg bc it is a bit ugly but the logic is there
+					othersUsersDiv?.classList.remove("hidden");
+					othersUsersP!.textContent = "No others users to connect with";
+				}
 			}
 			i++;
 		}
@@ -187,6 +181,7 @@ export const manageOthersUsersCard = (() => {
   function reset()
   {
 	i = 0;
+	j = 0;
   }
 
   return { main, reset };

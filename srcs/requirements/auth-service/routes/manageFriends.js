@@ -42,14 +42,14 @@ export async function FriendsRoute(fastify)
 	})
 }
 
-export async function invitationSentRoute(fastify)
+export async function invitationReceivedRoute(fastify)
 {
-	fastify.post('/invitationSent', async (request, body) => {
+	fastify.post('/invitationReceived', async (request, body) => {
 		const { currentUser, otherUser } = request.body;
 		const stmt = db.prepare(`SELECT * FROM friend_requests WHERE from_user_id = ? AND to_user_id = ?`);
-		const invitationSent = stmt.get(currentUser.id, otherUser.id);
-		console.log("invitationSent = ", invitationSent);
-		return invitationSent;
+		const invitationReceived = stmt.get(otherUser.id, currentUser.id);
+		console.log("invitationReceived = ", invitationReceived);
+		return invitationReceived;
 	})
 }
 
@@ -91,4 +91,36 @@ export async function getFriendsListRoute(fastify)
     	const friends = stmt.all(userId, userId);
 		return reply.status(200).send(friends);
 	});
+}
+
+export async function randomEligibleOtherUserRoute(fastify)
+{
+	fastify.post('/randomEligibleOtherUser', async (request, reply) => {
+		const { currentUser } = request.body;
+		const stmt = db.prepare(`SELECT id, login, mail, profile_picture
+			FROM users u
+			WHERE u.id != ?
+				AND u.id NOT IN (
+					SELECT CASE
+						WHEN user_a_id = ? THEN user_b_id
+						ELSE user_a_id
+					END
+					FROM friendships
+					WHERE user_a_id = ? OR user_b_id = ?
+				)
+				AND u.id NOT IN (
+					SELECT CASE
+						WHEN from_user_id = ? THEN to_user_id
+						ELSE from_user_id
+					END
+					FROM friend_requests
+					WHERE (from_user_id = ? OR to_user_id = ?)
+						AND status = 'pending'
+				)
+			ORDER BY RANDOM()
+			LIMIT 1
+		`);
+		const user = stmt.get(currentUser.id, currentUser.id, currentUser.id, currentUser.id, currentUser.id, currentUser.id, currentUser.id);
+		return user;
+	})
 }

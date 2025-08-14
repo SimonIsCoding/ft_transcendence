@@ -128,8 +128,6 @@ export const othersUsersCard = {
 	addFriendBtn?.addEventListener('click', async () => {
 		fadeOutAndRemove(othersUsersCard);
 		showSuccessPopup("Invitation sent", 3500, "popup");
-		//you have to call the backend to change status about friendList
-		// you have to send OtherUser (which is user_b) and currentUser (that you can have with 'api/auth/info') => for both you have to send the whole Promise
 		const currentUser:User = await getCurrentUser();
 		sendFriendRequestOtherUser(currentUser, otherUser);
 	});

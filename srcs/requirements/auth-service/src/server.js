@@ -18,8 +18,7 @@ import { editProfileRoute } from '../routes/editProfileRoute.js';
 import { eraseAccountRoute } from '../routes/eraseAccountRoute.js';
 import db from './database.js';
 import { loadSecretKey } from '../utils/loadSecretKey.js';
-import { countTotalUsers, randomOtherUser, requestFriendExistsRoute, getFriendsListRoute, getUserByIdRoute } from '../routes/manageFriends.js';
-import { sendFriendRequestRoute, updateFriendshipStatusRoute, FriendsRoute, invitationSentRoute } from '../routes/manageFriends.js';
+import { countTotalUsers, randomOtherUser, requestFriendExistsRoute, getFriendsListRoute, getUserByIdRoute, randomEligibleOtherUserRoute, sendFriendRequestRoute, updateFriendshipStatusRoute, FriendsRoute, invitationReceivedRoute } from '../routes/manageFriends.js';
 
 const app = fastify();
 const cookieSecretKey = loadSecretKey('SECRET_KEY_FILE');
@@ -69,9 +68,10 @@ app.register(eraseAccountRoute);
 app.register(sendFriendRequestRoute);
 app.register(FriendsRoute);
 app.register(getFriendsListRoute);
-app.register(invitationSentRoute);
+app.register(invitationReceivedRoute);
 app.register(updateFriendshipStatusRoute);
 app.register(getUserByIdRoute);
+app.register(randomEligibleOtherUserRoute);
 
 
 //maybe you could put it in a specific file 

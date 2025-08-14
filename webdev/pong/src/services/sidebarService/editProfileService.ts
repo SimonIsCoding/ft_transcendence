@@ -1,5 +1,4 @@
-import { showErrorPopup, isValidEmail, showSuccessPopup } from "../../utils/utils";
-import { getUserLogin } from "../../utils/utils";
+import { showErrorPopup, isValidEmail, showSuccessPopup, getCurrentUser } from "../../utils/utils";
 
 export async function reloadUserInfo(): Promise<void>
 {
@@ -24,7 +23,7 @@ export async function reloadUserInfo(): Promise<void>
 
 export async function editProfileService()
 {
-	const login = await getUserLogin();
+	const currentUser = await getCurrentUser();
 
 	const currentPassword = (document.getElementById("currentPasswordEditProfile") as HTMLInputElement).value;
 	const changePassword = (document.getElementById("changePasswordEditProfile") as HTMLInputElement).value;
@@ -44,7 +43,7 @@ export async function editProfileService()
 		method: 'POST',
 		credentials: 'include',
 		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ login: login, currentPassword: currentPassword, changePassword: changePassword, changeMail: changeMail })
+		body: JSON.stringify({ login: currentUser.login, currentPassword: currentPassword, changePassword: changePassword, changeMail: changeMail })
 	})
 	.then(async res => {
 		const backend_answer = await res.json();
