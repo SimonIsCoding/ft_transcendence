@@ -40,8 +40,8 @@ export async function initLogin()
 				.then(res => {
 					if (res.ok)
 					{
-						fetch('/api/auth/infoUser', { credentials: 'include' })
-						.then(res => res.json())
+						// fetch('/api/auth/infoUser', { credentials: 'include' })
+						// .then(res => res.json())
 						Router.navigate('home');
 						showSuccessPopup("You are logged", 3500, "popup");
 					}

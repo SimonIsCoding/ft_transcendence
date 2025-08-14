@@ -27,7 +27,6 @@ export async function FriendsRoute(fastify)
 		const [a,b] = currentUser.id < otherUser.id ? [currentUser.id, otherUser.id] : [otherUser.id, currentUser.id];
 		const stmt = db.prepare(`SELECT * FROM friendships WHERE user_a_id = ? AND user_b_id = ?`);
 		const friendship = stmt.get(a, b);
-		console.log("friendship = ", friendship);
 		return friendship;
 	})
 }
@@ -38,7 +37,6 @@ export async function invitationReceivedRoute(fastify)
 		const { currentUser, otherUser } = request.body;
 		const stmt = db.prepare(`SELECT * FROM friend_requests WHERE from_user_id = ? AND to_user_id = ?`);
 		const invitationReceived = stmt.get(otherUser.id, currentUser.id);
-		console.log("invitationReceived = ", invitationReceived);
 		return invitationReceived;
 	})
 }
@@ -68,7 +66,7 @@ export async function getUserByIdRoute(fastify)
 export async function requestFriendExistsRoute(fastify)
 {
 	fastify.get('/requestFriendExists', async (request, reply) => {
-		const stmt = db.prepare("SELECT from_user_id, to_user_id FROM friend_requests WHERE status = 'pending'");//you can remove  WHERE status = 'pending'
+		const stmt = db.prepare("SELECT from_user_id, to_user_id FROM friend_requests");
     	const users = stmt.all();
 		return reply.status(200).send(users);
 	});
