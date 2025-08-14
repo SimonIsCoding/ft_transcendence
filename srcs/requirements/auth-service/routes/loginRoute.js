@@ -13,7 +13,7 @@ export async function loginRoute(fastify)
 	if (!login || !password)
 		return reply.status(400).send({ error: "Missing login or password" });
 	
-	const stmt = db.prepare("SELECT id, login, mail, profile_picutre FROM users WHERE login = ?");
+	const stmt = db.prepare("SELECT * FROM users WHERE login = ?");//id, login, mail, profile_picture
 	const user = stmt.get(login);
 	const match = user ? await bcrypt.compare(password, user.password) : false;
 	

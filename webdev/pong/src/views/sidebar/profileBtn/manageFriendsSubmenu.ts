@@ -119,14 +119,14 @@ export const manageOthersUsersCard = (() => {
 		while (i < max)
 		{
 			randomUser = await getRandomEligibleOtherUser(currentUser);
-			listOthersFriends.push(randomUser!);
+			if (randomUser) listOthersFriends.push(randomUser);
 			if (i > 0)
 			{
 				while (randomUser && listOthersFriends[0].login === listOthersFriends[1].login)
 				{
 					listOthersFriends.pop();
 					randomUser = await getRandomEligibleOtherUser(currentUser);
-					listOthersFriends.push(randomUser!);
+					if (randomUser) listOthersFriends.push(randomUser);
 					if (j >= totalUsers)
 						randomUser = null;
 					j++;

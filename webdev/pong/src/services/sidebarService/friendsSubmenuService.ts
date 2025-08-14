@@ -8,14 +8,14 @@ interface User {
   token: string;
 }
 
-//first function to check which friends can we add
+//function to check how many user there is in the db
 export async function getTotalUser()
 {
 	const res = await fetch('/api/auth/countTotalUsers', {
 		method: 'GET',
 		credentials: 'include'
 	})
-	const data = await res.json();
+	const data = await res.json();//issue
 	return data;
 }
 
@@ -32,7 +32,6 @@ export async function getUserById(userId: number)
 	return (user);
 }
 
-//you have to create an endpoint for user_a sending Invitation request to user_b
 export async function sendFriendRequestOtherUser(currentUser: User, otherUser: User)
 {
 	fetch('/api/auth/sendFriendRequest', {
@@ -77,7 +76,11 @@ export async function getRandomEligibleOtherUser(currentUser: User): Promise<Use
 		body: JSON.stringify({ currentUser: currentUser }),
 		credentials: 'include'
 	})
-	.then(res => res.json())
+	.then(res => {
+		if (res.status === 204)
+			return null;
+		return res.json();
+	})
 	.then(data => { return data })
 	if (eligibleUser)
 		return eligibleUser;
@@ -102,20 +105,6 @@ export async function friendInvitationReceived(currentUser: User, otherUser: Use
 		return true;
 	return false;
 }
-
-// export async function isRequestFriendExists(): Promise<User | null>
-// {
-// 	const friendRequest: FriendRequest | null = await fetch('/api/auth/requestFriendExists', { credentials: 'include' })
-// 	.then(res => res.json())
-// 	.then(async (data: FriendRequest[]) => {
-// 		const currentUser: User = await getCurrentUser();
-// 		return data.find(item => item.to_user_id === currentUser.id) || null;
-// 	});
-
-// 	if (friendRequest)
-// 		return await getUserById(friendRequest.from_user_id);
-// 	return null;
-// }
 
 export async function howManyFriendsRequests(): Promise<number>
 {
