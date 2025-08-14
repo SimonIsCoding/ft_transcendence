@@ -157,9 +157,9 @@ export async function howManyFriends(): Promise<number>
 	.then(res => res.json())
 	.then(async (data: FriendsConnexion[]) => {
 		const currentUser: User = await getCurrentUser();
-		let nbFriends = data.filter(item => item.user_a_id === currentUser.id).length;
-		if (nbFriends == 0)
-			nbFriends = data.filter(item => item.user_b_id === currentUser.id).length;
+		let nbFriendsFirstRow = data.filter(item => item.user_a_id === currentUser.id).length;
+		let nbFriendsSecondRow = data.filter(item => item.user_b_id === currentUser.id).length;
+		let nbFriends = nbFriendsFirstRow + nbFriendsSecondRow;
 		return nbFriends;
 	});
 	return nbFriends;
