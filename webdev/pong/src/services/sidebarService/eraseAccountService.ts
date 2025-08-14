@@ -1,9 +1,9 @@
-import { getUserLogin } from "../../utils/utils";
+import { getCurrentUser } from "../../utils/utils";
 import { manageOthersUsersCard, manageFriendsRequestsCard } from "../../views/sidebar/profileBtn/manageFriendsSubmenu";
 
 export async function eraseAccountService()
 {
-	const login = await getUserLogin();
+	const currentUser = await getCurrentUser();
 
 	await fetch('/api/auth/logout', {
 		method: 'GET',
@@ -16,6 +16,6 @@ export async function eraseAccountService()
 		method: 'POST',
 		credentials: 'include',
 		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ login: login })
+		body: JSON.stringify({ login: currentUser.login })
 	})
 }

@@ -82,31 +82,6 @@ export async function receiveProfilePicture(file: File): Promise<void>
   }
 }
 
-//kind of utils and services - idk where to put it 
-export async function getUserLogin(): Promise<string>
-{
-	const login = await fetch("/api/auth/info")
-	.then(res => res.json())
-	.then(data => { return data.login });
-	return login;
-}
-
-export async function getUserMail(): Promise<string>
-{
-	const mail = await fetch("/api/auth/info")
-	.then(res => res.json())
-	.then(data => { return data.mail });
-	return mail;
-}
-
-export async function getUserPic(): Promise<string>
-{
-	const profilePic = await fetch("/api/auth/info")
-	.then(res => res.json())
-	.then(data => { return data.profile_picture });
-	return profilePic;
-}
-
 export async function getCurrentUser(): Promise<User>
 {
 	const res = await fetch("/api/auth/info");
