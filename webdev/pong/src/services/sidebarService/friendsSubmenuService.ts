@@ -170,20 +170,16 @@ export async function howManyFriends(): Promise<number>
 	.then(async (data: FriendsConnexion[]) => {
 		const currentUser: User = await getCurrentUser();
 		let nbFriends = data.filter(item => item.user_a_id === currentUser.id).length;
-		console.log("in fetch for howManyFriends & nbFriends 1 = ", nbFriends);
 		if (nbFriends == 0)
 			nbFriends = data.filter(item => item.user_b_id === currentUser.id).length;
-		console.log("in fetch for howManyFriends & nbFriends 2 = ", nbFriends);
 		return nbFriends;
 	});
-	console.log("in frontend howManyFriends, nbFriends = ", nbFriends);
 	return nbFriends;
 }
 
 // getFriends fetch returns:  [ { user_a_id: 2, user_b_id: 3 } ]
 export async function displayFriend(i: number): Promise<User>
 {
-	console.log("entering in displyFriend function");
 	const currentUser: User = await getCurrentUser();
 	const allFriends: FriendsConnexion[] = await fetch('/api/auth/getFriends', {
 		method: 'POST',
@@ -199,15 +195,7 @@ export async function displayFriend(i: number): Promise<User>
 	});
 
 	if (!allFriends || i < 0 || i >= allFriends.length)
-	{
-		console.log("entering in new Error condition");
 		throw new Error("Invalid index || no friends found");
-	}
-
-	console.log("allFriends List = ", allFriends);
 	const friendId = allFriends[i].user_a_id === currentUser.id ? allFriends[i].user_b_id : allFriends[i].user_a_id;
-	console.log("in DisplayFriend, friendId = ", friendId);
-	console.log("meaning it returns User = ", await getUserById(friendId));
-
 	return await getUserById(friendId);
 }
