@@ -47,6 +47,7 @@ export async function updateFriendshipStatusRoute(fastify)
 {
 	fastify.post('/updateFriendshipStatus', async (request, reply) => {
 		const { currentUser, otherUser, status } = request.body;
+		const [a,b] = currentUser.id < otherUser.id ? [currentUser.id, otherUser.id] : [otherUser.id, currentUser.id];
 		if (status == true)
 			db.prepare(`INSERT INTO friendships (user_a_id, user_b_id) VALUES (?, ?)`).run(a, b);
 		db.prepare(`DELETE FROM friend_requests WHERE to_user_id = ? AND from_user_id = ?`).run(currentUser.id, otherUser.id);
