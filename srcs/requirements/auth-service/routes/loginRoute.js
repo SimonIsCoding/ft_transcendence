@@ -7,16 +7,14 @@ const cookieSecretKey = loadSecretKey('SECRET_KEY_FILE');
 
 export async function loginRoute(fastify)
 {
-	// to log in
 	fastify.post('/login', async (request, reply) => {
 		const { login, password } = request.body;
 		
 	if (!login || !password)
 		return reply.status(400).send({ error: "Missing login or password" });
 	
-	const stmt = db.prepare("SELECT * FROM users WHERE login = ?");
+	const stmt = db.prepare("SELECT id, login, mail, profile_picutre FROM users WHERE login = ?");
 	const user = stmt.get(login);
-	console.log("AVOID TO SHOW PASSWORD IN FETCH: in loginRoute user = ", user);
 	const match = user ? await bcrypt.compare(password, user.password) : false;
 	
 	const SECRET = cookieSecretKey;

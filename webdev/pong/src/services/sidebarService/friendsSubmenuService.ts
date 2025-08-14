@@ -98,7 +98,6 @@ export async function friendInvitationReceived(currentUser: User, otherUser: Use
 		return JSON.parse(text);
 	})
 	.then(data => { return data })
-	console.log("in friendInvitationReceived, invitationReceived = ", invitationReceived);
 	if (invitationReceived)
 		return true;
 	return false;

@@ -56,23 +56,21 @@ Begin space for friendsCard
 
 async function displayAllFriends(i: number)
 {
-	console.log("in DisplayAllFriends");
 	const friendsListDiv = document.getElementById("friendsListDiv");
 	const userToDisplay = await displayFriend(i);
-	console.log("in DisplayAllFriends & userToDisplay = ", userToDisplay);
 	if (friendsListDiv)
 	{
 		friendsListDiv.classList.remove("hidden");
 		document.getElementById("friendsCard")?.insertAdjacentHTML("beforeend", friendsCard.render(userToDisplay));
 		await friendsCard.init(userToDisplay);
 	}
-	else
-	{
-		// change the msg bc it is a bit ugly but the logic is there
-		// friendsListDiv.classList.remove("hidden");
-		// const friendsListP = document.getElementById("friendsListP");
-		// friendsListP!.textContent = "No Friends for the moment - You can add new friends below!";
-	}
+	// else
+	// {
+	// 	// change the msg bc it is a bit ugly but the logic is there
+	// 	// friendsListDiv.classList.remove("hidden");
+	// 	// const friendsListP = document.getElementById("friendsListP");
+	// 	// friendsListP!.textContent = "No Friends for the moment - You can add new friends below!";
+	// }
 }
 
 export const manageFriendsCard = (() => {
@@ -81,8 +79,6 @@ export const manageFriendsCard = (() => {
 	async function main()
 	{
 		const nbFriends = await howManyFriends();
-		console.log("in manageFriendsCard, nbFriends: ", nbFriends);
-		console.log("la valeur de i est: ", i);
 		while (i < nbFriends)
 		{
 			displayAllFriends(i);
@@ -123,8 +119,6 @@ export const manageOthersUsersCard = (() => {
 		while (i < max)
 		{
 			randomUser = await getRandomEligibleOtherUser(currentUser);
-			// if (randomUser) console.log("in OtherUsers, random user = ", randomUser);
-			// console.log("i = ", i);
 			listOthersFriends.push(randomUser!);
 			if (i > 0)
 			{
@@ -138,14 +132,11 @@ export const manageOthersUsersCard = (() => {
 					j++;
 
 				}
-				// if (randomUser) console.log("in OtherUsers, random user = ", randomUser);
-				// console.log("2nd i = ", i);
 			}
 			const container = document.getElementById("othersUsersCard");
 			const othersUsersP = document.getElementById("othersUsersP");
 			if (randomUser && container)
 			{
-				// console.log("we add OtherUsers container with randomUser = ", randomUser);
 				othersUsersDiv?.classList.remove("hidden");
 				let name: string = `othersUsers_${randomUser.login}_card`;
 				container.insertAdjacentHTML("beforeend", othersUsersCard.render(name, randomUser.login));
