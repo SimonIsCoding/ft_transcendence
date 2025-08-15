@@ -1,5 +1,5 @@
 import fp from 'fastify-plugin';
-import { initiate2FA, verify2FA, resend2FA } from '../services/twofaService.js';
+import { initiate2FA, verify2FA } from '../services/twofaService.js';
 
 export default fp(async (fastify) => {
   // Request 2FA Token

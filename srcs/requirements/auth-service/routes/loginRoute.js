@@ -39,7 +39,9 @@ export async function loginRoute(fastify) {
     reply.send({
       success: true,
       requires2FA: process.env.ENABLE_2FA === 'true',
-      userId: user.id // Critical for /generate-token
+      userId: user.id, // Critical for /generate-token
+      mail: user.mail // Add this field
+
     });
   });
 
