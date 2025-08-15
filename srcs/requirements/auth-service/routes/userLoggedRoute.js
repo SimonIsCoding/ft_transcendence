@@ -76,7 +76,16 @@ export async function statusWSRoute(fastify)
 			if (onlineUsers.has(userId))
 			{
 				console.log(`🟡 User ${login} already connected, closing old socket`);
+				reply.clearCookie('token', {
+					path: '/',
+					secure: true,
+					httpOnly: true,
+					sameSite: 'none' //'strict'
+				});
+				console.log(`after erasing cookie, token = ${decoded.token}`);
+				//here you have to reset data.authenticated
 				const oldSocket = onlineUsers.get(userId).socket;
+				console.log(`oldSocket = ${oldSocket}`);
 				oldSocket.close();
 			}
 
