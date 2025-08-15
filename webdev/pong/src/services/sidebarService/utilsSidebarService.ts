@@ -1,5 +1,10 @@
+// import { getCurrentUser } from "../../utils/utils";
+// import { initStatusSocket } from "../../views/sidebar/profileBtn/statusSocket";
+
 export async function isConnected(): Promise<boolean>
 {
+	// const currentUser = await getCurrentUser();
+	// initStatusSocket(currentUser);
 	const res = await fetch('/api/auth/status', {
 			method: 'GET',
   			credentials: 'include' 

@@ -62,33 +62,33 @@ export const friendRequestCard = {
 }
 
 export const friendsCard = {
-	render(currentUser: User): string {
+	render(userToDisplay: User): string {
 	return `
-	<div id="friendBox_${currentUser.login}" class="flex flex-col rounded-2xl w-full space-y-5 shadow-base shadow-gray-600 pr-5 pl-5 pt-2 pb-2 bg-black mb-2">
+	<div id="friendBox_${userToDisplay.login}" class="flex flex-col rounded-2xl w-full space-y-5 shadow-base shadow-gray-600 pr-5 pl-5 pt-2 pb-2 bg-black mb-2">
 		<div class="flex items-center space-x-2">
-			<img id="friendProfilePic_${currentUser.login}" class="w-10 h-10 rounded-full object-cover border border-black bg-[#fbd11b] text-black flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md" />
+			<img id="friendProfilePic_${userToDisplay.login}" class="w-10 h-10 rounded-full object-cover border border-black bg-[#fbd11b] text-black flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md" />
 			<div class="space-x-2">
-				<p id="friendUsername_${currentUser.login}" class="font-bold text-sm text-[#fbd11b]">FriendUsername</p>
-				<p id="friendMail_${currentUser.login}" class="text-sm text-[#fbd11b]">email@exemple.com</p>
+				<p id="friendUsername_${userToDisplay.login}" class="font-bold text-sm text-[#fbd11b]">FriendUsername</p>
+				<p id="friendMail_${userToDisplay.login}" class="text-sm text-[#fbd11b]">email@exemple.com</p>
 				<hr class="w-55"/>
 			</div>
-			<div id="friendsStatus_${currentUser.login}" class="top-1 right-1 w-3 h-3 bg-red-500 rounded-full border border-black"><button id="Offline" title="Offline"></button></div>
+			<div id="friendsStatus_${userToDisplay.login}" class="top-1 right-1 w-3 h-3 bg-red-500 rounded-full border border-black"><button id="Offline" title="Offline"></button></div>
 		</div>
 	</div>
   `;
   },
 
-  async init(currentUser: User)
+  async init(userToDisplay: User)
   {
-	// const friendBox = document.getElementById(`friendBox_${currentUser.login}`);
-	const friendImg = document.getElementById(`friendProfilePic_${currentUser.login}`) as HTMLImageElement;
-	const friendUsername = document.getElementById(`friendUsername_${currentUser.login}`);
-	const friendMail = document.getElementById(`friendMail_${currentUser.login}`);
-	// const friendStatus = document.getElementById(`friendsStatus_${currentUser.login}`);
+	// const friendBox = document.getElementById(`friendBox_${userToDisplay.login}`);
+	const friendImg = document.getElementById(`friendProfilePic_${userToDisplay.login}`) as HTMLImageElement;
+	const friendUsername = document.getElementById(`friendUsername_${userToDisplay.login}`);
+	const friendMail = document.getElementById(`friendMail_${userToDisplay.login}`);
+	// const friendStatus = document.getElementById(`friendsStatus_${userToDisplay.login}`);
 	// if (friendImg)
-	friendImg.src = `https://localhost:4443/${currentUser.profile_picture}`;
-	friendUsername!.textContent = currentUser.login;
-	friendMail!.textContent = currentUser.mail;
+	friendImg.src = `https://localhost:4443/${userToDisplay.profile_picture}`;
+	friendUsername!.textContent = userToDisplay.login;
+	friendMail!.textContent = userToDisplay.mail;
   }
 }
 
