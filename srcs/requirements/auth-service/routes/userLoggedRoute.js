@@ -44,6 +44,8 @@ export async function statusWSRoute(fastify)
 	console.log("🟢 StatusWSRoute loaded");
 
 	const onlineUsers = fastify.onlineUsers;
+	let userId;
+	let login;
 
 	fastify.get('/ws', { websocket: true }, (connection, req) =>
 	{
@@ -66,8 +68,8 @@ export async function statusWSRoute(fastify)
 		try
 		{
 			const decoded = fastify.jwt.verify(token);
-			const userId = decoded.id;
-			const login = decoded.login;
+			userId = decoded.id;
+			login = decoded.login;
 			console.log(`✅ JWT verified for userId=${userId} login=${login}`);
 
 			// Remove old socket if exists
