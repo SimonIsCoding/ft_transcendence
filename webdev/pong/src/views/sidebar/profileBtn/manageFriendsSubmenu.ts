@@ -105,6 +105,7 @@ export const manageOthersUsersCard = (() => {
   async function main()
   {
 	const othersUsersDiv = document.getElementById("othersUsersDiv");
+	othersUsersDiv?.classList.remove("hidden");
 	const totalUsers = await getTotalUser();
 	const currentUser: User = await getCurrentUser();
 
@@ -137,7 +138,6 @@ export const manageOthersUsersCard = (() => {
 			const othersUsersP = document.getElementById("othersUsersP");
 			if (randomUser && container)
 			{
-				othersUsersDiv?.classList.remove("hidden");
 				let name: string = `othersUsers_${randomUser.login}_card`;
 				container.insertAdjacentHTML("beforeend", othersUsersCard.render(name, randomUser.login));
 				othersUsersCard.init(randomUser);
@@ -148,7 +148,6 @@ export const manageOthersUsersCard = (() => {
 			{
 				if (noOtherFriend == 0)
 				{// change the msg bc it is a bit ugly but the logic is there
-					othersUsersDiv?.classList.remove("hidden");
 					othersUsersP!.textContent = "No others users to connect with";
 				}
 			}
