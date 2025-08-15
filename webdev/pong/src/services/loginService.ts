@@ -1,6 +1,8 @@
 import { Router } from '../router';
-import { showSuccessPopup } from '../utils/utils';
+import { /*getCurrentUser,*/ showSuccessPopup } from '../utils/utils';
 import { showErrorPopup } from '../utils/utils';
+// import { initStatusSocket } from '../views/sidebar/profileBtn/statusSocket';
+import { onLoginSuccess } from '../views/sidebar/profileBtn/statusSocket';
 
 // --- form to log in
 export async function initLogin()
@@ -37,13 +39,17 @@ export async function initLogin()
 				fetch('/api/auth/info', {
 					credentials: 'include'
 				})
-				.then(res => {
+				.then(async res => {
 					if (res.ok)
 					{
 						// fetch('/api/auth/infoUser', { credentials: 'include' })
 						// .then(res => res.json())
 						Router.navigate('home');
 						showSuccessPopup("You are logged", 3500, "popup");
+						onLoginSuccess();
+						// const currentUser = await getCurrentUser();
+						// initStatusSocket(currentUser);
+						// initStatusSocket();
 					}
 				});
 			}
