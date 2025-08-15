@@ -1,60 +1,59 @@
-// let socket: WebSocket;
+// filename: statusSocket.ts
+let socket: WebSocket;
 
-// interface User {
-//   id: number;
-//   login: string;
-//   mail: string;
-//   profile_picture: string,
-//   token: string;
-// }
-export function onLoginSuccess()
-{
-	const ws = new WebSocket(`wss://${location.host}/ws`);
-	ws.onopen = () => ws.send('ping');
-	ws.onmessage = (e) => console.log('Réponse:', e.data);
+interface User {
+	id: number;
+	login: string;
+	mail: string;
+	profile_picture: string;
+	token: string;
 }
 
-// export async function initStatusSocket(currentUser: User)
-// {
-// 	socket = new WebSocket(`wss://localhost:4443/api/auth/statusWS`);
-// 	console.log("entered in initStatusSocket.ts and socket = ", socket);
+export function initStatusSocket(user: User)
+{
+	console.log("🟢 initStatusSocket called for user", user.login);
 
-// 	socket.addEventListener("open", () => {
-// 		console.log("✅ WebSocket connected");
+	socket = new WebSocket("wss://localhost:4443/api/auth/ws"); // assigner à la variable globale
 
-// 		socket.send(JSON.stringify({
-// 			type: "identify",
-// 			user: currentUser
-// 		}));
-// 	});
+	socket.onopen = () =>
+	{
+		console.log("✅ WebSocket connected");
+		console.log("📝 Sending identify message with token/user info");
+		socket.send(JSON.stringify({ type: 'identify', user }));
+		console.log("📝 Identify message sent:", { id: user.id, login: user.login, mail: user.mail, profile_picture: user.profile_picture });
+	};
 
-// 	socket.onmessage = (event) =>
-// 	{
-// 			const data = JSON.parse(event.data);
-// 			if (data.type === 'status')
-// 			{
-// 				// Mettre à jour le UI : data.userId, data.isOnline
-// 				// Ici tu pourrais mettre à jour ton DOM ou ton store
-// 				// friendsStatus_${currentUser.login}
-// 				// const friendsStatus = document.getElementById(`friendsStatus_${currentUser.login}`)
-// 				// friendsStatus?.classList.remove()
-// 			}
-// 		}
+	socket.onmessage = (event) =>
+	{
+		console.log("📩 Message received from server:", event.data);
+		try
+		{
+			const data = JSON.parse(event.data);
+			if (data.type === 'status')
+				console.log(`🟢 User ${data.userId} is ${data.isOnline ? "online" : "offline"}`);
+		}
+		catch (err) { console.warn("❌ Failed to parse server message:", err); }
+	};
 
-// 	socket.addEventListener("close", () => {
-// 		console.log("⚠️ WebSocket closed");
-// 	});
+	socket.onclose = (event) =>
+	{
+		console.warn(`⚠️ WebSocket closed code=${event.code} reason=${event.reason}`);
+	};
 
-// 	socket.addEventListener("error", (err) => {
-// 		console.error("❌ WebSocket error", err);
-// 	});
+	socket.onerror = (err) =>
+	{
+		console.error("❌ WebSocket error:", err);
+	};
+}
 
-// 	return socket;
-// }
+export function closeSocket()
+{
+	if (!socket)
+	{
+		console.log("🟡 No socket to close");
+		return;
+	}
 
-// export function closeSocket()
-// {
-// 	if (socket) 
-// 		socket.close();
-// }
-
+	socket.close();
+	console.log("🔴 Socket closed manually");
+}

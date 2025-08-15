@@ -13,7 +13,7 @@ import { registerRoute } from '../routes/registerRoute.js';
 import { auth } from '../plugins/auth.js';
 import { uploadProfilePictureRoute } from '../routes/uploadProfilePictureRoute.js';
 import { logoutRoute } from '../routes/logoutRoute.js';
-import { statusRoute,/* statusWSRoute,*/ currentUserInfoRoute } from '../routes/userLoggedRoute.js';
+import { statusRoute, statusWSRoute, currentUserInfoRoute } from '../routes/userLoggedRoute.js';
 import { editProfileRoute } from '../routes/editProfileRoute.js';
 import { eraseAccountRoute } from '../routes/eraseAccountRoute.js';
 import { loadSecretKey } from '../utils/loadSecretKey.js';
@@ -24,13 +24,14 @@ const cookieSecretKey = loadSecretKey('SECRET_KEY_FILE');
 
 await app.register(multipart);//to receive images
 await app.register(fastifyWebsocket);
-// app.decorate('onlineUsers', new Map());
+// app.onlineUsers.clear();
+app.decorate('onlineUsers', new Map());
 // export const onlineUsers = new Map();
 // app.register(statusWSRoute, { prefix: '/api/auth' });
 
-app.get('/ws', { websocket: true }, (conn) =>
-	conn.socket.on('message', () => conn.socket.send('OK: reçu'))
-);
+// app.get('/ws', { websocket: true }, (conn) =>
+// 	conn.socket.on('message', () => conn.socket.send('OK: reçu'))
+// );
 
 
 app.register(fastifyCookie, {
@@ -67,7 +68,7 @@ await uploadProfilePictureRoute(app);
 await countTotalUsers(app);
 await logoutRoute(app);
 await statusRoute(app);
-// await statusWSRoute(app);
+await statusWSRoute(app);
 await requestFriendExistsRoute(app);
 await currentUserInfoRoute(app);
 app.register(editProfileRoute);
