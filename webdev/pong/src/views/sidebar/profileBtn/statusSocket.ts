@@ -13,7 +13,7 @@ export function initStatusSocket(user: User)
 {
 	console.log("🟢 initStatusSocket called for user", user.login);
 
-	socket = new WebSocket("wss://localhost:4443/api/auth/ws"); // assigner à la variable globale
+	socket = new WebSocket("wss://localhost:4443/api/auth/ws");
 
 	socket.onopen = () =>
 	{
