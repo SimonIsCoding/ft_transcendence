@@ -1,4 +1,5 @@
 import { twofaView } from '../views/twofaView';
+import { twoFAService } from '../services/twofaService';
 import { Router } from '../router';
 
 export class TwoFAController {
@@ -39,10 +40,25 @@ export class TwoFAController {
       });
       throw new Error('2FA template error');
     }
+  console.log('[TwoFAController] init() form found');
 
     this.setupEventListeners(view);
+  console.log('[TwoFAController] init() setupEventListener done');
+  // Request the first 2FA code via the service
+    this.sendInitialCode();
     return view;
   }
+
+private async sendInitialCode(): Promise<void> {
+  console.log('Requesting initial 2FA code for:', this.email);
+  try {
+    await twoFAService.requestCode(this.email);
+    console.log('Initial 2FA code sent');
+  } catch (error) {
+    console.error('Failed to send initial 2FA code:', error);
+    this.showError('Could not send verification code');
+  }
+}
 
   private setupEventListeners(container: HTMLElement): void {
     const form = container.querySelector('#twofaForm') as HTMLFormElement;
@@ -66,28 +82,20 @@ export class TwoFAController {
     this.attempts++;
     console.log(`Attempt ${this.attempts}/${this.maxAttempts}`);
 
-    try {
-      const response = await fetch('/api/2fa/verify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          email: this.email,
-          token: code 
-        }),
-        credentials: 'include' // Crucial for cookies
-      });
+try {
+  const result = await twoFAService.verifyCode(this.email, code);
 
-      console.log('Verification response:', response.status, await response.text());
+  console.log('Verification result:', result);
 
-      if (response.ok) {
-        this.onSuccess();
-      } else {
-        await this.handleFailedAttempt(response);
-      }
-    } catch (error) {
-      console.error('Verification error:', error);
-      await this.handleFailedAttempt();
-    }
+  if (result.success) {
+    this.onSuccess();
+  } else {
+    await this.handleFailedAttempt();
+  }
+} catch (error) {
+  console.error('Verification error:', error);
+  await this.handleFailedAttempt();
+}
   }
 
   private async handleFailedAttempt(response?: Response): Promise<void> {
@@ -129,26 +137,16 @@ export class TwoFAController {
     });
   }
 
-  private async resendCode(): Promise<void> {
-    console.log('Resending 2FA code to:', this.email);
-    try {
-      const response = await fetch('/api/2fa/resend', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: this.email }),
-        credentials: 'include'
-      });
-
-      if (response.ok) {
-        this.showError('New code sent successfully');
-      } else {
-        throw new Error('Failed to resend');
-      }
-    } catch (error) {
-      console.error('Resend failed:', error);
-      this.showError('Failed to resend code');
-    }
+private async resendCode(): Promise<void> {
+  console.log('Resending 2FA code to:', this.email);
+  try {
+    await twoFAService.requestCode(this.email);
+    this.showError('New code sent successfully');
+  } catch (error) {
+    console.error('Resend failed:', error);
+    this.showError('Failed to resend code');
   }
+}
 
   private showError(message: string): void {
     console.log('Displaying error:', message);
