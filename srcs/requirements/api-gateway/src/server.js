@@ -49,7 +49,7 @@ fastify.register(fastifyHttpProxy, {
 fastify.register(fastifyHttpProxy, {
   upstream: 'http://2fa-service:3003',
   prefix: '/api/2fa',
-  rewritePrefix: '/api/2fa',
+  rewritePrefix: '/',
     http2: false,
   replyOptions: {
     rewriteRequestHeaders: (originalReq, headers) => {
