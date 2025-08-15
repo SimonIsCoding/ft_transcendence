@@ -1,6 +1,6 @@
 import { Router } from "../../router";
 import { manageOthersUsersCard, manageFriendsRequestsCard, manageFriendsCard } from "../../views/sidebar/profileBtn/manageFriendsSubmenu";
-// import { closeSocket } from "../../views/sidebar/profileBtn/statusSocket";
+import { closeSocket } from "../../views/sidebar/profileBtn/statusSocket";
 
 export function initLogout()
 {
@@ -13,7 +13,7 @@ export function initLogout()
 	manageFriendsRequestsCard.reset();
 	manageFriendsCard.reset();
 	manageOthersUsersCard.reset();
-	// closeSocket();
+	closeSocket();
 	Router.navigate('home');
 	});
 
