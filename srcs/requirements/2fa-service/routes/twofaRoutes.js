@@ -15,6 +15,15 @@ export default fp(async (fastify) => {
     }
   }, async (request, reply) => {
     try {
+    // 1. Check if auth_phase cookie exists and is correct
+    const authPhase = request.cookies?.auth_phase;
+    if (authPhase !== 'password_verified') {
+      return reply.code(401).send({
+        success: false,
+        error: 'Not authorized for 2FA request'
+      });
+    }
+
       const result = await initiate2FA(request.body.email);
       return result;
     } catch (error) {

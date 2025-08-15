@@ -1,6 +1,7 @@
 // requirements/2fa-service/server.js
 import fastify from 'fastify';
 import fastifyJwt from '@fastify/jwt';
+import fastifyCookie from '@fastify/cookie';
 import helmet from '@fastify/helmet';
 import rateLimit from '@fastify/rate-limit';
 import cors from '@fastify/cors';
@@ -14,7 +15,11 @@ const server = fastify({
 });
 
 await server.register(fastifyJwt, {
-  secret: 'super-secret-key',// you should put it in a env file
+  secret: process.env.JWT_SECRET || 'super-secret-key',// I should put it in a env file
+});
+
+server.register(fastifyCookie, {
+  secret: process.env.COOKIE_SECRET || 'super-secret-key', //to sign ur cookie // you should put it in a env file
 });
 
 // Security Middleware
@@ -34,12 +39,7 @@ await server.register(cors, {
 import './services/dbService.js';
 
 // Routes
-await server.register(
-  async (fastify) => {
-    await fastify.register(authRoutes);
-  },
-  { prefix: '/api/2fa' }
-);
+await server.register(authRoutes);
 
 // Health Check
 server.get('/health', async () => ({ status: 'ok' }));
