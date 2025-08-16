@@ -17,6 +17,7 @@ export async function currentUserInfoRoute(fastify)
 		return reply.send(user);
 	});
 }
+
 export async function statusRoute(fastify)
 {
   fastify.get('/status', async (request, reply) => {
@@ -30,6 +31,17 @@ export async function statusRoute(fastify)
       const decoded = fastify.jwt.verify(token);
 	  console.log("token status = ", token);
       return reply.send({ authenticated: true, user: decoded });
+		// const decoded = fastify.jwt.verify(token);
+		// const userId = decoded.id;
+		
+		// const session = fastify.onlineUsers.get(userId);
+		// console.log(`session = ${session}`);
+		// console.log(`session.token = ${session.token}`);
+		// console.log(`token = ${token}`);
+		// if (session && session.token === token)
+		// 		return reply.send({ authenticated: true, user: decoded });
+
+		// return reply.send({ authenticated: false });
     }
 	catch (err)
 	{
@@ -37,6 +49,59 @@ export async function statusRoute(fastify)
     }
   });
 }
+
+
+function isDuplicateSession(fastify, userId)
+{
+	console.log("entered in isDuplicateSession");
+	const session = fastify.onlineUsers.get(userId);
+	console.log(`fastify = ${fastify}`);
+	console.log(`userId = ${userId}`);
+	console.log(`session = ${session}`);
+	if (!session) return false; // pas de session active
+
+	// Ici, si la session existait et qu'on veut la remplacer
+	session.socket.close();      // déconnecte la session précédente
+	fastify.onlineUsers.delete(userId); // supprime de la map
+	return true; // indique qu'une session a été supprimée
+}
+
+export async function forceLogoutRoute(fastify)
+{
+	fastify.post('/forceLogout', async (request, reply) => {
+		console.log("entered in forceLogout");
+		const { userId2 } = request.body;
+		// // const token = request.cookies.token;
+		// // token = currentUser.token;
+		// console.log(`User.id = ${userId}`);
+		// console.log(`fastify = ${fastify}`);
+		// // console.log(`in forceLogout currentUser.token = ${currentUser.token}`);
+		// // if (!token) return reply.send({ success: false });
+
+		// // const decoded = fastify.jwt.verify(token);
+		// // const userId = decoded.id;
+
+		// const wasLoggedOut = isDuplicateSession(fastify, userId);
+		// console.log(`wasLoggedOut = ${wasLoggedOut}`);
+		// return reply.send({ success: wasLoggedOut });
+		console.log(`userId2 = ${userId2}`);
+		
+		const token = request.cookies.token;
+		console.log(` in forcelogout token = ${token}`);
+		
+		if (!token)
+			return reply.send({ success: false });
+
+		const decoded = fastify.jwt.verify(token);
+		const userId = decoded.id;
+
+		console.log(`userId = ${userId}`);
+		const wasLoggedOut = isDuplicateSession(userId);
+		console.log(`wasLoggedOut = ${wasLoggedOut}`);
+		return reply.send({ success: wasLoggedOut });
+	});
+}
+
 import cookie from 'cookie';
 
 export async function statusWSRoute(fastify)
@@ -89,7 +154,8 @@ export async function statusWSRoute(fastify)
 				oldSocket.close();
 			}
 
-			onlineUsers.set(userId, { login, socket: connection });
+			// onlineUsers.set(userId, { login, socket: connection });
+			onlineUsers.set(userId, { login, socket: connection, token });
 			console.log("📝 Current online users:", Array.from(onlineUsers.entries()));
 			console.log(`✅ ${login} is online`);
 
@@ -105,7 +171,9 @@ export async function statusWSRoute(fastify)
 
 		connection.on('close', () =>
 		{
+			console.log("📝 Before deleting online users:", Array.from(onlineUsers.entries()));
 			onlineUsers.delete(userId);
+			console.log("📝 After deleting online users:", Array.from(onlineUsers.entries()));
 			console.log(`❌ ${login} is offline`);
 			broadcastStatus(userId, false);
 		});

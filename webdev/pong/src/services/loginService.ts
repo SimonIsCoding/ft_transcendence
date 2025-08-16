@@ -1,8 +1,21 @@
 import { Router } from '../router';
 import { getCurrentUser, showSuccessPopup } from '../utils/utils';
 import { showErrorPopup } from '../utils/utils';
+import { manageFriendsCard, manageFriendsRequestsCard, manageOthersUsersCard } from '../views/sidebar/profileBtn/manageFriendsSubmenu';
 // import { onLoginSuccess } from '../views/sidebar/profileBtn/statusSocket';
-import { initStatusSocket } from '../views/sidebar/profileBtn/statusSocket';
+import { closeSocket, initStatusSocket } from '../views/sidebar/profileBtn/statusSocket';
+import { isConnected } from './sidebarService/utilsSidebarService';
+// import { } 
+
+interface User {
+  id : number;
+  login: string;
+//   password: string;
+  mail: string;
+  profile_picture: string;
+  token: string;
+}
+
 
 // --- form to log in
 export async function initLogin()
@@ -16,8 +29,8 @@ export async function initLogin()
 		return;
 	}
 
-	const submitBtn = document.getElementById("connectionBtn") as HTMLButtonElement;
-	submitBtn.addEventListener("click", async () => {
+	// const submitBtn = document.getElementById("connectionBtn") as HTMLButtonElement;
+	// submitBtn.addEventListener("click", async () => {
 
 		const login = (document.getElementById("login") as HTMLInputElement).value;
 		const password = (document.getElementById("password") as HTMLInputElement).value;
@@ -42,19 +55,42 @@ export async function initLogin()
 				.then(async res => {
 					if (res.ok)
 					{
-						// fetch('/api/auth/infoUser', { credentials: 'include' })
-						// .then(res => res.json())
-						Router.navigate('home');
-						showSuccessPopup("You are logged", 3500, "popup");
-						// onLoginSuccess();
-						const currentUser = await getCurrentUser();
-						initStatusSocket(currentUser);
-						// initStatusSocket();
+						const currentUser: User = await getCurrentUser();
+						const forceLogout = await fetch('/api/auth/forceLogout', {
+							method: 'POST',
+							headers: { 'Content-Type': 'application/json' },
+							body: JSON.stringify({ userId2: currentUser.id }),
+							credentials: 'include'
+						})
+						const forceIt = await forceLogout.json();
+						console.log(`forceIt = ${forceIt.success}`);
+						if (forceIt.success === true)
+						{
+							console.log("entered in forceIt condition");
+							await fetch('/api/auth/logout', {
+								method: 'GET',
+								credentials: 'include'
+							});
+							manageFriendsRequestsCard.reset();
+							manageFriendsCard.reset();
+							manageOthersUsersCard.reset();
+							closeSocket();
+							console.log("closeSocket executed");
+							await isConnected();
+							Router.navigate('home');
+						}
+						else
+						{
+							initStatusSocket(currentUser);
+							showSuccessPopup("You are logged", 3500, "popup");
+							Router.navigate('home');
+						}
+
 					}
 				});
 			}
 			else
 				showErrorPopup("Sorry. Your credentials doesn't match", "popup");
 			});
-		});
+		// });
 }
