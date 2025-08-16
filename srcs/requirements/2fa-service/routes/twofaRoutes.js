@@ -17,7 +17,9 @@ export default fp(async (fastify) => {
     try {
     // 1. Check if auth_phase cookie exists and is correct
     const authPhase = request.cookies?.auth_phase;
-    if (authPhase !== 'password_verified') {
+	const pendingCookie = request.cookies?.pending_registration;
+
+    if (authPhase !== 'password_verified' && !pendingCookie) {
       return reply.code(401).send({
         success: false,
         error: 'Not authorized for 2FA request'
