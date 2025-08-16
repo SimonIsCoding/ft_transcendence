@@ -32,7 +32,7 @@ export async function initRegistration() {
       const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ login, mail, password }),
+        body: JSON.stringify({ login, mail }),
         credentials: 'include'
       });
 
@@ -69,7 +69,7 @@ export async function initRegistration() {
             async () => {
               registerForm.classList.add('hidden');
               twoFaContainer.classList.add('hidden');
-              handleSuccessfulRegistration(login);
+              handleSuccessfulRegistration(login, password);
             },
             twoFaContainer,
             (message, isFinal) => {
@@ -89,7 +89,7 @@ export async function initRegistration() {
           twoFaContainer.appendChild(view);
         }
       } else {
-        handleSuccessfulRegistration(login);
+        handleSuccessfulRegistration(login, password);
       }
 
     } catch (error) {
@@ -101,20 +101,20 @@ export async function initRegistration() {
   });
 }
 
-async function handleSuccessfulRegistration(login: string): Promise<void> {
+async function handleSuccessfulRegistration(login: string, password: string): Promise<void> {
   try {
     const tokenRes = await fetch('/api/auth/register-end', {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ login })
+      body: JSON.stringify({ password })
     });
 
     if (!tokenRes.ok) throw new Error('Token generation failed');
 
     localStorage.setItem('login', login);
-    Router.navigate('home');
     showSuccessPopup("Account created successfully");
+    Router.navigate('home');
   } catch (error) {
     console.error("Registration completion error:", error);
     showErrorPopup("Account created but session could not be loaded");
