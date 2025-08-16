@@ -39,10 +39,10 @@ export const registerView = {
           <button id="createAccountBtn" class="text-white px-2 py-1 text-xl border border-white rounded w-80">Create Account</button>
           <button id="backToLogin" class="text-white px-2 py-1 text-xl underline">Click here to go back to log in</button>
 
-          <!-- Hidden 2FA container -->
-     	  <div id="twofa-container" class="hidden flex-col justify-center items-center w-full space-y-10"><!-- Will be populated by TwoFAController --></div>
 
         </div>
+          <!-- Hidden 2FA container -->
+ 	  <div id="twofa-container" class="hidden flex-col justify-center items-center w-full space-y-10"><!-- Will be populated by TwoFAController --></div>
 
       </main>
     </div>
