@@ -5,6 +5,15 @@ import { TwoFAController } from '../controllers/twofaController';
 export async function initRegistration() {
   console.log('1 - Registration service initialized');
 
+  const status = await fetch('/api/auth/status', { credentials: 'include' })
+    .then(res => res.json());
+  
+  if (status.authenticated) {
+    Router.navigate('home');
+    showErrorPopup("You are already connected. You can't access the register page.");
+    return;
+  }
+
   const submitBtn = document.getElementById("createAccountBtn") as HTMLButtonElement;
   submitBtn.addEventListener("click", async () => {
     const username = (document.getElementById("newUsername") as HTMLInputElement).value;
@@ -28,21 +37,34 @@ export async function initRegistration() {
       });
 
       const data = await response.json();
-      console.log('register response:', data);
 
       if (!response.ok || data.success === false) {
         showErrorPopup(data.error || "Registration failed");
         return;
       }
 
-      const registerForm = document.getElementById("registerForm");
-      const twoFaContainer = document.getElementById("twoFaContainer");
+	  
+      if (data.requires2FA) {
+		const registerForm = document.getElementById("registerForm");
+		const twoFaContainer = document.getElementById("twoFaContainer");
 
-      if (data.requires2FA && registerForm && twoFaContainer) {
+		console.log('Pre-Check:', {
+  		  loginFormExists: !!registerForm,
+  		  twofaContainerExists: !!twoFaContainer,
+  		  loginData: data
+  		});
+
+		if (!registerForm || !twoFaContainer) {
+			showErrorPopup(data.error || "Registration form problem");
+        	return;
+		}
         registerForm.classList.add('hidden');
         twoFaContainer.classList.remove('hidden');
 
         if (twoFaContainer.querySelector('*') === null) {
+
+			console.log('Attempting TwoFAController creation');
+
           const controller = new TwoFAController(
             data.mail,
             'register',
