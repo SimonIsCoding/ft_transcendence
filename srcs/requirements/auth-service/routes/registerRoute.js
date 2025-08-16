@@ -16,32 +16,51 @@ export function getRandomAvatar()
 
 export async function registerRoute(fastify)
 {
-	//to create an account
-	fastify.post('/register', async (request, reply) => {
-		const { login, password, mail } = request.body;
-		
-		if (!login || !password || !mail)
-			return reply.status(400).send({ success: false, error: "All fields required" });
-		const encryptedPassword = await hashPassword(password);
-		const avatarPath = getRandomAvatar();
-		try
-		{
-			const stmt = db.prepare("INSERT INTO users (login, password, mail, profile_picture) VALUES (?, ?, ?, ?)");
-			stmt.run(login, encryptedPassword, mail, avatarPath);
-			return reply.status(200).send({ success: true, message: "User registered" });
-		}
-		catch (err)
-		{
-			if (err && typeof err === 'object' && 'code' in err && err.code === 'SQLITE_CONSTRAINT_UNIQUE')
-			{
-				if (err.message.includes('login'))
-					return reply.status(409).send({ success: false, error: "Login already exists" });
-				if (err.message.includes('mail'))
-					return reply.status(409).send({ success: false, error: "Email already used" });
-			}
-			console.log("body received:", request.body);
-			console.error("SQL Error:", err);
-			return reply.status(500).send({ success: false, error: "Database error" });
-		}
+	// /register
+	fastify.post('/register', async (req, reply) => {
+	  const { login, password, mail } = req.body;
+	
+	  // 1. validate + uniqueness
+	  if (!login || !password || !mail)
+	    return reply.code(400).send({ success: false, error: "All fields required" });
+  
+	  const existsLogin = db.prepare("SELECT 1 FROM users WHERE login = ?").get(login);
+	  if (existsLogin) return reply.code(409).send({ success: false, error: "Login already exists" });
+	  const existsMail = db.prepare("SELECT 1 FROM users WHERE mail = ?").get(mail);
+	  if (existsMail) return reply.code(409).send({ success: false, error: "Email already used" });
+	
+	  // 2. store pending info in signed cookie
+	  reply.setCookie('pending_registration', JSON.stringify({ login, password, mail }), {
+	    httpOnly: true,
+	    secure: true,
+	    signed: true,   // <--- requires fastify-cookie secret
+	    sameSite: 'strict',
+	    maxAge: 300_000,
+	    path: '/'
+	  });
+  
+	  return reply.send({ success: true, requires2FA: process.env.ENABLE_2FA === 'true' });
 	});
+	
+	// /register-end
+	fastify.post('/register-end', async (req, reply) => {
+	  const pending = req.unsignCookie(req.cookies.pending_registration || '');
+	  if (!pending.valid) return reply.code(400).send({ success: false, error: "No pending registration" });
+	
+	  const { login, password, mail } = JSON.parse(pending.value);
+	
+	  // If 2FA required, check that auth_phase is verified
+	  if (process.env.ENABLE_2FA === 'true' && req.cookies.auth_phase !== '2fa_verified') {
+	    return reply.code(401).send({ success: false, error: "2FA not verified" });
+	  }
+  
+	  const encryptedPassword = await bcrypt.hash(password, 10);
+	  const avatarPath = getRandomAvatar();
+	  db.prepare("INSERT INTO users (login, password, mail, profile_picture) VALUES (?, ?, ?, ?)")
+	    .run(login, encryptedPassword, mail, avatarPath);
+  
+	  reply.clearCookie('pending_registration').clearCookie('auth_phase');
+	  return reply.send({ success: true, message: "User registered" });
+	});
+
 }

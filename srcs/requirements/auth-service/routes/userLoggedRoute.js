@@ -24,7 +24,7 @@ export async function statusRoute(fastify) {
 
     } catch (error) {
       // 4. Only clear cookie for INVALID tokens (not 2FA cases)
-      if (error.message.includes('Invalid') || !request.cookies.auth_token) {
+      if (error.message.includes('Invalid') && request.cookies.auth_token) {
         reply.clearCookie('auth_token');
       }
       

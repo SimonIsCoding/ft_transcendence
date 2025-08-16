@@ -124,11 +124,11 @@ try {
     }
 
     if (isFinal) {
-      await this.invalidateSession();
+      // await this.invalidateSession();  // needed just with temporal token approach
       setTimeout(() => Router.navigate(this.flowType), 3000);
     }
   }
-
+/*
   private async invalidateSession(): Promise<void> {
     console.log('Invalidating session...');
     await fetch('/api/auth/invalidate', {
@@ -136,7 +136,7 @@ try {
       credentials: 'include'
     });
   }
-
+*/
 private async resendCode(): Promise<void> {
   console.log('Resending 2FA code to:', this.email);
   try {
