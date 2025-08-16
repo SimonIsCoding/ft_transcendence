@@ -40,10 +40,8 @@ export const registerView = {
           <button id="backToLogin" class="text-white px-2 py-1 text-xl underline">Click here to go back to log in</button>
 
           <!-- Hidden 2FA container -->
-          <div id="twoFaContainer" class="hidden flex flex-col items-center space-y-4">
-            <input id="twoFaCode" placeholder="2FA Code" class="text-white px-4 py-2 text-xl border border-white rounded w-80"/>
-            <button id="verify2FaBtn" class="text-white px-2 py-1 text-xl border border-white rounded w-80">Verify 2FA</button>
-          </div>
+     	  <div id="twofa-container" class="hidden flex-col justify-center items-center w-full space-y-10"><!-- Will be populated by TwoFAController --></div>
+
         </div>
 
       </main>

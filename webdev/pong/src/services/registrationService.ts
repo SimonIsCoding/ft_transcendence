@@ -49,9 +49,9 @@ export async function initRegistration() {
 		const twoFaContainer = document.getElementById("twoFaContainer");
 
 		console.log('Pre-Check:', {
-  		  loginFormExists: !!registerForm,
+  		  regFormExists: !!registerForm,
   		  twofaContainerExists: !!twoFaContainer,
-  		  loginData: data
+  		  regData: data
   		});
 
 		if (!registerForm || !twoFaContainer) {
@@ -62,8 +62,6 @@ export async function initRegistration() {
         twoFaContainer.classList.remove('hidden');
 
         if (twoFaContainer.querySelector('*') === null) {
-
-			console.log('Attempting TwoFAController creation');
 
           const controller = new TwoFAController(
             mail,
