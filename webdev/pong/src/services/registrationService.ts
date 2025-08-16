@@ -16,8 +16,8 @@ export async function initRegistration() {
 
   const submitBtn = document.getElementById("createAccountBtn") as HTMLButtonElement;
   submitBtn.addEventListener("click", async () => {
-    const username = (document.getElementById("newUsername") as HTMLInputElement).value;
-    const email = (document.getElementById("newMail") as HTMLInputElement).value;
+    const login = (document.getElementById("newUsername") as HTMLInputElement).value;
+    const mail = (document.getElementById("newMail") as HTMLInputElement).value;
     const password = (document.getElementById("newPassword") as HTMLInputElement).value;
     const confirmPassword = (document.getElementById("confirmPassword") as HTMLInputElement).value;
 
@@ -32,7 +32,7 @@ export async function initRegistration() {
       const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, email, password }),
+        body: JSON.stringify({ login, mail, password }),
         credentials: 'include'
       });
 
@@ -66,12 +66,12 @@ export async function initRegistration() {
 			console.log('Attempting TwoFAController creation');
 
           const controller = new TwoFAController(
-            data.mail,
+            mail,
             'register',
             async () => {
               registerForm.classList.add('hidden');
               twoFaContainer.classList.add('hidden');
-              handleSuccessfulRegistration(username, data.userId);
+              handleSuccessfulRegistration(login);
             },
             twoFaContainer,
             (message, isFinal) => {
@@ -91,7 +91,7 @@ export async function initRegistration() {
           twoFaContainer.appendChild(view);
         }
       } else {
-        handleSuccessfulRegistration(username, data.userId);
+        handleSuccessfulRegistration(login);
       }
 
     } catch (error) {
@@ -103,18 +103,18 @@ export async function initRegistration() {
   });
 }
 
-async function handleSuccessfulRegistration(username: string, userId: string): Promise<void> {
+async function handleSuccessfulRegistration(login: string): Promise<void> {
   try {
     const tokenRes = await fetch('/api/auth/register-end', {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId })
+      body: JSON.stringify({ login })
     });
 
     if (!tokenRes.ok) throw new Error('Token generation failed');
 
-    localStorage.setItem('login', username);
+    localStorage.setItem('login', login);
     Router.navigate('home');
     showSuccessPopup("Account created successfully");
   } catch (error) {
