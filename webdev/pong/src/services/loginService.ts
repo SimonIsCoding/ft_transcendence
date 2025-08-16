@@ -53,17 +53,6 @@ export async function initLogin() {
           loginForm.classList.add('hidden');
           twofaContainer.classList.remove('hidden');
 
-/* console.log('Container State:', {
-  outerHTML: twofaContainer.outerHTML,
-  children: twofaContainer.children.length,
-  querySelector: twofaContainer.querySelector('*'),
-  childNodes: Array.from(twofaContainer.childNodes).map(node => ({
-    type: node.nodeType,
-    name: node.nodeName,
-    content: node.nodeValue?.trim()
-  }))
-}); 
-*/
           if (twofaContainer.querySelector('*') === null) {
 	
 			console.log('Attempting TwoFAController creation');

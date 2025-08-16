@@ -67,7 +67,7 @@ export default fp(async (fastify) => {
         })
         .send({ 
           success: true,
-          userId: verification.user.id // Frontend needs this for /generate-token
+          // userId: verification.user.id // Frontend needs this for /generate-token
         });
 
     } catch (error) {
