@@ -22,7 +22,7 @@ export async function initRegistration() {
     const confirmPassword = (document.getElementById("confirmPassword") as HTMLInputElement).value;
 
     if (password !== confirmPassword) {
-      showErrorPopup("Passwords do not match");
+      showRegError("Passwords do not match");
       return;
     }
 
@@ -39,7 +39,7 @@ export async function initRegistration() {
       const data = await response.json();
 
       if (!response.ok || data.success === false) {
-        showErrorPopup(data.error || "Registration failed");
+        showRegError(data.error || "Registration failed");
         return;
       }
 
@@ -120,4 +120,18 @@ async function handleSuccessfulRegistration(login: string, password: string): Pr
     showErrorPopup("Account created but session could not be loaded");
     Router.navigate('home');
   }
+}
+
+function showRegError(message: string): void {
+  let errorMsg = document.getElementById("registrationMsg");
+  if (!errorMsg) {
+    errorMsg = document.createElement("p");
+    errorMsg.id = "registrationMsg";
+    errorMsg.classList.add("text-red", "px-1", "py-1", "text-xl");
+    const connectionBtn = document.getElementById("registrationMsg");
+    if (connectionBtn) {
+      connectionBtn.insertAdjacentElement("afterend", errorMsg);
+    }
+  }
+  errorMsg.textContent = message;
 }

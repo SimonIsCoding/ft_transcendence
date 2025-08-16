@@ -42,12 +42,7 @@ export async function initLogin() {
       if (loginData.requires2FA) {
         const loginForm = document.getElementById("loginCredentials");
         const twofaContainer = document.getElementById("twofa-container");
- 
-		console.log('Pre-Check:', {
-  		  loginFormExists: !!loginForm,
-  		  twofaContainerExists: !!twofaContainer,
-  		  loginData: loginData
-  		});
+
 
         if (loginForm && twofaContainer) {
           loginForm.classList.add('hidden');
@@ -82,13 +77,13 @@ export async function initLogin() {
                 }
               );
 			  // DEBUG: Verify controller creation
- 			  console.log('Controller instance:', controller);
+ 			  // console.log('Controller instance:', controller);
 			  		 
  			  const view = controller.init();
- 			  console.log('View content:', view.outerHTML); // Check HTML exists
+ 			  // console.log('View content:', view.outerHTML); // Check HTML exists
 			  		 
  			  twofaContainer.appendChild(view);
- 			  console.log('Container after append:', twofaContainer.innerHTML); // Verify insertionsole.log('Controller instance init:');
+ 			  // console.log('Container after append:', twofaContainer.innerHTML); // Verify insertionsole.log('Controller instance init:');
 
           }
         }
@@ -140,7 +135,7 @@ function showLoginError(message: string): void {
   if (!errorMsg) {
     errorMsg = document.createElement("p");
     errorMsg.id = "connectionMsg";
-    errorMsg.classList.add("text-white", "px-1", "py-1", "text-xl");
+    errorMsg.classList.add("text-red", "px-1", "py-1", "text-xl");
     const connectionBtn = document.getElementById("connectionBtn");
     if (connectionBtn) {
       connectionBtn.insertAdjacentElement("afterend", errorMsg);
