@@ -46,7 +46,7 @@ export async function initRegistration() {
 	  
       if (data.requires2FA) {
 		const registerForm = document.getElementById("registerForm");
-		const twoFaContainer = document.getElementById("twoFaContainer");
+        const twoFaContainer = document.getElementById("twofa-container");
 
 		console.log('Pre-Check:', {
   		  regFormExists: !!registerForm,
