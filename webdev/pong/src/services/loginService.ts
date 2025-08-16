@@ -34,8 +34,8 @@ export async function initLogin() {
   		  loginData: loginData
   	  });
 
-      if (!loginResponse.ok) {
-        showLoginError(loginData.message || "Login failed");
+      if (!loginResponse.ok || loginData.success === false) {
+        showLoginError(loginData.error || "Login failed");
         return;
       }
 
@@ -53,7 +53,7 @@ export async function initLogin() {
           loginForm.classList.add('hidden');
           twofaContainer.classList.remove('hidden');
 
-console.log('Container State:', {
+/* console.log('Container State:', {
   outerHTML: twofaContainer.outerHTML,
   children: twofaContainer.children.length,
   querySelector: twofaContainer.querySelector('*'),
@@ -63,6 +63,7 @@ console.log('Container State:', {
     content: node.nodeValue?.trim()
   }))
 }); 
+*/
           if (twofaContainer.querySelector('*') === null) {
 	
 			console.log('Attempting TwoFAController creation');
