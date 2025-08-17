@@ -1,4 +1,4 @@
-interface TwoFAResponse {
+export interface TwoFAResponse {
   success: boolean;
   message?: string;
   token?: string;

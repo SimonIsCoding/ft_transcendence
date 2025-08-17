@@ -13,7 +13,6 @@ export const twofaView = {
             maxlength="6" 
             placeholder="6-digit code"
             inputmode="numeric"
-            pattern="\\d{6}"
             required
           >
           <button 

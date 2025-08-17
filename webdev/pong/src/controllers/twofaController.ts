@@ -1,5 +1,6 @@
 import { twofaView } from '../views/twofaView';
 import { twoFAService } from '../services/twofaService';
+import type { TwoFAResponse } from '../services/twofaService';
 import { Router } from '../router';
 
 export class TwoFAController {
@@ -8,7 +9,7 @@ export class TwoFAController {
   private readonly email: string;
   private readonly flowType: 'login' | 'register';
   private readonly onSuccess: () => void;
-  private readonly container: HTMLElement;
+  private container: HTMLElement;
   private readonly onFailure?: (message: string, isFinal: boolean) => void;
 
   constructor(
@@ -41,6 +42,8 @@ export class TwoFAController {
       throw new Error('2FA template error');
     }
   console.log('[TwoFAController] init() form found');
+
+    this.container = view;
 
     this.setupEventListeners(view);
   console.log('[TwoFAController] init() setupEventListener done');
@@ -90,7 +93,7 @@ try {
   if (result.success) {
     this.onSuccess();
   } else {
-    await this.handleFailedAttempt();
+    await this.handleFailedAttempt(result);
   }
 } catch (error) {
   console.error('Verification error:', error);
@@ -98,16 +101,15 @@ try {
 }
   }
 
-  private async handleFailedAttempt(response?: Response): Promise<void> {
+  private async handleFailedAttempt(response?: TwoFAResponse): Promise<void> {
     const remaining = this.maxAttempts - this.attempts;
     const isFinal = remaining <= 0;
     let errorMessage = 'Verification failed';
 
     if (response) {
       try {
-        const data = await response.json();
-        errorMessage = data.message || errorMessage;
-        console.log('Failure details:', data);
+        errorMessage = response.message || errorMessage;
+        console.log('Failure details:', response);
       } catch (e) {
         console.error('Failed to parse error response:', e);
       }
@@ -118,6 +120,7 @@ try {
       : ` (${remaining} ${remaining === 1 ? 'attempt' : 'attempts'} remaining)`;
 
     console.log(`Attempt failed. Message: ${errorMessage}`);
+    this.showError(`Attempt failed. Message: ${errorMessage}`);
 
     if (this.onFailure) {
       this.onFailure(errorMessage, isFinal);
