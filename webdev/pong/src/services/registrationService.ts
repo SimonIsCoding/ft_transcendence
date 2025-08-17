@@ -157,7 +157,7 @@ function showRegError(message: string): void {
   if (!errorMsg) {
     errorMsg = document.createElement("p");
     errorMsg.id = "registrationMsg";
-    errorMsg.classList.add("text-red", "px-1", "py-1", "text-xl");
+    errorMsg.classList.add("text-red-500", "px-1", "py-1", "text-xl");
     const submitBtn = document.getElementById("createAccountBtn");
     if (submitBtn && submitBtn.parentNode) {
       submitBtn.insertAdjacentElement("afterend", errorMsg);
