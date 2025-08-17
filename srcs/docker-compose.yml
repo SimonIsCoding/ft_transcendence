@@ -71,10 +71,6 @@ services:
     healthcheck:
       disable: true
 
-  service-b:
-    container_name: service-b
-    build: requirements/service-b
-
 networks:
   default:
     name: transcendence-network
@@ -85,7 +81,7 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: $PWD/srcs/data/pong
+      device: ${PWD}/srcs/data/pong
       o: bind
   2fa_data:
     driver: local

@@ -18,30 +18,25 @@ export async function registerRoute(fastify)
 {
 	//to create an account
 	fastify.post('/register', async (request, reply) => {
-		const { login, password, mail } = request.body;
+		const { login, mail } = request.body;
 		
-		if (!login || !password || !mail)
+		if (!login || !mail)
 			return reply.status(400).send({ success: false, error: "All fields required" });
-		const encryptedPassword = await hashPassword(password);
-		const avatarPath = getRandomAvatar();
-		try
-		{
-			const stmt = db.prepare("INSERT INTO users (login, password, mail, profile_picture) VALUES (?, ?, ?, ?)");
-			stmt.run(login, encryptedPassword, mail, avatarPath);
-			return reply.status(200).send({ success: true, message: "User registered" });
-		}
-		catch (err)
-		{
-			if (err && typeof err === 'object' && 'code' in err && err.code === 'SQLITE_CONSTRAINT_UNIQUE')
-			{
-				if (err.message.includes('login'))
-					return reply.status(409).send({ success: false, error: "Login already exists" });
-				if (err.message.includes('mail'))
-					return reply.status(409).send({ success: false, error: "Email already used" });
-			}
-			console.log("body received:", request.body);
-			console.error("SQL Error:", err);
-			return reply.status(500).send({ success: false, error: "Database error" });
-		}
+	  const existsLogin = db.prepare("SELECT 1 FROM users WHERE login = ?").get(login);
+	  if (existsLogin) return reply.code(409).send({ success: false, error: "Login already exists" });
+	  const existsMail = db.prepare("SELECT 1 FROM users WHERE mail = ?").get(mail);
+	  if (existsMail) return reply.code(409).send({ success: false, error: "Email already used" });
+
+	  // 2. store pending info in signed cookie
+	  reply.setCookie('pending_registration', JSON.stringify({ login, mail }), {
+	    httpOnly: true,
+	    secure: true,
+	    signed: true,   // <--- requires fastify-cookie secret
+	    sameSite: 'strict',
+	    maxAge: 300_000,
+	    path: '/'
+	  });
+
+	  return reply.send({ success: true, requires2FA: process.env.ENABLE_2FA === 'true' });
 	});
 }

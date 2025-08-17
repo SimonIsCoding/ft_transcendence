@@ -7,6 +7,7 @@ import fastifyStatic from '@fastify/static';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import dotenv from 'dotenv';
 import { loginRoute } from '../routes/loginRoute.js';
 import { registerRoute } from '../routes/registerRoute.js';
 import { auth } from '../plugins/auth.js';
@@ -16,24 +17,29 @@ import { infoUserRoute } from '../routes/infoUserRoute.js';
 import { statusRoute } from '../routes/userLoggedRoute.js';
 import db from './database.js';
 
-const app = fastify();
+// Load environment variables
+dotenv.config();
+
+const app = fastify({
+  logger: true // Enable logging for production
+});
 
 await app.register(multipart);//to receive images
 
 app.register(fastifyCookie, {
-  secret: 'super-secret-key', //to sign ur cookie // you should put it in a env file
+  secret: process.env.COOKIE_SECRET || 'super-secret-key', //to sign ur cookie // you should put it in a env file
 });
 
 app.register(fastifyCors, {
-  origin: 'https://localhost:4443',
+  origin: process.env.CORS_ORIGIN || 'https://localhost:4443',
   credentials: true,
 });
 
 
 app.register(fastifyJwt, {
-  secret: 'super-secret-key',// you should put it in a env file
+  secret: process.env.JWT_SECRET || 'super-secret-key',// you should put it in a env file
   cookie: {
-    cookieName: 'token',
+    cookieName: 'auth_token',
     signed: false,
   }
 });
@@ -55,21 +61,9 @@ await infoUserRoute(app);
 await logoutRoute(app);
 await statusRoute(app);
 
-//maybe you could put it in a specific file 
-app.get('/info', { preHandler: [app.auth] }, async (request, reply) => {
-    const userId = request.user?.id;
 
-    if (!userId)
-      return reply.status(401).send({ error: 'Not authenticated' });
-
-    const stmt = db.prepare('SELECT id, login, mail, profile_picture FROM users WHERE id = ?');
-    const user = stmt.get(userId);
-
-    if (!user)
-      return reply.status(404).send({ error: 'User not found' });
-
-    return reply.send(user);
-});
+// Health Check
+app.get('/health', async () => ({ status: 'OK' }));
 
 app.post('/', async (request, reply) => {
   const data = request.body;
@@ -77,10 +71,14 @@ app.post('/', async (request, reply) => {
   return { status: "status ok" };
 });
 
-app.listen({ port: 3001, host: '0.0.0.0' }, err => {
+// Start Server
+app.listen({ 
+  port: process.env.PORT || 3001, 
+  host: '0.0.0.0' 
+}, (err) => {
   if (err) {
-    console.error(err);
+    app.log.error(err);
     process.exit(1);
   }
-  console.log('Auth service running on http://localhost:3001');
+  console.log(`Auth service running on ${app.server.address().port}`);
 });

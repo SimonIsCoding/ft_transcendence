@@ -1,6 +1,7 @@
-interface TwoFAResult {
+export interface TwoFAResponse {
   success: boolean;
-  message: string;
+  message?: string;
+  token?: string;
 }
 
 export const twoFAService = {
@@ -11,37 +12,22 @@ export const twoFAService = {
       body: JSON.stringify({ email }),
       credentials: 'include'
     });
-    
+
     if (!response.ok) {
-      throw new Error('Failed to request 2FA code');
+      const error = await response.json().catch(() => ({}));
+      throw new Error(error.message || 'Failed to send verification code');
     }
   },
 
-  async verifyCode(email: string, code: string): Promise<TwoFAResult>  {
+  async verifyCode(email: string, code: string): Promise<TwoFAResponse> {
     const response = await fetch('/api/2fa/verify', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, code }),
+      body: JSON.stringify({ email, token: code }),
       credentials: 'include'
     });
 
-    // Handle 401 Unauthorized (invalid token) specifically
-    if (response.status === 401) {
-      return {
-        success: false,
-        message: 'Invalid or expired token'
-      };
-    }
-
-    // Handle other error statuses
-    if (!response.ok) {
-      throw new Error(`Verification failed: ${response.statusText}`);
-    }
-
-    // Successful verification
-    return {
-      success: true,
-      message: '2FA verification successful'
-    };
+    const data = await response.json();
+    return response.ok ? data : { ...data, success: false };
   }
 };
