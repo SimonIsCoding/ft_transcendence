@@ -36,9 +36,7 @@ export const loginView = {
 	await handleSidebar();
 
 	setupPasswordToggle("password", "togglePasswordLogin", "eyeIconClosedLogin", "eyeIconOpenedLogin");
-	const connectionBtn = document.getElementById('connectionBtn') as HTMLButtonElement | null;
-	connectionBtn!.addEventListener('click', () => initLogin());
-	// initLogin();
+	initLogin();
 
 	const backToRegister = document.getElementById('backToRegister') as HTMLButtonElement | null;
 	backToRegister!.addEventListener('click', () => Router.navigate('register'));

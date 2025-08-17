@@ -1,14 +1,53 @@
+// export async function isConnected(): Promise<boolean>
+// {
+// 	const res = await fetch('/api/auth/status', {
+// 			method: 'GET',
+//   			credentials: 'include' 
+// 	})
+
+import { getCurrentUser } from "../../utils/utils";
+
+// 	const data = await res.json();
+// 	if (data.authenticated === true)
+// 		return true;
+// 	return false;
+// }
+
+// websocket.ts
+// export function connectWebSocket(): Promise<WebSocket>
+// {
+// 	return new Promise((resolve, reject) => {
+// 		const socket = new WebSocket(`wss://localhost:4443/api/auth/ws`);
+
+// 		socket.onopen = () => {
+// 			console.log("✅ WebSocket opened");
+// 			resolve(socket);
+// 		};
+
+// 		socket.onerror = err => {
+// 			console.error("❌ WebSocket error", err);
+// 			reject(err);
+// 		};
+// 	});
+// }
+
 export async function isConnected(): Promise<boolean>
 {
-	const res = await fetch('/api/auth/status', {
-			method: 'GET',
-  			credentials: 'include' 
-	})
-
+	const currentUser = await getCurrentUser();
+	const userId = currentUser.id;
+	if (userId === undefined)
+	{
+		console.log("entered in false for isConnected() => not doing fetch");
+		return false;
+	}
+	console.log(`in isConnected, currentUser.id = ${currentUser.id}`);
+	const res = await fetch(`/api/auth/status/${userId}`, {
+		method: 'GET',
+		credentials: 'include'
+	});
 	const data = await res.json();
-	if (data.authenticated === true)
-		return true;
-	return false;
+	console.log(`in https://${location.host}/api/auth/status/${userId}, and data.authenticated = ${data.authenticated}`);
+	return data.authenticated;
 }
 
 export async function getUserInfo()
