@@ -12,7 +12,7 @@ interface User {
   login: string;
   password: string;
   mail: string;
-  photo: string,
+  photo: string;
   token: string;
 }
 
@@ -21,7 +21,7 @@ export class Router {
   public static currentUser: User | null;
 
   public static navigate(
-    page: 'home' | 'login' | 'register' | 'game' | 'twofa' | 'tournament',
+    page: 'home' | 'login' | 'register' | 'game' | 'tournament',
     params?: { email?: string },  // Changed from login to email
     addToHistory = true
   ): void {
@@ -38,15 +38,15 @@ export class Router {
       HomeView.init();
       break;
 
-	case 'login':
-      this.app.innerHTML = loginView.render();
-	  loginView.init();
-      break;
-	
-	case 'register':
-	  this.app.innerHTML = registerView.render();
-	  registerView.init();
-      break;
+      case 'login':
+        this.app.innerHTML = loginView.render();
+        loginView.init();
+        break;
+      
+      case 'register':
+        this.app.innerHTML = registerView.render();
+        registerView.init();
+        break;
 
 	case 'game':
 	  this.app.innerHTML = GameView.renderGameCanvas();
@@ -54,15 +54,11 @@ export class Router {
 	  gameController.init();
       break;
 
-	case 'twofa':
-        if (!params?.email) {
-          console.error('email parameter required for twofa route');
-          this.navigate('login');
-          return;
-        }
-        gameArea!.innerHTML = '';
-        gameArea!.appendChild(initTwoFAController(params.email));
-        break;
+	case 'userLogged':
+	  gameArea!.innerHTML = userLogged.render();
+	  userLogged.init();
+      break;
+
 
   case 'tournament':
     this.app.innerHTML = GameView.renderGameCanvas();
@@ -90,9 +86,8 @@ export class Router {
 	  path.includes('login') ? 'login' :
 	  path.includes('register') ? 'register' :
 	  path.includes('game') ? 'game' :
-      path.includes('twofa') ? 'twofa' :
 	  path.includes('tournament') ? 'tournament' :
-	  'home', undefined,
+	  'home',
 	  false);
     });
 
@@ -103,10 +98,8 @@ export class Router {
 	  path.includes('login') ? 'login' :
 	  path.includes('register') ? 'register' :
 	  path.includes('game') ? 'game' :
-      path.includes('twofa') ? 'twofa' :
 	  path.includes('tournament') ? 'tournament' :
 	  'home' ,
-	  undefined,
 	  false);
     });
   }

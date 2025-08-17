@@ -54,15 +54,15 @@ export async function loadExistingProfilePicture(): Promise<void>
 			return; // not connected
 
 		const data = await res.json();
-		if (data && data.profile_picture)
+		if (data && data.user && data.user.profile_picture)
 		{
-			preview.src = `https://localhost:4443/${data.profile_picture}`;
+			preview.src = `https://localhost:4443/${data.user.profile_picture}`;
 			preview.classList.remove('hidden');
 			uploadIcon.classList.add('hidden');
 		}
 		else
 		{
-			preview.src = data.profile_picture;
+			preview.src = data.user.profile_picture;
 			preview.classList.remove("hidden");
 		}
 	}

@@ -1,4 +1,3 @@
-// requirements/2fa-service/services/authService.js
 import { generateToken, storeToken, verifyToken, deleteToken } from './tokenService.js';
 import { send2FAToken } from './emailService.js';
 
@@ -25,5 +24,3 @@ export const verify2FA = async (email, token) => {
   return { success: true, message: '2FA verification successful' };
 };
 
-// Alternative if you prefer default export
-// export default { initiate2FA, verify2FA };
