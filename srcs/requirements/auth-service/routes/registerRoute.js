@@ -39,4 +39,28 @@ export async function registerRoute(fastify)
 
 	  return reply.send({ success: true, requires2FA: process.env.ENABLE_2FA === 'true' });
 	});
+
+	fastify.post('/register-end', async (req, reply) => {
+	  const pending = req.unsignCookie(req.cookies.pending_registration || '');
+	  if (!pending.valid) return reply.code(400).send({ success: false, error: "No pending registration" });
+
+	  const { login, mail } = JSON.parse(pending.value);
+  	  // extract password from request body
+	  const { password } = req.body;
+	  if (!password) return reply.code(400).send({ success: false, error: "Password required" });
+
+	  // If 2FA required, check that auth_phase is verified
+	  if (process.env.ENABLE_2FA === 'true' && req.cookies.auth_phase !== '2fa_verified') {
+	    return reply.code(401).send({ success: false, error: "2FA not verified" });
+	  }
+
+	  const encryptedPassword = await bcrypt.hash(password, 10);
+	  const avatarPath = getRandomAvatar();
+	  db.prepare("INSERT INTO users (login, password, mail, profile_picture) VALUES (?, ?, ?, ?)")
+	    .run(login, encryptedPassword, mail, avatarPath);
+
+	  reply.clearCookie('pending_registration').clearCookie('auth_phase');
+	  return reply.send({ success: true, message: "User registered" });
+	});
+
 }
