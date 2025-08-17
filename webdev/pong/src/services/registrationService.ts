@@ -21,11 +21,41 @@ export async function initRegistration() {
     const password = (document.getElementById("newPassword") as HTMLInputElement).value;
     const confirmPassword = (document.getElementById("confirmPassword") as HTMLInputElement).value;
 
+    if (!login) {
+      showRegError("Username is required");
+      return;
+    }
+    if (!mail) {
+      showRegError("Email is required");
+      return;
+    }
+	  // --- Email format check ---
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(mail)) {
+      showRegError("Please enter a valid email address");
+      return;
+    }
+    if (!password) {
+      showRegError("Password is required");
+      return;
+    }
+    if (!confirmPassword) {
+      showRegError("Please confirm your password");
+      return;
+    }	
     if (password !== confirmPassword) {
       showRegError("Passwords do not match");
       return;
     }
-
+/*
+    // --- Password rules ---
+    // Example: min 8 chars, at least 1 uppercase, 1 lowercase, 1 number, 1 special char
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      showRegError("Password must be at least 8 characters, include uppercase, lowercase, number, and special character");
+      return;
+    }
+*/
     submitBtn.disabled = true;
 
     try {
