@@ -128,9 +128,9 @@ function showRegError(message: string): void {
     errorMsg = document.createElement("p");
     errorMsg.id = "registrationMsg";
     errorMsg.classList.add("text-red", "px-1", "py-1", "text-xl");
-    const connectionBtn = document.getElementById("registrationMsg");
-    if (connectionBtn) {
-      connectionBtn.insertAdjacentElement("afterend", errorMsg);
+    const submitBtn = document.getElementById("createAccountBtn");
+    if (submitBtn && submitBtn.parentNode) {
+      submitBtn.insertAdjacentElement("afterend", errorMsg);
     }
   }
   errorMsg.textContent = message;
