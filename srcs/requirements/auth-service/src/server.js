@@ -13,7 +13,7 @@ import { registerRoute } from '../routes/registerRoute.js';
 import { auth } from '../plugins/auth.js';
 import { uploadProfilePictureRoute } from '../routes/uploadProfilePictureRoute.js';
 import { logoutRoute } from '../routes/logoutRoute.js';
-import { statusRoute, forceLogoutRoute, statusWSRoute, currentUserInfoRoute } from '../routes/userLoggedRoute.js';
+import { /*statusRoute, forceLogoutRoute,*/ statusWSRoute, currentUserInfoRoute } from '../routes/userLoggedRoute.js';
 import { editProfileRoute } from '../routes/editProfileRoute.js';
 import { eraseAccountRoute } from '../routes/eraseAccountRoute.js';
 import { loadSecretKey } from '../utils/loadSecretKey.js';
@@ -23,14 +23,14 @@ const app = fastify();
 const cookieSecretKey = loadSecretKey('SECRET_KEY_FILE');
 
 await app.register(multipart);//to receive images
+app.decorate('onlineUsers', new Map());
 await app.register(fastifyWebsocket);
 // app.onlineUsers.clear();
-app.decorate('onlineUsers', new Map());
 // export const onlineUsers = new Map();
 // app.register(statusWSRoute, { prefix: '/api/auth' });
 
 // app.get('/ws', { websocket: true }, (conn) =>
-// 	conn.socket.on('message', () => conn.socket.send('OK: reçu'))
+// 	conn.socket.on('message', () => conn.socket.send('OK: socket well received'))
 // );
 
 
@@ -67,7 +67,31 @@ app.register(registerRoute);
 await uploadProfilePictureRoute(app);
 await countTotalUsers(app);
 await logoutRoute(app);
-await statusRoute(app);
+// await statusRoute(app);
+	app.get('/status/:userId', async (req, reply) => {
+		const userId = Number(req.params.userId);
+		console.log(userId, typeof userId);
+		console.log("userId =", userId, "typeof =", typeof userId);
+		console.log("Number(userId) = ");
+		console.log("Number(userId) = ", Number(userId));
+		// userId = Number(userId);
+		console.log("userId =", userId, "typeof =", typeof userId);
+		console.log(`entered in backend fetch for /status/${userId}`);
+		// console.log(`app = ${app}`);
+		console.log(`app.onlineUsers = ${app.onlineUsers}`);
+		console.log(`app.onlineUsers.get(userId) = ${app.onlineUsers.get(userId)}`);
+		console.log(`socket = ${app.onlineUsers.get(userId)}`);
+		const socket = app.onlineUsers.get(userId);
+		console.log(`entered in backend fetch for /status/${userId}`);
+		console.log(`socket =`, socket);
+		console.log(`socket?.readyState =`, socket?.readyState);
+		console.log(`isConnected =`, !!(socket && socket.readyState === 1));
+
+		const isConnected = socket && socket.readyState === 1;
+		console.log(`isConnected = socket = ${socket} && socket = ${socket.readyState}`)
+		console.log(`!!isConnected = ${!!isConnected}`);
+		return { authenticated: !!isConnected };
+	});
 // await forceLogoutRoute(app);
 await statusWSRoute(app);
 await requestFriendExistsRoute(app);
@@ -81,7 +105,7 @@ app.register(invitationReceivedRoute);
 app.register(updateFriendshipStatusRoute);
 app.register(getUserByIdRoute);
 app.register(randomEligibleOtherUserRoute);
-app.register(forceLogoutRoute);
+// app.register(forceLogoutRoute);
 
 app.listen({ port: 3001, host: '0.0.0.0' }, err => {
   if (err) {
