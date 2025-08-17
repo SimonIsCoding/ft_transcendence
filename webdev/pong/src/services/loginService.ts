@@ -10,7 +10,7 @@ export async function initLogin() {
   
   if (status.authenticated) {
     Router.navigate('home');
-    showErrorPopup("You are already connected. You can't access the login page.");
+    showErrorPopup("You are already connected. You can't access the login page.", "successPopup");
     return;
   }
 
@@ -65,7 +65,7 @@ export async function initLogin() {
 		    twofaContainer,
       		(message, isFinal) => {
 				  console.log(`2FA Error: ${message}`, isFinal);
-                  showErrorPopup(message);
+                  showErrorPopup(message, "successPopup");
                   if (isFinal) {
 					document.cookie = 'auth_phase=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     				document.cookie = 'auth_token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
@@ -121,11 +121,11 @@ async function handleSuccessfulLogin(username: string, userId: string): Promise<
 
     // 3. Navigate to home
     Router.navigate('home');
-    showSuccessPopup("You are logged in");
+    showSuccessPopup("You are logged in", 3500, "successPopup");
 
   } catch (error) {
     console.error("Login completion error:", error);
-    showErrorPopup("Login complete but couldn't load session");
+    showErrorPopup("Login complete but couldn't load session", "successPopup");
     Router.navigate('home');
   }
 }

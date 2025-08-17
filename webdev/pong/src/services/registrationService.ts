@@ -10,7 +10,7 @@ export async function initRegistration() {
   
   if (status.authenticated) {
     Router.navigate('home');
-    showErrorPopup("You are already connected. You can't access the register page.");
+    showErrorPopup("You are already connected. You can't access the register page.", "successPopup");
     return;
   }
 
@@ -85,7 +85,7 @@ export async function initRegistration() {
   		});
 
 		if (!registerForm || !twoFaContainer) {
-			showErrorPopup(data.error || "Registration form problem");
+			showErrorPopup(data.error || "Registration form problem","successPopup");
         	return;
 		}
         registerForm.classList.add('hidden');
@@ -103,7 +103,7 @@ export async function initRegistration() {
             },
             twoFaContainer,
             (message, isFinal) => {
-              showErrorPopup(message);
+              showErrorPopup(message,"successPopup");
               if (isFinal) {
                 document.cookie = 'auth_phase=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
                 document.cookie = 'auth_token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
@@ -123,7 +123,7 @@ export async function initRegistration() {
       }
 
     } catch (error) {
-      showErrorPopup("Network error during registration");
+      showErrorPopup("Network error during registration", "successPopup");
       console.error("Registration error:", error);
     } finally {
       submitBtn.disabled = false;
@@ -143,11 +143,11 @@ async function handleSuccessfulRegistration(login: string, password: string): Pr
     if (!tokenRes.ok) throw new Error('Token generation failed');
 
     localStorage.setItem('login', login);
-    showSuccessPopup("Account created successfully");
+    showSuccessPopup("Account created successfully",3000, "successPopup");
     Router.navigate('home');
   } catch (error) {
     console.error("Registration completion error:", error);
-    showErrorPopup("Account created but session could not be loaded");
+    showErrorPopup("Account created but session could not be loaded", "successPopup");
     Router.navigate('home');
   }
 }
