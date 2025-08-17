@@ -3,7 +3,6 @@ import { loginView } from './views/loginView';
 import { registerView } from './views/registerView';
 import { GameView } from './views/game';
 import { gameController } from './controllers/gameController';
-import { initTwoFAController } from './controllers/twofaController';
 // import { TournamentView } from './views/TournamentView.ts';
 import { TournamentController } from './controllers/TournamentController.ts';
 import { TournamentModel } from './models/TournamentModel.ts';
@@ -22,7 +21,6 @@ export class Router {
 
   public static navigate(
     page: 'home' | 'login' | 'register' | 'game' | 'tournament',
-    params?: { email?: string },  // Changed from login to email
     addToHistory = true
   ): void {
     if (!this.app) {
@@ -31,7 +29,7 @@ export class Router {
     }
 
   // Handle route protection + rendering
-  const gameArea = document.getElementById('gameArea') as HTMLDivElement | null;
+  //const gameArea = document.getElementById('gameArea') as HTMLDivElement | null;
   switch (page) {
     case 'home':
       this.app.innerHTML = HomeView.render();
@@ -54,23 +52,17 @@ export class Router {
 	  gameController.init();
       break;
 
-	case 'userLogged':
-	  gameArea!.innerHTML = userLogged.render();
-	  userLogged.init();
+    case 'tournament':
+      this.app.innerHTML = GameView.renderGameCanvas();
+      console.log('antes de iniciar el juego')
+      GameView.initGameCanvas();
+      console.log('despues de iniciar el juego')
+      const controller = new TournamentController(new TournamentModel());
+      controller.iniciarTorneo();
+      gameController.init();
+      // this.app.innerHTML = TournamentView.render();
+      // TournamentView.init();
       break;
-
-
-  case 'tournament':
-    this.app.innerHTML = GameView.renderGameCanvas();
-    console.log('antes de iniciar el juego')
-    GameView.initGameCanvas();
-    console.log('despues de iniciar el juego')
-    const controller = new TournamentController(new TournamentModel());
-    controller.iniciarTorneo();
-    gameController.init();
-    // this.app.innerHTML = TournamentView.render();
-    // TournamentView.init();
-    break;
   }
     
 
