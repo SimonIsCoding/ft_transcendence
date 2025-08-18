@@ -17,7 +17,6 @@ import { editProfileRoute } from '../routes/editProfileRoute.js';
 import { eraseAccountRoute } from '../routes/eraseAccountRoute.js';
 import { loadSecretKey } from '../utils/loadSecretKey.js';
 import { countTotalUsers, requestFriendExistsRoute, getFriendsListRoute, getUserByIdRoute, randomEligibleOtherUserRoute, sendFriendRequestRoute, updateFriendshipStatusRoute, FriendsRoute, invitationReceivedRoute } from '../routes/manageFriends.js';
-import { activeSessionRoute, deleteSessionRoute, sendSessionIdRoute } from '../routes/manageSession.js';
 
 const app = fastify();
 const cookieSecretKey = loadSecretKey('SECRET_KEY_FILE');
@@ -69,9 +68,6 @@ app.register(invitationReceivedRoute);
 app.register(updateFriendshipStatusRoute);
 app.register(getUserByIdRoute);
 app.register(randomEligibleOtherUserRoute);
-app.register(sendSessionIdRoute);
-app.register(deleteSessionRoute);
-app.register(activeSessionRoute);
 
 app.listen({ port: 3001, host: '0.0.0.0' }, err => {
   if (err) {
