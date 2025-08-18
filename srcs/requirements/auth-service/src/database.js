@@ -39,6 +39,14 @@ CREATE INDEX IF NOT EXISTS idx_friendships_user_b ON friendships(user_b_id);
 CREATE INDEX IF NOT EXISTS idx_requests_from ON friend_requests(from_user_id);
 CREATE INDEX IF NOT EXISTS idx_requests_to   ON friend_requests(to_user_id);
 
+	CREATE TABLE IF NOT EXISTS sessions (
+	    user_id TEXT PRIMARY KEY,
+	    user_login TEXT,
+	    session_id TEXT,
+	    created_at TIMESTAMP,
+	    connected INTEGER
+	);
+
 `);
 
 export default db;
