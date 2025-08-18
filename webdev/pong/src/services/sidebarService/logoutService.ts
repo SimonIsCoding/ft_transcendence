@@ -1,4 +1,5 @@
 import { Router } from "../../router";
+import { showSuccessPopup } from "../../utils/utils";
 import { manageOthersUsersCard, manageFriendsRequestsCard, manageFriendsCard } from "../../views/sidebar/profileBtn/manageFriendsSubmenu";
 
 export function initLogout()
@@ -13,6 +14,7 @@ export function initLogout()
 	manageFriendsRequestsCard.reset();
 	manageFriendsCard.reset();
 	manageOthersUsersCard.reset();
+	showSuccessPopup("Logged out", 3500, "popup");
 	});
 
 }
