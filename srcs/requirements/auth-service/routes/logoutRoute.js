@@ -5,7 +5,7 @@ export async function logoutRoute(app)
       path: '/',
       secure: true,
       httpOnly: true,
-      sameSite: 'none' //'strict'
+      sameSite: 'strict'
     });
     return reply.send({ success: true, message: 'Logged out' });
   });

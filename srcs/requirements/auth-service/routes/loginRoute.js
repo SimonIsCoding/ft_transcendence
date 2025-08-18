@@ -24,7 +24,7 @@ export async function loginRoute(fastify)
 		return reply.setCookie('token', token, {
 			httpOnly: true, //ALWAYS PUT TRUE FOR PROD
 			secure: true,
-			sameSite: 'none', //'strict'
+			sameSite: 'strict',
 			maxAge: 24 * 60 * 60 * 1000,
 			path: '/', // important !
 		})
