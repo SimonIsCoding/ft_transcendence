@@ -57,9 +57,9 @@ export async function loadExistingProfilePicture(): Promise<void>
 			return; // not connected
 
 		const data = await res.json();
-		if (data && data.profile_picture)//to load avatar pic
+		if (data && data.user && data.user.profile_picture)
 		{
-			preview.src = `https://localhost:4443/${data.profile_picture}`;
+			preview.src = `https://localhost:4443/${data.user.profile_picture}`;
 			preview.classList.remove('hidden');
 			previewEdit.src = `https://localhost:4443/${data.profile_picture}`;
 			previewEdit.classList.remove('hidden');
@@ -67,7 +67,7 @@ export async function loadExistingProfilePicture(): Promise<void>
 		}
 		else // to load personal pic
 		{
-			preview.src = data.profile_picture;
+			preview.src = data.user.profile_picture;
 			preview.classList.remove("hidden");
 			previewEdit.src = data.profile_picture;
 			previewEdit.classList.remove("hidden");

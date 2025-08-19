@@ -27,6 +27,7 @@ export const loginView = {
 				<button id="connectionBtn" class="text-white px-4 py-2 text-xl border border-white rounded w-80">Log in</button>
 				<button id="backToRegister" class="text-white px-2 py-1 text-xl underline">Click here to create an account</button>
 			</div>
+			<div id="twofa-container" class="hidden flex-col justify-center items-center w-full space-y-10"><!-- Will be populated by TwoFAController --></div>
 		</main>
     </div>
   `,
