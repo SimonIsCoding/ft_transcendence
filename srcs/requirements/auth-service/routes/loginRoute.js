@@ -5,6 +5,7 @@ export async function loginRoute(fastify) {
   // POST /login
   fastify.post('/login', async (request, reply) => {
     const { login, password } = request.body;
+	console.log(`password = ${password}`);
     
     // 1. Input validation
     if (!login || !password) {
@@ -16,10 +17,12 @@ export async function loginRoute(fastify) {
 
     // 2. Credential verification
     const user = db.prepare("SELECT * FROM users WHERE login = ?").get(login);
-    const valid = user && await bcrypt.compare(password, user.password);
+	if (!user)
+		return reply.status(401).send({ error: 'Login not found', success: false});
+    const valid = await bcrypt.compare(password, user.password);
 
     if (!valid) {
-      return reply.code(401).send({ 
+      return reply.code(402).send({ 
         success: false,
         error: 'Invalid credentials',
         requires2FA: process.env.ENABLE_2FA === 'true'

@@ -120,6 +120,7 @@ async function handleSuccessfulLogin(username: string, userId: string): Promise<
     //if (!userInfoRes.ok) throw new Error("Failed to get user info");
 
     // 3. Navigate to home
+	console.log(`in loginService tokenRes = ${tokenRes}`);
     Router.navigate('home');
     showSuccessPopup("You are logged in", 3500, "successPopup");
 

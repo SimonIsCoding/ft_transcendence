@@ -144,7 +144,10 @@ async function handleSuccessfulRegistration(login: string, password: string): Pr
 
     localStorage.setItem('login', login);
     showSuccessPopup("Account created successfully",3000, "successPopup");
-    Router.navigate('home');
+    Router.navigate('login');//hay que poner la popup fuera de la div=mainArea
+	//por ejemplo en webdev/pong/src/views/home.ts, poner: <div id="popup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50"></div>
+	//justo antes de la div=sidebar
+	//igual para registration y login pages
   } catch (error) {
     console.error("Registration completion error:", error);
     showErrorPopup("Account created but session could not be loaded", "successPopup");

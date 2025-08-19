@@ -13,11 +13,12 @@ import { registerRoute } from '../routes/registerRoute.js';
 import { auth } from '../plugins/auth.js';
 import { uploadProfilePictureRoute } from '../routes/uploadProfilePictureRoute.js';
 import { logoutRoute } from '../routes/logoutRoute.js';
-import { statusRoute, currentUserInfoRoute } from '../routes/userLoggedRoute.js';
+import { statusRoute/*, currentUserInfoRoute*/ } from '../routes/userLoggedRoute.js';
 import { editProfileRoute } from '../routes/editProfileRoute.js';
 import { eraseAccountRoute } from '../routes/eraseAccountRoute.js';
 import { loadSecretKey } from '../utils/loadSecretKey.js';
 import { countTotalUsers, requestFriendExistsRoute, getFriendsListRoute, getUserByIdRoute, randomEligibleOtherUserRoute, sendFriendRequestRoute, updateFriendshipStatusRoute, FriendsRoute, invitationReceivedRoute } from '../routes/manageFriends.js';
+import { infoUserRoute } from '../routes/infoUserRoute.js';
 
 // Load environment variables
 dotenv.config();
@@ -63,7 +64,7 @@ await countTotalUsers(app);
 await logoutRoute(app);
 await statusRoute(app);
 await requestFriendExistsRoute(app);
-await currentUserInfoRoute(app);
+await infoUserRoute(app);
 app.register(editProfileRoute);
 app.register(eraseAccountRoute);
 app.register(sendFriendRequestRoute);

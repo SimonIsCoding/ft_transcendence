@@ -61,7 +61,7 @@ export async function loadExistingProfilePicture(): Promise<void>
 		{
 			preview.src = `https://localhost:4443/${data.user.profile_picture}`;
 			preview.classList.remove('hidden');
-			previewEdit.src = `https://localhost:4443/${data.profile_picture}`;
+			previewEdit.src = `https://localhost:4443/${data.user.profile_picture}`;
 			previewEdit.classList.remove('hidden');
 			uploadIcon.classList.add('hidden');
 		}
@@ -69,7 +69,7 @@ export async function loadExistingProfilePicture(): Promise<void>
 		{
 			preview.src = data.user.profile_picture;
 			preview.classList.remove("hidden");
-			previewEdit.src = data.profile_picture;
+			previewEdit.src = data.user.profile_picture;
 			previewEdit.classList.remove("hidden");
 		}
 	}
