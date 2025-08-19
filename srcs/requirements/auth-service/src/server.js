@@ -7,6 +7,7 @@ import fastifyStatic from '@fastify/static';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import dotenv from 'dotenv';
 import { loginRoute } from '../routes/loginRoute.js';
 import { registerRoute } from '../routes/registerRoute.js';
 import { auth } from '../plugins/auth.js';
@@ -18,25 +19,29 @@ import { eraseAccountRoute } from '../routes/eraseAccountRoute.js';
 import { loadSecretKey } from '../utils/loadSecretKey.js';
 import { countTotalUsers, requestFriendExistsRoute, getFriendsListRoute, getUserByIdRoute, randomEligibleOtherUserRoute, sendFriendRequestRoute, updateFriendshipStatusRoute, FriendsRoute, invitationReceivedRoute } from '../routes/manageFriends.js';
 
-const app = fastify();
-const cookieSecretKey = loadSecretKey('SECRET_KEY_FILE');
+// Load environment variables
+dotenv.config();
+
+const app = fastify({
+  logger: true // Enable logging for production
+});
 
 await app.register(multipart);//to receive images
 
 app.register(fastifyCookie, {
-  secret: cookieSecretKey, //to sign ur cookie
+  secret: process.env.COOKIE_SECRET || 'super-secret-key', //to sign ur cookie // you should put it in a env file
 });
 
 app.register(fastifyCors, {
-  origin: 'https://localhost:4443',
+  origin: process.env.CORS_ORIGIN || 'https://localhost:4443',
   credentials: true,
 });
 
 
 app.register(fastifyJwt, {
-  secret: cookieSecretKey,
+  secret: process.env.JWT_SECRET || 'super-secret-key',// you should put it in a env file
   cookie: {
-    cookieName: 'token',
+    cookieName: 'auth_token',
     signed: false,
   }
 });
@@ -69,10 +74,14 @@ app.register(updateFriendshipStatusRoute);
 app.register(getUserByIdRoute);
 app.register(randomEligibleOtherUserRoute);
 
-app.listen({ port: 3001, host: '0.0.0.0' }, err => {
+// Start Server
+app.listen({ 
+  port: process.env.PORT || 3001, 
+  host: '0.0.0.0' 
+}, (err) => {
   if (err) {
-    console.error(err);
+    app.log.error(err);
     process.exit(1);
   }
-  console.log('Auth service running on http://localhost:3001');
+  console.log(`Auth service running on ${app.server.address().port}`);
 });

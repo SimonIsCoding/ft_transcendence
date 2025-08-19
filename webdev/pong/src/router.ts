@@ -3,7 +3,6 @@ import { loginView } from './views/loginView';
 import { registerView } from './views/registerView';
 import { GameView } from './views/game';
 import { gameController } from './controllers/gameController';
-import { initTwoFAController } from './controllers/twofaController';
 // import { TournamentView } from './views/TournamentView.ts';
 import { TournamentController } from './controllers/TournamentController.ts';
 import { TournamentModel } from './models/TournamentModel.ts';
@@ -12,7 +11,7 @@ interface User {
   login: string;
   password: string;
   mail: string;
-  photo: string,
+  photo: string;
   token: string;
 }
 
@@ -21,8 +20,7 @@ export class Router {
   public static currentUser: User | null;
 
   public static navigate(
-    page: 'home' | 'login' | 'register' | 'game' | 'twofa' | 'tournament',
-    params?: { email?: string },  // Changed from login to email
+    page: 'home' | 'login' | 'register' | 'game' | 'tournament',
     addToHistory = true
   ): void {
     if (!this.app) {
@@ -31,22 +29,22 @@ export class Router {
     }
 
   // Handle route protection + rendering
-  const gameArea = document.getElementById('gameArea') as HTMLDivElement | null;
+  //const gameArea = document.getElementById('gameArea') as HTMLDivElement | null;
   switch (page) {
     case 'home':
       this.app.innerHTML = HomeView.render();
       HomeView.init();
       break;
 
-	case 'login':
-      this.app.innerHTML = loginView.render();
-	  loginView.init();
-      break;
-	
-	case 'register':
-	  this.app.innerHTML = registerView.render();
-	  registerView.init();
-      break;
+      case 'login':
+        this.app.innerHTML = loginView.render();
+        loginView.init();
+        break;
+      
+      case 'register':
+        this.app.innerHTML = registerView.render();
+        registerView.init();
+        break;
 
 	case 'game':
 	  this.app.innerHTML = GameView.renderGameCanvas();
@@ -54,27 +52,17 @@ export class Router {
 	  gameController.init();
       break;
 
-	case 'twofa':
-        if (!params?.email) {
-          console.error('email parameter required for twofa route');
-          this.navigate('login');
-          return;
-        }
-        gameArea!.innerHTML = '';
-        gameArea!.appendChild(initTwoFAController(params.email));
-        break;
-
-  case 'tournament':
-    this.app.innerHTML = GameView.renderGameCanvas();
-    console.log('antes de iniciar el juego')
-    GameView.initGameCanvas();
-    console.log('despues de iniciar el juego')
-    const controller = new TournamentController(new TournamentModel());
-    controller.iniciarTorneo();
-    gameController.init();
-    // this.app.innerHTML = TournamentView.render();
-    // TournamentView.init();
-    break;
+    case 'tournament':
+      this.app.innerHTML = GameView.renderGameCanvas();
+      console.log('antes de iniciar el juego')
+      GameView.initGameCanvas();
+      console.log('despues de iniciar el juego')
+      const controller = new TournamentController(new TournamentModel());
+      controller.iniciarTorneo();
+      gameController.init();
+      // this.app.innerHTML = TournamentView.render();
+      // TournamentView.init();
+      break;
   }
     
 
@@ -90,9 +78,8 @@ export class Router {
 	  path.includes('login') ? 'login' :
 	  path.includes('register') ? 'register' :
 	  path.includes('game') ? 'game' :
-      path.includes('twofa') ? 'twofa' :
 	  path.includes('tournament') ? 'tournament' :
-	  'home', undefined,
+	  'home',
 	  false);
     });
 
@@ -103,10 +90,8 @@ export class Router {
 	  path.includes('login') ? 'login' :
 	  path.includes('register') ? 'register' :
 	  path.includes('game') ? 'game' :
-      path.includes('twofa') ? 'twofa' :
 	  path.includes('tournament') ? 'tournament' :
 	  'home' ,
-	  undefined,
 	  false);
     });
   }
