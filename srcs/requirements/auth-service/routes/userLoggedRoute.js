@@ -1,23 +1,3 @@
-import db from '../src/database.js';
-
-export async function currentUserInfoRoute(fastify)
-{
-	fastify.get('/info', { preHandler: [fastify.auth] }, async (request, reply) => {
-		const userId = request.user?.id;
-
-		if (!userId)
-		return reply.status(401).send({ error: 'Not authenticated' });
-
-		const stmt = db.prepare('SELECT id, login, mail, profile_picture FROM users WHERE id = ?');
-		const user = stmt.get(userId);
-
-		if (!user)
-		return reply.status(404).send({ error: 'User not found' });
-
-		return reply.send(user);
-	});
-}
-
 export async function statusRoute(fastify)
 {
   fastify.get('/status', async (request, reply) => {
@@ -56,20 +36,3 @@ export async function statusRoute(fastify)
     }
   });
 }
-
-// // useless for the moment - but useful when I will add a profile page
-// export async function userLoggedRoutes(app)
-// {
-// 	app.get('/me', { preHandler: [app.auth] }, async (request, reply) => {
-// 		return {
-// 			success: true,
-// 			user: {
-// 				id: request.user.id,
-// 				login: request.user.login,
-// 				email: request.user.mail,
-// 				profile_picture: request.user.profile_picture,
-// 				token: request.user.token,
-// 			}
-// 		};
-// 	});
-// }

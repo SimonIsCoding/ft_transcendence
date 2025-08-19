@@ -17,33 +17,44 @@ export async function isConnected(): Promise<boolean>
 
 export async function getUserInfo()
 {
-	fetch("/api/auth/info")
-	.then(res => res.json())
-	.then(data => {
-		const profileName = document.getElementById("profileName");
-		if (profileName && data.login)
-			profileName.textContent = data.login;
-		else
-			profileName!.textContent = `Profile Name`;
+	const res = await fetch("/api/auth/info", {
+		method: 'GET',
+		credentials: 'include'
+	})
+	const data = await res.json()
 
-		const mail = document.getElementById("mailInProfileSubmenu");
-		if (mail && data.mail)
-			mail.textContent = data.mail;
-		else
-			mail!.textContent = `contact@mail.com`;
+	console.log("in getUserInfo data =", data)
 
-		//here we should add the stats of the matchs won
-		// but we have to fecth another db which is the stats one
-		// const stats = document.getElementById("statsInProfileSubmenu");
-		// if (stats && )
-		// 	stats.textContent = ;
-		// else
-		// 	stats!.textContent = `12/15 matchs won`;
+	console.log(`Fetched user:
+		id: ${data.user.id},
+		login: ${data.user.login},
+		email: ${data.user.mail},
+		profile_picture: ${data.user.profile_picture}
+	`)
 
-		const playerNameDashboard = document.getElementById("playerNameDashboard");
-		if (playerNameDashboard && data.login)
-			playerNameDashboard.textContent = data.login;
-		else
-			playerNameDashboard!.textContent = "Username";
-	});
+	const profileName = document.getElementById("profileName");
+	if (profileName && data.user.login)
+		profileName.textContent = data.user.login;
+	else
+		profileName!.textContent = `Profile Name`;
+
+	const mail = document.getElementById("mailInProfileSubmenu");
+	if (mail && data.user.mail)
+		mail.textContent = data.user.mail;
+	else
+		mail!.textContent = `contact@mail.com`;
+
+	//here we should add the stats of the matchs won
+	// but we have to fecth another db which is the stats one
+	// const stats = document.getElementById("statsInProfileSubmenu");
+	// if (stats && )
+	// 	stats.textContent = ;
+	// else
+	// 	stats!.textContent = `12/15 matchs won`;
+
+	const playerNameDashboard = document.getElementById("playerNameDashboard");
+	if (playerNameDashboard && data.user.login)
+		playerNameDashboard.textContent = data.user.login;
+	else
+		playerNameDashboard!.textContent = "Username";
 }

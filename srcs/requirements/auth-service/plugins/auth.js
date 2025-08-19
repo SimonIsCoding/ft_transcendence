@@ -5,7 +5,7 @@ const cookieSecretKey = loadSecretKey('SECRET_KEY_FILE');
 
 export async function auth(request, reply)
 {
-  const token = request.cookies.token;
+  const token = request.cookies.auth_token;
   if (!token)
     return reply.status(401).send({ error: 'Not authenticated'/*, authenticated: false*/ });
 
@@ -16,6 +16,6 @@ export async function auth(request, reply)
   }
   catch (err)
   {
-    return reply.status(401).send({ error: 'Invalid token'/*, authenticated: false*/ });
+    return reply.status(402).send({ error: 'Invalid token'/*, authenticated: false*/ });
   }
 }

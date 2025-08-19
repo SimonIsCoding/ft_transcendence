@@ -4,15 +4,19 @@ export async function reloadUserInfo(): Promise<void>
 {
 	try
 	{
-		const res = await fetch("/api/auth/info", {
-			credentials: "include"
-		});
-
+		const res = await fetch("/api/auth/info", { credentials: "include" });
 		if (!res.ok)
 			return console.error("Error fetching user info:", res.status);
-
 		const data = await res.json();
-		document.getElementById("mailInProfileSubmenu")!.textContent = data.mail;
+		console.log('in reloadUserInfo, data = ', data);
+		console.log(`reloadUserInfo
+			id: ${data.user.id},
+			login: ${data.user.login},
+			email: ${data.user.mail},
+			profile_picture: ${data.user.profile_picture}
+		`)
+
+		document.getElementById("mailInProfileSubmenu")!.textContent = data.user.mail;
 		// you have to reload the mail in Friends list as well 
 	}
 	catch (err)
@@ -24,6 +28,13 @@ export async function reloadUserInfo(): Promise<void>
 export async function editProfileService()
 {
 	const currentUser = await getCurrentUser();
+	console.log(`in editProfileService & currentUser = ${currentUser}`);
+	console.log(`Fetched user:
+		id: ${currentUser.id},
+		login: ${currentUser.login},
+		email: ${currentUser.mail},
+		profile_picture: ${currentUser.profile_picture}
+	`)
 
 	const currentPassword = (document.getElementById("currentPasswordEditProfile") as HTMLInputElement).value;
 	const changePassword = (document.getElementById("changePasswordEditProfile") as HTMLInputElement).value;
@@ -39,35 +50,27 @@ export async function editProfileService()
 	if ((changeMail && changeMail.trim() !== "") && isValidEmail(changeMail) === false)
 		return showErrorPopup("The mail format is not valid.", "popup");
 
-	fetch('/api/auth/changeInfo', {
+	if (currentPassword && (!changePassword || currentPassword.trim() === ""))
+		return showErrorPopup("You have to insert a new password.", "popup")
+
+	const res = await fetch('/api/auth/changeInfo', {
 		method: 'POST',
 		credentials: 'include',
 		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ login: currentUser.login, currentPassword: currentPassword, changePassword: changePassword, changeMail: changeMail })
+		body: JSON.stringify({
+			login: currentUser.login,
+			currentPassword,
+			changePassword,
+			changeMail
+		})
 	})
-	.then(async res => {
-		const backend_answer = await res.json();
-		if (res.status === 409)
-		{
-			switch (backend_answer.error)
-			{
-				case 'Current password is not matching the real password.':
-					showErrorPopup("Your current password is not matching the real password." , "popup");
-					break;
-				case 'Email already used':
-					showErrorPopup("Email already used.", "popup");
-					break;
-			}
-		}
-		else if (res.status === 200)
-		{
-			if (backend_answer.message === "Password & mail modified")
-				showSuccessPopup("Password & mail modified", 3500, "popup");
-			else if (backend_answer.message === "Password modified")
-				showSuccessPopup("Password modified", 3500, "popup");
-			else if (backend_answer.message === "Mail modified")
-				showSuccessPopup("Mail modified", 3500, "popup");
-			reloadUserInfo();
-		}
-	})
+	const backend_answer = await res.json()
+
+	if (res.status === 409)
+		showErrorPopup(backend_answer.error, "popup")
+	else if (res.ok)// in 200 range
+	{
+		showSuccessPopup(backend_answer.message, 3500, "popup")
+		reloadUserInfo()
+	}
 }

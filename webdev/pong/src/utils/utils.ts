@@ -1,11 +1,3 @@
-interface User {
-  id: number;
-  login: string;
-  mail: string;
-  profile_picture: string,
-  token: string;
-}
-
 export function isValidEmail(email: string): boolean
 {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -82,9 +74,9 @@ export async function receiveProfilePicture(file: File): Promise<void>
   }
 }
 
-export async function getCurrentUser(): Promise<User>
+export async function getCurrentUser()
 {
 	const res = await fetch("/api/auth/info");
-    const data: User = await res.json();
-    return data;
+	const data = await res.json();
+	return data.user;
 }
