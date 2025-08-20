@@ -16,10 +16,9 @@ export async function initLogin() {
 
   const submitBtn = document.getElementById("connectionBtn") as HTMLButtonElement;
   submitBtn.addEventListener("click", async () => {
-    const login = (document.getElementById("login") as HTMLInputElement).value;
+    const login = (document.getElementById("login") as HTMLInputElement).value.trim();
     const password = (document.getElementById("password") as HTMLInputElement).value;
     submitBtn.disabled = true;
-
     try {
       const loginResponse = await fetch('/api/auth/login', {
         method: 'POST',
@@ -130,17 +129,3 @@ async function handleSuccessfulLogin(username: string, userId: string): Promise<
     Router.navigate('home');
   }
 }
-
-// function showLoginError(message: string): void {
-//   let errorMsg = document.getElementById("connectionMsg");
-//   if (!errorMsg) {
-//     errorMsg = document.createElement("p");
-//     errorMsg.id = "connectionMsg";
-//     errorMsg.classList.add("text-red", "px-1", "py-1", "text-xl");
-//     const connectionBtn = document.getElementById("connectionBtn");
-//     if (connectionBtn) {
-//       connectionBtn.insertAdjacentElement("afterend", errorMsg);
-//     }
-//   }
-//   errorMsg.textContent = message;
-// }

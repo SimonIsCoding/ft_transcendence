@@ -11,8 +11,6 @@ export async function editProfileRoute(fastify)
 		if (currentPassword && currentPassword.trim() !== "")
 		{
 			const match = user ? await bcrypt.compare(currentPassword, user.password) : false;
-			console.log(`in /changeInfo`);
-			console.log(`match = ${match}`);
 			if (!match)
 				return reply.status(409).send({success: false, error: 'Current password is not matching the real password.'})
 			const encryptedPassword = await hashPassword(changePassword);

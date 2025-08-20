@@ -6,12 +6,9 @@ export async function isConnected(): Promise<boolean>
 	})
 
 	const data = await res.json();
-	if (data.authenticated === true)
-	{
-		console.log("data.authenticated = ", data.authenticated);
-		return true;
-	}
 	console.log("data.authenticated = ", data.authenticated);
+	if (data.authenticated === true)
+		return true;
 	return false;
 }
 
@@ -22,15 +19,6 @@ export async function getUserInfo()
 		credentials: 'include'
 	})
 	const data = await res.json()
-
-	console.log("in getUserInfo data =", data)
-
-	console.log(`Fetched user:
-		id: ${data.user.id},
-		login: ${data.user.login},
-		email: ${data.user.mail},
-		profile_picture: ${data.user.profile_picture}
-	`)
 
 	const profileName = document.getElementById("profileName");
 	if (profileName && data.user.login)

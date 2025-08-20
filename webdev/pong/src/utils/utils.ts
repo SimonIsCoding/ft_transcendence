@@ -78,9 +78,5 @@ export async function getCurrentUser()
 {
 	const res = await fetch("/api/auth/info");
 	const data = await res.json();
-	console.log(`in getCurrentUser return data = ${data}`);
-	console.log("data =", JSON.stringify(data, null, 2))
-	console.log(`in getCurrentUser return data.user = ${data.user}`);
-	console.log("data.user =", JSON.stringify(data.user, null, 2));
 	return data.user;
 }

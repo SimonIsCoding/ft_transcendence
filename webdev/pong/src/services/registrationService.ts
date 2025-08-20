@@ -16,7 +16,7 @@ export async function initRegistration() {
 
   const submitBtn = document.getElementById("createAccountBtn") as HTMLButtonElement;
   submitBtn.addEventListener("click", async () => {
-    const login = (document.getElementById("newUsername") as HTMLInputElement).value;
+    const login = (document.getElementById("newUsername") as HTMLInputElement).value.trim();
     const mail = (document.getElementById("newMail") as HTMLInputElement).value;
     const password = (document.getElementById("newPassword") as HTMLInputElement).value;
     const confirmPassword = (document.getElementById("confirmPassword") as HTMLInputElement).value;
@@ -151,17 +151,3 @@ async function handleSuccessfulRegistration(login: string, password: string): Pr
     Router.navigate('home');
   }
 }
-
-// function showRegError(message: string): void {
-//   let errorMsg = document.getElementById("registrationMsg");
-//   if (!errorMsg) {
-//     errorMsg = document.createElement("p");
-//     errorMsg.id = "registrationMsg";
-//     errorMsg.classList.add("text-red-500", "px-1", "py-1", "text-xl");
-//     const submitBtn = document.getElementById("createAccountBtn");
-//     if (submitBtn && submitBtn.parentNode) {
-//       submitBtn.insertAdjacentElement("afterend", errorMsg);
-//     }
-//   }
-//   errorMsg.textContent = message;
-// }
