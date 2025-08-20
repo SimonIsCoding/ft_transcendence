@@ -16,7 +16,7 @@ import { logoutRoute } from '../routes/logoutRoute.js';
 import { statusRoute/*, currentUserInfoRoute*/ } from '../routes/userLoggedRoute.js';
 import { editProfileRoute } from '../routes/editProfileRoute.js';
 import { eraseAccountRoute } from '../routes/eraseAccountRoute.js';
-import { loadSecretKey } from '../utils/loadSecretKey.js';
+//import { loadSecretKey } from '../utils/loadSecretKey.js';
 import { countTotalUsers, requestFriendExistsRoute, getFriendsListRoute, getUserByIdRoute, randomEligibleOtherUserRoute, sendFriendRequestRoute, updateFriendshipStatusRoute, FriendsRoute, invitationReceivedRoute } from '../routes/manageFriends.js';
 import { infoUserRoute } from '../routes/infoUserRoute.js';
 
