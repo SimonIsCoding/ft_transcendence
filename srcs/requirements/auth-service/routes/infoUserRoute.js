@@ -5,15 +5,14 @@ export async function infoUserRoute(fastify) {
   try {
     console.log('Incoming cookies:', request.cookies); // Debug cookie reception
     const token = request.cookies.auth_token;
-    // console.log()
     if (!token) {
       console.log('No token found');
       throw new Error('Missing token');
     }
 
-    console.log('Verifying token:', token); // Debug raw token
+    // console.log('Verifying token:', token); // Debug raw token
     const decoded = await request.jwtVerify(token);
-    console.error('Decoded token:', decoded); // Debug decoded content
+    // console.error('Decoded token:', decoded); // Debug decoded content
 
 	if (!decoded.userId) throw new Error('Invalid payload');
 	// console.error(`token`)
@@ -28,15 +27,6 @@ export async function infoUserRoute(fastify) {
     if (!user) {
       return reply.status(404).send({ error: 'User not found' });
     }
-
-    // 3. Debug logging
-    console.log('Fetched user:', {
-      id: user.id,
-      login: user.login,
-      email: user.mail,
-      profile_picture: user.profile_picture,
-      auth_phase: request.cookies.auth_phase // Check auth phase status
-    });
 
     // 4. Return complete user data
     return reply.send({ user });
