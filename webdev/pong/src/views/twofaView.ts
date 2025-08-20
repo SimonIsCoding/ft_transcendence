@@ -9,7 +9,7 @@ export const twofaView = {
           <input 
             type="text" 
             id="twofaCode" 
-            class="text-white px-4 py-2 text-xl border border-white rounded w-full mb-4"
+            class="w-80 inline-block text-white font-bold text-lg border border-[#fbd11b] rounded-lg p-2.75 mb-4"
             maxlength="6" 
             placeholder="6-digit code"
             inputmode="numeric"
@@ -18,13 +18,13 @@ export const twofaView = {
           <button 
             type="submit" 
             id="verifyBtn" 
-            class="text-white px-4 py-2 text-xl border border-white rounded w-full"
+            class="w-80 inline-block text-white font-bold text-lg border border-[#fbd11b] rounded-lg p-2.75"
           >
             Verify
           </button>
         </form>
-        
-        <p id="twofaError" class="text-red-400 hidden mt-2"></p>
+
+		<p id="twofaError" class="text-red-400 hidden mt-2"></p>
         
         <button 
           id="resendBtn" 
