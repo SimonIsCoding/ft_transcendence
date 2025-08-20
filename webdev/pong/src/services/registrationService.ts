@@ -10,7 +10,7 @@ export async function initRegistration() {
   
   if (status.authenticated) {
     Router.navigate('home');
-    showErrorPopup("You are already connected. You can't access the register page.", "successPopup");
+    showErrorPopup("You are already connected. You can't access the register page.", "popup");
     return;
   }
 
@@ -22,29 +22,29 @@ export async function initRegistration() {
     const confirmPassword = (document.getElementById("confirmPassword") as HTMLInputElement).value;
 
     if (!login) {
-      showRegError("Username is required");
+      showErrorPopup("Username is required", "popup");
       return;
     }
     if (!mail) {
-      showRegError("Email is required");
+      showErrorPopup("Email is required", "popup");
       return;
     }
 	  // --- Email format check ---
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(mail)) {
-      showRegError("Please enter a valid email address");
+      showErrorPopup("Please enter a valid email address", "popup");
       return;
     }
     if (!password) {
-      showRegError("Password is required");
+      showErrorPopup("Password is required", "popup");
       return;
     }
     if (!confirmPassword) {
-      showRegError("Please confirm your password");
+      showErrorPopup("Please confirm your password", "popup");
       return;
     }	
     if (password !== confirmPassword) {
-      showRegError("Passwords do not match");
+      showErrorPopup("Passwords do not match", "popup");
       return;
     }
 /*
@@ -52,7 +52,7 @@ export async function initRegistration() {
     // Example: min 8 chars, at least 1 uppercase, 1 lowercase, 1 number, 1 special char
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(password)) {
-      showRegError("Password must be at least 8 characters, include uppercase, lowercase, number, and special character");
+      showErrorPopup("Password must be at least 8 characters, include uppercase, "popup", lowercase, number, and special character");
       return;
     }
 */
@@ -69,7 +69,7 @@ export async function initRegistration() {
       const data = await response.json();
 
       if (!response.ok || data.success === false) {
-        showRegError(data.error || "Registration failed");
+        showErrorPopup(data.error || "Registration failed", "popup");
         return;
       }
 
@@ -85,7 +85,7 @@ export async function initRegistration() {
   		});
 
 		if (!registerForm || !twoFaContainer) {
-			showErrorPopup(data.error || "Registration form problem","successPopup");
+			showErrorPopup(data.error || "Registration form problem", "popup");
         	return;
 		}
         registerForm.classList.add('hidden');
@@ -103,7 +103,7 @@ export async function initRegistration() {
             },
             twoFaContainer,
             (message, isFinal) => {
-              showErrorPopup(message,"successPopup");
+              showErrorPopup(message,"popup");
               if (isFinal) {
                 document.cookie = 'auth_phase=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
                 document.cookie = 'auth_token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
@@ -123,7 +123,7 @@ export async function initRegistration() {
       }
 
     } catch (error) {
-      showErrorPopup("Network error during registration", "successPopup");
+      showErrorPopup("Network error during registration", "popup");
       console.error("Registration error:", error);
     } finally {
       submitBtn.disabled = false;
@@ -143,28 +143,25 @@ async function handleSuccessfulRegistration(login: string, password: string): Pr
     if (!tokenRes.ok) throw new Error('Token generation failed');
 
     localStorage.setItem('login', login);
-    showSuccessPopup("Account created successfully",3000, "successPopup");
-    Router.navigate('login');//hay que poner la popup fuera de la div=mainArea
-	//por ejemplo en webdev/pong/src/views/home.ts, poner: <div id="popup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50"></div>
-	//justo antes de la div=sidebar
-	//igual para registration y login pages
+    showSuccessPopup("Account created successfully", 3500, "popup");
+    Router.navigate('login');
   } catch (error) {
     console.error("Registration completion error:", error);
-    showErrorPopup("Account created but session could not be loaded", "successPopup");
+    showErrorPopup("Account created but session could not be loaded", "popup");
     Router.navigate('home');
   }
 }
 
-function showRegError(message: string): void {
-  let errorMsg = document.getElementById("registrationMsg");
-  if (!errorMsg) {
-    errorMsg = document.createElement("p");
-    errorMsg.id = "registrationMsg";
-    errorMsg.classList.add("text-red-500", "px-1", "py-1", "text-xl");
-    const submitBtn = document.getElementById("createAccountBtn");
-    if (submitBtn && submitBtn.parentNode) {
-      submitBtn.insertAdjacentElement("afterend", errorMsg);
-    }
-  }
-  errorMsg.textContent = message;
-}
+// function showRegError(message: string): void {
+//   let errorMsg = document.getElementById("registrationMsg");
+//   if (!errorMsg) {
+//     errorMsg = document.createElement("p");
+//     errorMsg.id = "registrationMsg";
+//     errorMsg.classList.add("text-red-500", "px-1", "py-1", "text-xl");
+//     const submitBtn = document.getElementById("createAccountBtn");
+//     if (submitBtn && submitBtn.parentNode) {
+//       submitBtn.insertAdjacentElement("afterend", errorMsg);
+//     }
+//   }
+//   errorMsg.textContent = message;
+// }

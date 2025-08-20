@@ -14,7 +14,7 @@ const server = Fastify({
     key: readFileSync(process.env.KEY_PATH || '/run/secrets/server_key'),
     cert: readFileSync(process.env.CERT_PATH || '/run/secrets/server_cert')
   } : null,
-  logger: true // Simple built-in logger
+//   logger: true // Simple built-in logger
 });
 
 // Register plugins

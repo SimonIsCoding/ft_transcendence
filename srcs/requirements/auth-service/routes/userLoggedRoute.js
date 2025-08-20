@@ -7,10 +7,14 @@ export async function statusRoute(fastify)
       if (!token) throw new Error('Missing token');
       
       const decoded = await request.jwtVerify(token);
+	  console.log(`IN STATUS!! __________\n\n`);
+	  console.log("decoded = ", JSON.stringify(decoded, null, 2));
       if (!decoded.userId) throw new Error('Invalid payload');
 
       // 2. Calculate auth states
       const needs2FA = process.env.ENABLE_2FA === 'true' && !decoded.is2FAVerified;
+	  console.log(`process.env.ENABLE_2FA = ${process.env.ENABLE_2FA }`);
+	  console.log(`!decoded.is2FAVerified = ${!decoded.is2FAVerified}`);
       const fullyAuthed = !needs2FA;
 
       // 3. Return status (NEVER clear cookie during 2FA flow)

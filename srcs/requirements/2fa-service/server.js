@@ -10,7 +10,7 @@ import authRoutes from './routes/twofaRoutes.js';
 
 // Initialize Fastify
 const server = fastify({ 
-  logger: true,
+//   logger: true,
   trustProxy: true 
 });
 

@@ -5,7 +5,7 @@ import fs from 'fs';
 import fastifyCors from '@fastify/cors';
 
 const fastify = Fastify({
-  logger: true,
+//   logger: true,
   https: {
     key: fs.readFileSync('/run/secrets/api_key'),
     cert: fs.readFileSync('/run/secrets/api_cert')

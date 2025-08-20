@@ -10,7 +10,7 @@ export async function initLogin() {
   
   if (status.authenticated) {
     Router.navigate('home');
-    showErrorPopup("You are already connected. You can't access the login page.", "successPopup");
+    showErrorPopup("You are already connected. You can't access the login page.", "popup");
     return;
   }
 
@@ -35,7 +35,7 @@ export async function initLogin() {
   	  });
 
       if (!loginResponse.ok || loginData.success === false) {
-        showLoginError(loginData.error || "Login failed");
+        showErrorPopup(loginData.error || "Login failed", "popup");
         return;
       }
 
@@ -65,7 +65,7 @@ export async function initLogin() {
 		    twofaContainer,
       		(message, isFinal) => {
 				  console.log(`2FA Error: ${message}`, isFinal);
-                  showErrorPopup(message, "successPopup");
+                  showErrorPopup(message, "popup");
                   if (isFinal) {
 					document.cookie = 'auth_phase=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     				document.cookie = 'auth_token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
@@ -91,7 +91,7 @@ export async function initLogin() {
         handleSuccessfulLogin(login, loginData.userId);
       }
     } catch (error) {
-      showLoginError("Network error during login");
+      showErrorPopup("Network error during login", "popup");
       console.error("Login error:", error);
     } finally {
       submitBtn.disabled = false;
@@ -122,25 +122,25 @@ async function handleSuccessfulLogin(username: string, userId: string): Promise<
     // 3. Navigate to home
 	console.log(`in loginService tokenRes = ${tokenRes}`);
     Router.navigate('home');
-    showSuccessPopup("You are logged in", 3500, "successPopup");
+    showSuccessPopup("You are logged in", 3500, "popup");
 
   } catch (error) {
     console.error("Login completion error:", error);
-    showErrorPopup("Login complete but couldn't load session", "successPopup");
+    showErrorPopup("Login complete but couldn't load session", "popup");
     Router.navigate('home');
   }
 }
 
-function showLoginError(message: string): void {
-  let errorMsg = document.getElementById("connectionMsg");
-  if (!errorMsg) {
-    errorMsg = document.createElement("p");
-    errorMsg.id = "connectionMsg";
-    errorMsg.classList.add("text-red", "px-1", "py-1", "text-xl");
-    const connectionBtn = document.getElementById("connectionBtn");
-    if (connectionBtn) {
-      connectionBtn.insertAdjacentElement("afterend", errorMsg);
-    }
-  }
-  errorMsg.textContent = message;
-}
+// function showLoginError(message: string): void {
+//   let errorMsg = document.getElementById("connectionMsg");
+//   if (!errorMsg) {
+//     errorMsg = document.createElement("p");
+//     errorMsg.id = "connectionMsg";
+//     errorMsg.classList.add("text-red", "px-1", "py-1", "text-xl");
+//     const connectionBtn = document.getElementById("connectionBtn");
+//     if (connectionBtn) {
+//       connectionBtn.insertAdjacentElement("afterend", errorMsg);
+//     }
+//   }
+//   errorMsg.textContent = message;
+// }
