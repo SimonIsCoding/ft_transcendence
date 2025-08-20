@@ -31,7 +31,6 @@ export const loginView = {
 		</main>
     </div>
   `,
-// class="w-80 inline-block text-yellow-400 hover:text-black hover:bg-yellow-400 transition-colors duration-300 border border-[#fbd11b] rounded-lg p-2.75"
   async init(): Promise<void>
   {
 	await handleSidebar();
