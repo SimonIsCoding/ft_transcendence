@@ -24,7 +24,7 @@ import { infoUserRoute } from '../routes/infoUserRoute.js';
 dotenv.config();
 
 const app = fastify({
-  logger: true // Enable logging for production
+//   logger: true // Enable logging for production
 });
 
 await app.register(multipart);//to receive images
@@ -61,11 +61,10 @@ app.register(loginRoute);
 app.register(registerRoute);
 await uploadProfilePictureRoute(app);
 await countTotalUsers(app);
-await logoutRoute(app);
 await statusRoute(app);
-await requestFriendExistsRoute(app);
+await requestFriendExistsRoute(app);//get
 await infoUserRoute(app);
-app.register(editProfileRoute);
+app.register(editProfileRoute);//post
 app.register(eraseAccountRoute);
 app.register(sendFriendRequestRoute);
 app.register(FriendsRoute);
@@ -74,6 +73,7 @@ app.register(invitationReceivedRoute);
 app.register(updateFriendshipStatusRoute);
 app.register(getUserByIdRoute);
 app.register(randomEligibleOtherUserRoute);
+app.register(logoutRoute);
 
 // Start Server
 app.listen({ 

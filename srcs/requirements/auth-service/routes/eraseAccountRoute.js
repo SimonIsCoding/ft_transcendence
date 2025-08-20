@@ -4,6 +4,10 @@ export async function eraseAccountRoute(fastify)
 {
 	fastify.post('/eraseAccount', async (request, reply) => {
 		const { login } = request.body;
+		// const token = request.cookies.auth_token;
+		// const decoded = await request.jwtVerify(token);
+		// console.log(`IN eraseAccount!! __________\n\n`);
+		// console.log("decoded = ", JSON.stringify(decoded, null, 2));
 		try
 		{
 			const stmt = db.prepare("DELETE FROM users WHERE login = ?");
