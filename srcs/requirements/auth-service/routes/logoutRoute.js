@@ -1,22 +1,29 @@
-export async function logoutRoute(app) {
-  app.post('/logout', async (request, reply) => {
-    // Clear both authentication cookies
-    ['auth_token', 'token'].forEach(cookieName => {
-      reply.clearCookie(cookieName, {
-        httpOnly: true,
-        secure: true,
-	sameSite: 'None',
-        path: '/'
-      });
-    });
+export async function logoutRoute(app)
+{
+	app.post('/logout', async (request, reply) => {
 
-    // Optional: Add JWT to blacklist if needed
-    // const token = request.cookies.auth_token;
-    // if (token) await blacklistToken(token);
+	const token = request.cookies.auth_token;
+	if (!token) throw new Error('Missing token');
+	const decoded = await request.jwtVerify(token);
+	if (!decoded.userId) throw new Error('Invalid payload');
+	
+		// Clear both authentication cookies
+		['auth_token', 'token'].forEach(cookieName => {
+		reply.clearCookie(cookieName, {
+			httpOnly: true,
+			secure: true,
+		sameSite: 'None',
+			path: '/'
+		});
+		});
 
-    return reply.send({ 
-      success: true, 
-      message: 'Logged out successfully' 
-    });
+		// Optional: Add JWT to blacklist if needed
+		// const token = request.cookies.auth_token;
+		// if (token) await blacklistToken(token);
+
+		return reply.send({ 
+		success: true, 
+		message: 'Logged out successfully' 
+		});
   });
 }

@@ -1,4 +1,7 @@
 import { Router } from "../router";
+// import { isConnected } from "../services/sidebarService/utilsSidebarService";
+// import { oneVsAIAreaInit, oneVsOneAreaInit } from "./sidebar/playBtn/playSidebarBehavior";
+// import { toggleMenuVisibility } from "./sidebar/sidebarUtils";
 
 interface User {
   login: string;
@@ -14,8 +17,6 @@ export const playButton = {
 	render(): string {
 	return `
 	<main id="gameArea" class="flex-1 bg-black flex items-center justify-center bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center w-full h-full" style="background-image: url('/pongBackgroundPlay.png');">
-		<!-- <div id="popup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50">
-		</div> -->
 		<button id="playBtn" class="text-[#fbd11b] text-5xl rounded-lg border border-[#fbd11b] px-12 py-6 rounded-lg hover:bg-[#fbd11b] hover:text-black transition">
 		PLAY
 		</button>
@@ -23,9 +24,24 @@ export const playButton = {
 	`;
 	},
 
-  init(): void
+  async init()
   {
-	const playBtn = document.getElementById('playBtn') as HTMLButtonElement | null;
-	playBtn?.addEventListener('click', () => { Router.navigate('game'); })
+	// const status = await isConnected();
+	// if (status === true)
+	// {
+	// 	console.log("entered in status = true");
+	// 	const playBtn = document.getElementById('playBtn') as HTMLButtonElement | null;
+	// 	playBtn?.addEventListener('click', () => { 
+	// 		const submenus = document.querySelectorAll<HTMLElement>('.submenu');
+	// 		toggleMenuVisibility('playSubmenu', submenus);
+	// 		oneVsOneAreaInit();
+	// 		oneVsAIAreaInit();
+	// 	 })
+	// }
+	// else
+	// {
+	// }
+		const playBtn = document.getElementById('playBtn') as HTMLButtonElement | null;
+		playBtn?.addEventListener('click', () => { Router.navigate('game'); })
   }
 }
