@@ -5,9 +5,9 @@ export async function eraseAccountRoute(fastify)
 	fastify.post('/eraseAccount', async (request, reply) => {
 		const { login } = request.body;
 		// const token = request.cookies.auth_token;
+		// if (!token) throw new Error('Missing token');
 		// const decoded = await request.jwtVerify(token);
-		// console.log(`IN eraseAccount!! __________\n\n`);
-		// console.log("decoded = ", JSON.stringify(decoded, null, 2));
+		// if (!decoded.userId) throw new Error('Invalid payload');
 		try
 		{
 			const stmt = db.prepare("DELETE FROM users WHERE login = ?");

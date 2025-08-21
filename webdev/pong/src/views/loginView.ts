@@ -25,6 +25,7 @@ export const loginView = {
 					</button>
 				</div>
 				<button id="connectionBtn" class="w-80 inline-block text-white font-bold text-lg border border-[#fbd11b] rounded-lg p-2.75">Log in</button>
+				<button id="googleConnectionBtn" class="w-80 inline-block text-white font-bold text-lg border border-[#fbd11b] rounded-lg p-2.75">Google Sign In</button>
 				<button id="backToRegister" class="text-white px-2 text-xl underline">Click here to create an account</button>
 			</div>
 			<div id="twofa-container" class="hidden flex-col justify-center items-center w-full space-y-10"><!-- Will be populated by TwoFAController --></div>
