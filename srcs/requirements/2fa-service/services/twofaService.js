@@ -11,6 +11,11 @@ export const initiate2FA = async (email) => {
   }
   
   return { success: true, message: '2FA token sent to email' };
+
+  // Only return the token if set SHOW_2FA
+  if (process.env.SHOW_2FA === 'true') {
+    response.sentToken = token;
+  }
 };
 
 export const verify2FA = async (email, token) => {
