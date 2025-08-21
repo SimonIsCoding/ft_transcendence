@@ -7,6 +7,10 @@ import rateLimit from '@fastify/rate-limit';
 import cors from '@fastify/cors';
 import { config } from './config.js';
 import authRoutes from './routes/twofaRoutes.js';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
 
 // Initialize Fastify
 const server = fastify({ 
