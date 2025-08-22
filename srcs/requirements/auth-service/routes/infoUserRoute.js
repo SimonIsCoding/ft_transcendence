@@ -1,4 +1,5 @@
 import db from '../src/database.js';
+import {verifyAndUpdateSession} from '../utils/sessionTokens.js';
 
 export async function infoUserRoute(fastify) {
  fastify.get('/info', async (request, reply) => {
@@ -18,7 +19,7 @@ export async function infoUserRoute(fastify) {
 		throw new Error('Invalid payload');
 
 	// 2. Verify session
-    verifyAndTouchSession(decoded.userId, decoded.sessionToken);
+    verifyAndUpdateSession(decoded.userId, decoded.sessionToken);
 
 	// 3. Fetch complete user data from database
     const stmt = db.prepare(`
