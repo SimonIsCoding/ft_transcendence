@@ -14,9 +14,13 @@ export async function infoUserRoute(fastify) {
     const decoded = await request.jwtVerify(token);
     // console.error('Decoded token:', decoded); // Debug decoded content
 
-	if (!decoded.userId) throw new Error('Invalid payload');
-	// console.error(`token`)
-    // 2. Fetch complete user data from database
+      if (!decoded.userId || !decoded.sessionToken)
+		throw new Error('Invalid payload');
+
+	// 2. Verify session
+    verifyAndTouchSession(decoded.userId, decoded.sessionToken);
+
+	// 3. Fetch complete user data from database
     const stmt = db.prepare(`
       SELECT id, login, mail, profile_picture 
       FROM users 

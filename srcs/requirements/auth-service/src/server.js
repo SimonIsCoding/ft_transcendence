@@ -19,6 +19,8 @@ import { eraseAccountRoute } from '../routes/eraseAccountRoute.js';
 //import { loadSecretKey } from '../utils/loadSecretKey.js';
 import { countTotalUsers, requestFriendExistsRoute, getFriendsListRoute, getUserByIdRoute, randomEligibleOtherUserRoute, sendFriendRequestRoute, updateFriendshipStatusRoute, FriendsRoute, invitationReceivedRoute } from '../routes/manageFriends.js';
 import { infoUserRoute } from '../routes/infoUserRoute.js';
+import {verifyAndTouchSession} from '../utils/sessionTokens.js';
+
 
 // Load environment variables
 dotenv.config();
@@ -74,6 +76,16 @@ app.register(updateFriendshipStatusRoute);
 app.register(getUserByIdRoute);
 app.register(randomEligibleOtherUserRoute);
 app.register(logoutRoute);
+
+// --- Cleanup expired sessions daily ---
+setInterval(() => {
+  const removed = deleteExpiredSessions();
+  if (removed > 0) console.log(`Deleted ${removed} expired sessions`);
+}, 24 * 60 * 60 * 1000); // every 24h
+
+// Optional: run once at startup
+const removed = deleteExpiredSessions();
+if (removed > 0) console.log(`Deleted ${removed} expired sessions at startup`)
 
 // Start Server
 app.listen({ 
