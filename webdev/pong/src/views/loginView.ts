@@ -4,7 +4,7 @@ import { Router } from '../router.ts';
 import { handleSidebar } from './sidebar/sidebarBehavior.ts';
 
 declare const google: any;
-let client: any;
+// let client: any;
 
 export const loginView = {
   render: (): string => `
@@ -51,30 +51,36 @@ export const loginView = {
 
 function initGoogleSignIn()
 {
-	// google.accounts.id.initialize({
-	// 	client_id: "11816073281-ka847kttjiaqlci012l9p7kpip87kocr.apps.googleusercontent.com",
-	// 	callback: handleCredentialResponse
-	// });
-	client = google.accounts.oauth2.initCodeClient({
+	google.accounts.id.initialize({
 		client_id: "11816073281-ka847kttjiaqlci012l9p7kpip87kocr.apps.googleusercontent.com",
-		scope: "openid profile email",
-		ux_mode: "popup",
-		callback: (response: any) => {
-			console.log("Code OAuth reçu:", response.code);
-		}
+		callback: handleCredentialResponse
 	});
+	// client = google.accounts.oauth2.initCodeClient({
+		// client_id: "11816073281-ka847kttjiaqlci012l9p7kpip87kocr.apps.googleusercontent.com",
+		// scope: "openid profile email",
+		// ux_mode: "popup",
+		// callback: (response: any) => {
+			// console.log("Code OAuth reçu:", response.code);
+		// }
+	// });
 
-	const btn = document.getElementById("googleConnectionBtn");
-	if (btn) {
-		btn.addEventListener("click", () => {
-			console.log("clicked");
-			// google.accounts.id.prompt();
-			client.requestCode();
-		});
-	}
+	google.accounts.id.renderButton(
+		document.getElementById("googleConnectionBtn"),
+		{ theme: "outline", size: "large" }
+	);
+
+	// const btn = document.getElementById("googleConnectionBtn");
+	// if (btn) {
+	// 	btn.addEventListener("click", () => {
+	// 		console.log("clicked");
+	// 		google.accounts.id.prompt();
+	// 		Router.navigate('home');
+	// 		// client.requestCode();
+	// 	});
+	// }
 }
 
-// function handleCredentialResponse(response: any)
-// {
-// 	console.log("ID Google Token:", response.credential);
-// }
+function handleCredentialResponse(response: any)
+{
+	console.log("ID Google Token:", response.credential);
+}
