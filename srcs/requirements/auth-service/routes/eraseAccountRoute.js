@@ -1,5 +1,5 @@
 import db from '../src/database.js';
-import { deleteAllSessions } from '../src/sessionUtils.js';
+import { deleteAllSessions } from '../utils/sessionTokens.js';
 
 export async function eraseAccountRoute(fastify) {
   fastify.post('/eraseAccount', async (request, reply) => {
