@@ -1,4 +1,4 @@
-import {verifyAndTouchSession} from '../utils/sessionTokens.js';
+import {verifyAndUpdateSession} from '../utils/sessionTokens.js';
 
 export async function statusRoute(fastify)
 {
@@ -13,7 +13,7 @@ export async function statusRoute(fastify)
 		throw new Error('Invalid payload');
 
 	  // 3. Verify and if exists update session. if not throw error
-      verifyAndTouchSession(decoded.userId, decoded.sessionToken);
+      verifyAndUpdateSession(decoded.userId, decoded.sessionToken);
 
       // 4. Calculate auth states
       const needs2FA = process.env.ENABLE_2FA === 'true' && !decoded.is2FAVerified;
