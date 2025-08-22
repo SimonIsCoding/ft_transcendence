@@ -1,5 +1,6 @@
 import db from '../src/database.js';
 import bcrypt from 'bcrypt';
+import {hashToken, createSessionToken} from '../utils/sessionTokens.js';
 
 export async function loginRoute(fastify) {
   // POST /login
@@ -58,6 +59,10 @@ export async function loginRoute(fastify) {
       }
     }
   }, async (request, reply) => {
+
+	const SESSION_LIFETIME = process.env.SESSION_LIFETIME
+	  ? parseInt(process.env.SESSION_LIFETIME, 10)
+	  : 86400; // default 24h if not set
     // 1. Validate user
     const user = db.prepare('SELECT id FROM users WHERE id = ?')
                   .get(request.body.userId);
@@ -68,21 +73,41 @@ export async function loginRoute(fastify) {
       ? request.cookies.auth_phase === '2fa_verified' // Check phase if 2FA enabled
       : true; // Auto-verify if 2FA disabled
   
-    // 3. Generate token
+ 	// 3. Create session_token (random string / UUID)
+	const rawSessionToken = createSessionToken();  // to send back
+	const hashedToken = hashToken(rawSessionToken);  // to store in db
+
+  // 4. Insert session in DB
+	const validUntil = new Date(Date.now() + SESSION_LIFETIME * 1000).toISOString();
+
+  	db.prepare(`
+      INSERT INTO sessions (user_id, session_token, created_at, last_seen_at, valid_until, user_agent, ip_address)
+      VALUES (?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?, ?, ?)
+    `).run(
+      user.id,
+      hashedToken,
+      validUntil,
+	  request.headers['user-agent'] || null,
+      request.ip || null
+    );
+    // 5. Generate token
     const token = await reply.jwtSign({
       userId: user.id,
-      is2FAVerified // Critical security flag
-    });
+      is2FAVerified,
+	  sessionToken: rawSessionToken
+      },
+      { expiresIn: SESSION_LIFETIME }
+	);
 	console.error(`in /login token = ${token.userId} `);
   
-    // 4. Set cookie
+    // 6. Set cookie
     reply
       .setCookie('auth_token', token, { 
         httpOnly: true,
         secure: true,
-	sameSite: 'None',
-	path: '/',
-        maxAge: 86400000 // 24h
+		sameSite: 'None',
+		path: '/',
+        maxAge: SESSION_LIFETIME
       })
       .clearCookie('auth_phase') // Cleanup
       .send({ success: true });
