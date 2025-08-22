@@ -3,6 +3,9 @@ import { setupPasswordToggle } from '../utils/utils';
 import { Router } from '../router.ts';
 import { handleSidebar } from './sidebar/sidebarBehavior.ts';
 
+declare const google: any;
+let client: any;
+
 export const loginView = {
   render: (): string => `
   	<div class="w-screen h-screen flex bg-[#fbd11b] overflow-hidden">
@@ -25,8 +28,8 @@ export const loginView = {
 					</button>
 				</div>
 				<button id="connectionBtn" class="w-80 inline-block text-white font-bold text-lg border border-[#fbd11b] rounded-lg p-2.75">Log in</button>
-				<button id="googleConnectionBtn" class="w-80 inline-block text-white font-bold text-lg border border-[#fbd11b] rounded-lg p-2.75">Google Sign In</button>
 				<button id="backToRegister" class="text-white px-2 text-xl underline">Click here to create an account</button>
+				<button id="googleConnectionBtn" class="w-80 inline-block text-white font-bold text-lg border border-[#fbd11b] rounded-lg p-2.75">Google Sign In</button>
 			</div>
 			<div id="twofa-container" class="hidden flex-col justify-center items-center w-full space-y-10"><!-- Will be populated by TwoFAController --></div>
 		</main>
@@ -38,8 +41,40 @@ export const loginView = {
 
 	setupPasswordToggle("password", "togglePasswordLogin", "eyeIconClosedLogin", "eyeIconOpenedLogin");
 	initLogin();
+	initGoogleSignIn();
 
 	const backToRegister = document.getElementById('backToRegister') as HTMLButtonElement | null;
 	backToRegister!.addEventListener('click', () => Router.navigate('register'));
   }
 };
+
+
+function initGoogleSignIn()
+{
+	// google.accounts.id.initialize({
+	// 	client_id: "11816073281-ka847kttjiaqlci012l9p7kpip87kocr.apps.googleusercontent.com",
+	// 	callback: handleCredentialResponse
+	// });
+	client = google.accounts.oauth2.initCodeClient({
+		client_id: "11816073281-ka847kttjiaqlci012l9p7kpip87kocr.apps.googleusercontent.com",
+		scope: "openid profile email",
+		ux_mode: "popup",
+		callback: (response: any) => {
+			console.log("Code OAuth reçu:", response.code);
+		}
+	});
+
+	const btn = document.getElementById("googleConnectionBtn");
+	if (btn) {
+		btn.addEventListener("click", () => {
+			console.log("clicked");
+			// google.accounts.id.prompt();
+			client.requestCode();
+		});
+	}
+}
+
+// function handleCredentialResponse(response: any)
+// {
+// 	console.log("ID Google Token:", response.credential);
+// }
