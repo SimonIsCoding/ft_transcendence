@@ -94,7 +94,7 @@ export async function loginRoute(fastify) {
     const token = await reply.jwtSign({
       userId: user.id,
       is2FAVerified,
-	  rawSessionToken
+	  sessionToken: rawSessionToken
       },
       { expiresIn: SESSION_LIFETIME }
 	);
