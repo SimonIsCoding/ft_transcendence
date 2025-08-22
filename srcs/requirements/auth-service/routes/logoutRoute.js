@@ -1,4 +1,4 @@
-import { deleteSession } from './sessionUtils.js';
+import { deleteSession } from '../utils/sessionTokens.js';
 
 export async function logoutRoute(app) {
   app.post('/logout', async (request, reply) => {
