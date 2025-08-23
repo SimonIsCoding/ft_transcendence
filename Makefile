@@ -1,4 +1,6 @@
 COMPOSE_FILE = ./srcs/docker-compose.yml
+PROJECT_PATH := $(shell pwd)
+export PROJECT_PATH
 
 all:
 	mkdir -p srcs/data/pong
@@ -22,8 +24,11 @@ webupdate:
 	  docker exec nginx /usr/sbin/nginx -s reload
 
 auth-service:
-	cd srcs && docker compose up -d --build auth-service && cd -
+	docker compose -f $(COMPOSE_FILE) up -d --build auth-service
 #to rebuild and restart the auth-service container - useful for User Management module
+
+2fa-service:
+	docker compose -f $(COMPOSE_FILE) up -d --build 2fa-service
 
 stop:
 	docker compose -f $(COMPOSE_FILE) down
@@ -38,7 +43,7 @@ clean:
 	docker image prune -af
 	docker volume prune -f
 	docker network prune -f
-	sudo rm -rf srcs/data/pong/assets/index-*
+# 	sudo rm -rf srcs/data/pong/assets/index-*
 	cd webdev/pong && \
 	  npm run clean
 
@@ -46,5 +51,5 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all stop clean fclean re auth-service
+.PHONY: all stop clean fclean re auth-service 2fa-service
 

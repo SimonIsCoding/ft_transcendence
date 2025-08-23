@@ -34,9 +34,10 @@ export async function uploadProfilePictureRoute(fastify)
       return reply.status(500).send({ error: 'Failed to save file', details: err.message});
     }
 
-    const userId = request.user?.id;
+    const userId = request.user?.userId;
+	console.log(`in /uploadProfilePicture userId = ${userId}\n\n`);
     if (!userId)
-      return reply.status(401).send({ error: 'Not authenticated: userId not found in token' });
+    	return reply.status(401).send({ error: 'Not authenticated: userId not found in token' });
 
 	const update = db.prepare('UPDATE users SET profile_picture = ? WHERE id = ?');
 	update.run(`/profile_pictures/${filename}`, userId);

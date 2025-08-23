@@ -1,37 +1,45 @@
-// import { auth } from '../plugins/auth.js';
+import {verifyAndUpdateSession} from '../utils/sessionTokens.js';
 
-export async function statusRoute(fastify) {
+export async function statusRoute(fastify)
+{
   fastify.get('/status', async (request, reply) => {
-    const token = request.cookies.token;
+    try {
+      // 1. Verify JWT exists and is valid
+      const token = request.cookies.auth_token;
+      if (!token) throw new Error('Missing token');
+      
+      const decoded = await request.jwtVerify(token);
+      if (!decoded.userId || !decoded.sessionToken)
+		throw new Error('Invalid payload');
 
-    if (!token)
-      return reply.send({ authenticated: false });
+	  // 3. Verify and if exists update session. if not throw error
+      verifyAndUpdateSession(decoded.userId, decoded.sessionToken);
 
-    try
-	{
-      const decoded = fastify.jwt.verify(token);//jwt.verify(token, 'super-secret-key'); doesn't work well :|
-      return reply.send({ authenticated: true, user: decoded });
-    }
-	catch (err)
-	{
-      return reply.send({ authenticated: false });
+      // 4. Calculate auth states
+      const needs2FA = process.env.ENABLE_2FA === 'true' && !decoded.is2FAVerified;
+      const fullyAuthed = !needs2FA;
+
+      // 5. Return status (NEVER clear cookie during 2FA flow)
+      return reply.send({
+        authenticated: fullyAuthed,
+        requires2FA: needs2FA,
+        user: {
+          id: decoded.userId,
+          is2FAVerified: decoded.is2FAVerified || false
+        }
+      });
+
+    } catch (error) {
+      // 6. Only clear cookie for INVALID tokens (not 2FA cases)
+      if (request.cookies.auth_token) {
+        reply.clearCookie('auth_token');
+      }
+      
+      return reply.code(401).send({
+        authenticated: false,
+        requires2FA: process.env.ENABLE_2FA === 'true',
+		message: error.message
+      });
     }
   });
-}
-
-// useless for the moment - but useful when I will add a profile page
-export async function userLoggedRoutes(app)
-{
-	app.get('/me', { preHandler: [app.auth] }, async (request, reply) => {
-		return {
-			success: true,
-			user: {
-				id: request.user.id,
-				login: request.user.login,
-				email: request.user.mail,
-				profile_picture: request.user.profile_picture,
-				token: request.user.token,
-			}
-		};
-	});
 }

@@ -1,7 +1,7 @@
 import { Router } from "../../router";
-import { isConnected } from "../../services/sidebar"
+import { isConnected } from "../../services/sidebarService/utilsSidebarService"
 import { loadExistingProfilePicture, uploadProfilePicture } from "../../utils/profilePictureUtils";
-import { initLogout } from '../../services/logoutService';
+import { initLogout } from '../../services/sidebarService/logoutService';
 import { setupMenuHandlers } from './sidebarUtils';
 import { gameSettingsSubmenuRender } from './settingsBtn/gameSettingsSubmenuRender';
 import { logoutButtonRender } from './logoutButtonRender';
@@ -28,7 +28,7 @@ export const userUnloggedSidebar = {
 
 	<div class="flex flex-col mt-auto items-center space-y-2 pb-6">
 		<button id="loginBtn" class="w-12 border border-black rounded-lg text-sm text-black font-semibold py-2 rounded hover:bg-black hover:text-yellow-400 transition">Login</button>
-		<button id="registerBtn" class="w-15 border border-black rounded-lg text-[0.825rem] text-black font-semibold py-2 rounded hover:bg-black hover:text-yellow-400 transition">Register</button>
+		<button id="registerBtn" class="w-full border border-black rounded-lg text-[0.825rem] text-black font-semibold py-2 rounded hover:bg-black hover:text-yellow-400 transition">Register</button>
 	</div>
 	 `;
   },
