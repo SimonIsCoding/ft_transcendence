@@ -3,9 +3,9 @@ import { loginView } from './views/loginView';
 import { registerView } from './views/registerView';
 import { GameView } from './views/game';
 import { gameController } from './controllers/gameController';
-// import { TournamentView } from './views/TournamentView.ts';
-import { TournamentController } from './controllers/TournamentController.ts';
-import { TournamentModel } from './models/TournamentModel.ts';
+import { currentTournament, matchInfo } from './models/TournamentStore';
+import { TournamentUIManager } from './views/TournamentUIManager';
+
 
 interface User {
   login: string;
@@ -52,17 +52,40 @@ export class Router {
 	  gameController.init();
       break;
 
-    case 'tournament':
-      this.app.innerHTML = GameView.renderGameCanvas();
-      console.log('antes de iniciar el juego')
-      GameView.initGameCanvas();
-      console.log('despues de iniciar el juego')
-      const controller = new TournamentController(new TournamentModel());
-      controller.iniciarTorneo();
-      gameController.init();
-      // this.app.innerHTML = TournamentView.render();
-      // TournamentView.init();
-      break;
+      case 'tournament':
+
+      const tournamentArea = document.getElementById('tournamentArea');
+      let gameCanvasContainer = document.getElementById('gameCanvasContainer');
+
+      if (!gameCanvasContainer && tournamentArea?.parentNode) {
+        gameCanvasContainer = document.createElement('div');
+        gameCanvasContainer.id = 'gameCanvasContainer';
+        gameCanvasContainer.className = 'hidden content bg-[#fbd11b] h-full';
+        tournamentArea.appendChild(gameCanvasContainer);
+      }
+      if (matchInfo && matchInfo.partidoActivo) {
+        gameCanvasContainer?.classList.remove('hidden');
+
+        if (gameCanvasContainer && gameCanvasContainer.innerHTML === '') {
+          gameCanvasContainer.innerHTML = GameView.renderGameCanvas();
+          GameView.initGameCanvas();
+        }
+
+        GameView.setPlayersAndCallback(
+          matchInfo.player1,
+          matchInfo.player2,
+          matchInfo.onMatchEnd
+        );
+        gameController.init();
+
+      } else {
+        gameCanvasContainer?.classList.add('hidden');
+        tournamentArea?.classList.remove('hidden');
+        if (currentTournament) {
+          TournamentUIManager.updateBracket(currentTournament);
+        }
+      }
+    break;
   }
     
 

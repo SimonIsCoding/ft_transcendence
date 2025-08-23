@@ -13,7 +13,7 @@ export function resetTournament(): void {
 export let matchInfo: { 
     player1: string, 
     player2: string, 
-    partidoActivo: boolean, // <-- LA NUEVA BANDERA
+    partidoActivo: boolean,
     onMatchEnd: (winnerAlias: string, player1Score: number, player2Score: number) => void 
 } | null = null;
 
