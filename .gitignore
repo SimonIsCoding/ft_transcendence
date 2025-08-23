@@ -3,3 +3,8 @@
 *subject.pdf
 console.txt
 *.swp
+srcs/data/pong
+learning/
+.DS_Store
+data/pong/users.db
+*/users.db

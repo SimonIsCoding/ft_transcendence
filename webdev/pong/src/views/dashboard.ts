@@ -1,5 +1,7 @@
 import { Router } from '../router';
 
+// archivo de jose (me parece) que no usamos (creo)
+
 export default class DashboardView {
   private currentUser: { email: string; token: string } | null = null;
 

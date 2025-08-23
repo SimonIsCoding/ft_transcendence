@@ -20,6 +20,7 @@
 
 ### To know what you are doing
 0. **Make sure you have the good prerequisite for your computer**
+   - We work with nodejs and npm in this project. Make sure you have them installed in you computer.
    - Make sure you have docker installed in you computer
    - the file /etc/hosts has the line `127.0.0.1 localhost`
 
