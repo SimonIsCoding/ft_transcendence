@@ -1,10 +1,9 @@
-import { initLogin } from '../services/loginService';
-import { setupPasswordToggle } from '../utils/utils';
+import { handleSuccessfulLogin, initLogin } from '../services/loginService';
+import { setupPasswordToggle, showErrorPopup/*, showSuccessPopup*/ } from '../utils/utils';
 import { Router } from '../router.ts';
 import { handleSidebar } from './sidebar/sidebarBehavior.ts';
 
 declare const google: any;
-// let client: any;
 
 export const loginView = {
   render: (): string => `
@@ -55,32 +54,48 @@ function initGoogleSignIn()
 		client_id: "11816073281-ka847kttjiaqlci012l9p7kpip87kocr.apps.googleusercontent.com",
 		callback: handleCredentialResponse
 	});
-	// client = google.accounts.oauth2.initCodeClient({
-		// client_id: "11816073281-ka847kttjiaqlci012l9p7kpip87kocr.apps.googleusercontent.com",
-		// scope: "openid profile email",
-		// ux_mode: "popup",
-		// callback: (response: any) => {
-			// console.log("Code OAuth reçu:", response.code);
-		// }
-	// });
 
 	google.accounts.id.renderButton(
 		document.getElementById("googleConnectionBtn"),
 		{ theme: "outline", size: "large" }
 	);
-
-	// const btn = document.getElementById("googleConnectionBtn");
-	// if (btn) {
-	// 	btn.addEventListener("click", () => {
-	// 		console.log("clicked");
-	// 		google.accounts.id.prompt();
-	// 		Router.navigate('home');
-	// 		// client.requestCode();
-	// 	});
-	// }
 }
 
-function handleCredentialResponse(response: any)
+async function handleCredentialResponse(response: any)
 {
 	console.log("ID Google Token:", response.credential);
+	const res = await fetch("/api/auth/google", {
+		method: "POST",
+		credentials: "include",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify({ id_token: response.credential })
+	});
+	const data = await res.json();
+	console.log("Internal JWT:", data.success);
+	if (!data.success)
+		showErrorPopup("Google SignIn failed", "popup");
+	getGoogleProfile();
+}
+
+async function getGoogleProfile()
+{
+	const res = await fetch("/api/auth/googleSession", {
+		method: "POST",
+		credentials: "include"
+	});
+
+	if (res.status === 401)
+	{
+		console.log("Not authenticated");
+		return;
+	}
+
+	const data = await res.json();
+	console.log(`data = ${data}`);
+	if (res.status === 201)
+	{
+		console.log(`data.name = ${data.login}, data.userId = ${data.userId}`);
+		handleSuccessfulLogin(data.login, data.userId);
+	}
+	console.log("Protected data:", data);
 }
