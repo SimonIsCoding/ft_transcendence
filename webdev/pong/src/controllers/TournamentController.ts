@@ -1,71 +1,161 @@
 import type { Match } from '../models/TournamentModel';
-import { GameView } from '../views/game';
+import { Router } from '../router';
+import { currentTournament, setMatchInfo, matchInfo } from '../models/TournamentStore';
+import { TournamentUIManager } from '../views/TournamentUIManager';
 
 export class TournamentController {
-    private model;
+    private tournamentStartTime: number = 0;
+    private matchStartTimes: Map<Match, number> = new Map();
 
-    constructor(model: any) {
-        this.model = model;
+    async iniciarTorneo() {
+        if (!currentTournament?.isReady()) return;
+
+        this.tournamentStartTime = Date.now();
+        this.enviarLog('tournament_created', {
+            tournament_id: 'tourn-' + Date.now(),
+            players_count: currentTournament.players.length,
+            player_aliases: currentTournament.players.map(p => p.alias)
+        });
+        currentTournament?.generateMatches();
+        await this.jugarPartido(currentTournament.semifinal1!);
+        TournamentUIManager.updateBracket(currentTournament);
+        this.mostrarVistaTorneo();
+        await this.esperarClickDelUsuario();
+        await this.jugarPartido(currentTournament.semifinal2!);
+        TournamentUIManager.updateBracket(currentTournament);
+        this.mostrarVistaTorneo();
+        await this.esperarClickDelUsuario();
+        if (currentTournament.semifinal1?.winner && currentTournament.semifinal2?.winner) {
+            currentTournament.generateFinal();
+            await this.jugarPartido(currentTournament.finalMatch!);
+            const ganador = currentTournament.finalMatch!.winner!;
+            currentTournament.setWinner(ganador);
+            this.enviarLog('tournament_completed', {
+                winner: ganador.alias,
+                total_matches: 3, // Semifinal1 + Semifinal2 + Final
+                duration_minutes: Math.floor((Date.now() - this.tournamentStartTime) / 60000)
+            });
+            TournamentUIManager.updateBracket(currentTournament);
+            this.mostrarVistaTorneo();
+            TournamentUIManager.showTournamentWinner(ganador.alias);
+            currentTournament.saveToLocalStorage();
+        }
     }
 
-    iniciarTorneo() {
-        this.model.players = [];
-
-        for (let i = 1; i <= 4; i++) {
-            let alias = '';
-            while (!alias) {
-                alias = prompt(`Introduce el alias del jugador ${i}:`)?.trim() || '';
+    private async esperarClickDelUsuario(): Promise<void> {
+        let next = document.getElementById('nextMatchBtn')
+        if (next)
+            next.classList.remove('hidden');
+        let play = document.getElementById('playtournamentBtn')
+        if (play)
+            play.classList.remove('inline-block');
+        return new Promise(resolve => {
+            const btn = document.getElementById('nextMatchBtn');
+            if (!btn) {
+                console.warn('Botón "Siguiente" no encontrado.');
+                resolve();
+                return;
             }
-            this.model.addPlayer(alias);
-        }
-
-        debugger
-        this.model.generateFirstMatch();
-        // esta parte hay que revisarla porque no va ha la siguiente semifinal y 
-        // tampoco te dice quien ha ganado del todo bien y a veces va ha la final 
-        // antes de hacer la segunda semifinal o directamente te dice x ha ganado el torneo
-        this.jugarPartido(this.model.semifinal1!, () => {
-            alert(`${this.model.semifinal1.winner.alias} ha ganado esta partida`);
-            this.model.generateSecondMatch();
-            // console.log(this.model.semifinal2)
-            this.jugarPartido(this.model.semifinal2!, () => {
-                // alert(`${this.model.semifinal2.winner.alias} ha ganado esta partida`);
-                // console.log(this.model.semifinal2)
-                if (this.model.semifinal1!.winner && this.model.semifinal2!.winner) {
-                    this.model.generateFinal();
-                    // hay que cambiar esta parte porque al no haber jugado la final
-                    // va la final en vez de hacer la otra semifinal
-                    // console.log('final: ' + this.model.finalMatch)
-                    this.jugarPartido(this.model.finalMatch!, () => {
-                        // console.log('final: ' + this.model.finalMatch)
-                        const ganador = this.model.finalMatch!.winner!;
-                          alert(`🏆 Ganador del torneo: ${ganador.alias}`);
-                        this.model.setWinner(ganador);
-                        this.model.saveToLocalStorage();
-                        
-                    });
-                }
-            });
+            const handler = () => {
+                btn.removeEventListener('click', handler);
+                resolve();
+            };
+            btn.addEventListener('click', handler);
         });
     }
-    // puede ser que esta funcion este mal, por que cuando solo es una semifinal funciona bien
-    private jugarPartido(match: Match, callback: () => void) {
-        // console.log('jugando partido', match);
-        GameView.setPlayersAndCallback(
-            match.player1.alias,
-            match.player2.alias,
-            (winnerAlias: string) => {
-                const winner = [match.player1, match.player2].find(p => p.alias == winnerAlias);
-                if (!winner) {
-                    alert("Error: No se pudo determinar el ganador");
-                    return;
+
+    private mostrarVistaTorneo() {
+        const tournamentArea = document.getElementById('esquemaTorneo');
+        const gameArea = document.getElementById('gameCanvasContainer');
+        if (tournamentArea) tournamentArea.style.display = 'block';
+        if (gameArea) gameArea.style.display = 'none';
+    }
+
+    private mostrarVistaJuego() {
+        const tournamentArea = document.getElementById('esquemaTorneo');
+        const gameArea = document.getElementById('gameCanvasContainer');
+        if (tournamentArea) tournamentArea.style.display = 'none';
+        if (gameArea) gameArea.style.display = 'block';
+    }
+
+    private jugarPartido(match: Match): Promise<void> {
+        return new Promise(async (resolve) => {
+            this.enviarLog('match_started', {
+                match_type: this.obtenerTipoPartido(match),
+                player1: match.player1.alias,
+                player2: match.player2.alias,
+                match_id: 'match-' + Date.now()
+            });
+            await TournamentUIManager.showPreGame(match.player1.alias, match.player2.alias);
+            await TournamentUIManager.startCountdown();
+            this.mostrarVistaJuego();
+            setMatchInfo({
+                player1: match.player1.alias,
+                player2: match.player2.alias,
+                partidoActivo: true,
+                onMatchEnd: (winnerAlias: string, player1Score: number, player2Score: number) => {
+                    match.player1.score = player1Score;
+                    match.player2.score = player2Score;
+                    match.winner = (match.player1.alias === winnerAlias) ? match.player1 : match.player2;
+                    const startTime = this.matchStartTimes.get(match) || Date.now();
+                    this.enviarLog('match_ended', {
+                        match_type: this.obtenerTipoPartido(match),
+                        player1: match.player1.alias,
+                        player2: match.player2.alias,
+                        winner: winnerAlias,
+                        score: `${player1Score}-${player2Score}`,
+                        duration_seconds: Math.floor((Date.now() - startTime) / 1000)
+                    });
+                    if (matchInfo)
+                        setMatchInfo({ ...matchInfo, partidoActivo: false });
+                    resolve();
                 }
-                match.winner = winner;
-                // console.log('ganador', winner);
-                // debugger
-                callback();
-                // console.log('Partido terminado', match);
-            }
-        );
+            });
+            Router.navigate('tournament');
+        });
+    }
+    private enviarLog(eventType: string, data: any) {
+        TournamentLogger.enviarLog(eventType, data);
+    }
+
+    private obtenerTipoPartido(match: Match): string {
+        if (match === currentTournament?.semifinal1) return 'semifinal_1';
+        if (match === currentTournament?.semifinal2) return 'semifinal_2';
+        if (match === currentTournament?.finalMatch) return 'final';
+        return 'unknown';
+    }
+}
+
+class TournamentLogger {
+
+    static enviarLog(eventType: string, data: any) {
+        const logEntry = JSON.stringify({
+            service: 'tournament-service',
+            level: 'INFO',
+            event_type: eventType,
+            timestamp: new Date().toISOString(),
+            environment: 'development',
+            ...data
+        });
+
+        // Usar TCP en lugar de HTTP - MUCHO más fiable
+        this.enviarLogTCP(logEntry);
+    }
+    static enviarLogTCP(logData: string) {
+        // Usar XMLHttpRequest para TCP (funciona en navegador)
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://localhost:5050', false); // Puerto 5050 para TCP
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(logData);
+
+        // Alternative: usar fetch con modo 'no-cors' para desarrollo
+        fetch('http://localhost:5050', {
+            method: 'POST',
+            mode: 'no-cors', // ← Importante para evitar problemas CORS
+            headers: { 'Content-Type': 'application/json' },
+            body: logData
+        }).catch(() => {
+            console.log('Log enviado via TCP (puerto 5050)');
+        });
     }
 }

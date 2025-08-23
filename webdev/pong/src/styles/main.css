@@ -21,7 +21,7 @@
   font-display: swap;
 }
 
-.font-seven{
+.font-seven {
   font-family: 'SevenSegment', monospace;
   color: white;
 }
@@ -31,12 +31,11 @@
 }
 
 /* Firefox */
-input[type="range"]
-{
+input[type="range"] {
   height: 8px;
   background: transparent;
   -webkit-appearance: none;
-  -moz-appearance: none; 
+  -moz-appearance: none;
   appearance: none;
 }
 
@@ -59,7 +58,8 @@ input[type="range"]::-moz-range-track {
 
 /* Chrome, Safari, Edge */
 input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none; /* important */
+  -webkit-appearance: none;
+  /* important */
   height: 10px;
   width: 10px;
   background: black;
@@ -91,4 +91,14 @@ input[type="range"]::-ms-track {
   border-radius: 9999px;
   border-color: transparent;
   color: transparent;
+}
+
+.winner-bg
+{
+  background-color: #EDD24E;
+}
+
+.winner-bg input, .winner-bg span
+{
+  color: black;
 }
