@@ -1,5 +1,6 @@
 export type Player = {
   alias: string;
+  score?: number;
 };
 
 export type Match = {
@@ -23,35 +24,20 @@ export class TournamentModel {
     return this.players.length === 4;
   }
 
-  generateFirstMatch() {
+  generateMatches() {
     this.semifinal1 = {
       player1: { ...this.players[0] }, 
       player2: { ...this.players[1] },
       winner: null
     };
-    console.log('semifinal1: ' + this.semifinal1)
-    // this.semifinal2 = {
-    //     player1: { ...this.players[2] },
-    //     player2: { ...this.players[3] },
-    //     winner: null
-    // };
-    // console.log('semifinal2: ' + this.semifinal2)
-  }
-  
-  generateSecondMatch() {
-    // this.semifinal1 = {
-    //   player1: { ...this.players[0] }, 
-    //   player2: { ...this.players[1] },
-    //   winner: null
-    // };
-    // console.log('semifinal1: ' + this.semifinal1)
     this.semifinal2 = {
         player1: { ...this.players[2] },
         player2: { ...this.players[3] },
         winner: null
     };
-    console.log('semifinal2: ' + this.semifinal2)
   }
+  
+
 
   generateFinal() {
     if (this.semifinal1?.winner && this.semifinal2?.winner) {
