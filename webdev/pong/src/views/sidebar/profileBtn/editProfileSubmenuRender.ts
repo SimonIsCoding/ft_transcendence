@@ -19,14 +19,16 @@ export function editProfileSubmenuRender()
 			<img id="previewProfilePictureEditProfile" class="absolute w-24 h-24 rounded-full object-cover hidden" />
 		</button>
 
-		<p>Change password</p>
-		<input id="currentPasswordEditProfile" type="password" placeholder="Current password" class="border border-black w-[80%] rounded-xl text-black flex felx-col justify-center text-center placeholder-black/50 placeholder:text-sm h-[4%]">
-		<input id="changePasswordEditProfile" type="password" placeholder="Change password" class="border border-black w-[80%] rounded-xl text-black flex felx-col justify-center text-center placeholder-black/50 placeholder:text-sm h-[4%]">
-		<input id="repeatPasswordEditProfile" type="password" placeholder="Repeat password" class="border border-black w-[80%] rounded-xl text-black flex felx-col justify-center text-center placeholder-black/50 placeholder:text-sm h-[4%]">
-		<hr class="border-t-1.5 border-black w-20"/>
-		<p>Change mail</p>
-		<input id="changeMailEditProfile" type="text" placeholder="Change email" class="border border-black w-[80%] rounded-xl text-black flex felx-col justify-center text-center placeholder-black/50 placeholder:text-sm h-[4%]">
-		<button id="saveBtnEditProfile" class="font-bold rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit">Save</button>
+		<div id="editProfileChangePasswordMail" class="w-full flex flex-col items-center space-y-3.5">
+			<p>Change password</p>
+			<input id="currentPasswordEditProfile" type="password" placeholder="Current password" class="border border-black w-[80%] rounded-xl text-black flex felx-col justify-center text-center placeholder-black/50 placeholder:text-sm h-[4vh]">
+			<input id="changePasswordEditProfile" type="password" placeholder="Change password" class="border border-black w-[80%] rounded-xl text-black flex felx-col justify-center text-center placeholder-black/50 placeholder:text-sm h-[4vh]">
+			<input id="repeatPasswordEditProfile" type="password" placeholder="Repeat password" class="border border-black w-[80%] rounded-xl text-black flex felx-col justify-center text-center placeholder-black/50 placeholder:text-sm h-[4vh]">
+			<hr class="border-t-1.5 border-black w-20"/>
+			<p>Change mail</p>
+			<input id="changeMailEditProfile" type="text" placeholder="Change email" class="border border-black w-[80%] rounded-xl text-black flex felx-col justify-center text-center placeholder-black/50 placeholder:text-sm h-[4vh]">
+			<button id="saveBtnEditProfile" class="font-bold rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit">Save</button>
+		</div>
 		<button id="eraseAccountBtn" class="absolute bottom-4 font-bold border rounded px-2 py-1 text-sm hover:bg-red-500 w-fit">Erase account</button>
 	</div>
 	${eraseAccountConfirmationPopupRender()}

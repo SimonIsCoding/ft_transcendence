@@ -46,6 +46,7 @@ export async function loadExistingProfilePicture(): Promise<void>
 	const preview = document.getElementById('previewProfilePicture') as HTMLImageElement;
 	const previewEdit = document.getElementById('previewProfilePictureEditProfile') as HTMLImageElement;
 	const uploadIcon = document.getElementById('uploadIcon')!;
+	const editProfileChangePasswordMail = document.getElementById('editProfileChangePasswordMail')!;
 
 	try
 	{
@@ -66,9 +67,11 @@ export async function loadExistingProfilePicture(): Promise<void>
 			previewEdit.src = `https://localhost:4443/${data.user.profile_picture}`;
 			previewEdit.classList.remove('hidden');
 			uploadIcon.classList.add('hidden');
+			editProfileChangePasswordMail.classList.remove('hidden');
 		}
 		else // to load personal pic
 		{
+			editProfileChangePasswordMail.classList.add('hidden');
 			preview.src = data.user.profile_picture;
 			preview.classList.remove("hidden");
 			previewEdit.src = data.user.profile_picture;
