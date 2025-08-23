@@ -27,28 +27,29 @@ export async function googleRoute(fastify)
 			console.log("env.JWT_SECRET = ", process.env.JWT_SECRET);
 			const sessionToken = crypto.randomBytes(32).toString("hex");
 			console.log(`sessionToken = ${sessionToken}`);
+			const Gprovider = "google";
 			const internalToken = jwt.sign(
 				{
 					userId: payload.sub,
 					email: payload.email,
 					name: payload.name,
 					picture: payload.picture,
-					sessionToken: sessionToken
+					sessionToken: sessionToken,
+					provider: Gprovider
 				},
 				process.env.JWT_SECRET,
 				{ expiresIn: "24h" }
 			);
-
 			return reply.setCookie("auth_token", internalToken, {
 				httpOnly: true,
 				secure: true,
 				sameSite: "lax",
 				path: "/"
-			}).send({ success: true });
+			}).send({ success: true, provider: Gprovider });
 		} 
 		catch (err)
 		{
-			console.error("Erreur verifyIdToken:", err);
+			console.error("Err verifyIdToken:", err);
 			return reply.status(401).send({success: false, error: "Invalid ID token" });
 		}
 	});
@@ -60,7 +61,7 @@ export async function googleSessionRoute(fastify)
 		try {
 			// ⬇️ Récupère le JWT depuis le cookie
 			console.log("entered in googleSession");
-			const cookie = request.cookies.session;
+			const cookie = request.cookies.auth_token;
 			console.log(`cookie = ${cookie}`);
 			if (!cookie)
 				return reply.status(401).send({ error: "No session cookie" });
@@ -70,6 +71,7 @@ export async function googleSessionRoute(fastify)
 			console.log(`2 payload.sub = ${payload.sub}\npayload.email = ${payload.email}\npayload.name = ${payload.name}\npayload.picture = ${payload.picture}`);
 			console.log(`payload.userId = ${payload.userId}`);
 			console.log(`payload.userId = ${payload.id}`);
+			console.log(`payload.provider = ${payload.provider}`);
 
 			// const db = await dbPromise;
 			const user = db.prepare("SELECT * FROM users WHERE mail = ?").get(payload.email);
@@ -78,12 +80,14 @@ export async function googleSessionRoute(fastify)
 			{
 				console.log("entered in !user");
 				// Créer l'utilisateur si nouveau
-				db.prepare("INSERT INTO users (login, mail, profile_picture) VALUES (?, ?, ?)").run(payload.name, payload.email, payload.picture);
+				db.prepare("INSERT INTO users (login, mail, profile_picture, provider) VALUES (?, ?, ?, ?)").run(payload.name, payload.email, payload.picture, payload.provider);
 				console.log("not user and run on db");
 			}
 
 			// ⬇️ Accès accordé
-			return reply.status(201).send({ userId: user.id, login: user.login, mail: user.mail, profile_picture: user.profile_picture });
+			console.log(`user.provider = ${user.provider}`);
+			console.log(`payload.provider = ${payload.provider}`);
+			return reply.status(201).send({ userId: user.id, login: user.login, mail: user.mail, profile_picture: user.profile_picture, provider: user.provider});
 
 		} catch (err) {
 			console.log(err);

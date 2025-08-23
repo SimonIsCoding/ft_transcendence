@@ -57,8 +57,10 @@ export async function loadExistingProfilePicture(): Promise<void>
 			return; // not connected
 
 		const data = await res.json();
-		if (data && data.user && data.user.profile_picture)
+		console.log(`data.user.provider = ${data.user.provider}`);
+		if (data && data.user && data.user.profile_picture && data.user.provider !== 'google')
 		{
+			console.log("provider not google");
 			preview.src = `https://localhost:4443/${data.user.profile_picture}`;
 			preview.classList.remove('hidden');
 			previewEdit.src = `https://localhost:4443/${data.user.profile_picture}`;

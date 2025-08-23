@@ -72,6 +72,7 @@ async function handleCredentialResponse(response: any)
 	});
 	const data = await res.json();
 	console.log("Internal JWT:", data.success);
+	console.log(`Gprovider = ${data.provider}`);
 	if (!data.success)
 		showErrorPopup("Google SignIn failed", "popup");
 	getGoogleProfile();
@@ -92,9 +93,12 @@ async function getGoogleProfile()
 
 	const data = await res.json();
 	console.log(`data = ${data}`);
+	console.log(`data.provider = ${data.provider}`);
 	if (res.status === 201)
 	{
+		// console.log("in res.status === 201, data.provider =", data.provider );
 		console.log(`data.name = ${data.login}, data.userId = ${data.userId}`);
+
 		handleSuccessfulLogin(data.login, data.userId);
 	}
 	console.log("Protected data:", data);
