@@ -74,7 +74,7 @@ export async function googleSessionRoute(fastify)
 			console.log(`payload.provider = ${payload.provider}`);
 
 			// const db = await dbPromise;
-			const user = db.prepare("SELECT * FROM users WHERE mail = ?").get(payload.email);
+			let user = db.prepare("SELECT * FROM users WHERE mail = ?").get(payload.email);
 			console.log("user = ", user);
 			if (!user)
 			{
@@ -82,6 +82,7 @@ export async function googleSessionRoute(fastify)
 				// Créer l'utilisateur si nouveau
 				db.prepare("INSERT INTO users (login, mail, profile_picture, provider) VALUES (?, ?, ?, ?)").run(payload.name, payload.email, payload.picture, payload.provider);
 				console.log("not user and run on db");
+				user = db.prepare("SELECT * FROM users WHERE mail = ?").get(payload.email);
 			}
 
 			// ⬇️ Accès accordé
