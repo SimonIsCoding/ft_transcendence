@@ -1,0 +1,6 @@
+http.host: ${http.host}
+xpack.monitoring.elasticsearch.hosts:
+- http://elasticsearch:9200
+xpack.monitoring.elasticsearch.password: ${XPACK_MONITORING_ELASTICSEARCH_PASSWORD}
+xpack.monitoring.elasticsearch.username: ${XPACK_MONITORING_ELASTICSEARCH_USERNAME}
+xpack.monitoring.enabled: ${XPACK_MONITORING_ENABLED}
