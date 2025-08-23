@@ -1,8 +1,8 @@
 import { VirtualCanvas } from '../models/VirtualCanvas';
 import { Ball } from '../models/Ball';
 import { Paddle } from '../models/Paddle';
-import { GameSounds } from '../models/GameSounds';
 import { GAME_CONFIG } from '../config';
+//import { GameSounds } from '../models/GameSounds';
 
 class Game {
   private canvas!: HTMLCanvasElement;
@@ -16,14 +16,33 @@ class Game {
   private scorePlayer2 = 0;
   private keysPressed: Record<string, boolean> = {};
   private showCollisionZones = false;
+  private maxPoints: number = 11;
+  private onFinishCallback: ((winner: string) => void) | null = null;
+  private player1Name: string = "";
+  private player2Name: string = "";
 
-  init() {
+  init(player1Alias = "Jugador 1", player2Alias = "Jugador 2", onFinish?: (winner: string) => void) {
+    this.player1Name = player1Alias;
+    this.player2Name = player2Alias;
+    console.log(this.player1Name)
+    console.log(this.player2Name)
+    this.onFinishCallback = onFinish ?? null;
     this.canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
     this.ctx = this.canvas.getContext('2d')!;
     this.resizeCanvas();
-	GameSounds.init();
+//	GameSounds.init();
     window.addEventListener('resize', () => this.resizeCanvas());
     this.startLoop();
+  }
+
+  public setPlayersAndCallback(player1Alias: string, player2Alias: string, onFinish?: (winner: string) => void) {
+    this.player1Name = player1Alias;
+    this.player2Name = player2Alias;
+    this.onFinishCallback = onFinish ?? null;
+    // Si necesitas reiniciar solo el marcador y la bola, hazlo aquí:
+    this.scorePlayer1 = 0;
+    this.scorePlayer2 = 0;
+    // ...y cualquier otro estado del juego que quieras resetear
   }
 
   private resizeCanvas() {
@@ -35,12 +54,18 @@ class Game {
     const availableHeight = parent.clientHeight - 
       (parseFloat(style.paddingTop) + parseFloat(style.paddingBottom));
 
-    this.virtualCanvas.update(availableWidth, availableHeight);
-    
-    this.canvas.width = availableWidth;
-    this.canvas.height = availableHeight;
-    this.canvas.style.width = `${availableWidth}px`;
-    this.canvas.style.height = `${availableHeight}px`;
+  // Calculate the largest size that fits in 4:3
+    const idealWidth = Math.min(availableWidth, availableHeight * 4 / 3);
+     const idealHeight = idealWidth * 3 / 4;
+
+    this.virtualCanvas.update(idealWidth, idealHeight);
+
+    this.canvas.width = Math.round(idealWidth);
+    this.canvas.height = Math.round(idealHeight);
+    this.canvas.style.width = `${idealWidth}px`;
+    this.canvas.style.height = `${idealHeight}px`;
+
+    this.virtualCanvas.update(idealWidth, idealHeight);
   }
 
   private startLoop() {
@@ -56,7 +81,7 @@ class Game {
     this.ball.move();
 
     if (this.ball.checkWallCollision()) {
-      	GameSounds.play("wall");
+ //     	GameSounds.play("wall");
     }
 
     this.checkPaddleCollision(this.leftPaddle);
@@ -77,11 +102,10 @@ class Game {
     );
 
     if (zone > 0) {
-      const angle = paddle.getDeflectionAngle(zone);
-	  GameSounds.play("paddle");
-      this.ball.handlePaddleCollision(angle, paddle === this.rightPaddle);
-      this.showCollisionZones = true;
-      setTimeout(() => this.showCollisionZones = false, 100);
+//		GameSounds.play("paddle");
+		this.ball.handlePaddleCollision(zone, paddle === this.rightPaddle);
+		this.showCollisionZones = true;
+		setTimeout(() => this.showCollisionZones = false, 100);
     }
   }
 
@@ -94,14 +118,24 @@ class Game {
       this.resetRound();
     }
 
-    if (this.scorePlayer1 >= 21 || this.scorePlayer2 >= 21) {
+    if (this.scorePlayer1 >= this.maxPoints || this.scorePlayer2 >= this.maxPoints) {
+      const winner = this.scorePlayer1 > this.scorePlayer2
+      ? this.player1Name
+      : this.player2Name;
+
+      
+
+      if (this.onFinishCallback) {
+        this.onFinishCallback(winner);
+        // alert(`${winner} ha ganado esta partida`);
+      }
       this.scorePlayer1 = 0;
       this.scorePlayer2 = 0;
     }
   }
 
   private resetRound() {
-	GameSounds.play("score");
+//	GameSounds.play("score");
     this.ball.reset();
     // this.leftPaddle.reset();
     // this.rightPaddle.reset();
@@ -134,6 +168,13 @@ class Game {
     this.ctx.lineTo(this.canvas.width / 2, this.canvas.height);
     this.ctx.stroke();
     this.ctx.setLineDash([]);
+
+//console.log({
+//    physicalCenter: this.canvas.width / 2,
+//    virtualCenter: this.virtualCanvas.toPhysicalX(this.virtualCanvas.baseWidth / 2),
+//    scaleFactor: this.virtualCanvas.scaleFactor
+//});
+
   }
 
   private drawPaddle(paddle: Paddle) {
@@ -175,19 +216,33 @@ class Game {
   }
 
   private drawScore() {
+
+    this.ctx.font = `${this.virtualCanvas.toPhysicalSize(24)}px monospace`;
+    this.ctx.fillText(
+      this.player1Name,
+      this.virtualCanvas.toPhysicalX(GAME_CONFIG.BASE_WIDTH / 4),
+      this.virtualCanvas.toPhysicalY(100)
+    );
+
+    this.ctx.fillText(
+      this.player2Name,
+      this.virtualCanvas.toPhysicalX((GAME_CONFIG.BASE_WIDTH * 3) / 4),
+      this.virtualCanvas.toPhysicalY(100)
+    );
+
     const fontSize = this.virtualCanvas.toPhysicalSize(48);
     this.ctx.font = `${fontSize}px 'DSEG7ClassicMini', monospace`;
     this.ctx.textAlign = 'center';
     this.ctx.fillStyle = 'white';
     
     this.ctx.fillText(
-      this.scorePlayer1.toString().padStart(2, '0'),
+      this.scorePlayer1.toString().padStart(2, ' '),
       this.virtualCanvas.toPhysicalX(GAME_CONFIG.BASE_WIDTH / 4),
       this.virtualCanvas.toPhysicalY(60)
     );
     
     this.ctx.fillText(
-      this.scorePlayer2.toString().padStart(2, '0'),
+      this.scorePlayer2.toString().padStart(2, ' '),
       this.virtualCanvas.toPhysicalX((GAME_CONFIG.BASE_WIDTH * 3) / 4),
       this.virtualCanvas.toPhysicalY(60)
     );
@@ -198,8 +253,17 @@ class Game {
     this.keysPressed[key] = pressed;
   }
 
-  setBallSpeed(speed: number) {
-    this.ball.speed = speed;
+  setBallSpeedMultiplier(multiplier: number) {
+    this.ball.speedMultiplier = multiplier;
+  }
+
+  setPaddleSize(size: number) {
+    this.leftPaddle.setPaddleHeight(size);
+    this.rightPaddle.setPaddleHeight(size);
+  }
+
+  setMaxPoints(points: number) {
+    this.maxPoints = points;
   }
 
   stop() {
@@ -207,15 +271,23 @@ class Game {
   }
 
   render(): string {
-  return `
-    <div class="flex items-center justify-center bg-[#fbd11b] p-2 w-full">
-      <div class="aspect-[4/3] w-full max-w-[1024px] min-w-[600px] bg-black border-4 border-white">
-        <canvas 
-          id="game-canvas" 
-          class="w-full h-full"
-        ></canvas>
+    return `
+      <div class="flex items-center justify-center w-full bg-[#fbd11b] px-4 py-2 overflow-hidden">
+        <div class="relative aspect-[4/3] w-full max-w-[1024px] min-w-[600px] flex items-center justify-center">
+  
+          <!-- Bezel Layer -->
+          <div class="absolute inset-0 rounded-[48px] bg-black/80 shadow-[inset_0_0_40px_#000000cc] z-0"
+               style="clip-path: polygon(0% 0%, 100% 0%, 95% 100%, 5% 100%);">
+          </div>
+ 
+          <!-- CRT Screen Layer -->
+          <div class="relative z-10 w-[90%] aspect-[4/3] rounded-[24px] bg-[#111] shadow-[inset_0_0_30px_#444] flex justify-center items-center">
+    		<canvas 
+      			id="game-canvas"
+      			class="w-full h-full block rounded-[20px]"
+    		></canvas>
+	 </div> 
       </div>
-    </div>
     `;
   }
 }
@@ -225,9 +297,20 @@ const gameInstance = new Game();
 
 export const GameView = {
   renderGameCanvas: () => gameInstance.render(),
-  initGameCanvas: () => gameInstance.init(),
+  initGameCanvas: (player1Alias?: string,
+    player2Alias?: string,
+    onFinish?: (winner: string) => void) => gameInstance.init(player1Alias, player2Alias, onFinish),
   stop: () => gameInstance.stop(),
-  setBallSpeed: (speed: number) => gameInstance.setBallSpeed(speed),
+  setBallSpeedMultiplier: (multiplier: number) => gameInstance.setBallSpeedMultiplier(multiplier),
+  setPaddleSize: (size: number) => gameInstance.setPaddleSize(size),
+  setPlayersAndCallback: (player1Alias: string, player2Alias: string, onFinish?: (winner: string) => void) =>
+    gameInstance.setPlayersAndCallback(player1Alias, player2Alias, onFinish),
+  setMaxPoints: (points: number) => gameInstance.setMaxPoints(points),
+  setPlayerType(playerId: string, type: 'me' | 'alias' | 'remote' | 'ia'): void {
+    // Implementation here
+    console.log(`Player ${playerId} set to ${type}`);
+    // Update your game state accordingly
+  },
   handleKeyDown: (key: string) => gameInstance.setKey(key, true),
   handleKeyUp: (key: string) => gameInstance.setKey(key, false)
 };

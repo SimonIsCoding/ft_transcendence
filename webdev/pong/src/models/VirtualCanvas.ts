@@ -3,7 +3,7 @@ import { GAME_CONFIG } from '../config';
 export class VirtualCanvas {
     private physicalWidth: number = 0;
     private physicalHeight: number = 0;
-    private scaleFactor: number = 1;
+    public scaleFactor: number = 1;
     
     // Base (virtual) dimensions - 1024x768 for Pong
     readonly baseWidth: number = GAME_CONFIG.BASE_WIDTH;

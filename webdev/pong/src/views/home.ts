@@ -1,12 +1,13 @@
-import { AuthView } from './authView';
-import { GameView } from './game';
-import { SettingsView } from './settings';
-import { authService } from '../services/authService';
-import { gameController } from '../controllers/gameController';
-import { authController } from '../controllers/authController';
+import { playButton } from "./playButton";
+import { handleSidebar } from "./sidebar/sidebarBehavior";
+import { oneVsOneArea } from "./OneVsOneArea";
+import { oneVsAIArea } from "./OneVsOneArea";
 
 interface User {
-  email: string;
+  login: string;
+  password: string;
+  mail: string;
+  photo: string,
   token: string;
 }
 
@@ -15,49 +16,26 @@ export const HomeView = {
   isLogin: true,
 
  render(): string {
-  return `
-    <div class="flex flex-col min-h-screen bg-[#fbd11b] text-black">
+	return `
+	<div class="w-screen h-screen flex bg-[#fbd11b] overflow-hidden">
+		
+		<div id="popup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50">
+		</div>
 
-      <!-- Header with Pong Logo -->
-      <header class="flex justify-center items-center h-24 bg-[#fbd11b]">
-        <img src="/pong-logo.png" alt="PONG Logo" class="h-16">
-      </header>
+		<div id="sidebar" class="bg-[#fbd11b] h-screen flex flex-col overflow-hidden transition-all duration-500 ease-in-out w-[64px]">
+		</div>
 
-      <!-- Game Canvas Area -->
-	<main class="flex-1 flex items-center justify-center bg-[#fbd11b] overflow-y-auto min-h-[450px]">
-        ${GameView.renderGameCanvas()}
-      </main>
-
-      <!-- Control Panel -->
-      <footer class="bg-[#fbd11b] p-4">
-        ${SettingsView.renderGameSettings()}
-      </footer>
+      ${playButton.render()}
+      ${oneVsOneArea.render()}
+      ${oneVsAIArea.render()}
 
     </div>
-    `;
+  `;
   },
 
-
-  renderAuth(): string {
-    const user = authService.getCurrentUser(); // Use service instead of direct localStorage
-    return user 
-      ? AuthView.renderProfile(user.email)
-      : AuthView.renderAuthForm(this.isLogin);
-  },
-
-  init(): void {
-    this.currentUser = authService.getCurrentUser();
-    GameView.initGameCanvas();
-    gameController.init();
-
-    authController.init();
-
-	SettingsView.initSettings();
-
-    // Add this if you need to re-render when auth state changes
-    authService.onAuthStateChanged(() => {
-      this.currentUser = authService.getCurrentUser();
-      document.getElementById('auth-container')!.innerHTML = this.renderAuth();
-    });
+  async init(): Promise<void>
+  {
+	await handleSidebar();
+	playButton.init();
   }
 };

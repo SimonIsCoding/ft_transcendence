@@ -1,74 +1,98 @@
 import { HomeView } from './views/home';
-import { DashboardView } from './views/dashboard.ts';
-import { LoginView } from './views/login.ts';
+import { loginView } from './views/loginView';
+import { registerView } from './views/registerView';
+import { GameView } from './views/game';
+import { gameController } from './controllers/gameController';
+// import { TournamentView } from './views/TournamentView.ts';
+import { TournamentController } from './controllers/TournamentController.ts';
+import { TournamentModel } from './models/TournamentModel.ts';
+
+interface User {
+  login: string;
+  password: string;
+  mail: string;
+  photo: string;
+  token: string;
+}
 
 export class Router {
   private static app = document.getElementById('app');
+  public static currentUser: User | null;
 
-  public static navigate(page: 'home' | 'dashboard' | 'login'): void {
+  public static navigate(
+    page: 'home' | 'login' | 'register' | 'game' | 'tournament',
+    addToHistory = true
+  ): void {
     if (!this.app) {
       console.error('App container not found');
       return;
     }
 
-    // Clear previous view
-    this.app.innerHTML = '';
+  // Handle route protection + rendering
+  //const gameArea = document.getElementById('gameArea') as HTMLDivElement | null;
+  switch (page) {
+    case 'home':
+      this.app.innerHTML = HomeView.render();
+      HomeView.init();
+      break;
 
-    // Handle route protection
-    if (page === 'dashboard' && !this.isAuthenticated()) {
-      console.warn('Redirecting to home: not authenticated');
-      return this.navigate('home');
-    }
-
-    switch (page) {
-      case 'home':
-        if (this.isAuthenticated()) {
-          return this.navigate('dashboard'); // Redirect if already logged in
-        }
-        this.app.innerHTML = HomeView.render();
-		HomeView.init();
+      case 'login':
+        this.app.innerHTML = loginView.render();
+        loginView.init();
+        break;
+      
+      case 'register':
+        this.app.innerHTML = registerView.render();
+        registerView.init();
         break;
 
-      case 'dashboard':
-        const dashboard = new DashboardView();
-        dashboard.initialize();
-        break;
+	case 'game':
+	  this.app.innerHTML = GameView.renderGameCanvas();
+	  GameView.initGameCanvas();
+	  gameController.init();
+      break;
 
-	  case 'login':
-        this.app.innerHTML = LoginView.render();
-        LoginView.init();
-        break;
-    }
+    case 'tournament':
+      this.app.innerHTML = GameView.renderGameCanvas();
+      console.log('antes de iniciar el juego')
+      GameView.initGameCanvas();
+      console.log('despues de iniciar el juego')
+      const controller = new TournamentController(new TournamentModel());
+      controller.iniciarTorneo();
+      gameController.init();
+      // this.app.innerHTML = TournamentView.render();
+      // TournamentView.init();
+      break;
+  }
+    
 
-    // Update browser history
+  if (addToHistory)
     history.pushState({}, '', page === 'home' ? '/' : `/${page}`);
-  }
-
-  private static isAuthenticated(): boolean {
-    return localStorage.getItem('authToken') !== null;
-  }
+}
 
   public static init(): void {
     // Handle initial load
     window.addEventListener('load', () => {
       const path = window.location.pathname;
 	  this.navigate(
-	    path.includes('dashboard') ? 'dashboard' :
-	    path.includes('login') ? 'login' :
-	    'home'
-	  );
-
+	  path.includes('login') ? 'login' :
+	  path.includes('register') ? 'register' :
+	  path.includes('game') ? 'game' :
+	  path.includes('tournament') ? 'tournament' :
+	  'home',
+	  false);
     });
 
     // Handle back/forward navigation
     window.addEventListener('popstate', () => {
       const path = window.location.pathname;
 	  this.navigate(
-	  path.includes('dashboard') ? 'dashboard' :
 	  path.includes('login') ? 'login' :
-	  'home'
-	  );
-
+	  path.includes('register') ? 'register' :
+	  path.includes('game') ? 'game' :
+	  path.includes('tournament') ? 'tournament' :
+	  'home' ,
+	  false);
     });
   }
 }
