@@ -24,12 +24,15 @@ export function setupPasswordToggle(passwordId: string, toggleBtnId: string, eye
 	});
 }
 
-export function showSuccessPopup(message: string, duration: number = 3500, id: string): void
+export async function showSuccessPopup(message: string, duration: number = 3500, id: string)
 {
 	const popup = document.getElementById(id);
 	if (!popup)
 		return;
-	
+
+	popup.classList.remove("bg-red-600");
+	popup.classList.add("bg-green-600");
+
 	popup.textContent = message;
 	popup.classList.remove("hidden");
 
@@ -71,3 +74,9 @@ export async function receiveProfilePicture(file: File): Promise<void>
   }
 }
 
+export async function getCurrentUser()
+{
+	const res = await fetch("/api/auth/info");
+	const data = await res.json();
+	return data.user;
+}
