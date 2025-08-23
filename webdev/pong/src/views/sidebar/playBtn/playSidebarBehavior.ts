@@ -79,14 +79,16 @@ export function tournamentAreaInit()
 	
 	const tournamentBtn = document.getElementById("tournamentBtn");
 	const gameArea = document.getElementById("gameArea");
-	const tournamentArea = document.getElementById("tournamentArea");
+	const tournamentArea = document.getElementById("");
 	const oneVsOneArea = document.getElementById("oneVsOneArea");
 	const oneVsAIArea = document.getElementById("oneVsAIArea");
+	const esquemaTorneo = document.getElementById("esquemaTorneo");
 	tournamentBtn?.addEventListener('click', () => {
 		gameArea?.classList.add('hidden');
 		oneVsOneArea?.classList.add('hidden');
 		oneVsAIArea?.classList.add('hidden');
 		tournamentArea?.classList.remove('hidden');
+		esquemaTorneo?.classList.remove('hidden');
 	});
 }
 
@@ -97,11 +99,13 @@ export function oneVsAIAreaInit()
 	const oneVsAIArea = document.getElementById("oneVsAIArea");
 	const oneVsOneArea = document.getElementById("oneVsOneArea");
 	const tournamentArea = document.getElementById("tournamentArea");
+	const esquemaTorneo = document.getElementById("esquemaTorneo");
 	oneVsAIBtn?.addEventListener('click', () => {
 		gameArea?.classList.add('hidden');
 		oneVsOneArea?.classList.add('hidden');
 		oneVsAIArea?.classList.remove('hidden');
 		tournamentArea?.classList.add('hidden');
+		esquemaTorneo?.classList.add('hidden');
 	});
 	document.getElementById("swapAIBtn")?.addEventListener("click", () => {
 		swapElements("player1VSAI", "AIPlayer");
