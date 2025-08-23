@@ -69,7 +69,7 @@ export async function loginRoute(fastify) {
     if (!user) return reply.code(404).send({ error: 'User not found' });
   
     // 2. Determine verification status
-    const is2FAVerified = process.env.ENABLE_2FA === 'true' 
+    const is2FAVerified = process.env.ENABLE_2FA === 'true'
       ? request.cookies.auth_phase === '2fa_verified' // Check phase if 2FA enabled
       : true; // Auto-verify if 2FA disabled
   

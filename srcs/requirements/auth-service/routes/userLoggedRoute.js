@@ -8,7 +8,11 @@ export async function statusRoute(fastify)
       const token = request.cookies.auth_token;
       if (!token) throw new Error('Missing token');
       
+	  console.log(`token = ${token}`);
       const decoded = await request.jwtVerify(token);
+	  console.log(`decoded = ${decoded}`);
+	  console.log(`decoded.userId = ${decoded.userId}`);
+	  console.log(`decoded.sessionToken = ${decoded.sessionToken}`);
       if (!decoded.userId || !decoded.sessionToken)
 		throw new Error('Invalid payload');
 
