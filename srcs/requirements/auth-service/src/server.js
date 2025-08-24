@@ -20,7 +20,7 @@ import { eraseAccountRoute } from '../routes/eraseAccountRoute.js';
 import { countTotalUsers, requestFriendExistsRoute, getFriendsListRoute, getUserByIdRoute, randomEligibleOtherUserRoute, sendFriendRequestRoute, updateFriendshipStatusRoute, FriendsRoute, invitationReceivedRoute } from '../routes/manageFriends.js';
 import { infoUserRoute } from '../routes/infoUserRoute.js';
 import {deleteExpiredSessions} from '../utils/sessionTokens.js';
-
+import { googleRoute, googleSessionRoute } from '../routes/google.js';
 
 // Load environment variables
 dotenv.config();
@@ -76,6 +76,8 @@ app.register(updateFriendshipStatusRoute);
 app.register(getUserByIdRoute);
 app.register(randomEligibleOtherUserRoute);
 app.register(logoutRoute);
+app.register(googleRoute);
+app.register(googleSessionRoute);
 
 // --- Cleanup expired sessions daily ---
 setInterval(() => {

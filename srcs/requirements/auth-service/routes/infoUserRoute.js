@@ -23,7 +23,7 @@ export async function infoUserRoute(fastify) {
 
 	// 3. Fetch complete user data from database
     const stmt = db.prepare(`
-      SELECT id, login, mail, profile_picture 
+      SELECT id, login, mail, profile_picture, provider
       FROM users 
       WHERE id = ?
     `);
