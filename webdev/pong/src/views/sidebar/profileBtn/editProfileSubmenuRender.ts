@@ -11,7 +11,7 @@ export function editProfileSubmenuRender()
 		<p id="editProfileSubmenuName" class="font-bold text-center pt-5">Edit Profile</p>
 		<hr class="border-t-1.5 border-black w-full" />
 				<input type="file" id="uploadProfilePictureInput" accept="image/*" class="hidden">
-		<button id="uploadPictureBtnEditProfile" class="relative w-24 h-24 bg-black rounded-full flex items-center justify-center border border-transparent hover:border-black group hover:bg-[#fbd11b] transition">
+		<button id="uploadPictureBtnEditProfile" class="relative w-24 h-24 bg-black rounded-full flex items-center justify-center border border-black hover:border-black group hover:bg-[#fbd11b] transition">
 			<svg id="uploadIconEditProfile" xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-[#fbd11b] group-hover:text-black transition" fill="currentColor" viewBox="0 0 24 24">
 				<path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
 			</svg>
