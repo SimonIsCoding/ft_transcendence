@@ -15,9 +15,7 @@ export async function reloadUserInfo(): Promise<void>
 			email: ${data.user.mail},
 			profile_picture: ${data.user.profile_picture}
 		`)
-
 		document.getElementById("mailInProfileSubmenu")!.textContent = data.user.mail;
-		// you have to reload the mail in Friends list as well 
 	}
 	catch (err)
 	{
