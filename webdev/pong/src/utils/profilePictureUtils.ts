@@ -74,8 +74,8 @@ export async function loadExistingProfilePicture(): Promise<void>
 		}
 		else // to load personal pic
 		{
-			console.log("entered in else");
-			console.log(`data.user.profile_picture = ${data.user.profile_picture}`);
+			// console.log("entered in else");
+			// console.log(`data.user.profile_picture = ${data.user.profile_picture}`);
 			editProfileChangePasswordMail.classList.add('hidden');
 			preview.src = data.user.profile_picture;
 			preview.classList.remove("hidden");
