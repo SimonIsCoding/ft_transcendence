@@ -98,7 +98,7 @@ export async function initLogin() {
   });
 }
 
-async function handleSuccessfulLogin(username: string, userId: string): Promise<void> {
+export async function handleSuccessfulLogin(username: string, userId: string): Promise<void> {
   try {
     // 1. Generate token (works for both 2FA and non-2FA flows)
     const tokenRes = await fetch('/api/auth/generate-token', {

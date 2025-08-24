@@ -40,7 +40,10 @@ export const friendRequestCard = {
 	{
 		const currentUser: User = await getCurrentUser();
 		const profilePictureFrom_ = document.getElementById(`profilePictureFrom_${userRequest.login}`) as HTMLImageElement;
-		profilePictureFrom_.src = `https://localhost:4443/${userRequest.profile_picture}`;
+		if (userRequest.profile_picture && userRequest.profile_picture.startsWith("https://lh3.googleusercontent.com"))
+			profilePictureFrom_.src = `${userRequest.profile_picture}`;
+		else
+			profilePictureFrom_.src = `https://localhost:4443/${userRequest.profile_picture}`;
 
 		const requestedFriendUsername_ = document.getElementById(`requestedFriendUsername_${userRequest.login}`);
 		if (requestedFriendUsername_)
@@ -86,7 +89,10 @@ export const friendsCard = {
 	const friendMail = document.getElementById(`friendMail_${currentUser.login}`);
 	// const friendStatus = document.getElementById(`friendsStatus_${currentUser.login}`);
 	// if (friendImg)
-	friendImg.src = `https://localhost:4443/${currentUser.profile_picture}`;
+	if (currentUser.profile_picture && currentUser.profile_picture.startsWith("https://lh3.googleusercontent.com"))
+		friendImg.src = `${currentUser.profile_picture}`;
+	else
+		friendImg.src = `https://localhost:4443/${currentUser.profile_picture}`;
 	friendUsername!.textContent = currentUser.login;
 	friendMail!.textContent = currentUser.mail;
   }
@@ -120,8 +126,10 @@ export const othersUsersCard = {
 		othersUsersUsername.textContent = otherUser.login;
 
 	const othersUsersPhoto = document.getElementById(`othersUsersPhoto_${otherUser.login}`) as HTMLImageElement;
-	if (othersUsersPhoto)
-  		othersUsersPhoto.src = `https://localhost:4443/${otherUser.profile_picture}`;
+	if (otherUser.profile_picture && otherUser.profile_picture.startsWith("https://lh3.googleusercontent.com"))
+			othersUsersPhoto.src = `${otherUser.profile_picture}`;
+		else
+			othersUsersPhoto.src = `https://localhost:4443/${otherUser.profile_picture}`;
 	
 	const addFriendBtn = document.getElementById(`addFriendBtn_${otherUser.login}`);
 	const othersUsersCard = document.getElementById(`othersUsers_${otherUser.login}_card`);

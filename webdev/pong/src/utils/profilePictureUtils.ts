@@ -46,6 +46,10 @@ export async function loadExistingProfilePicture(): Promise<void>
 	const preview = document.getElementById('previewProfilePicture') as HTMLImageElement;
 	const previewEdit = document.getElementById('previewProfilePictureEditProfile') as HTMLImageElement;
 	const uploadIcon = document.getElementById('uploadIcon')!;
+	const editProfileChangePasswordMail = document.getElementById('editProfileChangePasswordMail')!;
+	const uploadPictureProfileSubmenu = document.getElementById("uploadPictureProfileSubmenu")!;
+	const uploadIconEditProfile = document.getElementById('uploadIconEditProfile')!;
+	const uploadPictureBtnEditProfile = document.getElementById("uploadPictureBtnEditProfile")!;
 
 	try
 	{
@@ -57,20 +61,30 @@ export async function loadExistingProfilePicture(): Promise<void>
 			return; // not connected
 
 		const data = await res.json();
-		if (data && data.user && data.user.profile_picture)
+		console.log(`data.user.provider = ${data.user.provider}`);
+		if (data && data.user && data.user.profile_picture && data.user.provider !== 'google')
 		{
+			console.log("provider not google");
 			preview.src = `https://localhost:4443/${data.user.profile_picture}`;
 			preview.classList.remove('hidden');
 			previewEdit.src = `https://localhost:4443/${data.user.profile_picture}`;
 			previewEdit.classList.remove('hidden');
 			uploadIcon.classList.add('hidden');
+			editProfileChangePasswordMail.classList.remove('hidden');
 		}
 		else // to load personal pic
 		{
+			// console.log("entered in else");
+			// console.log(`data.user.profile_picture = ${data.user.profile_picture}`);
+			editProfileChangePasswordMail.classList.add('hidden');
 			preview.src = data.user.profile_picture;
 			preview.classList.remove("hidden");
 			previewEdit.src = data.user.profile_picture;
 			previewEdit.classList.remove("hidden");
+			uploadIcon.classList.add("hidden");
+			uploadPictureProfileSubmenu.classList.remove("bg-black");
+			uploadIconEditProfile.classList.add("hidden");
+			uploadPictureBtnEditProfile.classList.remove("bg-black");
 		}
 	}
 	catch (err)
