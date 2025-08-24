@@ -14,20 +14,20 @@ interface User {
 export const friendRequestCard = {
 	render(userRequest: User): string {
 	return `
-	<div id="newRequestsFrom_${userRequest.login}" class="flex flex-col rounded-2xl w-full space-y-1 shadow-base shadow-gray-600 pr-5 pl-5 pt-2 pb-2 bg-black mb-2">
+	<div id="newRequestsFrom_${userRequest.id}" class="flex flex-col rounded-2xl w-full space-y-1 shadow-base shadow-gray-600 pr-5 pl-5 pt-2 pb-2 bg-black mb-2">
 		<div class="flex items-center space-x-2">
-			<img id="profilePictureFrom_${userRequest.login}" class="w-10 h-10 rounded-full object-cover border border-black bg-[#fbd11b] text-black flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md" />
+			<img id="profilePictureFrom_${userRequest.id}" class="w-10 h-10 rounded-full object-cover border border-black bg-[#fbd11b] text-black flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md" />
 			
 			<div class="flex flex-col justify-center">
-				<p id="requestedFriendUsername_${userRequest.login}" class="font-bold text-sm text-[#fbd11b]">FriendUsername</p>
+				<p id="requestedFriendUsername_${userRequest.id}" class="font-bold text-sm text-[#fbd11b]">FriendUsername</p>
 			</div>
 		</div>
 
 		<div class="flex justify-center space-x-2">
-			<button id="acceptBtn_${userRequest.login}" class="px-2 py-1 rounded-full border border-[#fbd11b] text-[#fbd11b] bg-black hover:bg-[#fbd11b] hover:text-black transition font-bold text-sm w-40">
+			<button id="acceptBtn_${userRequest.id}" class="px-2 py-1 rounded-full border border-[#fbd11b] text-[#fbd11b] bg-black hover:bg-[#fbd11b] hover:text-black transition font-bold text-sm w-40">
 				Accept
 			</button>
-			<button id="ignoreBtn_${userRequest.login}" class="px-2 py-1 rounded-full border border-[#fbd11b] text-[#fbd11b] bg-black hover:bg-[#fbd11b] hover:text-black transition font-bold text-sm w-30">
+			<button id="ignoreBtn_${userRequest.id}" class="px-2 py-1 rounded-full border border-[#fbd11b] text-[#fbd11b] bg-black hover:bg-[#fbd11b] hover:text-black transition font-bold text-sm w-30">
 				Ignore
 			</button>
 		</div>
@@ -39,19 +39,19 @@ export const friendRequestCard = {
 	if (userRequest)
 	{
 		const currentUser: User = await getCurrentUser();
-		const profilePictureFrom_ = document.getElementById(`profilePictureFrom_${userRequest.login}`) as HTMLImageElement;
+		const profilePictureFrom_ = document.getElementById(`profilePictureFrom_${userRequest.id}`) as HTMLImageElement;
 		if (userRequest.profile_picture && userRequest.profile_picture.startsWith("https://lh3.googleusercontent.com"))
 			profilePictureFrom_.src = `${userRequest.profile_picture}`;
 		else
 			profilePictureFrom_.src = `https://localhost:4443/${userRequest.profile_picture}`;
 
-		const requestedFriendUsername_ = document.getElementById(`requestedFriendUsername_${userRequest.login}`);
+		const requestedFriendUsername_ = document.getElementById(`requestedFriendUsername_${userRequest.id}`);
 		if (requestedFriendUsername_)
 			requestedFriendUsername_.textContent = userRequest.login;
 
-		const acceptBtn = document.getElementById(`acceptBtn_${userRequest.login}`);
-		const ignoreBtn = document.getElementById(`ignoreBtn_${userRequest.login}`);
-		const newRequests = document.getElementById(`newRequestsFrom_${userRequest.login}`);
+		const acceptBtn = document.getElementById(`acceptBtn_${userRequest.id}`);
+		const ignoreBtn = document.getElementById(`ignoreBtn_${userRequest.id}`);
+		const newRequests = document.getElementById(`newRequestsFrom_${userRequest.id}`);
 		acceptBtn?.addEventListener('click', async () => {
 			updateFriendshipStatus(currentUser, userRequest, true);
 			fadeOutAndRemove(newRequests);
@@ -67,15 +67,15 @@ export const friendRequestCard = {
 export const friendsCard = {
 	render(currentUser: User): string {
 	return `
-	<div id="friendBox_${currentUser.login}" class="flex flex-col rounded-2xl w-full space-y-5 shadow-base shadow-gray-600 pr-5 pl-5 pt-2 pb-2 bg-black mb-2">
+	<div id="friendBox_${currentUser.id}" class="flex flex-col rounded-2xl w-full space-y-5 shadow-base shadow-gray-600 pr-5 pl-5 pt-2 pb-2 bg-black mb-2">
 		<div class="flex items-center space-x-2">
-			<img id="friendProfilePic_${currentUser.login}" class="w-10 h-10 rounded-full object-cover border border-black bg-[#fbd11b] text-black flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md" />
+			<img id="friendProfilePic_${currentUser.id}" class="w-10 h-10 rounded-full object-cover border border-black bg-[#fbd11b] text-black flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md" />
 			<div class="space-x-2">
-				<p id="friendUsername_${currentUser.login}" class="font-bold text-sm text-[#fbd11b]">FriendUsername</p>
-				<p id="friendMail_${currentUser.login}" class="text-sm text-[#fbd11b]">email@exemple.com</p>
+				<p id="friendUsername_${currentUser.id}" class="font-bold text-sm text-[#fbd11b]">FriendUsername</p>
+				<p id="friendMail_${currentUser.id}" class="text-sm text-[#fbd11b]">email@exemple.com</p>
 				<hr class="w-55"/>
 			</div>
-			<div id="friendsStatus_${currentUser.login}" class="top-1 right-1 w-3 h-3 bg-red-500 rounded-full border border-black"><button id="Offline" title="Offline"></button></div>
+			<div id="friendsStatus_${currentUser.id}" class="top-1 right-1 w-3 h-3 bg-red-500 rounded-full border border-black"><button id="Offline" title="Offline"></button></div>
 		</div>
 	</div>
   `;
@@ -83,12 +83,11 @@ export const friendsCard = {
 
   async init(currentUser: User)
   {
-	// const friendBox = document.getElementById(`friendBox_${currentUser.login}`);
-	const friendImg = document.getElementById(`friendProfilePic_${currentUser.login}`) as HTMLImageElement;
-	const friendUsername = document.getElementById(`friendUsername_${currentUser.login}`);
-	const friendMail = document.getElementById(`friendMail_${currentUser.login}`);
-	// const friendStatus = document.getElementById(`friendsStatus_${currentUser.login}`);
-	// if (friendImg)
+	// const friendBox = document.getElementById(`friendBox_${currentUser.id}`);
+	const friendImg = document.getElementById(`friendProfilePic_${currentUser.id}`) as HTMLImageElement;
+	const friendUsername = document.getElementById(`friendUsername_${currentUser.id}`);
+	const friendMail = document.getElementById(`friendMail_${currentUser.id}`);
+	// const friendStatus = document.getElementById(`friendsStatus_${currentUser.id}`);
 	if (currentUser.profile_picture && currentUser.profile_picture.startsWith("https://lh3.googleusercontent.com"))
 		friendImg.src = `${currentUser.profile_picture}`;
 	else
@@ -121,18 +120,18 @@ export const othersUsersCard = {
 
   async init(otherUser: User): Promise<void>
   {
-	const othersUsersUsername = document.getElementById(`othersUsersUsername_${otherUser.login}`);
+	const othersUsersUsername = document.getElementById(`othersUsersUsername_${otherUser.id}`);
 	if (othersUsersUsername)
 		othersUsersUsername.textContent = otherUser.login;
 
-	const othersUsersPhoto = document.getElementById(`othersUsersPhoto_${otherUser.login}`) as HTMLImageElement;
+	const othersUsersPhoto = document.getElementById(`othersUsersPhoto_${otherUser.id}`) as HTMLImageElement;
 	if (otherUser.profile_picture && otherUser.profile_picture.startsWith("https://lh3.googleusercontent.com"))
 			othersUsersPhoto.src = `${otherUser.profile_picture}`;
 		else
 			othersUsersPhoto.src = `https://localhost:4443/${otherUser.profile_picture}`;
 	
-	const addFriendBtn = document.getElementById(`addFriendBtn_${otherUser.login}`);
-	const othersUsersCard = document.getElementById(`othersUsers_${otherUser.login}_card`);
+	const addFriendBtn = document.getElementById(`addFriendBtn_${otherUser.id}`);
+	const othersUsersCard = document.getElementById(`othersUsers_${otherUser.id}_card`);
 	addFriendBtn?.addEventListener('click', async () => {
 		fadeOutAndRemove(othersUsersCard);
 		showSuccessPopup("Invitation sent", 3500, "popup");
