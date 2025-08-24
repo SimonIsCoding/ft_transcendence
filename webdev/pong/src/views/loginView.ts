@@ -28,7 +28,7 @@ export const loginView = {
 				</div>
 				<button id="connectionBtn" class="w-80 inline-block text-white font-bold text-lg border border-[#fbd11b] rounded-lg p-2.75">Log in</button>
 				<button id="backToRegister" class="text-white px-2 text-xl underline">Click here to create an account</button>
-				<button id="googleConnectionBtn" class="w-80 inline-block text-white font-bold text-lg border border-[#fbd11b] rounded-lg p-2.75">Google Sign In</button>
+				<button id="googleConnectionBtn"></button>
 			</div>
 			<div id="twofa-container" class="hidden flex-col justify-center items-center w-full space-y-10"><!-- Will be populated by TwoFAController --></div>
 		</main>
@@ -57,7 +57,13 @@ function initGoogleSignIn()
 
 	google.accounts.id.renderButton(
 		document.getElementById("googleConnectionBtn"),
-		{ theme: "outline", size: "large" }
+		{
+			theme: "outline",
+			size: "large",
+			text: "signin_with",
+			shape: "rectangular", // or pill
+			width: 315
+		}
 	);
 }
 
