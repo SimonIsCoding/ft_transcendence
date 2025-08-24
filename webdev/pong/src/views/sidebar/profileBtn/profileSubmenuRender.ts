@@ -11,9 +11,9 @@ export function profileSubmenuRender():string
 			</svg>
 			<img id="previewProfilePicture" class="absolute w-24 h-24 rounded-full object-cover hidden" />
 		</div>
-		<div class="flex flex-col items-center space-y-1">
+		<div class="flex flex-col items-center space-y-1 mx-2 px-2 w-full">
 			<p id="profileName" class="font-bold">Profile Name</p>
-			<p id="mailInProfileSubmenu" class="">contact@mail.com</p>
+			<p id="mailInProfileSubmenu" class="w-[99%] text-center overflow-hidden text-ellipsis whitespace-nowrap min-w-0">contact@mail.com</p>
 			<p id="statsInProfileSubmenu" class="text-gray-500 text-[13px] font-bold">12/15 matchs won</p>
 		</div>
 		<hr class="border-t-1 border-black w-20" />
