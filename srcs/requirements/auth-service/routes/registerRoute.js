@@ -54,13 +54,25 @@ export async function registerRoute(fastify)
 	    return reply.code(401).send({ success: false, error: "2FA not verified" });
 	  }
 
-	  const encryptedPassword = await bcrypt.hash(password, 10);
-	  const avatarPath = getRandomAvatar();
-	  db.prepare("INSERT INTO users (login, password, mail, profile_picture) VALUES (?, ?, ?, ?)")
-	    .run(login, encryptedPassword, mail, avatarPath);
+	  try {
 
-	  reply.clearCookie('pending_registration').clearCookie('auth_phase');
-	  return reply.send({ success: true, message: "User registered" });
+	    const encryptedPassword = await bcrypt.hash(password, 10);
+	    const avatarPath = getRandomAvatar();
+	    db.prepare("INSERT INTO users (login, password, mail, profile_picture) VALUES (?, ?, ?, ?)")
+	      .run(login, encryptedPassword, mail, avatarPath);
+  
+	    reply.clearCookie('pending_registration').clearCookie('auth_phase');
+	    return reply.send({ success: true, message: "User registered" });
+	  } catch (err) {
+	     // Constraint violation: e.g. duplicate login/mail
+	     if (err.code === 'SQLITE_CONSTRAINT') {
+	       return reply.code(409).send({ success: false, error: "User or mail already exists" });
+	     }
+	 
+	     // Any other db error
+	     req.log.error(err); // log for debugging
+	     return reply.code(500).send({ success: false, error: "Database error" });
+	  }
 	});
 
 }
