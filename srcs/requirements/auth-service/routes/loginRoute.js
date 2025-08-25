@@ -98,7 +98,6 @@ export async function loginRoute(fastify) {
       },
       { expiresIn: SESSION_LIFETIME }
 	);
-	console.error(`in /login token = ${token.userId} `);
   
     // 6. Set cookie
     reply

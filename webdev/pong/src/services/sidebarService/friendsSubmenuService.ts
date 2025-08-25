@@ -187,3 +187,16 @@ export async function displayFriend(i: number): Promise<User>
 	const friendId = allFriends[i].user_a_id === currentUser.id ? allFriends[i].user_b_id : allFriends[i].user_a_id;
 	return await getUserById(friendId);
 }
+
+export async function checkFriendIsConnected(userId: number)
+{
+	const res = await fetch('/api/auth/isFriendConnected', {
+		"method": "POST",
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ userId: userId }),
+		credentials: 'include'
+	})
+	const bool = await res.json();
+	console.log(`bool = ${bool.success}`);
+	return bool.success;
+}

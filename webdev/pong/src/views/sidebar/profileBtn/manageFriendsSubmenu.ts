@@ -123,7 +123,7 @@ export const manageOthersUsersCard = (() => {
 			if (randomUser) listOthersFriends.push(randomUser);
 			if (i > 0)
 			{
-				while (randomUser && listOthersFriends[0].login === listOthersFriends[1].login)
+				while (randomUser && listOthersFriends[0].id === listOthersFriends[1].id)
 				{
 					listOthersFriends.pop();
 					randomUser = await getRandomEligibleOtherUser(currentUser);
@@ -138,8 +138,9 @@ export const manageOthersUsersCard = (() => {
 			const othersUsersP = document.getElementById("othersUsersP");
 			if (randomUser && container)
 			{
-				let name: string = `othersUsers_${randomUser.login}_card`;
-				container.insertAdjacentHTML("beforeend", othersUsersCard.render(name, randomUser.login));
+				let name: string = `othersUsers_${randomUser.id}_card`;
+				let userId: string = randomUser.id.toString();
+				container.insertAdjacentHTML("beforeend", othersUsersCard.render(name, userId));
 				othersUsersCard.init(randomUser);
 				othersUsersP!.textContent = "Others Users";
 				noOtherFriend++;
