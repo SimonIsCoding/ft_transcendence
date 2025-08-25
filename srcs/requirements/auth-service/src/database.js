@@ -11,7 +11,8 @@ db.exec(`
 	password TEXT,
 	mail TEXT UNIQUE,
 	profile_picture TEXT,
-	provider TEXT DEFAULT 'local');
+	provider TEXT DEFAULT 'local'
+	);
 
 	CREATE TABLE IF NOT EXISTS friendships (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,

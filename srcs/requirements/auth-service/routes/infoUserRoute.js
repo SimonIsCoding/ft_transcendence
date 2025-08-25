@@ -4,7 +4,7 @@ import {verifyAndUpdateSession} from '../utils/sessionTokens.js';
 export async function infoUserRoute(fastify) {
  fastify.get('/info', async (request, reply) => {
   try {
-    console.log('Incoming cookies:', request.cookies); // Debug cookie reception
+    // console.log('Incoming cookies:', request.cookies); // Debug cookie reception
     const token = request.cookies.auth_token;
     if (!token) {
       console.log('No token found');

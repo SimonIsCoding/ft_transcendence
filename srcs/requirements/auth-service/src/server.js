@@ -17,7 +17,7 @@ import { statusRoute/*, currentUserInfoRoute*/ } from '../routes/userLoggedRoute
 import { editProfileRoute } from '../routes/editProfileRoute.js';
 import { eraseAccountRoute } from '../routes/eraseAccountRoute.js';
 //import { loadSecretKey } from '../utils/loadSecretKey.js';
-import { countTotalUsers, requestFriendExistsRoute, getFriendsListRoute, getUserByIdRoute, randomEligibleOtherUserRoute, sendFriendRequestRoute, updateFriendshipStatusRoute, FriendsRoute, invitationReceivedRoute } from '../routes/manageFriends.js';
+import { countTotalUsers, requestFriendExistsRoute, getFriendsListRoute, getUserByIdRoute, randomEligibleOtherUserRoute, sendFriendRequestRoute, updateFriendshipStatusRoute, FriendsRoute, invitationReceivedRoute, isFriendConnectedRoute } from '../routes/manageFriends.js';
 import { infoUserRoute } from '../routes/infoUserRoute.js';
 import {deleteExpiredSessions} from '../utils/sessionTokens.js';
 import { googleRoute, googleSessionRoute } from '../routes/google.js';
@@ -78,6 +78,7 @@ app.register(randomEligibleOtherUserRoute);
 app.register(logoutRoute);
 app.register(googleRoute);
 app.register(googleSessionRoute);
+app.register(isFriendConnectedRoute);
 
 // --- Cleanup expired sessions daily ---
 setInterval(() => {
