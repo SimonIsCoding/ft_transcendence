@@ -14,7 +14,7 @@ export const registerView = {
   
       <main id="gameArea" class="flex-1 bg-black flex items-center justify-center bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center w-full h-full">
 
-        <div id="registerForm" class="flex flex-col justify-center items-center w-full space-y-10">
+        <div id="registerForm" class="flex flex-col justify-center items-center w-full space-y-7">
 
           <div class="relative">
             <input id="newUsername" placeholder="Username" class="w-80 inline-block text-white font-bold text-lg border border-[#fbd11b] rounded-lg p-2.75"/>
@@ -47,6 +47,13 @@ export const registerView = {
 		        <path d="M12 5c-7.633 0-11 7-11 7s3.367 7 11 7 11-7 11-7-3.367-7-11-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
 		      </svg>
 		    </button>
+		  </div>
+		  <div class="w-full flex justify-center">
+				<label class="text-white font-bold text-xs text-center">
+					<input id="anonimisationCheckbox" type="checkbox" />
+					Would you like to not share your data ?<br>
+					Click <a href="" class="underline">here</a> to know more.
+				</label>
 		  </div>
           <button id="createAccountBtn" class="w-80 inline-block text-white font-bold text-lg border border-[#fbd11b] rounded-lg p-2.75">Create Account</button>
           <button id="backToLogin" class="text-white px-2 py-1 text-xl underline">Click here to go back to log in</button>
