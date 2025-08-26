@@ -1,5 +1,5 @@
 import { getCurrentUser } from '../../../utils/utils.ts';
-import { checkFriendIsConnected, sendFriendRequestOtherUser, updateFriendshipStatus } from '../../../services/sidebarService/friendsSubmenuService.ts';
+import { checkFriendIsConnected, reloadFriendshipsStatus, sendFriendRequestOtherUser, updateFriendshipStatus } from '../../../services/sidebarService/friendsSubmenuService.ts';
 import { showSuccessPopup } from '../../../utils/utils.ts';
 import { renderBackButton } from '../sidebarUtils.ts'
 
@@ -56,11 +56,13 @@ export const friendRequestCard = {
 			updateFriendshipStatus(currentUser, userRequest, true);
 			fadeOutAndRemove(newRequests);
 			//reload friendship status & everything
+			reloadFriendshipsStatus();
 		});
 			ignoreBtn?.addEventListener('click', async () => {
 			updateFriendshipStatus(currentUser, userRequest, false);
 			fadeOutAndRemove(newRequests);
 			//reload friendship status & everything
+			reloadFriendshipsStatus();
 		});
 	}
   }
@@ -85,13 +87,11 @@ export const friendsCard = {
 
   async init(friendUser: User)
   {
-	// const friendBox = document.getElementById(`friendBox_${friendUser.id}`);
 	const friendImg = document.getElementById(`friendProfilePic_${friendUser.id}`) as HTMLImageElement;
 	const friendUsername = document.getElementById(`friendUsername_${friendUser.id}`);
 	const friendMail = document.getElementById(`friendMail_${friendUser.id}`);
 	const friendStatus = document.getElementById(`friendsStatus_${friendUser.id}`);
 	const isFriendConnected = await checkFriendIsConnected(friendUser.id);
-	console.log(`isFriendConnected = ${isFriendConnected}`);
 	if (isFriendConnected)
 	{
 		friendStatus?.classList.remove("bg-red-500");
@@ -152,6 +152,7 @@ export const othersUsersCard = {
 		const currentUser:User = await getCurrentUser();
 		sendFriendRequestOtherUser(currentUser, otherUser);
 		//reload friendship status & everything
+		//wait 3500 for the popup to disappear and load another one
 	});
   }
 }

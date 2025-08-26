@@ -43,7 +43,6 @@ export async function registerRoute(fastify)
 	fastify.post('/register-end', async (req, reply) => {
 	  const pending = req.unsignCookie(req.cookies.pending_registration || '');
 	  if (!pending.valid) return reply.code(400).send({ success: false, error: "No pending registration" });
-
 	  const { login, mail } = JSON.parse(pending.value);
   	  // extract password from request body
 	  const { password } = req.body;
@@ -51,7 +50,7 @@ export async function registerRoute(fastify)
 
 	  // If 2FA required, check that auth_phase is verified
 	  if (process.env.ENABLE_2FA === 'true' && req.cookies.auth_phase !== '2fa_verified') {
-	    return reply.code(401).send({ success: false, error: "2FA not verified" });
+	    return reply.code(401).send({ success: false, error: "2FA not verified" });// if ENABLE_2FA is false then error 500 here
 	  }
 
 	  const encryptedPassword = await bcrypt.hash(password, 10);
@@ -61,6 +60,5 @@ export async function registerRoute(fastify)
 
 	  reply.clearCookie('pending_registration').clearCookie('auth_phase');
 	  return reply.send({ success: true, message: "User registered" });
-	});
-
+	})
 }
