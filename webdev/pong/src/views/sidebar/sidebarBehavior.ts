@@ -90,9 +90,7 @@ export const userLoggedSidebar = {
   {
 	setupMenuHandlers();
 	const tournamentBtn = document.getElementById('tournamentBtn');
-	tournamentBtn?.addEventListener('click', () => {
-		Router.navigate('tournament')
-	});
+	tournamentBtn?.addEventListener('click', () => { Router.navigate('tournament') });
   }
 }
 

@@ -1,4 +1,5 @@
 import { getCurrentUser } from "../../utils/utils";
+import { addFriendRequestCard, displayAllFriends } from "../../views/sidebar/profileBtn/manageFriendsSubmenu";
 
 interface User {
   id: number;
@@ -40,8 +41,6 @@ export async function sendFriendRequestOtherUser(currentUser: User, otherUser: U
 		body: JSON.stringify({ currentUser: currentUser, otherUser: otherUser }),
 		credentials: 'include'
 	})
-	// .then(res => res.json())
-	// .then(data => { return data })
 }
 
 type FriendRequest = {
@@ -128,6 +127,7 @@ export async function friendsRequest(i :number): Promise<User | null>
 	return await getUserById(allFriendsRequest[i].from_user_id);
 }
 
+//check if 2 users are friends
 export async function updateFriendshipStatus(currentUser: User, otherUser: User , status: Boolean)
 {
 	fetch('/api/auth/updateFriendshipStatus', {
@@ -136,8 +136,6 @@ export async function updateFriendshipStatus(currentUser: User, otherUser: User 
 		body: JSON.stringify({ currentUser: currentUser, otherUser: otherUser, status: status }),
 		credentials: 'include'
 	})
-	// .then(res => res.json())
-	// .then(data => { return data })
 }
 
 type FriendsConnexion = {
@@ -185,6 +183,7 @@ export async function displayFriend(i: number): Promise<User>
 	if (!allFriends || i < 0 || i >= allFriends.length)
 		throw new Error("Invalid index || no friends found");
 	const friendId = allFriends[i].user_a_id === currentUser.id ? allFriends[i].user_b_id : allFriends[i].user_a_id;
+	// checkFriendIsConnected(friendId);
 	return await getUserById(friendId);
 }
 
@@ -197,6 +196,94 @@ export async function checkFriendIsConnected(userId: number)
 		credentials: 'include'
 	})
 	const bool = await res.json();
-	console.log(`bool = ${bool.success}`);
+	// console.log(`bool = ${bool.success}`);
 	return bool.success;
 }
+
+export async function reloadFriendshipsStatus(/*currentUser: User*/)
+{
+	// reload all Friend_requests
+	const nbFriendsRequests = await howManyFriendsRequests();
+	let i: number = 0;
+	while (i < nbFriendsRequests)
+	{
+		const userToFriend: User | null = await friendsRequest(i);
+		await addFriendRequestCard(userToFriend);
+		i++;
+	}
+
+	// reload all friends
+	const nbFriends = await howManyFriends();
+	let j: number = 0;
+	while (j < nbFriends)
+	{
+		displayAllFriends(j);
+		j++;
+	}
+}
+
+// export async function reloadOtherUsersCard()
+// {
+// 	const reloadothersUsersCard = document.getElementById('othersUsersCard');
+// 	if (reloadothersUsersCard)
+// 		reloadothersUsersCard.innerHTML = '';
+// 	let i: number = 0;
+// 	let j: number = 0;
+// 	let k: number = 0;
+// 	const othersUsersDiv = document.getElementById("othersUsersDiv");
+// 		othersUsersDiv?.classList.remove("hidden");
+// 		const totalUsers = await getTotalUser();
+// 		const currentUser: User = await getCurrentUser();
+	
+// 		if (totalUsers > 1)
+// 		{
+// 			let max: number = totalUsers - 1 > 2 ? 2 : totalUsers - 1;
+			// if (totalUsers == 2)
+				// max = 1;
+// 			let randomUser: User | null;
+// 			let listOthersFriends: User[] = [];
+// 			let noOtherFriend = 0;
+// 			while (i < max)
+// 			{
+// 				randomUser = await getRandomEligibleOtherUser(currentUser);
+// 				if (randomUser) listOthersFriends.push(randomUser);
+// 				if (i > 0)
+// 				{
+// 					while (randomUser && listOthersFriends[0].id === listOthersFriends[1].id)
+// 					{
+// 						listOthersFriends.pop();
+// 						randomUser = await getRandomEligibleOtherUser(currentUser);
+// 						if (randomUser) listOthersFriends.push(randomUser);
+// 						if (j >= totalUsers)
+// 							randomUser = null;
+// 						j++;
+	
+// 					}
+// 				}
+// 				const container = document.getElementById("othersUsersCard");
+// 				const othersUsersP = document.getElementById("othersUsersP");
+// 				if (randomUser && container)
+// 				{
+// 					let name: string = `othersUsers_${randomUser.id}_card`;
+// 					let userId: string = randomUser.id.toString();
+// 					container.insertAdjacentHTML("beforeend", othersUsersCard.render(name, userId));
+// 					othersUsersCard.init(randomUser, k);
+// 					othersUsersP!.textContent = "Others Users";
+// 					noOtherFriend++;
+// 				}
+// 				else
+// 				{
+// 					if (noOtherFriend == 0)
+// 					{// change the msg bc it is a bit ugly but the logic is there
+// 						othersUsersP!.textContent = "No others users to connect with";
+// 					}
+// 				}
+// 				i++;
+// 			}
+// 		}
+// 		else
+// 		{
+// 			const othersUsersP = document.getElementById("othersUsersP");
+// 			othersUsersP!.textContent = "You are the only player registered in the database. You can't connect with no one.";
+// 		}
+// }

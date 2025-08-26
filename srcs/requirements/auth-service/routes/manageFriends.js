@@ -151,10 +151,16 @@ export async function isFriendConnectedRoute(fastify)
 {
 	fastify.post('/isFriendConnected', async (request, reply) => {
 		const { userId } = request.body;
-		const stmt = db.prepare(`SELECT user_id FROM sessions WHERE user_id = ?`).get(userId);
-		console.log("in isFriendConnected, stmt = ", JSON.stringify(stmt));
-		if (stmt)
+		const now = new Date().toISOString();
+		const session = db.prepare(`SELECT id, user_id, created_at, valid_until FROM sessions WHERE user_id = ?`).get(userId);
+		if (!session)
+			return reply.status(400).send({success: false});
+		if (now >= session.created_at && now <= session.valid_until)
 			return reply.status(200).send({success: true});
-		return reply.status(400).send({success: false});
+		else
+		{
+			db.prepare(`DELETE FROM sessions WHERE id = ?`).run(session.id);
+			return reply.status(401).send({success: false});
+		}
 	})
 }

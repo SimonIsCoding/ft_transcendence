@@ -2,6 +2,7 @@ import { getUserInfo } from '../../services/sidebarService/utilsSidebarService'
 import { playSidebarBehavior } from './playBtn/playSidebarBehavior';
 import { userChangingInfo } from './profileBtn/userChangingInfo';
 import { seeFriendsList } from './profileBtn/manageFriendsSubmenu';
+import { setupGameSettingsListeners } from '../../controllers/gameSettingsControllers';
 
 export function renderBackButton(id: string): string
 {
@@ -167,4 +168,5 @@ export function setupMenuHandlers()
 	playSidebarBehavior();
 	profileSidebarBehavior();
 	settingsSidebarBehavior();
+	setupGameSettingsListeners();
 }

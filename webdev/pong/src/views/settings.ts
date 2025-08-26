@@ -2,7 +2,7 @@ import { GameView } from './game';
 import { GameState } from '../models/GamePhase';
 import { GAME_CONFIG } from '../config';
 // import { GameSounds } from '../models/GameSounds';
-
+// do we use this file ?
 
 export const SettingsView = {
   renderGameSettings(): string {
