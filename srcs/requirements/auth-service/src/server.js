@@ -10,7 +10,7 @@ import { dirname } from 'path';
 import dotenv from 'dotenv';
 import { loginRoute } from '../routes/loginRoute.js';
 import { registerRoute } from '../routes/registerRoute.js';
-import { auth } from '../plugins/auth.js';
+import { authCheck } from '../plugins/auth.js';
 import { uploadProfilePictureRoute } from '../routes/uploadProfilePictureRoute.js';
 import { logoutRoute } from '../routes/logoutRoute.js';
 import { statusRoute/*, currentUserInfoRoute*/ } from '../routes/userLoggedRoute.js';
@@ -49,7 +49,7 @@ app.register(fastifyJwt, {
   }
 });
 
-app.decorate('auth', auth);
+app.decorate('auth', authCheck);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
