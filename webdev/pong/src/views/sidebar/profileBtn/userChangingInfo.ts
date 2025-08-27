@@ -15,19 +15,18 @@ export function userChangingInfo()
 	eraseAccount();
 }
 
-async function twofaToggle()
+function twofaToggle()
 {
-	let enabled: Boolean;
-	const value = await twofaCheckService();
-	if (value === 1)
-		enabled = true;
-	else
-		enabled = false;
 	const toggle = document.getElementById("2FAtoggleSwitch") as HTMLButtonElement;
 	const circle = toggle.querySelector("span")!;
 
-
-	toggle.addEventListener("click", () => {
+	toggle.addEventListener("click", async () => {
+		let enabled: Boolean;
+		const value = await twofaCheckService();
+		if (value === 1)
+			enabled = true;
+		else
+			enabled = false;
 		enabled = !enabled;
 
 		twofaChangeValueService();//changing value in db
@@ -46,7 +45,6 @@ async function twofaToggle()
 			//change value in db
 		}
 	});
-
 }
 
 function eraseAccount()
