@@ -72,3 +72,62 @@ export async function editProfileService()
 		reloadUserInfo()
 	}
 }
+
+export async function twofaCheckService(): Promise<number>
+{
+	try
+	{
+		const res = await fetch("/api/auth/twofaCheck", { credentials: "include" });
+		if (!res.ok)
+		{
+			console.error("Error fetching twofaCheck:", res.status);
+			return -1;
+		}
+		const data = await res.json();
+		console.log(`data.is_activated = ${data.is_activated}`);
+		//vert si activated ou gris si false
+
+		const toggle = document.getElementById("2FAtoggleSwitch") as HTMLButtonElement;
+		const circle = toggle.querySelector("span")!;
+		console.log(`in /api/auth/twofaCheck`)
+		console.log(`data.is_activated = ${data.is_activated}`)
+		if (data.is_activated === 1)
+		{
+			console.log(`entered in true`)
+			toggle.classList.remove("bg-gray-400");
+			toggle.classList.add("bg-green-500");
+			circle.classList.add("translate-x-6");
+		}
+		else
+		{
+			console.log(`entered in false`)
+			toggle.classList.remove("bg-green-500");
+			toggle.classList.add("bg-gray-400");
+			circle.classList.remove("translate-x-6");
+		}
+		return data.is_activated;
+	}
+	catch (err)
+	{
+		console.error("Network error:", err);
+		return -1;
+	}
+}
+
+export async function twofaChangeValueService(): Promise<void>
+{
+	const currentUser = await getCurrentUser();
+	const res = await fetch('/api/auth/twofaChangeValue', {
+		method: 'POST',
+		credentials: 'include',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({
+			userId: currentUser.id,
+		})
+	})
+	const backend_answer = await res.json()
+
+	if (res.status === 409)
+		showErrorPopup(backend_answer.error, "popup")
+	
+}
