@@ -10,17 +10,17 @@ import { dirname } from 'path';
 import dotenv from 'dotenv';
 import { loginRoute } from '../routes/loginRoute.js';
 import { registerRoute } from '../routes/registerRoute.js';
-import { auth } from '../plugins/auth.js';
+import { authCheck } from '../plugins/auth.js';
 import { uploadProfilePictureRoute } from '../routes/uploadProfilePictureRoute.js';
 import { logoutRoute } from '../routes/logoutRoute.js';
 import { statusRoute/*, currentUserInfoRoute*/ } from '../routes/userLoggedRoute.js';
 import { editProfileRoute } from '../routes/editProfileRoute.js';
 import { eraseAccountRoute } from '../routes/eraseAccountRoute.js';
 //import { loadSecretKey } from '../utils/loadSecretKey.js';
-import { countTotalUsers, requestFriendExistsRoute, getFriendsListRoute, getUserByIdRoute, randomEligibleOtherUserRoute, sendFriendRequestRoute, updateFriendshipStatusRoute, FriendsRoute, invitationReceivedRoute } from '../routes/manageFriends.js';
+import { FriendsRoute } from '../routes/manageFriends.js';
 import { infoUserRoute } from '../routes/infoUserRoute.js';
 import {deleteExpiredSessions} from '../utils/sessionTokens.js';
-import { googleRoute, googleSessionRoute } from '../routes/google.js';
+import { googleRoute } from '../routes/google.js';
 
 // Load environment variables
 dotenv.config();
@@ -49,7 +49,7 @@ app.register(fastifyJwt, {
   }
 });
 
-app.decorate('auth', auth);
+app.decorate('auth', authCheck);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -62,22 +62,13 @@ app.register(fastifyStatic, {
 app.register(loginRoute);
 app.register(registerRoute);
 await uploadProfilePictureRoute(app);
-await countTotalUsers(app);
 await statusRoute(app);
-await requestFriendExistsRoute(app);//get
 await infoUserRoute(app);
 app.register(editProfileRoute);//post
 app.register(eraseAccountRoute);
-app.register(sendFriendRequestRoute);
 app.register(FriendsRoute);
-app.register(getFriendsListRoute);
-app.register(invitationReceivedRoute);
-app.register(updateFriendshipStatusRoute);
-app.register(getUserByIdRoute);
-app.register(randomEligibleOtherUserRoute);
 app.register(logoutRoute);
 app.register(googleRoute);
-app.register(googleSessionRoute);
 
 // --- Cleanup expired sessions daily ---
 setInterval(() => {
