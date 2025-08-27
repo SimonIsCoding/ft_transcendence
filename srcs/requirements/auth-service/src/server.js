@@ -62,9 +62,7 @@ app.register(fastifyStatic, {
 app.register(loginRoute);
 app.register(registerRoute);
 await uploadProfilePictureRoute(app);
-await countTotalUsers(app);
 await statusRoute(app);
-await requestFriendExistsRoute(app);//get
 await infoUserRoute(app);
 app.register(editProfileRoute);//post
 app.register(eraseAccountRoute);
