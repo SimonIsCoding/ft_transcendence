@@ -84,22 +84,17 @@ export async function twofaCheckService(): Promise<number>
 			return -1;
 		}
 		const data = await res.json();
-		console.log(`data.is_activated = ${data.is_activated}`);
 
 		const toggle = document.getElementById("2FAtoggleSwitch") as HTMLButtonElement;
 		const circle = toggle.querySelector("span")!;
-		console.log(`in /api/auth/twofaCheck`)
-		console.log(`data.is_activated = ${data.is_activated}`)
 		if (data.is_activated === 1)
 		{
-			console.log(`entered in true`)
 			toggle.classList.remove("bg-gray-400");
 			toggle.classList.add("bg-green-500");
 			circle.classList.add("translate-x-6");
 		}
 		else
 		{
-			console.log(`entered in false`)
 			toggle.classList.remove("bg-green-500");
 			toggle.classList.add("bg-gray-400");
 			circle.classList.remove("translate-x-6");

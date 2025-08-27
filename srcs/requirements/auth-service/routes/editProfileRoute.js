@@ -67,9 +67,7 @@ export async function twofaManagementRoute(fastify)
 			const decoded = await request.jwtVerify(token);
 			if (decoded.userId && decoded.sessionToken) 
 			{
-				console.log(`decoded.userId = ${decoded.userId}`)
 				const stmt = db.prepare("SELECT is_2fa_activated FROM users WHERE id = ?").get(decoded.userId);
-				console.log(`in twofaCheck, is_2fa_activated = ${stmt.is_2fa_activated}`)
 				return reply.send({ is_activated: stmt.is_2fa_activated})
 			}
 		}
@@ -85,10 +83,7 @@ export async function twofaManagementRoute(fastify)
 			{
 				let row = db.prepare("SELECT is_2fa_activated FROM users WHERE id = ?").get(decoded.userId);
 				let former_value = row.is_2fa_activated;
-				console.log(`in twofaChangeValue `);
-				console.log(`former_value = ${former_value}`);
 				let current_value = former_value ? 0 : 1;
-				console.log(`current_value = ${current_value}`);
 				db.prepare(`UPDATE users SET is_2fa_activated = ? WHERE id = ?`).run(current_value, decoded.userId);
 				return reply.status(200);
 			}

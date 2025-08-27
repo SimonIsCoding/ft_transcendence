@@ -29,7 +29,7 @@ function twofaToggle()
 			enabled = false;
 		enabled = !enabled;
 
-		twofaChangeValueService();//changing value in db
+		twofaChangeValueService();
 
 		if (enabled)
 		{
