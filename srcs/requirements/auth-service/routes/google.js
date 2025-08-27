@@ -47,17 +47,14 @@ export async function googleRoute(fastify)
 			return reply.status(401).send({success: false, error: "Invalid ID token" });
 		}
 	});
-}
 
-export async function googleSessionRoute(fastify)
-{
 	fastify.post("/googleSession", async (request, reply) => {
 		try
 		{
 			const cookie = request.cookies.auth_token;
 			if (!cookie)
 				return reply.status(401).send({ error: "No session cookie" });
-
+	
 			const payload = jwt.verify(cookie, process.env.JWT_SECRET);
 			let user = db.prepare("SELECT * FROM users WHERE mail = ?").get(payload.email);
 			if (!user)
@@ -65,9 +62,9 @@ export async function googleSessionRoute(fastify)
 				db.prepare("INSERT INTO users (login, mail, profile_picture, provider) VALUES (?, ?, ?, ?)").run(payload.name, payload.email, payload.picture, payload.provider);
 				user = db.prepare("SELECT * FROM users WHERE mail = ?").get(payload.email);
 			}
-
+	
 			return reply.status(201).send({ userId: user.id, login: user.login, mail: user.mail, profile_picture: user.profile_picture, provider: user.provider});
-
+	
 		}
 		catch (err)
 		{
