@@ -17,10 +17,10 @@ import { statusRoute/*, currentUserInfoRoute*/ } from '../routes/userLoggedRoute
 import { editProfileRoute } from '../routes/editProfileRoute.js';
 import { eraseAccountRoute } from '../routes/eraseAccountRoute.js';
 //import { loadSecretKey } from '../utils/loadSecretKey.js';
-import { countTotalUsers, requestFriendExistsRoute, getFriendsListRoute, getUserByIdRoute, randomEligibleOtherUserRoute, sendFriendRequestRoute, updateFriendshipStatusRoute, FriendsRoute, invitationReceivedRoute } from '../routes/manageFriends.js';
+import { FriendsRoute } from '../routes/manageFriends.js';
 import { infoUserRoute } from '../routes/infoUserRoute.js';
 import {deleteExpiredSessions} from '../utils/sessionTokens.js';
-import { googleRoute, googleSessionRoute } from '../routes/google.js';
+import { googleRoute } from '../routes/google.js';
 
 // Load environment variables
 dotenv.config();
@@ -68,16 +68,9 @@ await requestFriendExistsRoute(app);//get
 await infoUserRoute(app);
 app.register(editProfileRoute);//post
 app.register(eraseAccountRoute);
-app.register(sendFriendRequestRoute);
 app.register(FriendsRoute);
-app.register(getFriendsListRoute);
-app.register(invitationReceivedRoute);
-app.register(updateFriendshipStatusRoute);
-app.register(getUserByIdRoute);
-app.register(randomEligibleOtherUserRoute);
 app.register(logoutRoute);
 app.register(googleRoute);
-app.register(googleSessionRoute);
 
 // --- Cleanup expired sessions daily ---
 setInterval(() => {
