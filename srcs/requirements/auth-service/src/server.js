@@ -14,7 +14,7 @@ import { auth } from '../plugins/auth.js';
 import { uploadProfilePictureRoute } from '../routes/uploadProfilePictureRoute.js';
 import { logoutRoute } from '../routes/logoutRoute.js';
 import { statusRoute/*, currentUserInfoRoute*/ } from '../routes/userLoggedRoute.js';
-import { editProfileRoute } from '../routes/editProfileRoute.js';
+import { editProfileRoute, twofaManagementRoute } from '../routes/editProfileRoute.js';
 import { eraseAccountRoute } from '../routes/eraseAccountRoute.js';
 //import { loadSecretKey } from '../utils/loadSecretKey.js';
 import { countTotalUsers, requestFriendExistsRoute, getFriendsListRoute, getUserByIdRoute, randomEligibleOtherUserRoute, sendFriendRequestRoute, updateFriendshipStatusRoute, FriendsRoute, invitationReceivedRoute, isFriendConnectedRoute } from '../routes/manageFriends.js';
@@ -66,6 +66,7 @@ await countTotalUsers(app);
 await statusRoute(app);
 await requestFriendExistsRoute(app);//get
 await infoUserRoute(app);
+await twofaManagementRoute(app);
 app.register(editProfileRoute);//post
 app.register(eraseAccountRoute);
 app.register(sendFriendRequestRoute);
