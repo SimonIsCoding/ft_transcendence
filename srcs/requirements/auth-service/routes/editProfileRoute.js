@@ -90,6 +90,7 @@ export async function twofaManagementRoute(fastify)
 				let current_value = former_value ? 0 : 1;
 				console.log(`current_value = ${current_value}`);
 				db.prepare(`UPDATE users SET is_2fa_activated = ? WHERE id = ?`).run(current_value, decoded.userId);
+				return reply.status(200);
 			}
 		}
 	})

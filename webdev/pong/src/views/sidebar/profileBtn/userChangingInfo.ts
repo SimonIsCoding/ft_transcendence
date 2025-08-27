@@ -36,13 +36,12 @@ function twofaToggle()
 			toggle.classList.remove("bg-gray-400");
 			toggle.classList.add("bg-green-500");
 			circle.classList.add("translate-x-6");
-			//change value in db
-
-		} else {
+		}
+		else
+		{
 			toggle.classList.remove("bg-green-500");
 			toggle.classList.add("bg-gray-400");
 			circle.classList.remove("translate-x-6");
-			//change value in db
 		}
 	});
 }

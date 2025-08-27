@@ -113,7 +113,7 @@ export async function twofaCheckService(): Promise<number>
 	}
 }
 
-export async function twofaChangeValueService(): Promise<void>
+export async function twofaChangeValueService()
 {
 	const currentUser = await getCurrentUser();
 	const res = await fetch('/api/auth/twofaChangeValue', {
