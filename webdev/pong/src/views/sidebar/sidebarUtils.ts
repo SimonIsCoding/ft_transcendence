@@ -3,6 +3,7 @@ import { playSidebarBehavior } from './playBtn/playSidebarBehavior';
 import { userChangingInfo } from './profileBtn/userChangingInfo';
 import { seeFriendsList } from './profileBtn/manageFriendsSubmenu';
 import { setupGameSettingsListeners } from '../../controllers/gameSettingsControllers';
+import { twofaCheckService } from '../../services/sidebarService/editProfileService';
 
 export function renderBackButton(id: string): string
 {
@@ -115,6 +116,7 @@ export function editProfileSubmenuBehavior()
 			editProfileSubmenu?.classList.add("max-h-0");
 			editProfileSubmenu?.classList.remove("max-h-screen");
 		});
+		twofaCheckService();
 	});
 
 	profileSidebarBtn?.addEventListener('click', () => {

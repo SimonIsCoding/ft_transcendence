@@ -85,7 +85,6 @@ export async function twofaCheckService(): Promise<number>
 		}
 		const data = await res.json();
 		console.log(`data.is_activated = ${data.is_activated}`);
-		//vert si activated ou gris si false
 
 		const toggle = document.getElementById("2FAtoggleSwitch") as HTMLButtonElement;
 		const circle = toggle.querySelector("span")!;
