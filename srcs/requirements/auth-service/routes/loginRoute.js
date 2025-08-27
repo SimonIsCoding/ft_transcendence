@@ -6,7 +6,7 @@ export async function loginRoute(fastify) {
   // POST /login
   fastify.post('/login', async (request, reply) => {
     const { login, password } = request.body;
-	console.log(`password = ${password}`);
+	//console.log(`password = ${password}`);
     
     // 1. Input validation
     if (!login || !password) {
@@ -23,7 +23,7 @@ export async function loginRoute(fastify) {
     const valid = await bcrypt.compare(password, user.password);
 
     if (!valid) {
-      return reply.code(402).send({ 
+      return reply.code(401).send({ 
         success: false,
         error: 'Invalid credentials',
         requires2FA: process.env.ENABLE_2FA === 'true'
