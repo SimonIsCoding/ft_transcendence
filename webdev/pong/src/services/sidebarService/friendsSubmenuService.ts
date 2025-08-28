@@ -23,7 +23,7 @@ export async function getTotalUser()
 export async function getUserById(userId: number)
 {
 	const user: User = await fetch('/api/auth/getUserById', {
-	method: 'POST',
+	method: 'GET',
 	headers: { 'Content-Type': 'application/json' },
 	body: JSON.stringify({ userId: userId }),
 	credentials: 'include'
@@ -51,7 +51,7 @@ type FriendRequest = {
 export async function alreadyFriends(currentUser: User, otherUser: User): Promise<Boolean> 
 {
 	const friends = await fetch('/api/auth/friends', {
-		method: 'POST',
+		method: 'GET',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ currentUser: currentUser, otherUser: otherUser }),
 		credentials: 'include'
@@ -70,7 +70,7 @@ export async function alreadyFriends(currentUser: User, otherUser: User): Promis
 export async function getRandomEligibleOtherUser(currentUser: User): Promise<User | null>
 {
 	const eligibleUser = await fetch('/api/auth/randomEligibleOtherUser', {
-		method: 'POST',
+		method: 'GET',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ currentUser: currentUser }),
 		credentials: 'include'
@@ -89,7 +89,7 @@ export async function getRandomEligibleOtherUser(currentUser: User): Promise<Use
 export async function friendInvitationReceived(currentUser: User, otherUser: User): Promise<Boolean> 
 {
 	const invitationReceived = await fetch('/api/auth/invitationReceived', {
-		method: 'POST',
+		method: 'GET',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ currentUser: currentUser, otherUser: otherUser }),
 		credentials: 'include'
@@ -147,7 +147,7 @@ export async function howManyFriends(): Promise<number>
 {
 	const currentUser = await getCurrentUser();
 	const nbFriends = await fetch('/api/auth/getFriends', {
-		method: 'POST',
+		method: 'GET',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ userId: currentUser.id }),
 		credentials: 'include'
@@ -168,7 +168,7 @@ export async function displayFriend(i: number): Promise<User>
 {
 	const currentUser: User = await getCurrentUser();
 	const allFriends: FriendsConnexion[] = await fetch('/api/auth/getFriends', {
-		method: 'POST',
+		method: 'GET',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ userId: currentUser.id }),
 		credentials: 'include'

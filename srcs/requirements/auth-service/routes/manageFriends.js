@@ -3,7 +3,7 @@ import db from '../src/database.js';
 
 export async function FriendsRoute(fastify)
 {
-	fastify.post('/friends', async (request, body) => {
+	fastify.get('/friends', { preHandler: fastify.auth }, async (request, body) => {
 		const { currentUser, otherUser } = request.body;
 		const [a,b] = currentUser.id < otherUser.id ? [currentUser.id, otherUser.id] : [otherUser.id, currentUser.id];
 		const stmt = db.prepare(`SELECT * FROM friendships WHERE user_a_id = ? AND user_b_id = ?`);
@@ -25,7 +25,7 @@ export async function FriendsRoute(fastify)
 			return reply.status(200).send({success: true});
 	});
 	
-	fastify.post('/invitationReceived', async (request, body) => {
+	fastify.get('/invitationReceived', async (request, body) => {
 		const { currentUser, otherUser } = request.body;
 		const stmt = db.prepare(`SELECT * FROM friend_requests WHERE from_user_id = ? AND to_user_id = ?`);
 		const invitationReceived = stmt.get(otherUser.id, currentUser.id);
@@ -65,7 +65,7 @@ export async function FriendsRoute(fastify)
 	});
 
 
-	fastify.post('/getUserById', async (request, reply) => {
+	fastify.get('/getUserById', async (request, reply) => {
 		const { userId } = request.body;
 		const stmt = db.prepare("SELECT id, login, mail, profile_picture FROM users WHERE id = ?");
 		const user = stmt.get(userId);
@@ -77,14 +77,14 @@ export async function FriendsRoute(fastify)
 		return reply.status(200).send(users);
 	});
 
-	fastify.post('/getFriends', async (request, reply) => {
-		const { userId } = request.body;
+	fastify.get('/getFriends', { preHandler: fastify.auth }, async (request, reply) => {
+    	const userId = request.user.id;
 		const stmt = db.prepare("SELECT user_a_id, user_b_id FROM friendships WHERE user_a_id = ? OR user_b_id = ?");
 		const friends = stmt.all(userId, userId);
 		return reply.status(200).send(friends);
 	});
 
-	fastify.post('/randomEligibleOtherUser', async (request, reply) => {
+	fastify.get('/randomEligibleOtherUser', async (request, reply) => {
 		const { currentUser } = request.body;
 		const stmt = db.prepare(`SELECT id, login, mail, profile_picture
 			FROM users u
@@ -118,16 +118,34 @@ export async function FriendsRoute(fastify)
 	fastify.post('/isFriendConnected', async (request, reply) => {
 		const { userId } = request.body;
 		const now = new Date().toISOString();
-		const session = db.prepare(`SELECT id, user_id, created_at, valid_until FROM sessions WHERE user_id = ?`).get(userId);
-		if (!session)
-			return reply.status(400).send({success: false});
-		if (now >= session.created_at && now <= session.valid_until)
-			return reply.status(200).send({success: true});
-		else
-		{
-			db.prepare(`DELETE FROM sessions WHERE id = ?`).run(session.id);
-			return reply.status(401).send({success: false});
-		}
+	  // Get all sessions for this user
+	    const sessions = db.prepare(`
+	        SELECT id, created_at, valid_until 
+	        FROM sessions 
+	        WHERE user_id = ?
+	    `).all(userId);
+
+	    if (!sessions || sessions.length === 0) {
+	        return reply.status(400).send({ success: false });
+	    }
+
+	    let isOnline = false;
+
+	    for (const session of sessions) {
+	        if (now >= session.created_at && now <= session.valid_until) {
+	            // At least one valid session
+	            isOnline = true;
+	        } else {
+	            // Remove expired sessions
+	            db.prepare(`DELETE FROM sessions WHERE id = ?`).run(session.id);
+	        }
+	    }
+
+	    if (isOnline) {
+	        return reply.status(200).send({ success: true });
+	    } else {
+	        return reply.status(401).send({ success: false });
+	    }
 	});
 
 }
