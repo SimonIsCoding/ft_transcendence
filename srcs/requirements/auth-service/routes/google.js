@@ -39,7 +39,7 @@ export async function googleRoute(fastify)
 				secure: true,
 				sameSite: "lax",
 				path: "/"
-			}).send({ success: true, provider: Gprovider });
+			}).send({ success: true, provider: "google" });
 		} 
 		catch (err)
 		{

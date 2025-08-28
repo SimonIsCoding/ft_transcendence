@@ -40,6 +40,7 @@ status:
 
 clean:
 	sudo rm -rf srcs/data/pong/users.db
+	sudo rm -rf srcs/srcs
 	docker compose -f $(COMPOSE_FILE) down --rmi all -v
 	docker image prune -af
 	docker volume prune -f

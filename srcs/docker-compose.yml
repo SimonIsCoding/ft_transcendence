@@ -56,24 +56,6 @@ services:
     volumes:
       - 2fa_data:/usr/src/app/data
 
-  # New WebSocket service
-  ws-server:
-    container_name: ws-server
-    build: requirements/ws-server
-    secrets:
-      - server_cert  # Share the same certs as nginx
-      - server_key
-    environment:
-      - NODE_ENV=production
-      - CERT_PATH=/run/secrets/server_cert
-      - KEY_PATH=/run/secrets/server_key
-    ports:
-      - "3002:3002"  # Internal port for WebSocket server
-    depends_on:
-      - auth-service  # If you need authentication
-    restart: unless-stopped
-    healthcheck:
-      disable: true
   
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}

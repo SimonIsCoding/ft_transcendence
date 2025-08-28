@@ -1,5 +1,5 @@
 import { Router } from "../../../router";
-import { editProfileService } from "../../../services/sidebarService/editProfileService";
+import { editProfileService, twofaChangeValueService, twofaCheckService } from "../../../services/sidebarService/editProfileService";
 import { eraseAccountService } from "../../../services/sidebarService/eraseAccountService"; 
 import { showSuccessPopup } from "../../../utils/utils";
 import { handleSidebar } from "../sidebarBehavior";
@@ -11,10 +11,42 @@ export function userChangingInfo()
 	saveBtnEditProfile?.addEventListener('click', () => {
 		editProfileService();
 	});
+	twofaToggle();
 	eraseAccount();
 }
 
-export function eraseAccount()
+function twofaToggle()
+{
+	const toggle = document.getElementById("2FAtoggleSwitch") as HTMLButtonElement;
+	const circle = toggle.querySelector("span")!;
+
+	toggle.addEventListener("click", async () => {
+		let enabled: Boolean;
+		const value = await twofaCheckService();
+		if (value === 1)
+			enabled = true;
+		else
+			enabled = false;
+		enabled = !enabled;
+
+		twofaChangeValueService();
+
+		if (enabled)
+		{
+			toggle.classList.remove("bg-gray-400");
+			toggle.classList.add("bg-green-500");
+			circle.classList.add("translate-x-6");
+		}
+		else
+		{
+			toggle.classList.remove("bg-green-500");
+			toggle.classList.add("bg-gray-400");
+			circle.classList.remove("translate-x-6");
+		}
+	});
+}
+
+function eraseAccount()
 {
 	const eraseAccountBtn = document.getElementById("eraseAccountBtn");
 	const confirmPopup = document.getElementById("confirmPopup");
