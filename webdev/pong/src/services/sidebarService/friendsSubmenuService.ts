@@ -48,24 +48,25 @@ type FriendRequest = {
 	to_user_id: number;
 };
 
-export async function alreadyFriends(currentUser: User, otherUser: User): Promise<Boolean> 
-{
-	const friends = await fetch('/api/auth/friends', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ currentUser: currentUser, otherUser: otherUser }),
-		credentials: 'include'
-	})
-	.then(async res => {
-		const text = await res.text();
-		if (!text) return null;
-		return JSON.parse(text);
-	})
-	.then(data => { return data })
-	if (friends)
-		return true;
-	return false;
-}
+// export async function alreadyFriends(currentUser: User, otherUser: User): Promise<Boolean> 
+// {
+// 	console.log(`alreadyFriends = ${alreadyFriends}`);
+// 	const friends = await fetch('/api/auth/friends', {
+// 		method: 'GET',
+// 		headers: { 'Content-Type': 'application/json' },
+// 		body: JSON.stringify({ currentUser: currentUser, otherUser: otherUser }),
+// 		credentials: 'include'
+// 	})
+// 	.then(async res => {
+// 		const text = await res.text();
+// 		if (!text) return null;
+// 		return JSON.parse(text);
+// 	})
+// 	.then(data => { return data })
+// 	if (friends)
+// 		return true;
+// 	return false;
+// }
 
 export async function getRandomEligibleOtherUser(currentUser: User): Promise<User | null>
 {
@@ -86,24 +87,24 @@ export async function getRandomEligibleOtherUser(currentUser: User): Promise<Use
 	return null;
 }
 
-export async function friendInvitationReceived(currentUser: User, otherUser: User): Promise<Boolean> 
-{
-	const invitationReceived = await fetch('/api/auth/invitationReceived', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ currentUser: currentUser, otherUser: otherUser }),
-		credentials: 'include'
-	})
-	.then(async res => {
-		const text = await res.text();
-		if (!text) return null;
-		return JSON.parse(text);
-	})
-	.then(data => { return data })
-	if (invitationReceived)
-		return true;
-	return false;
-}
+// export async function friendInvitationReceived(currentUser: User, otherUser: User): Promise<Boolean> 
+// {
+// 	const invitationReceived = await fetch('/api/auth/invitationReceived', {
+// 		method: 'POST',
+// 		headers: { 'Content-Type': 'application/json' },
+// 		body: JSON.stringify({ currentUser: currentUser, otherUser: otherUser }),
+// 		credentials: 'include'
+// 	})
+// 	.then(async res => {
+// 		const text = await res.text();
+// 		if (!text) return null;
+// 		return JSON.parse(text);
+// 	})
+// 	.then(data => { return data })
+// 	if (invitationReceived)
+// 		return true;
+// 	return false;
+// }
 
 export async function howManyFriendsRequests(): Promise<number>
 {
