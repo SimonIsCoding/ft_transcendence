@@ -70,7 +70,6 @@ app.register(eraseAccountRoute);
 app.register(FriendsRoute);
 app.register(logoutRoute);
 app.register(googleRoute);
-app.register(googleSessionRoute);
 
 // --- Cleanup expired sessions daily ---
 setInterval(() => {
