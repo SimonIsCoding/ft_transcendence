@@ -14,7 +14,7 @@ export async function uploadProfilePictureRoute(fastify)
 
 	const data = await request.file(); // recover uploaded file
     if (!data)
-      return reply.status(400).send({ error: 'No file uploaded' });
+		return reply.status(400).send({ error: 'No file uploaded' });
 
     if (!data.mimetype.startsWith('image/'))
       return reply.status(400).send({ error: 'Only images are allowed' });
@@ -34,7 +34,7 @@ export async function uploadProfilePictureRoute(fastify)
       return reply.status(500).send({ error: 'Failed to save file', details: err.message});
     }
 
-    const userId = request.user?.userId;
+    const userId = request.user?.id;
 	console.log(`in /uploadProfilePicture userId = ${userId}\n\n`);
     if (!userId)
     	return reply.status(401).send({ error: 'Not authenticated: userId not found in token' });
