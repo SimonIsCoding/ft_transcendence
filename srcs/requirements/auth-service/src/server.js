@@ -14,10 +14,10 @@ import { authCheck } from '../plugins/auth.js';
 import { uploadProfilePictureRoute } from '../routes/uploadProfilePictureRoute.js';
 import { logoutRoute } from '../routes/logoutRoute.js';
 import { statusRoute/*, currentUserInfoRoute*/ } from '../routes/userLoggedRoute.js';
-import { editProfileRoute } from '../routes/editProfileRoute.js';
+import { editProfileRoute, twofaManagementRoute } from '../routes/editProfileRoute.js';
 import { eraseAccountRoute } from '../routes/eraseAccountRoute.js';
 //import { loadSecretKey } from '../utils/loadSecretKey.js';
-import { FriendsRoute } from '../routes/manageFriends.js';
+import { FriendsRoute, invitationReceivedRoute } from '../routes/manageFriends.js';
 import { infoUserRoute } from '../routes/infoUserRoute.js';
 import {deleteExpiredSessions} from '../utils/sessionTokens.js';
 import { googleRoute } from '../routes/google.js';
@@ -64,11 +64,14 @@ app.register(registerRoute);
 await uploadProfilePictureRoute(app);
 await statusRoute(app);
 await infoUserRoute(app);
+await twofaManagementRoute(app);
 app.register(editProfileRoute);//post
 app.register(eraseAccountRoute);
 app.register(FriendsRoute);
 app.register(logoutRoute);
 app.register(googleRoute);
+app.register(googleSessionRoute);
+app.register(isFriendConnectedRoute);
 
 // --- Cleanup expired sessions daily ---
 setInterval(() => {

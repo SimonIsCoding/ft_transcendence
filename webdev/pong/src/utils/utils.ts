@@ -80,3 +80,13 @@ export async function getCurrentUser()
 	const data = await res.json();
 	return data.user;
 }
+
+// export function preloadImage(url: string): Promise<void>
+// {
+// 	return new Promise((resolve, reject) => {
+// 		const img = new Image();
+// 		img.src = url;
+// 		img.onload = () => resolve();
+// 		img.onerror = () => reject();
+// 	});
+// }

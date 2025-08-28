@@ -6,7 +6,7 @@ export async function loginRoute(fastify) {
   // POST /login
   fastify.post('/login', async (request, reply) => {
     const { login, password } = request.body;
-	//console.log(`password = ${password}`);
+	// console.log(`password = ${password}`);
     
     // 1. Input validation
     if (!login || !password) {
@@ -98,7 +98,6 @@ export async function loginRoute(fastify) {
       },
       { expiresIn: SESSION_LIFETIME }
 	);
-	console.error(`in /login token = ${token.userId} `);
   
     // 6. Set cookie
     reply
