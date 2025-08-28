@@ -1,7 +1,7 @@
 export function editProfileSubmenuRender()
 {
 	return `
-	<div id="editProfileSubmenu" class="submenu h-screen absolute left-[64px] top-0 w-48 bg-[#fbd11b] border border-black flex items-center flex-col overflow-hidden max-h-0 transition-[max-height] duration-450 z-50 space-y-3.5">
+	<div id="editProfileSubmenu" class="submenu h-screen absolute left-[64px] top-0 w-48 bg-[#fbd11b] border border-black flex items-center flex-col overflow-y-auto max-h-0 transition-[max-height] duration-450 z-50 space-y-3.5">
 	    <button id="backBtnEditProfileSubmenu" class="hover:underline underline-offset-2 decoration-black absolute top-1.5 left-1.5 flex items-center group z-50">
 			<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-black transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -36,7 +36,7 @@ export function editProfileSubmenuRender()
 				<span class="w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300"></span>
 			</button>
 		</div>
-		<button id="eraseAccountBtn" class="absolute bottom-4 font-bold border rounded px-2 py-1 text-sm hover:bg-red-500 w-fit">Erase account</button>
+		<button id="eraseAccountBtn" class="mt-auto mb-4 font-bold border rounded px-2 py-1 text-sm hover:bg-red-500 w-fit">Erase account</button>
 	</div>
 	${eraseAccountConfirmationPopupRender()}
 	`
