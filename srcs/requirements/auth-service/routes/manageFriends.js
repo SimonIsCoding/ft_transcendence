@@ -33,36 +33,36 @@ export async function FriendsRoute(fastify)
 	});
 	
 	fastify.post('/updateFriendshipStatus', async (request, reply) => {
-	const { currentUser, otherUser, status } = request.body;
-	const [a, b] = currentUser.id < otherUser.id ? [currentUser.id, otherUser.id] : [otherUser.id, currentUser.id];
-	if (status === true)
-	{
-		try
+		const { currentUser, otherUser, status } = request.body;
+		const [a, b] = currentUser.id < otherUser.id ? [currentUser.id, otherUser.id] : [otherUser.id, currentUser.id];
+		if (status === true)
 		{
-			db.prepare(`INSERT INTO friendships (user_a_id, user_b_id) VALUES (?, ?)`).run(a, b);
+			try
+			{
+				db.prepare(`INSERT INTO friendships (user_a_id, user_b_id) VALUES (?, ?)`).run(a, b);
+			}
+			catch (err)
+			{
+				if (!err.message.includes("UNIQUE constraint failed"))
+					throw err;
+			}
 		}
-		catch (err)
-		{
-			if (!err.message.includes("UNIQUE constraint failed"))
-				throw err;
-		}
-	}
-
-	db.prepare(`DELETE FROM friend_requests WHERE to_user_id = ? AND from_user_id = ?`).run(currentUser.id, otherUser.id);
 	
-	//we want to erase double interverted friend_requests if there is
-	const friendships = db.prepare(`SELECT user_a_id, user_b_id FROM friendships WHERE user_a_id = ? OR user_b_id = ?`).all(currentUser.id, currentUser.id);
-	const friendIds = friendships.map(f =>
-		f.user_a_id === currentUser.id ? f.user_b_id : f.user_a_id
-	);
-
-	if (friendIds.length > 0)
-	{
-		db.prepare(`DELETE FROM friend_requests WHERE (from_user_id = ? AND to_user_id IN (${friendIds.map(() => '?').join(',')})) OR (to_user_id = ? AND from_user_id IN (${friendIds.map(() => '?').join(',')}))`).run(currentUser.id, ...friendIds, currentUser.id, ...friendIds);
-	}
-
-	return reply.status(200).send({ success: true });
-});
+		db.prepare(`DELETE FROM friend_requests WHERE to_user_id = ? AND from_user_id = ?`).run(currentUser.id, otherUser.id);
+		
+		//we want to erase double interverted friend_requests if there is
+		const friendships = db.prepare(`SELECT user_a_id, user_b_id FROM friendships WHERE user_a_id = ? OR user_b_id = ?`).all(currentUser.id, currentUser.id);
+		const friendIds = friendships.map(f =>
+			f.user_a_id === currentUser.id ? f.user_b_id : f.user_a_id
+		);
+	
+		if (friendIds.length > 0)
+		{
+			db.prepare(`DELETE FROM friend_requests WHERE (from_user_id = ? AND to_user_id IN (${friendIds.map(() => '?').join(',')})) OR (to_user_id = ? AND from_user_id IN (${friendIds.map(() => '?').join(',')}))`).run(currentUser.id, ...friendIds, currentUser.id, ...friendIds);
+		}
+	
+		return reply.status(200).send({ success: true });
+	});
 
 
 	fastify.post('/getUserById', async (request, reply) => {
@@ -114,18 +114,7 @@ export async function FriendsRoute(fastify)
 			return reply.status(204).send();
 		return reply.send(user);
 	});
-}
 
-// export async function reloadFriendshipsRoute(fastify)
-// {
-	// fastify.post('/reloadFriendships', async (request, body) => {
-		// const { currentUser, otherUser } = request.body;
-		// 
-	// })
-// }
-
-export async function isFriendConnectedRoute(fastify)
-{
 	fastify.post('/isFriendConnected', async (request, reply) => {
 		const { userId } = request.body;
 		const now = new Date().toISOString();
@@ -139,5 +128,14 @@ export async function isFriendConnectedRoute(fastify)
 			db.prepare(`DELETE FROM sessions WHERE id = ?`).run(session.id);
 			return reply.status(401).send({success: false});
 		}
-	})
+	});
+
 }
+
+// export async function reloadFriendshipsRoute(fastify)
+// {
+	// fastify.post('/reloadFriendships', async (request, body) => {
+		// const { currentUser, otherUser } = request.body;
+		// 
+	// })
+// }
