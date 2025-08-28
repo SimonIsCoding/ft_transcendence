@@ -64,7 +64,7 @@ app.register(registerRoute);
 await uploadProfilePictureRoute(app);
 await statusRoute(app);
 await infoUserRoute(app);
-await twofaManagementRoute(app);
+app.register(twofaManagementRoute);
 app.register(editProfileRoute);//post
 app.register(eraseAccountRoute);
 app.register(FriendsRoute);
