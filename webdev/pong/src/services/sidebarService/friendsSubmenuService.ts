@@ -172,12 +172,10 @@ export async function displayFriend(i: number): Promise<User>
 
 export async function checkFriendIsConnected(userId: number)
 {
-	const res = await fetch('/api/auth/isFriendConnected', {
-		"method": "POST",
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ userId: userId }),
-		credentials: 'include'
-	})
+	const res = await fetch(`/api/friends/${userId}/online`, {
+      method: 'GET',
+      credentials: 'include'
+    });
 	const bool = await res.json();
 	// console.log(`bool = ${bool.success}`);
 	return bool.success;
