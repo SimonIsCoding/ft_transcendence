@@ -111,7 +111,7 @@ export function editProfileSubmenuRender()
 export function eraseAccountConfirmationPopupRender(): string
 {
 	return `
-	<div id="confirmPopup" class="hidden bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style="background-image: url('/pongBackgroundPlay.png');">
+	<div id="confirmPopup" class="hidden bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center bg-opacity-50 bg-black fixed inset-0 flex items-center justify-center z-50" style="background-image: url('/pongBackgroundPlay.png');">
 		<div class="bg-white rounded-lg shadow-lg p-6 w-80">
 			<p id="popupMessage" class="text-gray-800 text-center">Do you really want to delete your account ?</p>
 			<p class="text-gray-800 text-center text-base mb-4">You will lose all your informations</p>
