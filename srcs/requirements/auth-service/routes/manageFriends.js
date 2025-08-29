@@ -163,7 +163,7 @@ export async function FriendsRoute(fastify)
 	      WHERE user_id = ?
 	  `).all(friendId);  
 	  if (!sessions || sessions.length === 0) {
-	      return reply.status(400).send({ success: false });
+	      return reply.status(200).send({ success: false });
 	  }  
 	  let isOnline = false;  
 	  for (const session of sessions) {
