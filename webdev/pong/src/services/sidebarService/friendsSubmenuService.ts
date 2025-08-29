@@ -172,7 +172,7 @@ export async function displayFriend(i: number): Promise<User>
 
 export async function checkFriendIsConnected(userId: number)
 {
-	const res = await fetch(`/api/friends/${userId}/online`, {
+	const res = await fetch(`/api/auth/friends/${userId}/online`, {
       method: 'GET',
       credentials: 'include'
     });
