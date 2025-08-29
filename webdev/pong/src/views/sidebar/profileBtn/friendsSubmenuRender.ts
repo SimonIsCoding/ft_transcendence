@@ -94,16 +94,20 @@ export const friendsCard = {
 	const friendStatus = document.getElementById(`friendsStatus_${friendUser.id}`);
 	const isFriendConnected = await checkFriendIsConnected(friendUser.id);
 	const isGPDRActivated = await checkFriendHasGDPRActivated(friendUser);
-	console.log(`isGPDRActivated for friend = ${isGPDRActivated}`);
-	if (isFriendConnected)
+	if (isFriendConnected && isGPDRActivated === 0)
 	{
 		friendStatus?.classList.remove("bg-red-500");
 		friendStatus?.classList.add("bg-green-500");
 	}
-	else
+	else if (isFriendConnected === 0 && isGPDRActivated === 0)
 	{
 		friendStatus?.classList.remove("bg-green-500");
 		friendStatus?.classList.add("bg-red-500");
+	}
+	else
+	{
+		friendStatus?.classList.remove("bg-red-500");
+		friendStatus?.classList.add("bg-black");
 	}
 	if (friendUser.profile_picture && friendUser.profile_picture.startsWith("https://lh3.googleusercontent.com"))
 		friendImg.src = `${friendUser.profile_picture}`;
@@ -111,7 +115,6 @@ export const friendsCard = {
 		friendImg.src = `https://localhost:4443/${friendUser.profile_picture}`;
 	friendUsername!.textContent = friendUser.login;
 	
-	//check if user wants privacy
 	if (isGPDRActivated === 0)
 		friendMail!.textContent = friendUser.mail;
 	else
