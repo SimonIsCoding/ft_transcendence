@@ -13,7 +13,6 @@ import { registerRoute } from '../routes/registerRoute.js';
 import { authCheck } from '../plugins/auth.js';
 import { uploadProfilePictureRoute } from '../routes/uploadProfilePictureRoute.js';
 import { logoutRoute } from '../routes/logoutRoute.js';
-import { statusRoute/*, currentUserInfoRoute*/ } from '../routes/userLoggedRoute.js';
 import { editProfileRoute, twofaManagementRoute } from '../routes/editProfileRoute.js';
 import { eraseAccountRoute } from '../routes/eraseAccountRoute.js';
 //import { loadSecretKey } from '../utils/loadSecretKey.js';
@@ -59,16 +58,15 @@ app.register(fastifyStatic, {
   prefix: '/profile_pictures/',
 });
 
-app.register(loginRoute);
-app.register(registerRoute);
+app.register(loginRoute); // users/check and /users/sesions
+app.register(registerRoute); // /users/verify and /users
 await uploadProfilePictureRoute(app);
-await statusRoute(app);
-await infoUserRoute(app);
+app.register(infoUserRoute);  // me/info and me/status api calls
 app.register(twofaManagementRoute);
 app.register(editProfileRoute);//post
-app.register(eraseAccountRoute);
-app.register(FriendsRoute);
-app.register(logoutRoute);
+app.register(eraseAccountRoute); // delete /me
+app.register(FriendsRoute); // /friends routes
+app.register(logoutRoute);  // delete /me/sessions
 app.register(googleRoute);
 
 // --- Cleanup expired sessions daily ---

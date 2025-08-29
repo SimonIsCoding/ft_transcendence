@@ -17,7 +17,7 @@ export function getRandomAvatar()
 export async function registerRoute(fastify)
 {
 	//to create an account
-	fastify.post('/register', async (request, reply) => {
+	fastify.post('/users/verify', async (request, reply) => {
 		const { login, mail, anonymisationEnabled } = request.body;
 		
 		if (!login || !mail)
@@ -40,7 +40,7 @@ export async function registerRoute(fastify)
 	  return reply.send({ success: true, requires2FA: process.env.ENABLE_2FA === 'true' });
 	});
 
-	fastify.post('/register-end', async (req, reply) => {
+	fastify.post('/users', async (req, reply) => {
 	  const pending = req.unsignCookie(req.cookies.pending_registration || '');
 	  if (!pending.valid) return reply.code(400).send({ success: false, error: "No pending registration" });
 	  const { login, mail, anonymisationEnabled } = JSON.parse(pending.value);

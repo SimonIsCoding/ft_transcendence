@@ -4,7 +4,7 @@ import {hashToken, createSessionToken} from '../utils/sessionTokens.js';
 
 export async function loginRoute(fastify) {
   // POST /login
-  fastify.post('/login', async (request, reply) => {
+  fastify.post('/users/check', async (request, reply) => {
     const { login, password } = request.body;
 	// console.log(`password = ${password}`);
     
@@ -50,7 +50,7 @@ export async function loginRoute(fastify) {
   });
 
   // POST /generate-token
-   fastify.post('/generate-token', {
+   fastify.post('/users/sessions', {
     schema: {
       body: {
         type: 'object',
