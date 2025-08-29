@@ -7,6 +7,7 @@ const client = new OAuth2Client("11816073281-ka847kttjiaqlci012l9p7kpip87kocr.ap
 
 export async function googleRoute(fastify)
 {
+	// this could be a get I think
 	fastify.post("/google", async (request, reply) => {
 		const { id_token } = request.body;
 		if (!id_token)

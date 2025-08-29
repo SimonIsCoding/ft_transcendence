@@ -55,19 +55,12 @@ export async function FriendsRoute(fastify)
 			const result = stmt.get();
 			return result.totalUsers;
 	});
-		
+
 	fastify.post('/sendFriendRequest', async (request, reply) => {
 		const { currentUser, otherUser } = request.body;
 		db.prepare(`INSERT INTO friend_requests (from_user_id, to_user_id, status, updated_at)
 			VALUES (?, ?, 'pending', datetime('now'))`).run(currentUser.id, otherUser.id);
 			return reply.status(200).send({success: true});
-	});
-	
-	fastify.post('/invitationReceived', async (request, body) => {
-		const { currentUser, otherUser } = request.body;
-		const stmt = db.prepare(`SELECT * FROM friend_requests WHERE from_user_id = ? AND to_user_id = ?`);
-		const invitationReceived = stmt.get(otherUser.id, currentUser.id);
-		return invitationReceived;
 	});
 	
 	fastify.post('/updateFriendshipStatus', async (request, reply) => {
@@ -227,6 +220,7 @@ export async function FriendsRoute(fastify)
 		return reply.send(user);
 	});
 
+	// this could be a get
 	fastify.post('/isFriendConnected', async (request, reply) => {
 		const { userId } = request.body;
 		const now = new Date().toISOString();
@@ -259,13 +253,4 @@ export async function FriendsRoute(fastify)
 	        return reply.status(401).send({ success: false });
 	    }
 	});
-
 }
-
-// export async function reloadFriendshipsRoute(fastify)
-// {
-	// fastify.post('/reloadFriendships', async (request, body) => {
-		// const { currentUser, otherUser } = request.body;
-		// 
-	// })
-// }

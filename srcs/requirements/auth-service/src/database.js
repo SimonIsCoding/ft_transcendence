@@ -12,7 +12,7 @@ db.exec(`
 	mail TEXT UNIQUE,
 	profile_picture TEXT,
 	provider TEXT DEFAULT 'local',
-	is_2fa_activated BOOLEAN DEFAULT false, 
+	is_2fa_activated BOOLEAN DEFAULT false,
 	GDPR_activated BOOLEAN DEFAULT false
 	);
 

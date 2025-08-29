@@ -125,3 +125,20 @@ export async function twofaChangeValueService()
 		showErrorPopup(backend_answer.error, "popup")
 	
 }
+
+// export async function GDPRChangeValueService()
+// {
+// 	const currentUser = await getCurrentUser();
+// 	const res = await fetch('/api/auth/GDPRChangeValue', {
+// 		method: 'POST',
+// 		credentials: 'include',
+// 		headers: { 'Content-Type': 'application/json' },
+// 		body: JSON.stringify({
+// 			userId: currentUser.id,
+// 		})
+// 	})
+// 	const backend_answer = await res.json()
+
+// 	if (res.status === 409)
+// 		showErrorPopup(backend_answer.error, "popup")
+// }
