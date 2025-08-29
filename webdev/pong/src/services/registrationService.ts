@@ -5,7 +5,7 @@ import { TwoFAController } from '../controllers/twofaController';
 export async function initRegistration() {
   console.log('1 - Registration service initialized');
 
-  const status = await fetch('/api/auth/status', { credentials: 'include' })
+  const status = await fetch('/api/auth/me/status', { credentials: 'include' })
     .then(res => res.json());
   
   if (status.authenticated) {
@@ -66,7 +66,7 @@ export async function initRegistration() {
 	console.log(`in initRegistrationService => anonymisationEnabled = ${anonymisationEnabled}`);
 
     try {
-      const response = await fetch('/api/auth/register', {
+      const response = await fetch('/api/auth/users/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ login, mail, anonymisationEnabled }),
@@ -140,7 +140,7 @@ export async function initRegistration() {
 
 async function handleSuccessfulRegistration(login: string, password: string, anonymisationEnabled: boolean): Promise<void> {
   try {
-    const tokenRes = await fetch('/api/auth/register-end', {
+    const tokenRes = await fetch('/api/auth/users', {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },

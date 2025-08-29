@@ -1,17 +1,13 @@
 import { deleteSession } from '../utils/sessionTokens.js';
 
 export async function logoutRoute(app) {
-  app.post('/logout', async (request, reply) => {
+  app.delete('/me/sessions', { preHandler: fastify.auth }, async (request, reply) => {
     try {
-      // 1. Verify JWT and extract session info
-      const token = request.cookies.auth_token;
-      if (token) {
-        const decoded = await request.jwtVerify(token);
-        if (decoded.userId && decoded.sessionToken) {
+	  const userId = request.user.id;
+	  const sessionToken = request.user.sessionToken;
           // 2. Delete this session from DB
-          deleteSession(decoded.userId, decoded.sessionToken);
-        }
-      }
+      deleteSession(userId, sessionToken);
+
 
       // 3. Clear cookies (auth + 2FA)
       ['auth_token', 'auth_phase'].forEach(cookieName => {

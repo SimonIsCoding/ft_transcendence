@@ -54,7 +54,7 @@
 // 	try
 // 	{
 // 		// Recover user info
-// 		const res = await fetch('/api/auth/info', {
+// 		const res = await fetch('/api/auth/me', {
 // 			credentials: 'include'
 // 		});
 // 		if (!res.ok)
@@ -149,7 +149,7 @@ export async function loadExistingProfilePicture(): Promise<void>
 	try
 	{
 		// Recover user info
-		const res = await fetch('/api/auth/info', {
+		const res = await fetch('/api/auth/me', {
 			credentials: 'include'
 		});
 		if (!res.ok)
