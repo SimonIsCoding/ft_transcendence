@@ -122,5 +122,22 @@ export async function GDPRManagementRoute(fastify)
 			}
 		}
 	})
+
+	fastify.post('/checkGDPRFriend', async (request, reply) => {
+		const { friendUserId } = request.body;
+		console.log(`friendUserId = ${friendUserId}`)
+		const token = request.cookies.auth_token;
+		if (token)
+		{
+			const decoded = await request.jwtVerify(token);
+			if (decoded.userId && decoded.sessionToken)
+			{
+				let row = db.prepare("SELECT GDPR_activated FROM users WHERE id = ?").get(friendUserId);
+				let check = row.GDPR_activated;
+				console.log(`check = ${check}`);
+				return reply.status(200).send({ value: check });
+			}
+		}
+	})
 }
 

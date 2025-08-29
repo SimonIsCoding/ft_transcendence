@@ -1,5 +1,13 @@
 import { showErrorPopup, isValidEmail, showSuccessPopup, getCurrentUser } from "../../utils/utils";
 
+interface User {
+  id: number;
+  login: string;
+  mail: string;
+  profile_picture: string,
+  token: string;
+}
+
 export async function reloadUserInfo(): Promise<void>
 {
 	try
@@ -177,4 +185,23 @@ export async function GDPRChangeValueService()
 	if (res.status === 409)
 		showErrorPopup(backend_answer.error, "popup")
 	
+}
+
+export async function checkFriendHasGDPRActivated(friendUser: User)
+{
+	// console.log(`entered in checkFriendHasGDPRActivated with ${friendUser.login} who has id: ${friendUser.id}`);
+	const res = await fetch('/api/auth/checkGDPRFriend', {
+		method: 'POST',
+		credentials: 'include',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({
+			friendUserId: friendUser.id,
+		})
+	})
+	const backend_answer = await res.json();
+
+	if (res.status === 409)
+		showErrorPopup(backend_answer.error, "popup")
+	// console.log(`backend is saying that the friend ${friendUser.login} has GDPR ACTIvated set to ${backend_answer.value}`)
+	return (backend_answer.value);
 }
