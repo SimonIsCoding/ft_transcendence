@@ -1,7 +1,7 @@
 import { openMenu, closeAllMenus, toggleMenuVisibility } from "../sidebarUtils";
 import { getTotalUser, friendsRequest, howManyFriendsRequests, displayFriend, howManyFriends, getRandomEligibleOtherUser } from "../../../services/sidebarService/friendsSubmenuService";
 import { othersUsersCard, friendRequestCard, friendsCard } from "./friendsSubmenuRender";
-import { getCurrentUser } from "../../../utils/utils";
+//import { getCurrentUser } from "../../../utils/utils";
 
 interface User {
   id: number;
@@ -121,7 +121,7 @@ export const manageOthersUsersCard = (() => {
 	const othersUsersDiv = document.getElementById("othersUsersDiv");
 	othersUsersDiv?.classList.remove("hidden");
 	const totalUsers = await getTotalUser();
-	const currentUser: User = await getCurrentUser();
+	//const currentUser: User = await getCurrentUser();
 
 	if (totalUsers > 1)
 	{
@@ -134,14 +134,14 @@ export const manageOthersUsersCard = (() => {
 		let noOtherFriend = 0;
 		while (i < max)
 		{
-			randomUser = await getRandomEligibleOtherUser(currentUser);
+			randomUser = await getRandomEligibleOtherUser();
 			if (randomUser) listOthersFriends.push(randomUser);
 			if (i > 0)
 			{
 				while (randomUser && listOthersFriends[0].id === listOthersFriends[1].id)
 				{
 					listOthersFriends.pop();
-					randomUser = await getRandomEligibleOtherUser(currentUser);
+					randomUser = await getRandomEligibleOtherUser();
 					if (randomUser) listOthersFriends.push(randomUser);
 					if (j >= totalUsers)
 						randomUser = null;

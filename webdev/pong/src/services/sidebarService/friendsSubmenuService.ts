@@ -67,7 +67,7 @@ export async function alreadyFriends(currentUser: User, otherUser: User): Promis
 	return false;
 }
 
-export async function getRandomEligibleOtherUser(currentUser: User): Promise<User | null>
+export async function getRandomEligibleOtherUser(): Promise<User | null>
 {
 	const eligibleUser = await fetch('/api/auth/randomEligibleOtherUser', {
 		method: 'GET',
@@ -147,7 +147,7 @@ type FriendsConnexion = {
 
 export async function howManyFriends(): Promise<number>
 {
-	const currentUser = await getCurrentUser();
+	//const currentUser = await getCurrentUser();
 	const nbFriends = await fetch('/api/auth/getFriends', {
 		method: 'GET',
 		// headers: { 'Content-Type': 'application/json' },
