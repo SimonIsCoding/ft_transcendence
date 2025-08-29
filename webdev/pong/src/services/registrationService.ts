@@ -14,6 +14,12 @@ export async function initRegistration() {
     return;
   }
 
+	const anonymizedCheckbox = document.getElementById('anonymizedCheckbox') as HTMLInputElement;
+	let anonymisationEnabled = false;
+	anonymizedCheckbox.addEventListener('change', () => {
+		anonymisationEnabled = anonymizedCheckbox.checked;
+		console.log("Anonymisation enabled:", anonymisationEnabled);
+	});
   const submitBtn = document.getElementById("createAccountBtn") as HTMLButtonElement;
   submitBtn.addEventListener("click", async () => {
     const login = (document.getElementById("newUsername") as HTMLInputElement).value.trim();
@@ -57,12 +63,13 @@ export async function initRegistration() {
     }
 */
     submitBtn.disabled = true;
+	console.log(`in initRegistrationService => anonymisationEnabled = ${anonymisationEnabled}`);
 
     try {
       const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ login, mail }),
+        body: JSON.stringify({ login, mail, anonymisationEnabled }),
         credentials: 'include'
       });
 
@@ -99,7 +106,7 @@ export async function initRegistration() {
             async () => {
               registerForm.classList.add('hidden');
               twoFaContainer.classList.add('hidden');
-              handleSuccessfulRegistration(login, password);
+              handleSuccessfulRegistration(login, password, anonymisationEnabled);
             },
             twoFaContainer,
             (message, isFinal) => {
@@ -119,7 +126,7 @@ export async function initRegistration() {
           twoFaContainer.appendChild(view);
         }
       } else {
-        handleSuccessfulRegistration(login, password);
+        handleSuccessfulRegistration(login, password, anonymisationEnabled);
       }
 
     } catch (error) {
@@ -131,13 +138,13 @@ export async function initRegistration() {
   });
 }
 
-async function handleSuccessfulRegistration(login: string, password: string): Promise<void> {
+async function handleSuccessfulRegistration(login: string, password: string, anonymisationEnabled: boolean): Promise<void> {
   try {
     const tokenRes = await fetch('/api/auth/register-end', {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password })
+      body: JSON.stringify({ password, anonymisationEnabled })
     });
 
     if (!tokenRes.ok) throw new Error('Token generation failed');

@@ -88,24 +88,21 @@ export const registerView = {
 function policiesRelatedRender()
 {
 	return `
-<div id="policiesPopup" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-	<div class="bg-white rounded-lg shadow-lg p-6 w-3/4 h-3/4 relative overflow-y-auto">
-		<button id="closePoliciesBtn" class="absolute top-2 right-2 text-gray-500 hover:text-black text-2xl font-bold">&times;</button>
-		<h2 class="text-xl font-bold mb-4 text-center">Our Data Sharing Policy</h2>
-		<p class="text-gray-700 mb-4">
-			We value your privacy. Here is how we collect, use, and store your data:
-		</p>
-		<ul class="list-disc pl-6 text-gray-700 space-y-2">
-			<li>We do not sell your personal data.</li>
-			<li>We only share anonymous statistics with trusted partners.</li>
-			<li>You may opt-out of data sharing at any time.</li>
-		</ul>
-		<p class="text-gray-700 mt-4">
-			If you have questions, contact our support team.
-		</p>
+	<div id="policiesPopup" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+		<div class="bg-white rounded-lg shadow-lg p-6 w-3/4 h-3/4 relative overflow-y-auto">
+			<button id="closePoliciesBtn" class="absolute top-1 right-3 text-gray-500 hover:text-black text-2xl font-bold">&times;</button>
+			<h2 class="text-xl font-bold mb-4 text-center">Our Data Sharing Policy</h2>
+			<p class="text-gray-700 mb-4">
+				We value your privacy. Here is how we collect, use, and store your data:
+			</p>
+			<ul class="list-disc pl-6 text-gray-700 space-y-2">
+				<li>We do not sell your personal data.</li>
+				<li>By sharing your data, you agree to be in the list of potential users to be friends with other. You will appear in 'Other Users' list. Once being friend with another user, your mail address will be shared with your friend reciprocatively.</li>
+				<li>You may opt-out of data sharing at any time.</li>
+			</ul>
+		</div>
 	</div>
-</div>
-`
+	`
 }
 
 function showPolicies()
@@ -122,12 +119,12 @@ function showPolicies()
 		if (event.target === popup) popup.classList.add("hidden");
 	});
 
-	const anonCheckbox = document.getElementById('anonymizedCheckbox') as HTMLInputElement;
-	let anonymisationEnabled = false;
-	anonCheckbox.addEventListener('change', () => {
-		anonymisationEnabled = anonCheckbox.checked;
-		console.log("Anonymisation enabled:", anonymisationEnabled);
-	});
+	// const anonymizedCheckbox = document.getElementById('anonymizedCheckbox') as HTMLInputElement;
+	// let anonymisationEnabled = false;
+	// anonymizedCheckbox.addEventListener('change', () => {
+	// 	anonymisationEnabled = anonymizedCheckbox.checked;
+	// 	console.log("Anonymisation enabled:", anonymisationEnabled);
+	// });
 
 }
 
