@@ -3,12 +3,50 @@ import db from '../src/database.js';
 
 export async function FriendsRoute(fastify)
 {
-	fastify.get('/friends', { preHandler: fastify.auth }, async (request, body) => {
-		const { currentUser, otherUser } = request.body;
-		const [a,b] = currentUser.id < otherUser.id ? [currentUser.id, otherUser.id] : [otherUser.id, currentUser.id];
-		const stmt = db.prepare(`SELECT * FROM friendships WHERE user_a_id = ? AND user_b_id = ?`);
-		const friendship = stmt.get(a, b);
-		return friendship;
+	fastify.get('/friends', { preHandler: fastify.auth }, async (req, reply) => {
+	  const userId = req.user.id;
+
+	  const stmt = db.prepare(`
+	    SELECT u.id, u.login, u.mail, u.profile_picture
+	    FROM users u
+	    JOIN friendships f
+	      ON (u.id = f.user_a_id OR u.id = f.user_b_id)
+	    WHERE ? IN (f.user_a_id, f.user_b_id)
+	      AND u.id != ?
+	  `);
+
+	  const friends = stmt.all(userId, userId);
+	  return friends;
+	});
+
+	fastify.post('/friends', { preHandler: fastify.auth }, async (req, reply) => {
+	  const fromUserId = req.user.id; // comes from JWT/session
+	  const { toUserId } = req.body;
+
+	  if (!toUserId) {
+	    return reply.status(400).send({ error: "Missing target user id" });
+	  }
+
+	  try {
+	    db.prepare(`
+	      INSERT INTO friend_requests (from_user_id, to_user_id, status, updated_at)
+	      VALUES (?, ?, 'pending', datetime('now'))
+	    `).run(fromUserId, toUserId);
+
+	    return reply.status(201).send({ success: true });
+	  } catch (err) {
+	    if (err.code === "SQLITE_CONSTRAINT_UNIQUE") {
+	      return reply.status(409).send({ error: "Request already exists" });
+	    }
+	    console.error("DB error:", err);
+	    return reply.status(500).send({ error: "Internal server error" });
+	  }
+	});
+
+	fastify.get('/users/count', async (req, reply) => {
+	  const stmt = db.prepare("SELECT COUNT(*) AS total FROM users");
+	  const result = stmt.get();
+	  return { total: result.total };
 	});
 	
 	fastify.get('/countTotalUsers', async (request, reply) =>

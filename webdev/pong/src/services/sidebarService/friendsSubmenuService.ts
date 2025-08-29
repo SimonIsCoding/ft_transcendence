@@ -12,12 +12,12 @@ interface User {
 //function to check how many user there is in the db
 export async function getTotalUser()
 {
-	const res = await fetch('/api/auth/countTotalUsers', {
+	const res = await fetch('/api/auth/users/count', {
 		method: 'GET',
 		credentials: 'include'
 	})
-	const data = await res.json();//issue
-	return data;
+	const { total } = await res.json();
+	return total;
 }
 
 export async function getUserById(userId: number): Promise<User> {
@@ -31,39 +31,20 @@ export async function getUserById(userId: number): Promise<User> {
   return user;
 }
 
-export async function sendFriendRequestOtherUser(currentUser: User, otherUser: User)
+export async function sendFriendRequestOtherUser(otherUser: User)
 {
-	fetch('/api/auth/sendFriendRequest', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ currentUser: currentUser, otherUser: otherUser }),
-		credentials: 'include'
-	})
+  fetch('/api/auth/friends', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ toUserId: otherUser.id }),
+    credentials: 'include'
+  });
 }
 
 type FriendRequest = {
 	from_user_id: number;
 	to_user_id: number;
 };
-
-export async function alreadyFriends(currentUser: User, otherUser: User): Promise<Boolean> 
-{
-	const friends = await fetch('/api/auth/friends', {
-		method: 'GET',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ currentUser: currentUser, otherUser: otherUser }),
-		credentials: 'include'
-	})
-	.then(async res => {
-		const text = await res.text();
-		if (!text) return null;
-		return JSON.parse(text);
-	})
-	.then(data => { return data })
-	if (friends)
-		return true;
-	return false;
-}
 
 export async function getRandomEligibleOtherUser(): Promise<User | null>
 {

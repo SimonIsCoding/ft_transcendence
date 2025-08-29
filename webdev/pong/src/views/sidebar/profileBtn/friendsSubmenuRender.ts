@@ -149,8 +149,7 @@ export const othersUsersCard = {
 	addFriendBtn?.addEventListener('click', async () => {
 		fadeOutAndRemove(othersUsersCard);
 		showSuccessPopup("Invitation sent", 3500, "popup");
-		const currentUser:User = await getCurrentUser();
-		sendFriendRequestOtherUser(currentUser, otherUser);
+		sendFriendRequestOtherUser(otherUser);
 		//reload friendship status & everything
 		//wait 3500 for the popup to disappear and load another one
 	});
