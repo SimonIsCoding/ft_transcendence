@@ -91,6 +91,12 @@ export function editProfileSubmenuRender()
 					class="relative w-12 h-6 flex items-center bg-gray-400 rounded-full p-1 transition-colors duration-300">
 					<span class="w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300"></span>
 				</button>
+				<hr class="border-t border-black w-20"/>
+				<p>Stay anonymous ?</p>
+				<button id="anonymousToggleSwitch"
+					class="relative w-12 h-6 flex items-center bg-gray-400 rounded-full p-1 transition-colors duration-300">
+					<span class="w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300"></span>
+				</button>
 			</div>
 		</div>
 

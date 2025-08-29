@@ -118,13 +118,5 @@ function showPolicies()
 	popup.addEventListener("click", (event) => {
 		if (event.target === popup) popup.classList.add("hidden");
 	});
-
-	// const anonymizedCheckbox = document.getElementById('anonymizedCheckbox') as HTMLInputElement;
-	// let anonymisationEnabled = false;
-	// anonymizedCheckbox.addEventListener('change', () => {
-	// 	anonymisationEnabled = anonymizedCheckbox.checked;
-	// 	console.log("Anonymisation enabled:", anonymisationEnabled);
-	// });
-
 }
 
