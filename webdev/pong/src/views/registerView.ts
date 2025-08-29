@@ -98,6 +98,7 @@ function policiesRelatedRender()
 			<ul class="list-disc pl-6 text-gray-700 space-y-2">
 				<li>We do not sell your personal data.</li>
 				<li>By sharing your data, you agree to be in the list of potential users to be friends with other. You will appear in 'Other Users' list. Once being friend with another user, your mail address will be shared with your friend reciprocatively.</li>
+				<li>By sharing your data, you agree to show to your friends your online status.</li>
 				<li>You may opt-out of data sharing at any time.</li>
 			</ul>
 		</div>
