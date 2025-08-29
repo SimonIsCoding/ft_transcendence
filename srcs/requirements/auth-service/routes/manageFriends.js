@@ -25,7 +25,7 @@ export async function FriendsRoute(fastify)
 			return reply.status(200).send({success: true});
 	});
 	
-	fastify.get('/invitationReceived', async (request, body) => {
+	fastify.post('/invitationReceived', async (request, body) => {
 		const { currentUser, otherUser } = request.body;
 		const stmt = db.prepare(`SELECT * FROM friend_requests WHERE from_user_id = ? AND to_user_id = ?`);
 		const invitationReceived = stmt.get(otherUser.id, currentUser.id);
@@ -65,15 +65,17 @@ export async function FriendsRoute(fastify)
 	});
 
 
-	fastify.get('/getUserById', async (request, reply) => {
+	fastify.post('/getUserById', async (request, reply) => {
 		const { userId } = request.body;
 		const stmt = db.prepare("SELECT id, login, mail, profile_picture FROM users WHERE id = ?");
 		const user = stmt.get(userId);
 		return user;
 	});
-	fastify.get('/requestFriendExists', async (request, reply) => {
-		const stmt = db.prepare("SELECT from_user_id, to_user_id FROM friend_requests");
-		const users = stmt.all();
+
+	fastify.get('/requestFriendExists', { preHandler: fastify.auth }, async (request, reply) => {
+		const userId = request.user.id;
+		const stmt = db.prepare("SELECT from_user_id, to_user_id FROM friend_requests WHERE to_user_id = ?");
+		const users = stmt.all(userId);
 		return reply.status(200).send(users);
 	});
 
@@ -84,8 +86,8 @@ export async function FriendsRoute(fastify)
 		return reply.status(200).send(friends);
 	});
 
-	fastify.get('/randomEligibleOtherUser', async (request, reply) => {
-		const { currentUser } = request.body;
+	fastify.get('/randomEligibleOtherUser', { preHandler: fastify.auth }, async (request, reply) => {
+		const currentUser = request.user.id;
 		const stmt = db.prepare(`SELECT id, login, mail, profile_picture
 			FROM users u
 			WHERE u.id != ?
