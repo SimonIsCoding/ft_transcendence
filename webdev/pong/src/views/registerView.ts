@@ -49,7 +49,13 @@ export const registerView = {
 		    </button>
 		  </div>
 		  
-		  <button id="showPoliciesBtn" class="underline text-white">See data policies</button>
+		  <div class="text-white text-center text-sm">
+			<label class="font-bold">
+				<input id="anonymizedCheckbox" type="checkbox" />
+				Would you like to not share your data ?
+			</label><br>
+			<button id="showPoliciesBtn" class="underline">See data policies</button>
+		  </div>
 
           <button id="createAccountBtn" class="w-80 inline-block text-white font-bold text-lg border border-[#fbd11b] rounded-lg p-2.75">Create Account</button>
           <button id="backToLogin" class="text-white px-2 py-1 text-xl underline">Click here to go back to log in</button>
@@ -79,7 +85,7 @@ export const registerView = {
   }
 };
 
-export function policiesRelatedRender()
+function policiesRelatedRender()
 {
 	return `
 <div id="policiesPopup" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -102,7 +108,7 @@ export function policiesRelatedRender()
 `
 }
 
-export function showPolicies()
+function showPolicies()
 {
 	const popup = document.getElementById("policiesPopup") as HTMLDivElement;
 	const showBtn = document.getElementById("showPoliciesBtn") as HTMLButtonElement;
@@ -115,5 +121,13 @@ export function showPolicies()
 	popup.addEventListener("click", (event) => {
 		if (event.target === popup) popup.classList.add("hidden");
 	});
+
+	const anonCheckbox = document.getElementById('anonymizedCheckbox') as HTMLInputElement;
+	let anonymisationEnabled = false;
+	anonCheckbox.addEventListener('change', () => {
+		anonymisationEnabled = anonCheckbox.checked;
+		console.log("Anonymisation enabled:", anonymisationEnabled);
+	});
+
 }
 
