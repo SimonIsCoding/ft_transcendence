@@ -1,7 +1,6 @@
 import bcrypt from 'bcrypt';
 import db from '../src/database.js';
 import { hashPassword } from './registerRoute.js'
-import { decode } from 'punycode';
 
 export async function editProfileRoute(fastify)
 {

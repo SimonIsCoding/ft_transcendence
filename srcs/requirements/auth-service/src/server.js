@@ -60,7 +60,7 @@ app.register(fastifyStatic, {
 
 app.register(loginRoute); // users/check and /users/sesions
 app.register(registerRoute); // /users/verify and /users
-await uploadProfilePictureRoute(app);
+app.register(uploadProfilePictureRoute);
 app.register(infoUserRoute);  // me/info and me/status api calls
 app.register(twofaManagementRoute);
 app.register(editProfileRoute);//post
@@ -90,3 +90,4 @@ app.listen({
   }
   console.log(`Auth service running on ${app.server.address().port}`);
 });
+
