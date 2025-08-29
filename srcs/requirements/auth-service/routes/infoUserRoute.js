@@ -1,8 +1,8 @@
 import db from '../src/database.js';
 
-export async function infoUserRoute(fastify) {
+export async function infoUserRoute(app) {
   // 🔒 Protected route: use preHandler fastify.auth
-  fastify.get('/me', { preHandler: fastify.auth }, async (request, reply) => {
+  app.get('/me', { preHandler: app.auth }, async (request, reply) => {
     try {
       // request.user is already set by authCheck
       const userId = request.user.id;
@@ -26,7 +26,7 @@ export async function infoUserRoute(fastify) {
     }
   });
 
-  fastify.get('/me/status', { preHandler: fastify.auth }, async (request, reply) => {
+  app.get('/me/status', { preHandler: app.auth }, async (request, reply) => {
     try {
       // request.user is set by auth
       const { id: userId, is2FAVerified } = request.user;

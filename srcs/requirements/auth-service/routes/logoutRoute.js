@@ -1,7 +1,7 @@
 import { deleteSession } from '../utils/sessionTokens.js';
 
 export async function logoutRoute(app) {
-  app.delete('/me/sessions', { preHandler: fastify.auth }, async (request, reply) => {
+  app.delete('/me/sessions', { preHandler: app.auth }, async (request, reply) => {
     try {
 	  const userId = request.user.id;
 	  const sessionToken = request.user.sessionToken;
