@@ -68,28 +68,38 @@ export async function FriendsRoute(fastify)
 	fastify.get('/friends/:id', { preHandler: fastify.auth }, async (req, reply) => {
 	  const currentUserId = req.user.id;
 	  const targetId = req.params.id;
-	
-	  const check = db.prepare(`
-	    SELECT 1
-	    FROM friendships
-	    WHERE (user_a_id = ? AND user_b_id = ?)
-	       OR (user_a_id = ? AND user_b_id = ?)
-	  `).get(currentUserId, targetId, targetId, currentUserId);
-	
+
+  	  // Check friendship OR pending request
+  	  const check = db.prepare(`
+  	    SELECT 1
+  	    FROM friendships f
+  	    WHERE (f.user_a_id = ? AND f.user_b_id = ?)
+  	       OR (f.user_a_id = ? AND f.user_b_id = ?)
+  	    UNION
+  	    SELECT 1
+  	    FROM friend_requests r
+  	    WHERE ((r.from_user_id = ? AND r.to_user_id = ?)
+  	        OR  (r.from_user_id = ? AND r.to_user_id = ?))
+  	      AND r.status = 'pending'
+  	  `).get(
+  	    currentUserId, targetId, targetId, currentUserId,
+  	    currentUserId, targetId, targetId, currentUserId
+  	  );
+
 	  if (!check) {
 	    return reply.status(403).send({ error: "Not your friend" });
 	  }
-  
+
 	  const user = db.prepare(`
 	    SELECT id, login, mail, profile_picture
 	    FROM users
 	    WHERE id = ?
 	  `).get(targetId);
-	
+
 	  if (!user) {
 	    return reply.status(404).send({ error: "User not found" });
 	  }
-  
+
 	  return user;
 	});
 
