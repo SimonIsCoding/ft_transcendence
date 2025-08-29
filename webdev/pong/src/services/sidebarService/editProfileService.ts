@@ -189,7 +189,6 @@ export async function GDPRChangeValueService()
 
 export async function checkFriendHasGDPRActivated(friendUser: User)
 {
-	// console.log(`entered in checkFriendHasGDPRActivated with ${friendUser.login} who has id: ${friendUser.id}`);
 	const res = await fetch('/api/auth/checkGDPRFriend', {
 		method: 'POST',
 		credentials: 'include',
@@ -202,6 +201,5 @@ export async function checkFriendHasGDPRActivated(friendUser: User)
 
 	if (res.status === 409)
 		showErrorPopup(backend_answer.error, "popup")
-	// console.log(`backend is saying that the friend ${friendUser.login} has GDPR ACTIvated set to ${backend_answer.value}`)
 	return (backend_answer.value);
 }
