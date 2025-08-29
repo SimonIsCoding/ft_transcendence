@@ -20,17 +20,15 @@ export async function getTotalUser()
 	return data;
 }
 
-export async function getUserById(userId: number)
-{
-	const user: User = await fetch('/api/auth/getUserById', {
-	method: 'POST',
-	headers: { 'Content-Type': 'application/json' },
-	body: JSON.stringify({ userId: userId }),
-	credentials: 'include'
-	})
+export async function getUserById(userId: number): Promise<User> {
+  const user: User = await fetch(`/api/auth/friends/${userId}`, {
+    method: 'GET',
+    credentials: 'include'
+  })
 	.then(res => res.json())
-	.then(data => { return data })
-	return (user);
+    .then(data => data);
+
+  return user;
 }
 
 export async function sendFriendRequestOtherUser(currentUser: User, otherUser: User)
