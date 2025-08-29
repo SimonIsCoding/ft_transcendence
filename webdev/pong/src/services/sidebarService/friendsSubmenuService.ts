@@ -145,22 +145,12 @@ type FriendsConnexion = {
 
 export async function howManyFriends(): Promise<number>
 {
-	//const currentUser = await getCurrentUser();
-	const nbFriends = await fetch('/api/auth/getFriends', {
+	const friendConnections: FriendsConnexion[] = await fetch('/api/auth/getFriends', {
 		method: 'GET',
-		// headers: { 'Content-Type': 'application/json' },
-		// body: JSON.stringify({ userId: currentUser.id }),
 		credentials: 'include'
-	})
-	.then(res => res.json())
-	.then(async (data: FriendsConnexion[]) => {
-		const currentUser: User = await getCurrentUser();
-		let nbFriendsFirstRow = data.filter(item => item.user_a_id === currentUser.id).length;
-		let nbFriendsSecondRow = data.filter(item => item.user_b_id === currentUser.id).length;
-		let nbFriends = nbFriendsFirstRow + nbFriendsSecondRow;
-		return nbFriends;
-	});
-	return nbFriends;
+	}).then(res => res.json());
+
+	return friendConnections.length;
 }
 
 // getFriends fetch returns:  [ { user_a_id: 2, user_b_id: 3 } ]
@@ -169,16 +159,9 @@ export async function displayFriend(i: number): Promise<User>
 	const currentUser: User = await getCurrentUser();
 	const allFriends: FriendsConnexion[] = await fetch('/api/auth/getFriends', {
 		method: 'GET',
-		//headers: { 'Content-Type': 'application/json' },
-		//body: JSON.stringify({ userId: currentUser.id }),
 		credentials: 'include'
 	})
-	.then(res => res.json())
-	.then((data: FriendsConnexion[]) => {
-		return data.filter(item =>
-			item.user_a_id === currentUser.id || item.user_b_id === currentUser.id
-		);
-	});
+	.then(res => res.json());
 
 	if (!allFriends || i < 0 || i >= allFriends.length)
 		throw new Error("Invalid index || no friends found");
