@@ -1,5 +1,5 @@
 import { Router } from "../../../router";
-import { editProfileService, twofaChangeValueService, twofaCheckService } from "../../../services/sidebarService/editProfileService";
+import { editProfileService, GDPRChangeValueService, GDPRCheckService, twofaChangeValueService, twofaCheckService } from "../../../services/sidebarService/editProfileService";
 import { eraseAccountService } from "../../../services/sidebarService/eraseAccountService"; 
 import { showSuccessPopup } from "../../../utils/utils";
 import { handleSidebar } from "../sidebarBehavior";
@@ -12,6 +12,7 @@ export function userChangingInfo()
 		editProfileService();
 	});
 	twofaToggle();
+	GDPRToggle();
 	eraseAccount();
 }
 
@@ -30,6 +31,37 @@ function twofaToggle()
 		enabled = !enabled;
 
 		twofaChangeValueService();
+
+		if (enabled)
+		{
+			toggle.classList.remove("bg-gray-400");
+			toggle.classList.add("bg-green-500");
+			circle.classList.add("translate-x-6");
+		}
+		else
+		{
+			toggle.classList.remove("bg-green-500");
+			toggle.classList.add("bg-gray-400");
+			circle.classList.remove("translate-x-6");
+		}
+	});
+}
+
+function GDPRToggle()
+{
+	const toggle = document.getElementById("anonymousToggleSwitch") as HTMLButtonElement;
+	const circle = toggle.querySelector("span")!;
+
+	toggle.addEventListener("click", async () => {
+		let enabled: Boolean;
+		const value = await GDPRCheckService();
+		if (value === 1)
+			enabled = true;
+		else
+			enabled = false;
+		enabled = !enabled;
+
+		GDPRChangeValueService();
 
 		if (enabled)
 		{

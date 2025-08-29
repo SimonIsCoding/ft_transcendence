@@ -14,7 +14,7 @@ import { authCheck } from '../plugins/auth.js';
 import { uploadProfilePictureRoute } from '../routes/uploadProfilePictureRoute.js';
 import { logoutRoute } from '../routes/logoutRoute.js';
 import { statusRoute/*, currentUserInfoRoute*/ } from '../routes/userLoggedRoute.js';
-import { editProfileRoute, twofaManagementRoute } from '../routes/editProfileRoute.js';
+import { editProfileRoute, GDPRManagementRoute, twofaManagementRoute } from '../routes/editProfileRoute.js';
 import { eraseAccountRoute } from '../routes/eraseAccountRoute.js';
 //import { loadSecretKey } from '../utils/loadSecretKey.js';
 import { FriendsRoute } from '../routes/manageFriends.js';
@@ -65,6 +65,7 @@ await uploadProfilePictureRoute(app);
 await statusRoute(app);
 await infoUserRoute(app);
 app.register(twofaManagementRoute);
+app.register(GDPRManagementRoute);
 app.register(editProfileRoute);//post
 app.register(eraseAccountRoute);
 app.register(FriendsRoute);

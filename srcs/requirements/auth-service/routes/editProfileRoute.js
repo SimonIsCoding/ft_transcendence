@@ -90,3 +90,37 @@ export async function twofaManagementRoute(fastify)
 		}
 	})
 }
+
+export async function GDPRManagementRoute(fastify)
+{
+	fastify.get('/GDPRCheck', async (request, reply) => {
+		const token = request.cookies.auth_token;
+		if (token)
+		{
+			const decoded = await request.jwtVerify(token);
+			if (decoded.userId && decoded.sessionToken) 
+			{
+				const stmt = db.prepare("SELECT GDPR_activated FROM users WHERE id = ?").get(decoded.userId);
+				return reply.send({ is_activated: stmt.GDPR_activated})
+			}
+		}
+	})
+
+	fastify.post('/GDPRChangeValue', async (request, reply) => {
+		const { userId } = request.body;
+		const token = request.cookies.auth_token;
+		if (token)
+		{
+			const decoded = await request.jwtVerify(token);
+			if (decoded.userId && decoded.userId == userId && decoded.sessionToken)
+			{
+				let row = db.prepare("SELECT GDPR_activated FROM users WHERE id = ?").get(decoded.userId);
+				let former_value = row.GDPR_activated;
+				let current_value = former_value ? 0 : 1;
+				db.prepare(`UPDATE users SET GDPR_activated = ? WHERE id = ?`).run(current_value, decoded.userId);
+				return reply.status(200).send({ success: true });
+			}
+		}
+	})
+}
+
