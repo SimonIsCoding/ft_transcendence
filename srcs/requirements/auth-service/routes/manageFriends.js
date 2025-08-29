@@ -105,7 +105,9 @@ export async function FriendsRoute(fastify)
 
 	fastify.get('/friends/:id/online', { preHandler: fastify.auth }, async (req, reply) => {
 	  const userId = req.user.id;
-	  const friendId = req.params.id;
+	  const friendId = parseInt(req.params.id, 10);
+	  if (isNaN(friendId)) return reply.status(400).send({ error: "Invalid friend ID" });
+	  const now = new Date().toISOString();
 
 	  // Friendship check
 	  const check = db.prepare(`
@@ -121,7 +123,7 @@ export async function FriendsRoute(fastify)
 	      SELECT id, created_at, valid_until 
 	      FROM sessions 
 	      WHERE user_id = ?
-	  `).all(userId);  
+	  `).all(friendId);  
 	  if (!sessions || sessions.length === 0) {
 	      return reply.status(400).send({ success: false });
 	  }  
@@ -138,7 +140,7 @@ export async function FriendsRoute(fastify)
 	  if (isOnline) {
 	      return reply.status(200).send({ success: true });
 	  } else {
-	      return reply.status(401).send({ success: false });
+	      return reply.status(200).send({ success: false });
 	  }
 	});
 
