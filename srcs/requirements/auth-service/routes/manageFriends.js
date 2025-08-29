@@ -132,7 +132,7 @@ export async function FriendsRoute(fastify)
 			ORDER BY RANDOM()
 			LIMIT 1
 		`);
-		const user = stmt.get(currentUser.id, currentUser.id, currentUser.id, currentUser.id, currentUser.id, currentUser.id, currentUser.id);
+		const user = stmt.get(currentUser, currentUser, currentUser, currentUser, currentUser, currentUser, currentUser);
 		if (!user)
 			return reply.status(204).send();
 		return reply.send(user);
