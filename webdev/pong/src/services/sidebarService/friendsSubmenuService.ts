@@ -65,24 +65,24 @@ export async function getRandomEligibleOtherUser(): Promise<User | null>
 	return null;
 }
 
-export async function friendInvitationReceived(currentUser: User, otherUser: User): Promise<Boolean> 
-{
-	const invitationReceived = await fetch('/api/auth/invitationReceived', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ currentUser: currentUser, otherUser: otherUser }),
-		credentials: 'include'
-	})
-	.then(async res => {
-		const text = await res.text();
-		if (!text) return null;
-		return JSON.parse(text);
-	})
-	.then(data => { return data })
-	if (invitationReceived)
-		return true;
-	return false;
-}
+// export async function friendInvitationReceived(currentUser: User, otherUser: User): Promise<Boolean> 
+// {
+// 	const invitationReceived = await fetch('/api/auth/invitationReceived', {
+// 		method: 'POST',
+// 		headers: { 'Content-Type': 'application/json' },
+// 		body: JSON.stringify({ currentUser: currentUser, otherUser: otherUser }),
+// 		credentials: 'include'
+// 	})
+// 	.then(async res => {
+// 		const text = await res.text();
+// 		if (!text) return null;
+// 		return JSON.parse(text);
+// 	})
+// 	.then(data => { return data })
+// 	if (invitationReceived)
+// 		return true;
+// 	return false;
+// }
 
 export async function howManyFriendsRequests(): Promise<number>
 {

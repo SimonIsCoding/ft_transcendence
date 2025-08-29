@@ -18,7 +18,7 @@ export async function registerRoute(fastify)
 {
 	//to create an account
 	fastify.post('/register', async (request, reply) => {
-		const { login, mail } = request.body;
+		const { login, mail, anonymisationEnabled } = request.body;
 		
 		if (!login || !mail)
 			return reply.status(400).send({ success: false, error: "All fields required" });
@@ -28,7 +28,7 @@ export async function registerRoute(fastify)
 	  if (existsMail) return reply.code(409).send({ success: false, error: "Email already used" });
 
 	  // 2. store pending info in signed cookie
-	  reply.setCookie('pending_registration', JSON.stringify({ login, mail }), {
+	  reply.setCookie('pending_registration', JSON.stringify({ login, mail, anonymisationEnabled }), {
 	    httpOnly: true,
 	    secure: true,
 	    signed: true,   // <--- requires fastify-cookie secret
@@ -43,7 +43,7 @@ export async function registerRoute(fastify)
 	fastify.post('/register-end', async (req, reply) => {
 	  const pending = req.unsignCookie(req.cookies.pending_registration || '');
 	  if (!pending.valid) return reply.code(400).send({ success: false, error: "No pending registration" });
-	  const { login, mail } = JSON.parse(pending.value);
+	  const { login, mail, anonymisationEnabled } = JSON.parse(pending.value);
   	  // extract password from request body
 	  const { password } = req.body;
 	  if (!password) return reply.code(400).send({ success: false, error: "Password required" });
@@ -57,8 +57,10 @@ export async function registerRoute(fastify)
 
 	    const encryptedPassword = await bcrypt.hash(password, 10);
 	    const avatarPath = getRandomAvatar();
-	    db.prepare("INSERT INTO users (login, password, mail, profile_picture) VALUES (?, ?, ?, ?)")
-	      .run(login, encryptedPassword, mail, avatarPath);
+		if (anonymisationEnabled === false)
+			db.prepare("INSERT INTO users (login, password, mail, profile_picture) VALUES (?, ?, ?, ?)").run(login, encryptedPassword, mail, avatarPath);
+		else
+			db.prepare("INSERT INTO users (login, password, mail, profile_picture, GDPR_activated) VALUES (?, ?, ?, ?, 1)").run(login, encryptedPassword, mail, avatarPath);
   
 	    reply.clearCookie('pending_registration').clearCookie('auth_phase');
 	    return reply.send({ success: true, message: "User registered" });
