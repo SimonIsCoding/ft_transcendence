@@ -103,6 +103,45 @@ export async function FriendsRoute(fastify)
 	  return user;
 	});
 
+	fastify.get('/friends/:id/online', { preHandler: fastify.auth }, async (req, reply) => {
+	  const userId = req.user.id;
+	  const friendId = req.params.id;
+
+	  // Friendship check
+	  const check = db.prepare(`
+	    SELECT 1
+	    FROM friendships
+	    WHERE (user_a_id = ? AND user_b_id = ?)
+	       OR (user_a_id = ? AND user_b_id = ?)
+	  `).get(userId, friendId, friendId, userId);
+
+	  if (!check) return reply.status(403).send({ error: "Not a friend" });
+
+	  const sessions = db.prepare(`
+	      SELECT id, created_at, valid_until 
+	      FROM sessions 
+	      WHERE user_id = ?
+	  `).all(userId);  
+	  if (!sessions || sessions.length === 0) {
+	      return reply.status(400).send({ success: false });
+	  }  
+	  let isOnline = false;  
+	  for (const session of sessions) {
+	      if (now >= session.created_at && now <= session.valid_until) {
+	          // At least one valid session
+	          isOnline = true;
+	      } else {
+	          // Remove expired sessions
+	          db.prepare(`DELETE FROM sessions WHERE id = ?`).run(session.id);
+	      }
+	  }  
+	  if (isOnline) {
+	      return reply.status(200).send({ success: true });
+	  } else {
+	      return reply.status(401).send({ success: false });
+	  }
+	});
+
 	fastify.get('/requestFriendExists', { preHandler: fastify.auth }, async (request, reply) => {
 		const userId = request.user.id;
 		const stmt = db.prepare("SELECT from_user_id, to_user_id FROM friend_requests WHERE to_user_id = ?");
