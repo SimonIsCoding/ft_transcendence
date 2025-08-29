@@ -171,8 +171,8 @@ export async function displayFriend(i: number): Promise<User>
 	const currentUser: User = await getCurrentUser();
 	const allFriends: FriendsConnexion[] = await fetch('/api/auth/getFriends', {
 		method: 'GET',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ userId: currentUser.id }),
+		//headers: { 'Content-Type': 'application/json' },
+		//body: JSON.stringify({ userId: currentUser.id }),
 		credentials: 'include'
 	})
 	.then(res => res.json())
