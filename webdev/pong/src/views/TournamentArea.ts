@@ -1,6 +1,7 @@
 import { TournamentModel } from '../models/TournamentModel';
-import { setTournament } from '../models/TournamentStore';
+import { getMatchInfo, getTournament, setTournament, setMatchInfo } from '../models/TournamentStore';
 import { TournamentController } from '../controllers/TournamentController';
+import { Router } from '../router';
 
 function swapLineToRightSvg(): string {
   return `
@@ -21,7 +22,7 @@ function swapLineToLeftSvg(): string {
 export const TournamentArea = {
   render(): string {
     return `
-      <main id="tournamentArea" class="flex-1 bg-black d-flex items-center justify-center bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center w-full h-full" style="background-image: url('/pongBackgroundPlay.png');">
+      <main id="tournamentArea" class="hidden flex-1 bg-black d-flex items-center justify-center bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center w-full h-full" style="background-image: url('/pongBackgroundPlay.png');">
 		<div id="tournamentAreaPopup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50">
 		</div>
 		<div id="esquemaTorneo" class="hidden relative w-full min-h-screen bg-[#1a1a1a] text-white p-4 md:p-8 overflow-hidden">
@@ -151,18 +152,36 @@ export const TournamentArea = {
           alias4Input.value = 'user 4';
         }
       }
+      let torneo = getTournament();
+      if (!torneo)
+      {
+        const torneoNew = new TournamentModel();
+        torneoNew.addPlayer(player1);
+        torneoNew.addPlayer(player2);
+        torneoNew.addPlayer(player3);
+        torneoNew.addPlayer(player4);
+        setTournament(torneoNew);
+        console.log('asignando jugadores sin tener el valor?')
 
-      const torneo = new TournamentModel();
-      torneo.addPlayer(player1);
-      torneo.addPlayer(player2);
-      torneo.addPlayer(player3);
-      torneo.addPlayer(player4);
-      setTournament(torneo);
-
+      }
+      const currentMatchInfo = getMatchInfo();
+      if (!currentMatchInfo)
+      {
+        setMatchInfo({
+          player1: player1,
+          player2: player2,
+          partidoActivo: true,
+          onMatchEnd: (winnerAlias: string, player1Score: number, player2Score: number) => {
+            console.log(`Match ended. Winner: ${winnerAlias}, Scores: ${player1Score} - ${player2Score}`);
+            // Placeholder for match end logic
+          }
+        })
+      }
       playtournamentBtn.classList.add('hidden');
 
       const controller = new TournamentController();
       controller.iniciarTorneo();
+      Router.navigate('tournament');
     });
   }
 };
