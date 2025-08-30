@@ -197,7 +197,6 @@ export async function FriendsRoute(fastify)
 					WHERE (from_user_id = ? OR to_user_id = ?)
 						AND status = 'pending'
 				)
-				AND u.GDPR_activated = 0
 			ORDER BY RANDOM()
 			LIMIT 1
 		`);

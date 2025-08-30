@@ -88,7 +88,7 @@ export const registerView = {
 function policiesRelatedRender()
 {
 	return `
-	<div id="policiesPopup" class="hidden bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+	<div id="policiesPopup" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
 		<div class="bg-white rounded-lg shadow-lg p-6 w-3/4 h-3/4 relative overflow-y-auto">
 			<button id="closePoliciesBtn" class="absolute top-1 right-3 text-gray-500 hover:text-black text-2xl font-bold">&times;</button>
 			<h2 class="text-xl font-bold mb-4 text-center">Our Data Sharing Policy</h2>
@@ -98,7 +98,6 @@ function policiesRelatedRender()
 			<ul class="list-disc pl-6 text-gray-700 space-y-2">
 				<li>We do not sell your personal data.</li>
 				<li>By sharing your data, you agree to be in the list of potential users to be friends with other. You will appear in 'Other Users' list. Once being friend with another user, your mail address will be shared with your friend reciprocatively.</li>
-				<li>By sharing your data, you agree to show to your friends your online status.</li>
 				<li>You may opt-out of data sharing at any time.</li>
 			</ul>
 		</div>
