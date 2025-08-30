@@ -14,7 +14,7 @@ export const loginView = {
 		<div id="sidebar" class="bg-[#fbd11b] h-screen flex flex-col overflow-hidden transition-all duration-500 ease-in-out w-[64px]">
 		</div>
 		
-			<main id="gameArea" class="flex-1 bg-black flex items-center justify-center bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center w-full h-full" style="background-image: url('/pongBackgroundPlay.png');">
+			<main id="loginArea" class="flex-1 bg-black flex items-center justify-center bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center w-full h-full" style="background-image: url('/pongBackgroundPlay.png');">
 
 			<div id="loginCredentials" class="flex flex-col justify-center items-center w-full space-y-10">
 				<input id="login" type="text" placeholder="Login" class="w-80 inline-block text-white font-bold text-lg border border-[#fbd11b] rounded-lg p-2.75" />
