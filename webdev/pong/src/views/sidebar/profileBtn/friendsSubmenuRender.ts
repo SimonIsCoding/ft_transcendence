@@ -2,7 +2,6 @@ import { getCurrentUser } from '../../../utils/utils.ts';
 import { checkFriendIsConnected, reloadFriendshipsStatus, sendFriendRequestOtherUser, updateFriendshipStatus } from '../../../services/sidebarService/friendsSubmenuService.ts';
 import { showSuccessPopup } from '../../../utils/utils.ts';
 import { renderBackButton } from '../sidebarUtils.ts'
-import { checkFriendHasGDPRActivated } from '../../../services/sidebarService/editProfileService.ts';
 
 interface User {
   id: number;
@@ -93,32 +92,22 @@ export const friendsCard = {
 	const friendMail = document.getElementById(`friendMail_${friendUser.id}`);
 	const friendStatus = document.getElementById(`friendsStatus_${friendUser.id}`);
 	const isFriendConnected = await checkFriendIsConnected(friendUser.id);
-	const isGPDRActivated = await checkFriendHasGDPRActivated(friendUser);
-	if (isFriendConnected && isGPDRActivated === 0)
+	if (isFriendConnected)
 	{
 		friendStatus?.classList.remove("bg-red-500");
 		friendStatus?.classList.add("bg-green-500");
 	}
-	else if (isFriendConnected === 0 && isGPDRActivated === 0)
+	else
 	{
 		friendStatus?.classList.remove("bg-green-500");
 		friendStatus?.classList.add("bg-red-500");
-	}
-	else
-	{
-		friendStatus?.classList.remove("bg-red-500");
-		friendStatus?.classList.add("bg-black");
 	}
 	if (friendUser.profile_picture && friendUser.profile_picture.startsWith("https://lh3.googleusercontent.com"))
 		friendImg.src = `${friendUser.profile_picture}`;
 	else
 		friendImg.src = `https://localhost:4443/${friendUser.profile_picture}`;
 	friendUsername!.textContent = friendUser.login;
-	
-	if (isGPDRActivated === 0)
-		friendMail!.textContent = friendUser.mail;
-	else
-		friendMail!.textContent = '';
+	friendMail!.textContent = friendUser.mail;
   }
 }
 
