@@ -1,20 +1,12 @@
-import { getCurrentUser } from "../../utils/utils";
 import { manageOthersUsersCard, manageFriendsRequestsCard, manageFriendsCard } from "../../views/sidebar/profileBtn/manageFriendsSubmenu";
 
 export async function eraseAccountService()
 {
-	const currentUser = await getCurrentUser();
 	manageFriendsRequestsCard.reset();
 	manageFriendsCard.reset();
 	manageOthersUsersCard.reset();
-	await fetch('/api/auth/logout', {
-		method: 'POST',
-		credentials: 'include'
-	})
-	await fetch("/api/auth/eraseAccount", {
-		method: 'POST',
+	await fetch("/api/auth/me", {
+		method: 'DELETE',
 		credentials: 'include',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ login: currentUser.login })
 	})
 }

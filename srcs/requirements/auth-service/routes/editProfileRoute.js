@@ -1,14 +1,14 @@
 import bcrypt from 'bcrypt';
 import db from '../src/database.js';
 import { hashPassword } from './registerRoute.js'
-import { decode } from 'punycode';
 
 export async function editProfileRoute(fastify)
 {
-	fastify.post('/changeInfo', async (request, reply) => {
-		const { login, currentPassword, changePassword, changeMail } = request.body;
-		const stmt = db.prepare("SELECT * FROM users WHERE login = ?");
-		const user = stmt.get(login);
+	fastify.post('/me/update', { preHandler: fastify.auth }, async (request, reply) => {
+		const userId = request.user.id;
+		const { currentPassword, changePassword, changeMail } = request.body;
+		const stmt = db.prepare("SELECT * FROM users WHERE id = ?");
+		const user = stmt.get(userId);
 		if (currentPassword && currentPassword.trim() !== "")
 		{
 			const match = user ? await bcrypt.compare(currentPassword, user.password) : false;
@@ -19,8 +19,8 @@ export async function editProfileRoute(fastify)
 			{
 				if (changeMail && changeMail.trim() !== "")
 				{
-					const stmt = db.prepare("UPDATE users SET password = ?, mail = ? WHERE login = ?");
-					stmt.run(encryptedPassword, changeMail, user.login);
+					const stmt = db.prepare("UPDATE users SET password = ?, mail = ? WHERE id = ?");
+					stmt.run(encryptedPassword, changeMail, userId);
 					return reply.status(200).send({ success: true, message: "Password & mail modified" });
 				}
 				const stmt2 = db.prepare("UPDATE users SET password = ? WHERE login = ?");
@@ -41,8 +41,8 @@ export async function editProfileRoute(fastify)
 		{
 			try
 			{
-				const stmt3 = db.prepare("UPDATE users SET mail = ? WHERE login = ?");
-				stmt3.run(changeMail, user.login);
+				const stmt3 = db.prepare("UPDATE users SET mail = ? WHERE id = ?");
+				stmt3.run(changeMail, userId);
 				return reply.status(200).send({ success: true, message: "Mail modified" });
 			}
 			catch (err)
@@ -60,34 +60,23 @@ export async function editProfileRoute(fastify)
 
 export async function twofaManagementRoute(fastify)
 {
-	fastify.get('/twofaCheck', async (request, reply) => {
-		const token = request.cookies.auth_token;
-		if (token)
-		{
-			const decoded = await request.jwtVerify(token);
-			if (decoded.userId && decoded.sessionToken) 
-			{
-				const stmt = db.prepare("SELECT is_2fa_activated FROM users WHERE id = ?").get(decoded.userId);
-				return reply.send({ is_activated: stmt.is_2fa_activated})
-			}
-		}
+	fastify.get('/me/twofa', { preHandler: fastify.auth }, async (request, reply) => {
+		const userId = request.user.id;
+
+		const stmt = db.prepare("SELECT is_2fa_activated FROM users WHERE id = ?").get(userId);
+		return reply.send({ is_activated: stmt.is_2fa_activated})
+
 	})
 
-	fastify.post('/twofaChangeValue', async (request, reply) => {
-		const { userId } = request.body;
-		const token = request.cookies.auth_token;
-		if (token)
-		{
-			const decoded = await request.jwtVerify(token);
-			if (decoded.userId && decoded.userId == userId && decoded.sessionToken)
-			{
-				let row = db.prepare("SELECT is_2fa_activated FROM users WHERE id = ?").get(decoded.userId);
-				let former_value = row.is_2fa_activated;
-				let current_value = former_value ? 0 : 1;
-				db.prepare(`UPDATE users SET is_2fa_activated = ? WHERE id = ?`).run(current_value, decoded.userId);
-				return reply.status(200).send({ success: true });
-			}
-		}
+	fastify.post('/me/twofa', { preHandler: fastify.auth }, async (request, reply) => {
+		const userId = request.user.id;
+
+		let row = db.prepare("SELECT is_2fa_activated FROM users WHERE id = ?").get(userId);
+		let former_value = row.is_2fa_activated;
+		let current_value = former_value ? 0 : 1;
+		db.prepare(`UPDATE users SET is_2fa_activated = ? WHERE id = ?`).run(current_value, userId);
+		return reply.status(200).send({ success: true });
+
 	})
 }
 

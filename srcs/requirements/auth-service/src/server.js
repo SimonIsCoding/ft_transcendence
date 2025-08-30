@@ -59,17 +59,16 @@ app.register(fastifyStatic, {
   prefix: '/profile_pictures/',
 });
 
-app.register(loginRoute);
-app.register(registerRoute);
-await uploadProfilePictureRoute(app);
-await statusRoute(app);
-await infoUserRoute(app);
+app.register(loginRoute); // users/check and /users/sesions
+app.register(registerRoute); // /users/verify and /users
+app.register(uploadProfilePictureRoute);
+app.register(infoUserRoute);  // me/info and me/status api calls
 app.register(twofaManagementRoute);
 app.register(GDPRManagementRoute);
 app.register(editProfileRoute);//post
-app.register(eraseAccountRoute);
-app.register(FriendsRoute);
-app.register(logoutRoute);
+app.register(eraseAccountRoute); // delete /me
+app.register(FriendsRoute); // /friends routes
+app.register(logoutRoute);  // delete /me/sessions
 app.register(googleRoute);
 
 // --- Cleanup expired sessions daily ---
@@ -93,3 +92,4 @@ app.listen({
   }
   console.log(`Auth service running on ${app.server.address().port}`);
 });
+

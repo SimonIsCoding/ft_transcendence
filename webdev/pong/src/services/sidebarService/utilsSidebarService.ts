@@ -1,6 +1,6 @@
 export async function isConnected(): Promise<boolean>
 {
-	const res = await fetch('/api/auth/status', {
+	const res = await fetch('/api/auth/me/status', {
 			method: 'GET',
   			credentials: 'include' 
 	})
@@ -14,7 +14,7 @@ export async function isConnected(): Promise<boolean>
 
 export async function getUserInfo()
 {
-	const res = await fetch("/api/auth/info", {
+	const res = await fetch("/api/auth/me", {
 		method: 'GET',
 		credentials: 'include'
 	})

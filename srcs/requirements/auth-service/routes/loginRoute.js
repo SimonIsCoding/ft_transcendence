@@ -4,7 +4,7 @@ import {hashToken, createSessionToken} from '../utils/sessionTokens.js';
 
 export async function loginRoute(fastify) {
   // POST /login
-  fastify.post('/login', async (request, reply) => {
+  fastify.post('/users/check', async (request, reply) => {
     const { login, password } = request.body;
 	// console.log(`password = ${password}`);
     
@@ -50,7 +50,7 @@ export async function loginRoute(fastify) {
   });
 
   // POST /generate-token
-   fastify.post('/generate-token', {
+   fastify.post('/users/sessions', {
     schema: {
       body: {
         type: 'object',
@@ -72,7 +72,11 @@ export async function loginRoute(fastify) {
     const is2FAVerified = process.env.ENABLE_2FA === 'true'
       ? request.cookies.auth_phase === '2fa_verified' // Check phase if 2FA enabled
       : true; // Auto-verify if 2FA disabled
-  
+  	
+	if (!is2FAVerified) {
+	  return reply.code(403).send({ error: '2FA verification required' });
+	}
+
  	// 3. Create session_token (random string / UUID)
 	const rawSessionToken = createSessionToken();  // to send back
 	const hashedToken = hashToken(rawSessionToken);  // to store in db
@@ -93,7 +97,6 @@ export async function loginRoute(fastify) {
     // 5. Generate token
     const token = await reply.jwtSign({
       userId: user.id,
-      is2FAVerified,
 	  sessionToken: rawSessionToken
       },
       { expiresIn: SESSION_LIFETIME }

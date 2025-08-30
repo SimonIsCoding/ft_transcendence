@@ -18,7 +18,7 @@ fastify.register(fastifyCors, {
     'https://localhost:4443',       // campus computer
     'https://localhost'       // virtual server
   ],
-  methods: ['GET', 'POST', 'OPTIONS'],
+  methods: ['GET', 'POST', 'DELETE'],
   allowedHeaders: ['Content-Type'],
   credentials: true,
   // Optional: Cache preflight for 24h

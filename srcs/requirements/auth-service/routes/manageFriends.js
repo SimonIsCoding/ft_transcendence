@@ -49,20 +49,6 @@ export async function FriendsRoute(fastify)
 	  return { total: result.total };
 	});
 	
-	fastify.get('/countTotalUsers', async (request, reply) =>
-		{
-			const stmt = db.prepare("SELECT COUNT(*) AS totalUsers FROM users");
-			const result = stmt.get();
-			return result.totalUsers;
-	});
-
-	fastify.post('/sendFriendRequest', async (request, reply) => {
-		const { currentUser, otherUser } = request.body;
-		db.prepare(`INSERT INTO friend_requests (from_user_id, to_user_id, status, updated_at)
-			VALUES (?, ?, 'pending', datetime('now'))`).run(currentUser.id, otherUser.id);
-			return reply.status(200).send({success: true});
-	});
-	
 	fastify.post('/updateFriendshipStatus', async (request, reply) => {
 		const { currentUser, otherUser, status } = request.body;
 		const [a, b] = currentUser.id < otherUser.id ? [currentUser.id, otherUser.id] : [otherUser.id, currentUser.id];
@@ -221,37 +207,4 @@ export async function FriendsRoute(fastify)
 		return reply.send(user);
 	});
 
-	// this could be a get
-	fastify.post('/isFriendConnected', async (request, reply) => {
-		const { userId } = request.body;
-		const now = new Date().toISOString();
-	  // Get all sessions for this user
-	    const sessions = db.prepare(`
-	        SELECT id, created_at, valid_until 
-	        FROM sessions 
-	        WHERE user_id = ?
-	    `).all(userId);
-
-	    if (!sessions || sessions.length === 0) {
-	        return reply.status(400).send({ success: false });
-	    }
-
-	    let isOnline = false;
-
-	    for (const session of sessions) {
-	        if (now >= session.created_at && now <= session.valid_until) {
-	            // At least one valid session
-	            isOnline = true;
-	        } else {
-	            // Remove expired sessions
-	            db.prepare(`DELETE FROM sessions WHERE id = ?`).run(session.id);
-	        }
-	    }
-
-	    if (isOnline) {
-	        return reply.status(200).send({ success: true });
-	    } else {
-	        return reply.status(401).send({ success: false });
-	    }
-	});
 }
