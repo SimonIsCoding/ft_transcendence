@@ -28,18 +28,13 @@ export async function infoUserRoute(app) {
 
   app.get('/me/status', { preHandler: app.auth }, async (request, reply) => {
     try {
-      // request.user is set by auth
-      const { id: userId, is2FAVerified } = request.user;
-
-      const needs2FA = process.env.ENABLE_2FA === 'true' && !is2FAVerified;
-      const fullyAuthed = !needs2FA;
+      // if arrived here app.auth has validated token
 
       return reply.send({
         authenticated: fullyAuthed,
         requires2FA: needs2FA,
         user: {
           id: userId,
-          is2FAVerified: is2FAVerified || false
         }
       });
 

@@ -19,7 +19,6 @@ export async function authCheck(request, reply) {
     // attach user info so routes can use it directly
     request.user = {
       id: decoded.userId,
-	  is2FAVerified: decoded.is2FAVerified,
       sessionToken: decoded.sessionToken
     };
 

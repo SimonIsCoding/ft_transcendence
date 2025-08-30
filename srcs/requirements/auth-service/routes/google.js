@@ -64,24 +64,24 @@ export async function googleRoute(fastify)
 				user = db.prepare("SELECT * FROM users WHERE mail = ?").get(payload.email);
 			}
 
-    // Determine auth phase
-    if (process.env.ENABLE_2FA === "true") {
-      reply.setCookie("auth_phase", "2fa_verified", {
-        httpOnly: true,
-        secure: true,
-        sameSite: "strict",
-        path: "/",
-        maxAge: 300_000 // 5 minutes
-      });
-    } else {
-      reply.setCookie("auth_phase", "password_verified", {
-        httpOnly: true,
-        secure: true,
-        sameSite: "strict",
-        path: "/",
-        maxAge: 300_000 // 5 minutes
-      });
-    }
+   			// Determine auth phase
+   			if (process.env.ENABLE_2FA === "true") {
+   			  reply.setCookie("auth_phase", "2fa_verified", {
+   			    httpOnly: true,
+   			    secure: true,
+   			    sameSite: "strict",
+   			    path: "/",
+   			    maxAge: 300_000 // 5 minutes
+   			  });
+   			} else {
+   			  reply.setCookie("auth_phase", "password_verified", {
+   			    httpOnly: true,
+   			    secure: true,
+   			    sameSite: "strict",
+   			    path: "/",
+   			    maxAge: 300_000 // 5 minutes
+   			  });
+   			}
 	
 			return reply.status(201).send({ userId: user.id, login: user.login, mail: user.mail, profile_picture: user.profile_picture, provider: user.provider});
 	
