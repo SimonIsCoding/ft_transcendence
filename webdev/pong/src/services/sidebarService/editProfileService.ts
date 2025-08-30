@@ -12,7 +12,7 @@ export async function reloadUserInfo(): Promise<void>
 {
 	try
 	{
-		const res = await fetch("/api/auth/info", { credentials: "include" });
+		const res = await fetch("/api/auth/me", { credentials: "include" });
 		if (!res.ok)
 			return console.error("Error fetching user info:", res.status);
 		const data = await res.json();
@@ -59,7 +59,7 @@ export async function editProfileService()
 	if (currentPassword && (!changePassword || currentPassword.trim() === ""))
 		return showErrorPopup("You have to insert a new password.", "popup")
 
-	const res = await fetch('/api/auth/changeInfo', {
+	const res = await fetch('/api/auth/me/update', {
 		method: 'POST',
 		credentials: 'include',
 		headers: { 'Content-Type': 'application/json' },
@@ -85,7 +85,7 @@ export async function twofaCheckService(): Promise<number>
 {
 	try
 	{
-		const res = await fetch("/api/auth/twofaCheck", { credentials: "include" });
+		const res = await fetch("/api/auth/me/twofa", { credentials: "include" });
 		if (!res.ok)
 		{
 			console.error("Error fetching twofaCheck:", res.status);
@@ -119,7 +119,7 @@ export async function twofaCheckService(): Promise<number>
 export async function twofaChangeValueService()
 {
 	const currentUser = await getCurrentUser();
-	const res = await fetch('/api/auth/twofaChangeValue', {
+	const res = await fetch('/api/auth/me/twofa', {
 		method: 'POST',
 		credentials: 'include',
 		headers: { 'Content-Type': 'application/json' },

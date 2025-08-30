@@ -1,10 +1,10 @@
 import db from '../src/database.js';
 
-export async function infoUserRoute(fastify) {
+export async function infoUserRoute(app) {
   // 🔒 Protected route: use preHandler fastify.auth
-  fastify.get('/info', { preHandler: fastify.auth }, async (request, reply) => {
+  app.get('/me', { preHandler: app.auth }, async (request, reply) => {
     try {
-      // request.user is already set by authGuard
+      // request.user is already set by authCheck
       const userId = request.user.id;
 
       // Fetch complete user data
@@ -22,6 +22,24 @@ export async function infoUserRoute(fastify) {
       return reply.send({ user });
     } catch (error) {
       console.error('Unexpected error in /info:', error);
+      return reply.code(500).send({ error: 'Internal server error' });
+    }
+  });
+
+  app.get('/me/status', { preHandler: app.auth }, async (request, reply) => {
+    try {
+      // if arrived here app.auth has validated token
+      const userId = request.user.id;
+
+      return reply.send({
+        authenticated: true,
+        user: {
+          id: userId,
+        }
+      });
+
+    } catch (error) {
+      console.error('Unexpected error in /status:', error);
       return reply.code(500).send({ error: 'Internal server error' });
     }
   });

@@ -14,8 +14,8 @@ export function initLogout() {
     e.preventDefault(); // Prevent default behavior if it's a link
     
     try {
-      const response = await fetch('/api/auth/logout', {
-        method: 'POST', // Changed to POST (more appropriate for logout)
+      const response = await fetch('/api/auth/me/sessions', {
+        method: 'DELETE', // Changed to POST (more appropriate for logout)
         credentials: 'include', // Necessary for cookies
       });
 
