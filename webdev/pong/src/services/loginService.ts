@@ -59,7 +59,7 @@ export async function initLogin() {
 		  		  
 		      loginForm.classList.add('hidden');
 		      twofaContainer.classList.add('hidden');
-		      handleSuccessfulLogin(loginData.login, loginData.userId);
+		      handleSuccessfulLogin(login, loginData.userId);
 		    },
 		    twofaContainer,
       		(message, isFinal) => {

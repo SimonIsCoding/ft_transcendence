@@ -76,7 +76,8 @@ export function oneVsOneAreaInit()
 
 export function tournamentAreaInit()
 {
-	
+		const submenus = document.querySelectorAll<HTMLElement>('.submenu');
+
 	const tournamentBtn = document.getElementById("tournamentBtn");
 	const gameArea = document.getElementById("gameArea");
 	const tournamentArea = document.getElementById("tournamentArea");
@@ -84,6 +85,8 @@ export function tournamentAreaInit()
 	const oneVsAIArea = document.getElementById("oneVsAIArea");
 	const esquemaTorneo = document.getElementById("esquemaTorneo");
 	tournamentBtn?.addEventListener('click', () => {
+				toggleMenuVisibility('playSubmenu', submenus);
+
 		gameArea?.classList.add('hidden');
 		oneVsOneArea?.classList.add('hidden');
 		oneVsAIArea?.classList.add('hidden');
