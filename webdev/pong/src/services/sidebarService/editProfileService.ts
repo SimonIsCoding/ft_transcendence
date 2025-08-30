@@ -138,7 +138,7 @@ export async function GDPRCheckService(): Promise<number>
 {
 	try
 	{
-		const res = await fetch("/api/auth/GDPRCheck", { credentials: "include" });
+		const res = await fetch("/api/auth/me/GDPRCheck", { credentials: "include" });
 		if (!res.ok)
 		{
 			console.error("Error fetching GDPRCheck:", res.status);
@@ -172,7 +172,7 @@ export async function GDPRCheckService(): Promise<number>
 export async function GDPRChangeValueService()
 {
 	const currentUser = await getCurrentUser();
-	const res = await fetch('/api/auth/GDPRChangeValue', {
+	const res = await fetch('/api/auth/me/GDPRChangeValue', {
 		method: 'POST',
 		credentials: 'include',
 		headers: { 'Content-Type': 'application/json' },
@@ -189,7 +189,7 @@ export async function GDPRChangeValueService()
 
 export async function checkFriendHasGDPRActivated(friendUser: User)
 {
-	const res = await fetch('/api/auth/checkGDPRFriend', {
+	const res = await fetch('/api/auth/me/checkGDPRFriend', {
 		method: 'POST',
 		credentials: 'include',
 		headers: { 'Content-Type': 'application/json' },

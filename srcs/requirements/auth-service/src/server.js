@@ -13,7 +13,7 @@ import { registerRoute } from '../routes/registerRoute.js';
 import { authCheck } from '../plugins/auth.js';
 import { uploadProfilePictureRoute } from '../routes/uploadProfilePictureRoute.js';
 import { logoutRoute } from '../routes/logoutRoute.js';
-import { editProfileRoute, twofaManagementRoute } from '../routes/editProfileRoute.js';
+import { editProfileRoute, GDPRManagementRoute, twofaManagementRoute } from '../routes/editProfileRoute.js';
 import { eraseAccountRoute } from '../routes/eraseAccountRoute.js';
 //import { loadSecretKey } from '../utils/loadSecretKey.js';
 import { FriendsRoute } from '../routes/manageFriends.js';
@@ -63,6 +63,7 @@ app.register(registerRoute); // /users/verify and /users
 app.register(uploadProfilePictureRoute);
 app.register(infoUserRoute);  // me/info and me/status api calls
 app.register(twofaManagementRoute);
+app.register(GDPRManagementRoute);
 app.register(editProfileRoute);//post
 app.register(eraseAccountRoute); // delete /me
 app.register(FriendsRoute); // /friends routes

@@ -82,7 +82,7 @@ export async function twofaManagementRoute(fastify)
 
 export async function GDPRManagementRoute(fastify)
 {
-	fastify.get('/GDPRCheck', async (request, reply) => {
+	fastify.get('/me/GDPRCheck', async (request, reply) => {
 		const token = request.cookies.auth_token;
 		if (token)
 		{
@@ -95,7 +95,7 @@ export async function GDPRManagementRoute(fastify)
 		}
 	})
 
-	fastify.post('/GDPRChangeValue', async (request, reply) => {
+	fastify.post('/me/GDPRChangeValue', async (request, reply) => {
 		const { userId } = request.body;
 		const token = request.cookies.auth_token;
 		if (token)
@@ -112,7 +112,7 @@ export async function GDPRManagementRoute(fastify)
 		}
 	})
 
-	fastify.post('/checkGDPRFriend', async (request, reply) => {
+	fastify.post('/me/checkGDPRFriend', async (request, reply) => {
 		const { friendUserId } = request.body;
 		const token = request.cookies.auth_token;
 		if (token)
