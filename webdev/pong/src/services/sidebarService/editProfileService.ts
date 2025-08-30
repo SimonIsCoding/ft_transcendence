@@ -118,20 +118,14 @@ export async function twofaCheckService(): Promise<number>
 
 export async function twofaChangeValueService()
 {
-	const currentUser = await getCurrentUser();
 	const res = await fetch('/api/auth/me/twofa', {
-		method: 'POST',
+		method: 'PUT',
 		credentials: 'include',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({
-			userId: currentUser.id,
 		})
-	})
 	const backend_answer = await res.json()
 
 	if (res.status === 409)
 		showErrorPopup(backend_answer.error, "popup")
-	
 }
 
 export async function GDPRCheckService(): Promise<number>
@@ -171,14 +165,9 @@ export async function GDPRCheckService(): Promise<number>
 
 export async function GDPRChangeValueService()
 {
-	const currentUser = await getCurrentUser();
 	const res = await fetch('/api/auth/me/GDPRChangeValue', {
-		method: 'POST',
+		method: 'PUT',
 		credentials: 'include',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({
-			userId: currentUser.id,
-		})
 	})
 	const backend_answer = await res.json()
 
