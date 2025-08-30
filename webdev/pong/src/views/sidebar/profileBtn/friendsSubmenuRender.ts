@@ -2,6 +2,7 @@ import { getCurrentUser } from '../../../utils/utils.ts';
 import { checkFriendIsConnected, reloadFriendshipsStatus, sendFriendRequestOtherUser, updateFriendshipStatus } from '../../../services/sidebarService/friendsSubmenuService.ts';
 import { showSuccessPopup } from '../../../utils/utils.ts';
 import { renderBackButton } from '../sidebarUtils.ts'
+import { checkFriendHasGDPRActivated } from '../../../services/sidebarService/editProfileService.ts';
 
 interface User {
   id: number;
@@ -76,10 +77,10 @@ export const friendsCard = {
 			<img id="friendProfilePic_${friendUser.id}" class="w-10 h-10 rounded-full object-cover border border-black bg-[#fbd11b] text-black flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md" />
 			<div class="space-x-2">
 				<p id="friendUsername_${friendUser.id}" class="font-bold text-sm text-[#fbd11b]">FriendUsername</p>
-				<p id="friendMail_${friendUser.id}" class="text-sm text-[#fbd11b]">email@exemple.com</p>
+				<p id="friendMail_${friendUser.id}" class="text-sm text-[#fbd11b]"></p>
 				<hr class="w-55"/>
 			</div>
-			<div id="friendsStatus_${friendUser.id}" class="top-1 right-1 w-3 h-3 bg-red-500 rounded-full border border-black"></div>
+			<div id="friendsStatus_${friendUser.id}" class="top-1 right-1 w-3 h-3 rounded-full border border-black"></div>
 		</div>
 	</div>
   `;
@@ -92,22 +93,21 @@ export const friendsCard = {
 	const friendMail = document.getElementById(`friendMail_${friendUser.id}`);
 	const friendStatus = document.getElementById(`friendsStatus_${friendUser.id}`);
 	const isFriendConnected = await checkFriendIsConnected(friendUser.id);
-	if (isFriendConnected)
-	{
-		friendStatus?.classList.remove("bg-red-500");
+	const isGPDRActivated = await checkFriendHasGDPRActivated(friendUser);
+	if (isFriendConnected && isGPDRActivated === 0)
 		friendStatus?.classList.add("bg-green-500");
-	}
-	else
-	{
-		friendStatus?.classList.remove("bg-green-500");
+	else if (isFriendConnected === 0 && isGPDRActivated === 0)
 		friendStatus?.classList.add("bg-red-500");
-	}
+	else
+		friendStatus?.classList.add("bg-black");
 	if (friendUser.profile_picture && friendUser.profile_picture.startsWith("https://lh3.googleusercontent.com"))
 		friendImg.src = `${friendUser.profile_picture}`;
 	else
 		friendImg.src = `https://localhost:4443/${friendUser.profile_picture}`;
 	friendUsername!.textContent = friendUser.login;
-	friendMail!.textContent = friendUser.mail;
+	
+	if (isGPDRActivated === 0)
+		friendMail!.textContent = friendUser.mail;
   }
 }
 
