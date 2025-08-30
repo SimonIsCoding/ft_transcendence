@@ -29,10 +29,10 @@ export async function infoUserRoute(app) {
   app.get('/me/status', { preHandler: app.auth }, async (request, reply) => {
     try {
       // if arrived here app.auth has validated token
+      const userId = request.user.id;
 
       return reply.send({
-        authenticated: fullyAuthed,
-        requires2FA: needs2FA,
+        authenticated: true,
         user: {
           id: userId,
         }
