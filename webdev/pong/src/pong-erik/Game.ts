@@ -19,6 +19,8 @@ export class Game {
   // Game configuration
   private options: GameOptions;
 
+  public isGameOver = false;
+
   // Game state
   private isPaused = false;
   private lastTime?: number;
@@ -166,9 +168,9 @@ export class Game {
   // Main game loop
   public start(): void {
     const gameLoop = (time: number) => {
+      if (this.isGameOver) return;
       if (this.lastTime != null) {
         const delta = time - this.lastTime;
-        
         // Limit frame rate to prevent excessive updates
         if (delta < GameConfig.FRAME_RATE_LIMIT) {
           window.requestAnimationFrame(gameLoop);
@@ -281,6 +283,7 @@ export class Game {
     if (result === GameResult.LEFT_WINS || result === GameResult.RIGHT_WINS) {
       this.isPaused = true; // Stop the game loop
       const winner = result === GameResult.LEFT_WINS ? this.options.leftPlayer : this.options.rightPlayer;
+      this.isGameOver = true;
       if (this.onFinishCallback) {
         this.onFinishCallback(winner, GameResult.LEFT_WINS, GameResult.RIGHT_WINS);
         // alert(`${winner} ha ganado esta partida`);

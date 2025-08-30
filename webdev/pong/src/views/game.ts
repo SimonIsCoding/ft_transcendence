@@ -297,9 +297,7 @@ const gameInstance = new Game();
 
 export const GameView = {
   renderGameCanvas: () => gameInstance.render(),
-  initGameCanvas: (player1Alias?: string,
-    player2Alias?: string,
-    onFinish?: (winner: string, score1: number, score2: number) => void) => gameInstance.init(player1Alias, player2Alias, onFinish),
+  initGameCanvas: (player1Alias?: string, player2Alias?: string, onFinish?: (winner: string, score1: number, score2: number) => void) => gameInstance.init(player1Alias, player2Alias, onFinish),
   stop: () => gameInstance.stop(),
   setBallSpeedMultiplier: (multiplier: number) => gameInstance.setBallSpeedMultiplier(multiplier),
   setPaddleSize: (size: number) => gameInstance.setPaddleSize(size),

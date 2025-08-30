@@ -72,7 +72,7 @@ export class Router {
         // anterior
         // if (gameCanvasContainer && gameCanvasContainer.innerHTML === '') {
         //   gameCanvasContainer.innerHTML = GameView.renderGameCanvas();
-        //   GameView.initGameCanvas();
+          // GameView.initGameCanvas(); // aqui erik
         // }
 
         //  new 
