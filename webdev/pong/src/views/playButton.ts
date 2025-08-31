@@ -1,14 +1,9 @@
+import type { User } from "../config";
 import { Router } from "../router";
 // import { isConnected } from "../services/sidebarService/utilsSidebarService";
 // import { oneVsAIAreaInit, oneVsOneAreaInit } from "./sidebar/playBtn/playSidebarBehavior";
 // import { toggleMenuVisibility } from "./sidebar/sidebarUtils";
 
-interface User {
-  login: string;
-  password: string;
-  mail: string;
-  token: string;
-}
 
 export const playButton = {
   currentUser: null as User | null,

@@ -15,3 +15,12 @@ export const GAME_CONFIG = {
 	FPS: 60
 };
 
+export interface User {
+  id: number;
+  login: string;
+  mail: string;
+  profile_picture: string;
+  provider: "google" | "local";
+  is_2fa_activated: 0 | 1;
+  GDPR_activated: 0 | 1;
+}

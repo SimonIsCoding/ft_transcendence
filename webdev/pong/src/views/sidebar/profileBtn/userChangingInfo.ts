@@ -30,7 +30,7 @@ function twofaToggle()
 			enabled = false;
 		enabled = !enabled;
 
-		twofaChangeValueService();
+		//twofaChangeValueService();
 
 		if (enabled)
 		{
@@ -61,7 +61,7 @@ function GDPRToggle()
 			enabled = false;
 		enabled = !enabled;
 
-		GDPRChangeValueService();
+		// GDPRChangeValueService();
 
 		if (enabled)
 		{

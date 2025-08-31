@@ -1,3 +1,4 @@
+import type { User } from "./config";
 import { HomeView } from './views/home';
 import { loginView } from './views/loginView';
 import { registerView } from './views/registerView';
@@ -5,15 +6,6 @@ import { GameView } from './views/game';
 import { gameController } from './controllers/gameController';
 import { currentTournament, matchInfo } from './models/TournamentStore';
 import { TournamentUIManager } from './views/TournamentUIManager';
-
-
-interface User {
-  login: string;
-  password: string;
-  mail: string;
-  photo: string;
-  token: string;
-}
 
 export class Router {
   private static app = document.getElementById('app');

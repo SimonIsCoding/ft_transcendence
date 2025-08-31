@@ -74,7 +74,7 @@ export async function receiveProfilePicture(file: File): Promise<void>
   }
 }
 
-export async function getCurrentUser()
+export async function getUserInfo()
 {
 	const res = await fetch('/api/auth/me', { credentials: 'include' });
 	const data = await res.json();
