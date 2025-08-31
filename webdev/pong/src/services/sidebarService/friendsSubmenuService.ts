@@ -151,14 +151,13 @@ export async function displayFriend(i: number): Promise<User>
 	return await getUserById(friendId);
 }
 
-export async function checkFriendIsConnected(userId: number)
+export async function checkFriendIsConnected(friendId: number)
 {
-	const res = await fetch(`/api/auth/friends/${userId}/online`, {
+	const res = await fetch(`/api/auth/friends/${friendId}/online`, {
       method: 'GET',
       credentials: 'include'
     });
 	const bool = await res.json();
-	// console.log(`bool = ${bool.success}`);
 	return bool.success;
 }
 

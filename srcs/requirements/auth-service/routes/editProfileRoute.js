@@ -64,7 +64,6 @@ export async function twofaManagementRoute(fastify)
 		const userId = request.user.id;
 		const stmt = db.prepare("SELECT is_2fa_activated FROM users WHERE id = ?").get(userId);
 		return reply.send({ is_activated: stmt.is_2fa_activated})
-
 	})
 
 	fastify.put('/me/twofa', { preHandler: fastify.auth }, async (request, reply) => {
@@ -74,19 +73,18 @@ export async function twofaManagementRoute(fastify)
 		let current_value = former_value ? 0 : 1;
 		db.prepare(`UPDATE users SET is_2fa_activated = ? WHERE id = ?`).run(current_value, userId);
 		return reply.status(200).send({ success: true });
-
 	})
 }
 
 export async function GDPRManagementRoute(fastify)
 {
-	fastify.get('/me/GDPRCheck', { preHandler: fastify.auth }, async (request, reply) => {
+	fastify.get('/me/GDPR', { preHandler: fastify.auth }, async (request, reply) => {
 		const userId = request.user.id;
 		const stmt = db.prepare("SELECT GDPR_activated FROM users WHERE id = ?").get(userId);
 		return reply.send({ is_activated: stmt.GDPR_activated})
 	})
 
-	fastify.put('/me/GDPRChangeValue', { preHandler: fastify.auth }, async (request, reply) => {
+	fastify.put('/me/GDPR', { preHandler: fastify.auth }, async (request, reply) => {
 		const userId = request.user.id;
 		let row = db.prepare("SELECT GDPR_activated FROM users WHERE id = ?").get(userId);
 		let former_value = row.GDPR_activated;
@@ -95,10 +93,4 @@ export async function GDPRManagementRoute(fastify)
 		return reply.status(200).send({ success: true });
 	})
 
-	fastify.post('/me/checkGDPRFriend', { preHandler: fastify.auth }, async (request, reply) => {
-		const { friendUserId } = request.body;
-		let row = db.prepare("SELECT GDPR_activated FROM users WHERE id = ?").get(friendUserId);
-		let check = row.GDPR_activated;
-		return reply.status(200).send({ value: check });
-	})
 }
