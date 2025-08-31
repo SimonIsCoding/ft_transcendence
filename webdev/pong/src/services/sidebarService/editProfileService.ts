@@ -112,11 +112,11 @@ export async function editProfileService(): Promise<void> {
 
   // --- Trigger flows if necessary ---
   if (requires2FAFlow) {
-    return showErrorPopup("You need to start the 2FA enrollment flow.", "popup");
+    console.log("You need to start the 2FA enrollment flow.", "popup");
   }
 
   if (requiresMailConfirmation) {
-    return showErrorPopup("A confirmation email will be sent to your new address.", "popup");
+    console.log("A confirmation email will be sent to your new address.", "popup");
   }
 
   // --- Send update to backend ---
