@@ -93,7 +93,8 @@ export const friendsCard = {
 	const friendMail = document.getElementById(`friendMail_${friendUser.id}`);
 	const friendStatus = document.getElementById(`friendsStatus_${friendUser.id}`);
 	const isFriendConnected = await checkFriendIsConnected(friendUser.id);
-	const isGPDRActivated = await checkFriendHasGDPRActivated(friendUser);
+	const isGPDRActivated = await checkFriendHasGDPRActivated(friendUser.id);
+	console.log(`isGPDRActivated = ${isGPDRActivated}`);
 	if (isFriendConnected && isGPDRActivated === 0)
 		friendStatus?.classList.add("bg-green-500");
 	else if (isFriendConnected === 0 && isGPDRActivated === 0)
