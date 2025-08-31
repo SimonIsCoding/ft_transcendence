@@ -121,8 +121,8 @@ export async function editProfileService(): Promise<void> {
 
   // --- Send update to backend ---
   try {
-    const res = await fetch("/api/auth/me/update", {
-      method: "POST",
+    const res = await fetch("/api/auth/me", {
+      method: "PUT",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(changes),
