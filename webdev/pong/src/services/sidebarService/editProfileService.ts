@@ -178,7 +178,7 @@ export async function GDPRChangeValueService()
 
 export async function checkFriendHasGDPRActivated(friendId: number)
 {
-	console.log(`in checkFriendHasGDPRActivated ${friendId}`);
+	console.log(`in checkFriendHasGDPRActivated friendId = ${friendId}`);
 	const res = await fetch(`/api/auth/friends/${friendId}/GDPR`, { credentials: 'include' })
 	const backend_answer = await res.json();
 
