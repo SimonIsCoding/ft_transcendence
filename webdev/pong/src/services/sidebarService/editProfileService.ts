@@ -1,12 +1,12 @@
 import { showErrorPopup, isValidEmail, showSuccessPopup, getCurrentUser } from "../../utils/utils";
 
-interface User {
-  id: number;
-  login: string;
-  mail: string;
-  profile_picture: string,
-  token: string;
-}
+// interface User {
+//   id: number;
+//   login: string;
+//   mail: string;
+//   profile_picture: string,
+//   token: string;
+// }
 
 export async function reloadUserInfo(): Promise<void>
 {
@@ -128,14 +128,14 @@ export async function twofaChangeValueService()
 		showErrorPopup(backend_answer.error, "popup")
 }
 
-export async function GDPRCheckService(): Promise<number>
+export async function GDPRCheckService(/*name: string, nb: number*/): Promise<number>
 {
 	try
 	{
-		const res = await fetch("/api/auth/me/GDPRCheck", { credentials: "include" });
+		const res = await fetch("/api/auth/me/GDPR", { credentials: "include" });
 		if (!res.ok)
 		{
-			console.error("Error fetching GDPRCheck:", res.status);
+			console.error("Error fetching GDPR get:", res.status);
 			return -1;
 		}
 		const data = await res.json();
@@ -165,7 +165,7 @@ export async function GDPRCheckService(): Promise<number>
 
 export async function GDPRChangeValueService()
 {
-	const res = await fetch('/api/auth/me/GDPRChangeValue', {
+	const res = await fetch('/api/auth/me/GDPR', {
 		method: 'PUT',
 		credentials: 'include',
 	})
@@ -176,19 +176,13 @@ export async function GDPRChangeValueService()
 	
 }
 
-export async function checkFriendHasGDPRActivated(friendUser: User)
+export async function checkFriendHasGDPRActivated(friendId: number)
 {
-	const res = await fetch('/api/auth/me/checkGDPRFriend', {
-		method: 'POST',
-		credentials: 'include',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({
-			friendUserId: friendUser.id,
-		})
-	})
+	console.log(`in checkFriendHasGDPRActivated ${friendId}`);
+	const res = await fetch(`/api/auth/friends/${friendId}/GDPR`, { credentials: 'include' })
 	const backend_answer = await res.json();
 
 	if (res.status === 409)
 		showErrorPopup(backend_answer.error, "popup")
-	return (backend_answer.value);
+	return (backend_answer.GDPR_activated);
 }
