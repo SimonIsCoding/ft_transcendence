@@ -1,5 +1,5 @@
 import { Router } from "../../../router";
-import { editProfileService, GDPRChangeValueService, GDPRCheckService, twofaChangeValueService, twofaCheckService } from "../../../services/sidebarService/editProfileService";
+import { editProfileService, GDPRCheckService, twofaCheckService } from "../../../services/sidebarService/editProfileService";
 import { eraseAccountService } from "../../../services/sidebarService/eraseAccountService"; 
 import { showSuccessPopup } from "../../../utils/utils";
 import { handleSidebar } from "../sidebarBehavior";
