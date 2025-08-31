@@ -100,8 +100,9 @@ export class Router {
           // console.log(res)
         }
         // } 
-        else {
+        else if (matchInfo?.player1 === undefined || matchInfo?.player2 === undefined) {
           console.log('no hay partido activo, se muestra torneo');
+          Router.navigate('login');
           // gameCanvasContainer?.classList.add('hidden');
           // tournamentArea?.classList.remove('hidden');
           // if (matchInfo) {

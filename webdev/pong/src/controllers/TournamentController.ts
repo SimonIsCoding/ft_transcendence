@@ -116,7 +116,7 @@ export class TournamentController {
             // }, 100);
             const game = new Game({
                 leftPlayer: 'player',
-                rightPlayer: '2', maxScore: 2, gameMode: 'ai-vs-ai',
+                rightPlayer: '2', maxScore: 2, gameMode: 'p-vs-p',
                 onFinish: (winnerAlias: string, player1Score: number, player2Score: number) => {
                     match.player1.score = player1Score;
                     match.player2.score = player2Score;

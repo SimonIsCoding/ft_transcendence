@@ -1,6 +1,6 @@
 import { TournamentModel } from '../models/TournamentModel';
 import { getMatchInfo, getTournament, setTournament, setMatchInfo } from '../models/TournamentStore';
-import { TournamentController } from '../controllers/TournamentController';
+// import { TournamentController } from '../controllers/TournamentController';
 import { Router } from '../router';
 
 function swapLineToRightSvg(): string {
@@ -179,8 +179,8 @@ export const TournamentArea = {
       }
       playtournamentBtn.classList.add('hidden');
 
-      const controller = new TournamentController();
-      controller.iniciarTorneo();
+      // const controller = new TournamentController();
+      // controller.iniciarTorneo();
       Router.navigate('tournament');
     });
   }
