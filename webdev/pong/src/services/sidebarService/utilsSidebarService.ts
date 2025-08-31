@@ -1,3 +1,5 @@
+import { setCurrentUser } from "../../views/sidebar/sidebarUtils";
+
 export async function isConnected(): Promise<boolean>
 {
 	const res = await fetch('/api/auth/me/status', {
@@ -19,6 +21,7 @@ export async function getUserInfo()
 		credentials: 'include'
 	})
 	const data = await res.json()
+	setCurrentUser(data.user);
 
 	const profileName = document.getElementById("profileName");
 	if (profileName)

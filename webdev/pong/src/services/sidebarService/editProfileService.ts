@@ -1,12 +1,6 @@
-import { showErrorPopup, isValidEmail, showSuccessPopup, getCurrentUser } from "../../utils/utils";
-
-// interface User {
-//   id: number;
-//   login: string;
-//   mail: string;
-//   profile_picture: string,
-//   token: string;
-// }
+import type { User } from "../../config";
+import { showErrorPopup, isValidEmail, showSuccessPopup } from "../../utils/utils";
+import { setCurrentUser, getCurrentUser } from "../../views/sidebar/sidebarUtils";
 
 export async function reloadUserInfo(): Promise<void>
 {
@@ -23,6 +17,7 @@ export async function reloadUserInfo(): Promise<void>
 			email: ${data.user.mail},
 			profile_picture: ${data.user.profile_picture}
 		`)
+		setCurrentUser(data.user);
 		document.getElementById("mailInProfileSubmenu")!.textContent = data.user.mail;
 	}
 	catch (err)
@@ -31,55 +26,133 @@ export async function reloadUserInfo(): Promise<void>
 	}
 }
 
-export async function editProfileService()
-{
-	const currentUser = await getCurrentUser();
-	console.log(`in editProfileService & currentUser = ${currentUser}`);
-	console.log(`Fetched user:
-		id: ${currentUser.id},
-		login: ${currentUser.login},
-		email: ${currentUser.mail},
-		profile_picture: ${currentUser.profile_picture}
-	`)
+function collectCurrentProfile(): Partial<User> & {
+  currentPassword?: string;
+  changePassword?: string;
+  repeatPassword?: string;
+} {
+  const loginInput = document.getElementById("loginEditProfile") as HTMLInputElement | null;
+  const mailInput = document.getElementById("changeMailEditProfile") as HTMLInputElement | null;
+  const twoFAToggle = document.getElementById("2FAtoggleSwitch");
+  const anonToggle = document.getElementById("anonymousToggleSwitch");
 
-	const currentPassword = (document.getElementById("currentPasswordEditProfile") as HTMLInputElement).value;
-	const changePassword = (document.getElementById("changePasswordEditProfile") as HTMLInputElement).value;
-	const repeatPassword = (document.getElementById("repeatPasswordEditProfile") as HTMLInputElement).value;
-	const changeMail = (document.getElementById("changeMailEditProfile") as HTMLInputElement).value;
+  const currentPasswordInput = document.getElementById("currentPasswordEditProfile") as HTMLInputElement | null;
+  const changePasswordInput = document.getElementById("changePasswordEditProfile") as HTMLInputElement | null;
+  const repeatPasswordInput = document.getElementById("repeatPasswordEditProfile") as HTMLInputElement | null;
 
-	if ((!changeMail && changeMail.trim() === "") && (!currentPassword && currentPassword.trim() === ""))
-		return showErrorPopup("You have to fill more fields to update your informations.", "popup");
-
-	if (changePassword !== repeatPassword)
-		return showErrorPopup("The new passwords are not the same.", "popup");
-
-	if ((changeMail && changeMail.trim() !== "") && isValidEmail(changeMail) === false)
-		return showErrorPopup("The mail format is not valid.", "popup");
-
-	if (currentPassword && (!changePassword || currentPassword.trim() === ""))
-		return showErrorPopup("You have to insert a new password.", "popup")
-
-	const res = await fetch('/api/auth/me/update', {
-		method: 'POST',
-		credentials: 'include',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({
-			login: currentUser.login,
-			currentPassword,
-			changePassword,
-			changeMail
-		})
-	})
-	const backend_answer = await res.json()
-
-	if (res.status === 409)
-		showErrorPopup(backend_answer.error, "popup")
-	else if (res.ok)// in 200 range
-	{
-		showSuccessPopup(backend_answer.message, 3500, "popup")
-		reloadUserInfo()
-	}
+  return {
+    login: loginInput?.value ?? "",
+    mail: mailInput?.value ?? "",
+    is_2fa_activated: twoFAToggle?.classList.contains("bg-green-500") ? 1 : 0,
+    GDPR_activated: anonToggle?.classList.contains("bg-green-500") ? 1 : 0,
+    currentPassword: currentPasswordInput?.value ?? "",
+    changePassword: changePasswordInput?.value ?? "",
+    repeatPassword: repeatPasswordInput?.value ?? "",
+  };
 }
+
+
+
+export async function editProfileService(): Promise<void> {
+  const currentUser = getCurrentUser();
+  if (!currentUser) return showErrorPopup("Current user not loaded.", "popup");
+
+  const current = collectCurrentProfile();
+
+  // --- Validation ---
+  if (!current.login || !current.mail) {
+    return showErrorPopup("Login and mail cannot be empty.", "popup");
+  }
+
+  // Password checks (optional)
+  if ((current.currentPassword || current.changePassword || current.repeatPassword) &&
+      (current.changePassword !== current.repeatPassword)) {
+    return showErrorPopup("The new passwords are not the same.", "popup");
+  }
+
+  if (current.currentPassword && !current.changePassword) {
+    return showErrorPopup("You have to insert a new password.", "popup");
+  }
+
+  if (current.mail && !isValidEmail(current.mail)) {
+    return showErrorPopup("The mail format is not valid.", "popup");
+  }
+
+  // --- Build changes object ---
+  const changes: any = {};
+  let requires2FAFlow = false;
+  let requiresMailConfirmation = false;
+
+  if (current.login !== currentUser.login) changes.login = current.login;
+
+  // Google users: mail is readonly
+  if (currentUser.provider !== "google" && current.mail !== currentUser.mail) {
+    changes.mail = current.mail;
+    requiresMailConfirmation = true;
+  }
+
+  if (current.is_2fa_activated !== currentUser.is_2fa_activated) {
+    changes.is_2fa_activated = current.is_2fa_activated;
+    if (current.is_2fa_activated === 1) requires2FAFlow = true;
+  }
+
+  if (current.GDPR_activated !== currentUser.GDPR_activated) {
+    changes.GDPR_activated = current.GDPR_activated;
+  }
+
+  // Password change
+  if (current.currentPassword && current.changePassword) {
+    changes.currentPassword = current.currentPassword;
+    changes.changePassword = current.changePassword;
+  }
+
+  if (Object.keys(changes).length === 0) {
+    return showErrorPopup("No changes detected.", "popup");
+  }
+
+  // --- Trigger flows if necessary ---
+  if (requires2FAFlow) {
+    return showErrorPopup("You need to start the 2FA enrollment flow.", "popup");
+  }
+
+  if (requiresMailConfirmation) {
+    return showErrorPopup("A confirmation email will be sent to your new address.", "popup");
+  }
+
+  // --- Send update to backend ---
+  try {
+    const res = await fetch("/api/auth/me/update", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(changes),
+    });
+
+ 
+	const backend_answer = await res.json();
+	
+	if (res.status === 409) {
+	  showErrorPopup(backend_answer.error, "popup"); // conflict: password/email
+	} else if (res.status === 400) {
+	  showErrorPopup(backend_answer.error, "popup"); // no changes detected, validation errors
+	} else if (!res.ok) {
+	  showErrorPopup(backend_answer.error || "Unexpected error", "popup"); // 500 or other errors
+	} else {
+	  // Success
+	  showSuccessPopup(backend_answer.message, 3500, "popup");
+	
+	  // Update snapshot
+	  setCurrentUser({ ...currentUser, ...changes });
+	
+	  // Reload UI if needed
+	  reloadUserInfo();
+	}
+  } catch (err) {
+    console.error(err);
+    showErrorPopup("Unexpected error while saving profile.", "popup");
+  }
+}
+
 
 export async function twofaCheckService(): Promise<number>
 {
