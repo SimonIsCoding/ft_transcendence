@@ -88,7 +88,7 @@ export const registerView = {
 function policiesRelatedRender()
 {
 	return `
-	<div id="policiesPopup" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+	<div id="policiesPopup" class="hidden bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
 		<div class="bg-white rounded-lg shadow-lg p-6 w-3/4 h-3/4 relative overflow-y-auto">
 			<button id="closePoliciesBtn" class="absolute top-1 right-3 text-gray-500 hover:text-black text-2xl font-bold">&times;</button>
 			<h2 class="text-xl font-bold mb-4 text-center">Our Data Sharing Policy</h2>
