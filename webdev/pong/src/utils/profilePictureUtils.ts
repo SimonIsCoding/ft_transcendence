@@ -46,7 +46,7 @@ export async function loadExistingProfilePicture(): Promise<void>
 	const preview = document.getElementById('previewProfilePicture') as HTMLImageElement;
 	const previewEdit = document.getElementById('previewProfilePictureEditProfile') as HTMLImageElement;
 	const uploadIcon = document.getElementById('uploadIcon')!;
-	const editProfileChangePasswordMail = document.getElementById('editProfileChangePasswordMail')!;
+	// const editProfileChangePasswordMail = document.getElementById('editProfileChangePasswordMail')!;
 	const uploadPictureProfileSubmenu = document.getElementById("uploadPictureProfileSubmenu")!;
 	const uploadIconEditProfile = document.getElementById('uploadIconEditProfile')!;
 	const uploadPictureBtnEditProfile = document.getElementById("uploadPictureBtnEditProfile")!;
@@ -70,13 +70,13 @@ export async function loadExistingProfilePicture(): Promise<void>
 			previewEdit.src = `https://localhost:4443/${data.user.profile_picture}`;
 			previewEdit.classList.remove('hidden');
 			uploadIcon.classList.add('hidden');
-			editProfileChangePasswordMail.classList.remove('hidden');
+			// editProfileChangePasswordMail.classList.remove('hidden');
 		}
 		else // to load personal pic
 		{
 			await loadGoogleAvatar(preview, data.user.profile_picture);
 			await loadGoogleAvatar(previewEdit, data.user.profile_picture);
-			editProfileChangePasswordMail.classList.add('hidden');
+			// editProfileChangePasswordMail.classList.add('hidden');
 			uploadIcon.classList.add("hidden");
 			uploadPictureProfileSubmenu.classList.remove("bg-black");
 			uploadIconEditProfile.classList.add("hidden");

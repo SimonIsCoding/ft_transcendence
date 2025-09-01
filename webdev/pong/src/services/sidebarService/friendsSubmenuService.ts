@@ -1,13 +1,8 @@
-import { getCurrentUser } from "../../utils/utils";
+import type { User } from "../../config";
+import { getCurrentUser } from "../../views/sidebar/sidebarUtils";
 import { addFriendRequestCard, displayAllFriends } from "../../views/sidebar/profileBtn/manageFriendsSubmenu";
 
-interface User {
-  id: number;
-  login: string;
-  mail: string;
-  profile_picture: string,
-  token: string;
-}
+
 
 //function to check how many user there is in the db
 export async function getTotalUser()
@@ -112,7 +107,8 @@ export async function howManyFriends(): Promise<number>
 // getFriends fetch returns:  [ { user_a_id: 2, user_b_id: 3 } ]
 export async function displayFriend(i: number): Promise<User>
 {
-	const currentUser: User = await getCurrentUser();
+	const currentUser = getCurrentUser();
+  	if (!currentUser) throw new Error("Current user not set");
 	const allFriends: FriendsConnexion[] = await fetch('/api/auth/getFriends', {
 		method: 'GET',
 		credentials: 'include'

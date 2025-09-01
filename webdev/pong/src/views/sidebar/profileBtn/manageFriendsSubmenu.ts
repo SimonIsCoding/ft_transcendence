@@ -1,15 +1,8 @@
+import type { User } from "../../../config";
 import { openMenu, closeAllMenus, toggleMenuVisibility } from "../sidebarUtils";
 import { getTotalUser, friendsRequest, howManyFriendsRequests, displayFriend, howManyFriends, getRandomEligibleOtherUser } from "../../../services/sidebarService/friendsSubmenuService";
 import { othersUsersCard, friendRequestCard, friendsCard } from "./friendsSubmenuRender";
 //import { getCurrentUser } from "../../../utils/utils";
-
-interface User {
-  id: number;
-  login: string;
-  mail: string;
-  profile_picture: string,
-  token: string;
-}
 
 export async function addFriendRequestCard(userToFriend: User | null)
 {
