@@ -44,6 +44,7 @@ export async function initLogin() {
 
 
         if (loginForm && twofaContainer) {
+		  twofaContainer.innerHTML='';
           loginForm.classList.add('hidden');
           twofaContainer.classList.remove('hidden');
 
