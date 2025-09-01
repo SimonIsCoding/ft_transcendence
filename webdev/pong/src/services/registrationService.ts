@@ -102,7 +102,7 @@ export async function initRegistration() {
 
           const controller = new TwoFAController(
             mail,
-            'register',
+            // 'register',
             async () => {
               registerForm.classList.add('hidden');
               twoFaContainer.classList.add('hidden');

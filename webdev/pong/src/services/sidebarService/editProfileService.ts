@@ -1,6 +1,9 @@
 import type { User } from "../../config";
 import { showErrorPopup, isValidEmail, showSuccessPopup } from "../../utils/utils";
 import { setCurrentUser, getCurrentUser } from "../../views/sidebar/sidebarUtils";
+import { TwoFAController } from '../../controllers/twofaController';
+import { twofaSidebarView } from '../../views/twofaView';
+
 
 export async function reloadUserInfo(): Promise<void>
 {
@@ -112,14 +115,67 @@ export async function editProfileService(): Promise<void> {
 
   // --- Trigger flows if necessary ---
   if (requires2FAFlow) {
-    console.log("You need to start the 2FA enrollment flow.", "popup");
+	  return beginEditProfile2FAFlow(currentUser.mail, changes);
   }
 
   if (requiresMailConfirmation) {
-    console.log("A confirmation email will be sent to your new address.", "popup");
+    console.log("A confirmation email will be sent to your new address.");
   }
 
   // --- Send update to backend ---
+  await submitProfileChanges(changes);
+
+}
+
+let form: HTMLElement | null = null;
+let twofa: HTMLElement | null = null;
+
+function beginEditProfile2FAFlow(email: string, changes: any) {
+  form = document.getElementById('editProfileFormContainer');
+  twofa = document.getElementById('twofa-container');
+
+  if (!form || !twofa) {
+    console.error("Missing containers for 2FA flow");
+    return;
+  }
+
+  // Hide form + footer, show 2FA
+  form.classList.add('hidden');
+  twofa.classList.remove('hidden');
+
+  if (twofa.querySelector('*') === null) {
+    const controller = new TwoFAController(
+      email,
+    //   'sidebar', // reuse existing flow type
+      async () => {
+        console.log("2FA success, saving profile...");
+        await submitProfileChanges(changes);
+        restoreUI();
+      },
+      twofa,
+      (message, isFinal) => {
+        showErrorPopup(message, "popup");
+        if (isFinal) {
+          // Clear passwords
+          (document.getElementById('currentPasswordEditProfile') as HTMLInputElement).value = '';
+          (document.getElementById('changePasswordEditProfile') as HTMLInputElement).value = '';
+
+          restoreUI();
+        }
+      },
+	  twofaSidebarView
+    );
+
+    twofa.appendChild(controller.init());
+  }
+
+  function restoreUI() {
+    twofa?.classList.add('hidden');
+    form?.classList.remove('hidden');
+  }
+}
+
+async function submitProfileChanges(changes: any) {
   try {
     const res = await fetch("/api/auth/me", {
       method: "PUT",
@@ -128,79 +184,27 @@ export async function editProfileService(): Promise<void> {
       body: JSON.stringify(changes),
     });
 
- 
-	const backend_answer = await res.json();
-	
-	if (res.status === 409) {
-	  showErrorPopup(backend_answer.error, "popup"); // conflict: password/email
-	} else if (res.status === 400) {
-	  showErrorPopup(backend_answer.error, "popup"); // no changes detected, validation errors
-	} else if (!res.ok) {
-	  showErrorPopup(backend_answer.error || "Unexpected error", "popup"); // 500 or other errors
-	} else {
-	  // Success
-	  showSuccessPopup(backend_answer.message, 3500, "popup");
-	
-	  // Update snapshot
-	  setCurrentUser({ ...currentUser, ...changes });
-	
-	  // Reload UI if needed
-	  reloadUserInfo();
-	}
+    const backend_answer = await res.json();
+
+    if (res.status === 409) {
+      showErrorPopup(backend_answer.error, "popup");
+    } else if (res.status === 400) {
+      showErrorPopup(backend_answer.error, "popup");
+    } else if (!res.ok) {
+      showErrorPopup(backend_answer.error || "Unexpected error", "popup");
+    } else {
+      showSuccessPopup(backend_answer.message, 3500, "popup");
+
+      // Update snapshot
+      const currentUser = getCurrentUser();
+      if (currentUser) setCurrentUser({ ...currentUser, ...changes });
+
+      reloadUserInfo();
+    }
   } catch (err) {
     console.error(err);
     showErrorPopup("Unexpected error while saving profile.", "popup");
   }
-}
-
-
-export async function checkService(endpoint: string, buttonId: string): Promise<number>
-{
-	try
-	{
-		const res = await fetch(`/api/auth/me/${endpoint}`, { credentials: "include" });
-		if (!res.ok)
-		{
-			console.error(`Error fetching ${endpoint} check:`, res.status);
-			return -1;
-		}
-		const data = await res.json();
-
-		const toggle = document.getElementById(buttonId) as HTMLButtonElement;
-		const circle = toggle.querySelector("span")!;
-
-		if (data.is_activated === 1)
-		{
-			toggle.classList.remove("bg-gray-400");
-			toggle.classList.add("bg-green-500");
-			circle.classList.add("translate-x-6");
-		}
-		else
-		{
-			toggle.classList.remove("bg-green-500");
-			toggle.classList.add("bg-gray-400");
-			circle.classList.remove("translate-x-6");
-		}
-
-		return data.is_activated;
-	}
-	catch (err)
-	{
-		console.error(`Network error (${endpoint}):`, err);
-		return -1;
-	}
-}
-
-export async function changeValueService(endpoint: string)
-{
-	const res = await fetch(`/api/auth/me/${endpoint}`, {
-		method: 'PUT',
-		credentials: 'include',
-	})
-	const backend_answer = await res.json()
-
-	if (res.status === 409)
-		showErrorPopup(backend_answer.error, "popup")
 }
 
 export async function checkFriendHasGDPRActivated(friendId: number)
