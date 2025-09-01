@@ -1,47 +1,51 @@
 import { twofaView } from '../views/twofaView';
 import { twoFAService } from '../services/twofaService';
 import type { TwoFAResponse } from '../services/twofaService';
-import { Router } from '../router';
 
 export class TwoFAController {
   private attempts = 0;
   private readonly maxAttempts = 3;
   private readonly email: string;
-  private readonly flowType: 'login' | 'register';
+//   private readonly flowType: 'login' | 'register' | 'sidebar';
   private readonly onSuccess: () => void;
   private container: HTMLElement;
   private readonly onFailure?: (message: string, isFinal: boolean) => void;
+  private viewRender: typeof twofaView;
+
 
   constructor(
     email: string,
-    flowType: 'login' | 'register',
+    // flowType: 'login' | 'register' | 'sidebar',
     onSuccess: () => void,
     container: HTMLElement,
-    onFailure?: (message: string, isFinal: boolean) => void
+    onFailure: (message: string, isFinal: boolean) => void,
+	viewRender?: typeof twofaView  // <-- add this
+
   ) {
     this.email = email;
-    this.flowType = flowType;
+    // this.flowType = flowType;
     this.onSuccess = onSuccess;
     this.container = container;
-    this.onFailure = onFailure || this.defaultFailureHandler;
+    this.onFailure = onFailure;
+    this.viewRender = viewRender || twofaView; // default to main login view
 
-    console.log('2FA Controller initialized for:', email);
+    // console.log('2FA Controller initialized for:', email);
   }
 
   public init(): HTMLElement {
-    console.log('Rendering 2FA template for:', this.email);
+    // console.log('Rendering 2FA template for:', this.email);
     const view = document.createElement('div');
-    view.innerHTML = twofaView.render(this.email);
+    view.innerHTML = this.viewRender.render(this.email);
 
     // Debug template rendering
     if (!view.innerHTML.includes('twofaForm')) {
       console.error('Template rendering failed!', {
-        templateOutput: twofaView.render(this.email),
+        templateOutput: this.viewRender.render(this.email),
         container: this.container
       });
       throw new Error('2FA template error');
     }
-  console.log('[TwoFAController] init() form found');
+//   console.log('[TwoFAController] init() form found');
 
     this.container = view;
 
@@ -76,7 +80,7 @@ private async sendInitialCode(): Promise<void> {
   }
 
   private async verifyCode(code: string): Promise<void> {
-    console.log('Verifying 2FA code:', code);
+    // console.log('Verifying 2FA code:', code);
     if (!/^\d{6}$/.test(code)) {
       this.showError('Please enter a valid 6-digit code');
       return;
@@ -88,7 +92,7 @@ private async sendInitialCode(): Promise<void> {
 try {
   const result = await twoFAService.verifyCode(this.email, code);
 
-  console.log('Verification result:', result);
+//   console.log('Verification result:', result);
 
   if (result.success) {
     this.onSuccess();
@@ -125,21 +129,8 @@ try {
     if (this.onFailure) {
       this.onFailure(errorMessage, isFinal);
     }
-
-    if (isFinal) {
-      // await this.invalidateSession();  // needed just with temporal token approach
-      setTimeout(() => Router.navigate(this.flowType), 3000);
-    }
-  }
-/*
-  private async invalidateSession(): Promise<void> {
-    console.log('Invalidating session...');
-    await fetch('/api/auth/invalidate', {
-      method: 'POST',
-      credentials: 'include'
-    });
-  }
-*/
+}
+  
 private async resendCode(): Promise<void> {
   console.log('Resending 2FA code to:', this.email);
   try {
@@ -160,11 +151,4 @@ private async resendCode(): Promise<void> {
     }
   }
 
-  private defaultFailureHandler = (message: string, isFinal: boolean): void => {
-    this.showError(message);
-    if (isFinal) {
-      const submitBtn = this.container.querySelector('button[type="submit"]');
-      if (submitBtn) submitBtn.setAttribute('disabled', 'true');
-    }
-  };
 }

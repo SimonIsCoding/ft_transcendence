@@ -61,3 +61,48 @@ export const twofaView = {
       : 'Verify';
   }
 };
+
+export const twofaSidebarView = {
+  render(email: string): string {
+    return `
+    <div class="flex flex-col items-center w-full space-y-4 p-2">
+      <h3 class="font-bold text-black text-lg">Verify 2FA</h3>
+      <p class="text-black text-sm">Code sent to ${email}</p>
+      <form id="twofaForm" class="w-full flex flex-col gap-2">
+        <input type="text" id="twofaCode" maxlength="6" placeholder="6-digit code"
+          class="w-full text-black border border-black rounded p-1 text-sm font-bold">
+        <button type="submit" id="verifyBtn"
+          class="w-full border border-black rounded p-1 font-bold hover:bg-black hover:text-[#fbd11b]">
+          Verify
+        </button>
+      </form>
+      <p id="twofaError" class="text-red-600 hidden text-sm"></p>
+      <button id="resendBtn" class="underline text-black text-sm">Resend Code</button>
+    </div>`;
+  },
+  
+  showMessage(container: HTMLElement, message: string): void {
+    const el = container.querySelector('.twofa-message') as HTMLElement;
+    el.textContent = message;
+  },
+
+  showError(container: HTMLElement, message: string): void {
+    const el = container.querySelector('#twofaError') as HTMLElement;
+    el.textContent = message;
+    el.classList.remove('hidden');
+  },
+
+  clearError(container: HTMLElement): void {
+    const el = container.querySelector('#twofaError') as HTMLElement;
+    el.textContent = '';
+    el.classList.add('hidden');
+  },
+
+  setButtonState(container: HTMLElement, isLoading: boolean): void {
+    const btn = container.querySelector('#verifyBtn') as HTMLButtonElement;
+    btn.disabled = isLoading;
+    btn.innerHTML = isLoading 
+      ? '<span class="spinner"></span> Verifying...' 
+      : 'Verify';
+  }
+}
