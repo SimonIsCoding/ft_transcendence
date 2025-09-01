@@ -93,11 +93,10 @@ export async function loadGoogleAvatar(imgElement: HTMLImageElement, googleImage
 {
 	try
 	{
-		imgElement.src = googleImageUrl;
-
 		await new Promise<void>((resolve, reject) => {
 			imgElement.onload = () => resolve();
 			imgElement.onerror = () => reject(new Error('Failed to load Google avatar'));
+			imgElement.src = googleImageUrl;
 		});
 
 		imgElement.classList.remove('hidden');
