@@ -10,7 +10,11 @@ db.exec(`
 	login TEXT UNIQUE,
 	password TEXT,
 	mail TEXT UNIQUE,
-	profile_picture TEXT);
+	profile_picture TEXT,
+	provider TEXT DEFAULT 'local',
+	is_2fa_activated BOOLEAN DEFAULT false,
+	GDPR_activated BOOLEAN DEFAULT false
+	);
 
 	CREATE TABLE IF NOT EXISTS friendships (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,

@@ -1,4 +1,3 @@
-// import { Router } from "../router";
 import { oneVsOneAreaInit, oneVsAIAreaInit } from "./sidebar/playBtn/playSidebarBehavior";
 
 interface User {

@@ -1,4 +1,5 @@
 import { Router } from "../../router";
+import { showErrorPopup } from "../../utils/utils";
 import { manageOthersUsersCard, manageFriendsRequestsCard, manageFriendsCard } from "../../views/sidebar/profileBtn/manageFriendsSubmenu";
 
 export function initLogout() {
@@ -29,6 +30,7 @@ export function initLogout() {
 	  manageFriendsCard.reset();
 	  manageOthersUsersCard.reset();
       Router.navigate('home');
+	  showErrorPopup("You have been disconnected", "popup");
       
     } catch (error) {
       console.error('Logout error:', error);
