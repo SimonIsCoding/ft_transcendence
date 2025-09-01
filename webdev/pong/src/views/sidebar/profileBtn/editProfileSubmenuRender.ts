@@ -23,7 +23,7 @@ export function editProfileSubmenuRender()
 		</div>
 
 		<!-- Body -->
-		<div id="editProfileFormContainer">
+		<div id="editProfileFormContainer" class="flex flex-col h-full overflow-hidden">
 
 			<div class="flex-1 overflow-y-auto py-4 space-y-4">
 				<!-- Profile Picture -->
@@ -90,16 +90,16 @@ export function editProfileSubmenuRender()
 			</div>
 
 			<!-- Footer: Erase -->
-			<div class="p-3 border-t border-black bg-[#fbd11b]">
+			<div class="p-3 border-t border-black bg-[#fbd11b] flex-shrink-0">
 				<button id="eraseAccountBtn" class="w-full font-bold border rounded px-2 py-1 text-sm hover:bg-red-500">
 					Erase account
 				</button>
 			</div>
 		</div>
+		<!-- Hidden 2FA container -->
+		<div id="twofa-container" class="hidden flex-col justify-center items-center w-full space-y-10"><!-- Will be populated by TwoFAController --></div>
 	</div>
 	${eraseAccountConfirmationPopupRender()}
-	        <!-- Hidden 2FA container -->
- 	<div id="twofa-container" class="hidden flex-col justify-center items-center w-full space-y-10"><!-- Will be populated by TwoFAController --></div>
 
 	`
 }

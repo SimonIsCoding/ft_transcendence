@@ -10,7 +10,7 @@ export class TwoFAController {
   private readonly onSuccess: () => void;
   private container: HTMLElement;
   private readonly onFailure?: (message: string, isFinal: boolean) => void;
-  private view: typeof twofaView;
+  private viewRender: typeof twofaView;
 
 
   constructor(
@@ -19,7 +19,7 @@ export class TwoFAController {
     onSuccess: () => void,
     container: HTMLElement,
     onFailure: (message: string, isFinal: boolean) => void,
-	view?: typeof twofaView  // <-- add this
+	viewRender?: typeof twofaView  // <-- add this
 
   ) {
     this.email = email;
@@ -27,7 +27,7 @@ export class TwoFAController {
     this.onSuccess = onSuccess;
     this.container = container;
     this.onFailure = onFailure;
-    this.view = view || twofaView; // default to main login view
+    this.viewRender = viewRender || twofaView; // default to main login view
 
     // console.log('2FA Controller initialized for:', email);
   }
@@ -35,12 +35,12 @@ export class TwoFAController {
   public init(): HTMLElement {
     // console.log('Rendering 2FA template for:', this.email);
     const view = document.createElement('div');
-    view.innerHTML = this.view.render(this.email);
+    view.innerHTML = this.viewRender.render(this.email);
 
     // Debug template rendering
     if (!view.innerHTML.includes('twofaForm')) {
       console.error('Template rendering failed!', {
-        templateOutput: this.view.render(this.email),
+        templateOutput: this.viewRender.render(this.email),
         container: this.container
       });
       throw new Error('2FA template error');
