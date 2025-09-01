@@ -23,75 +23,78 @@ export function editProfileSubmenuRender()
 		</div>
 
 		<!-- Body -->
-		<div class="flex-1 overflow-y-auto py-4 space-y-4">
-			<!-- Profile Picture -->
-			<input type="file" id="uploadProfilePictureInput" accept="image/*" class="hidden">
-			<button id="uploadPictureBtnEditProfile" 
-				class="relative w-24 h-24 mx-auto bg-black rounded-full flex items-center justify-center border border-black hover:bg-[#fbd11b] transition">
-				<svg id="uploadIconEditProfile" xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-[#fbd11b] group-hover:text-black transition" fill="currentColor" viewBox="0 0 24 24">
-					<path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
-				</svg>
-				<span class="absolute bottom-0 right-0 bg-[#fbd11b] text-black rounded-full w-5 h-5 flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md">+</span>
-				<img id="previewProfilePictureEditProfile" class="absolute w-24 h-24 rounded-full object-cover hidden" />
-			</button>
+		<div id="editProfileFormContainer">
 
-			<!-- Login / alias -->
-			<div class="flex flex-col items-center space-y-2">
-				<p>Login</p>
-				<input id="loginEditProfile" type="text" placeholder="Change login"
-					class="border border-black w-[80%] rounded-xl text-center placeholder-black/50 placeholder:text-sm h-[4vh]">
+			<div class="flex-1 overflow-y-auto py-4 space-y-4">
+				<!-- Profile Picture -->
+				<input type="file" id="uploadProfilePictureInput" accept="image/*" class="hidden">
+				<button id="uploadPictureBtnEditProfile" 
+					class="relative w-24 h-24 mx-auto bg-black rounded-full flex items-center justify-center border border-black hover:bg-[#fbd11b] transition">
+					<svg id="uploadIconEditProfile" xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-[#fbd11b] group-hover:text-black transition" fill="currentColor" viewBox="0 0 24 24">
+						<path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
+					</svg>
+					<span class="absolute bottom-0 right-0 bg-[#fbd11b] text-black rounded-full w-5 h-5 flex items-center justify-center text-xl font-bold group-hover:bg-black group-hover:text-[#fbd11b] transition shadow-md">+</span>
+					<img id="previewProfilePictureEditProfile" class="absolute w-24 h-24 rounded-full object-cover hidden" />
+				</button>
+
+				<!-- Login / alias -->
+				<div class="flex flex-col items-center space-y-2">
+					<p>Login</p>
+					<input id="loginEditProfile" type="text" placeholder="Change login"
+						class="border border-black w-[80%] rounded-xl text-center placeholder-black/50 placeholder:text-sm h-[4vh]">
+				</div>
+
+				<!-- Mail -->
+				<div id="editProfileChangeMail" class="flex flex-col items-center space-y-2">
+					<p>Mail</p>
+					<input id="changeMailEditProfile" type="text" placeholder="Change email"
+						class="border border-black w-[80%] rounded-xl text-center placeholder-black/50 placeholder:text-sm h-[4vh]">
+				</div>
+
+				<!-- Password block -->
+				<div id="editProfileChangePassword" class="flex flex-col items-center space-y-2">
+					<p>Change password</p>
+					<input id="currentPasswordEditProfile" type="password" placeholder="Current password"
+						class="border border-black w-[80%] rounded-xl text-center placeholder-black/50 placeholder:text-sm h-[4vh]">
+					<input id="changePasswordEditProfile" type="password" placeholder="New password"
+						class="border border-black w-[80%] rounded-xl text-center placeholder-black/50 placeholder:text-sm h-[4vh]">
+					<input id="repeatPasswordEditProfile" type="password" placeholder="Repeat password"
+						class="border border-black w-[80%] rounded-xl text-center placeholder-black/50 placeholder:text-sm h-[4vh]">
+				</div>
+
+				<!-- 2FA -->
+				<div id="editProfile2FA" class="flex flex-col items-center space-y-2">
+					<p>Activate 2FA ?</p>
+					<button id="2FAtoggleSwitch"
+						class="relative w-12 h-6 flex items-center bg-gray-400 rounded-full p-1 transition-colors duration-300">
+						<span class="w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300"></span>
+					</button>
+				</div>
+
+				<!-- Anonymity -->
+				<div class="flex flex-col items-center space-y-2">
+					<p>Stay anonymous ?</p>
+					<button id="anonymousToggleSwitch"
+						class="relative w-12 h-6 flex items-center bg-gray-400 rounded-full p-1 transition-colors duration-300">
+						<span class="w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300"></span>
+					</button>
+				</div>
+
+				<!-- Save -->
+				<div class="flex justify-center">
+					<button id="saveBtnEditProfile" 
+						class="font-bold rounded px-3 py-1 text-sm hover:bg-black hover:text-[#fbd11b] border border-black">
+						Save
+					</button>
+				</div>
 			</div>
 
-			<!-- Mail -->
-			<div id="editProfileChangeMail" class="flex flex-col items-center space-y-2">
-				<p>Mail</p>
-				<input id="changeMailEditProfile" type="text" placeholder="Change email"
-					class="border border-black w-[80%] rounded-xl text-center placeholder-black/50 placeholder:text-sm h-[4vh]">
-			</div>
-
-			<!-- Password block -->
-			<div id="editProfileChangePassword" class="flex flex-col items-center space-y-2">
-				<p>Change password</p>
-				<input id="currentPasswordEditProfile" type="password" placeholder="Current password"
-					class="border border-black w-[80%] rounded-xl text-center placeholder-black/50 placeholder:text-sm h-[4vh]">
-				<input id="changePasswordEditProfile" type="password" placeholder="New password"
-					class="border border-black w-[80%] rounded-xl text-center placeholder-black/50 placeholder:text-sm h-[4vh]">
-				<input id="repeatPasswordEditProfile" type="password" placeholder="Repeat password"
-					class="border border-black w-[80%] rounded-xl text-center placeholder-black/50 placeholder:text-sm h-[4vh]">
-			</div>
-
-			<!-- 2FA -->
-			<div id="editProfile2FA" class="flex flex-col items-center space-y-2">
-				<p>Activate 2FA ?</p>
-				<button id="2FAtoggleSwitch"
-					class="relative w-12 h-6 flex items-center bg-gray-400 rounded-full p-1 transition-colors duration-300">
-					<span class="w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300"></span>
+			<!-- Footer: Erase -->
+			<div class="p-3 border-t border-black bg-[#fbd11b]">
+				<button id="eraseAccountBtn" class="w-full font-bold border rounded px-2 py-1 text-sm hover:bg-red-500">
+					Erase account
 				</button>
 			</div>
-
-			<!-- Anonymity -->
-			<div class="flex flex-col items-center space-y-2">
-				<p>Stay anonymous ?</p>
-				<button id="anonymousToggleSwitch"
-					class="relative w-12 h-6 flex items-center bg-gray-400 rounded-full p-1 transition-colors duration-300">
-					<span class="w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300"></span>
-				</button>
-			</div>
-
-			<!-- Save -->
-			<div class="flex justify-center">
-				<button id="saveBtnEditProfile" 
-					class="font-bold rounded px-3 py-1 text-sm hover:bg-black hover:text-[#fbd11b] border border-black">
-					Save
-				</button>
-			</div>
-		</div>
-
-		<!-- Footer: Erase -->
-		<div class="p-3 border-t border-black bg-[#fbd11b]">
-			<button id="eraseAccountBtn" class="w-full font-bold border rounded px-2 py-1 text-sm hover:bg-red-500">
-				Erase account
-			</button>
 		</div>
 	</div>
 	${eraseAccountConfirmationPopupRender()}

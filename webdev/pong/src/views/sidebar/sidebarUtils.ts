@@ -5,7 +5,7 @@ import { loadProfileAndPrefill } from './profileBtn/editProfileSubmenuRender';
 import { userChangingInfo } from './profileBtn/userChangingInfo';
 import { seeFriendsList } from './profileBtn/manageFriendsSubmenu';
 import { setupGameSettingsListeners } from '../../controllers/gameSettingsControllers';
-import { checkService } from '../../services/sidebarService/editProfileService';
+// import { checkService } from '../../services/sidebarService/editProfileService';
 
 let currentUser: User | null = null;
 
@@ -128,8 +128,8 @@ export function editProfileSubmenuBehavior()
 			editProfileSubmenu?.classList.add("max-h-0");
 			editProfileSubmenu?.classList.remove("max-h-screen");
 		});
-		checkService("twofa", "2FAtoggleSwitch");
-		checkService("GDPR", "anonymousToggleSwitch");
+		// checkService("twofa", "2FAtoggleSwitch");
+		// checkService("GDPR", "anonymousToggleSwitch");
 	});
 
 	profileSidebarBtn?.addEventListener('click', () => {
