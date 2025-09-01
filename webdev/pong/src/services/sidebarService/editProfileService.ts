@@ -143,12 +143,16 @@ function beginEditProfile2FAFlow(email: string, changes: any) {
   form.classList.add('hidden');
   twofa.classList.remove('hidden');
 
+  const expires = new Date(Date.now() + 5 * 60 * 1000).toUTCString(); // 5 minutes from now
+  document.cookie = `pending_2fa_edit=true; path=/; Expires=${expires}; SameSite=Strict`;
+
   if (twofa.querySelector('*') === null) {
     const controller = new TwoFAController(
       email,
     //   'sidebar', // reuse existing flow type
       async () => {
         console.log("2FA success, saving profile...");
+		document.cookie = 'pending2FAEdit=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         await submitProfileChanges(changes);
         restoreUI();
       },
@@ -159,6 +163,7 @@ function beginEditProfile2FAFlow(email: string, changes: any) {
           // Clear passwords
           (document.getElementById('currentPasswordEditProfile') as HTMLInputElement).value = '';
           (document.getElementById('changePasswordEditProfile') as HTMLInputElement).value = '';
+		  document.cookie = 'pending2FAEdit=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 
           restoreUI();
         }
