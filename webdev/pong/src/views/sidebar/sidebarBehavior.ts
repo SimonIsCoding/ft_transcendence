@@ -11,6 +11,7 @@ import { friendsSubmenuRender } from './profileBtn/friendsSubmenuRender'
 import { dashboardSubmenuRender } from './profileBtn/dashboardSubmenuRender'
 import { gameHistorySubmenuRender } from './profileBtn/gameHistorySubmenuRender'
 import { editProfileSubmenuRender } from './profileBtn/editProfileSubmenuRender'
+import { showDashboard } from "../../pong-erik/Dashboard";
 
 interface User {
   login: string;
@@ -77,6 +78,7 @@ export const userLoggedSidebar = {
 
 	<div id="largeSubmenu" class="submenu h-screen absolute left-[64px] top-0 w-96 bg-[#fbd11b] border border-black flex flex-col overflow-hidden max-h-0 transition-[max-height] duration-450 z-50 space-y-5">
 		${dashboardSubmenuRender()}
+		${showDashboard()}
 		${friendsSubmenuRender()}
 		${gameHistorySubmenuRender()}
 		${gameSettingsSubmenuRender()}

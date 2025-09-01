@@ -68,13 +68,13 @@ export function profileSidebarBehavior()
 		gameHistorySubmenu?.classList.add('hidden');
 		dashboardSubmenu?.classList.remove('hidden');
 		openMenu('largeSubmenu');
-		// openMenu('dashboardSubmenu');
+		openMenu('dashboard-container');
+		showDashboard();
 		const backBtnDasboardSubmenu = document.getElementById("backBtnDasboardSubmenu");
 		backBtnDasboardSubmenu?.addEventListener('click', () => {
 			closeAllMenus(submenus);
 			toggleMenuVisibility('profileSubmenu', submenus);
 		});
-		showDashboard();
 	});
 	
 	const friendsBtn = document.getElementById("friendsListBtn");
