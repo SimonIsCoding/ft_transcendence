@@ -39,10 +39,14 @@ export async function loginRoute(fastify) {
       path: '/'
     });
 
-    // 4. Response
+	// 4. check 2FA
+	const env2faDisabled = process.env.ENABLE_2FA === 'false';
+	const requires2FA = !env2faDisabled && user.is_2fa_activated;
+
+    // 5. Response
     reply.send({
       success: true,
-      requires2FA: process.env.ENABLE_2FA === 'true',
+      requires2FA,
       userId: user.id, // Critical for /generate-token
       mail: user.mail // Add this field
 
@@ -64,12 +68,15 @@ export async function loginRoute(fastify) {
 	  ? parseInt(process.env.SESSION_LIFETIME, 10)
 	  : 86400; // default 24h if not set
     // 1. Validate user
-    const user = db.prepare('SELECT id FROM users WHERE id = ?')
+    const user = db.prepare('SELECT id, is_2fa_activated FROM users WHERE id = ?')
                   .get(request.body.userId);
     if (!user) return reply.code(404).send({ error: 'User not found' });
   
     // 2. Determine verification status
-    const is2FAVerified = process.env.ENABLE_2FA === 'true'
+    const env2faDisabled = process.env.ENABLE_2FA === 'false';
+	const requires2FA = !env2faDisabled && user.is_2fa_activated;
+
+	const is2FAVerified = requires2FA
       ? request.cookies.auth_phase === '2fa_verified' // Check phase if 2FA enabled
       : true; // Auto-verify if 2FA disabled
   	
