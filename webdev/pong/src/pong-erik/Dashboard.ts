@@ -28,7 +28,7 @@ export function showDashboard() {
     document.body.appendChild(dashboardContainer);
   }
   dashboardContainer.innerHTML = `
-    <div class="w-screen h-screen fixed top-0 left-0 z-50 bg-custom-black flex items-start justify-start p-0 m-0" style="min-height:100vh;min-width:100vw;">
+    <div class="w-screen h-screen fixed top-0 left-[64px] z-50 bg-custom-black flex items-start justify-start p-0 m-0" style="min-height:100vh;min-width:100vw;">
       <div class="bg-custom-yellow h-screen shadow-lg p-2 space-y-2 flex flex-col"
         style="border-radius:0;width:256px;min-width:256px;max-width:256px;overflow:hidden;">
       <header class="text-center py-1">
@@ -122,14 +122,7 @@ export function showDashboard() {
     `;
     document.head.appendChild(style);
   }
-  // Add D3 if not present
-  // if (!(window as any).d3) {
-  //   const d3Script = document.createElement('script');
-  //   d3Script.src = 'https://d3js.org/d3.v7.min.js';
-  //   d3Script.onload = () => renderDashboard(data);
-  //   document.head.appendChild(d3Script);
-  // } else {
-  const data: DashboardData = {
+    const data: DashboardData = {
     username: 'Player1',
     stats: {
       won: 10,
@@ -142,8 +135,15 @@ export function showDashboard() {
       scored: 120
     }
   };
-  renderDashboard(data);
-  // }
+  // Add D3 if not present
+    if (!(window as any).d3) {
+      const d3Script = document.createElement('script');
+      d3Script.src = 'https://d3js.org/d3.v7.min.js';
+      d3Script.onload = () => renderDashboard(data);
+      document.head.appendChild(d3Script);
+    } else {
+    renderDashboard(data);
+  }
 }
 
 function renderDashboard(data: DashboardData) {

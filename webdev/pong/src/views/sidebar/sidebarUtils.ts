@@ -4,6 +4,7 @@ import { userChangingInfo } from './profileBtn/userChangingInfo';
 import { seeFriendsList } from './profileBtn/manageFriendsSubmenu';
 import { setupGameSettingsListeners } from '../../controllers/gameSettingsControllers';
 import { twofaCheckService } from '../../services/sidebarService/editProfileService';
+import { showDashboard } from '../../pong-erik/Dashboard';
 
 export function renderBackButton(id: string): string
 {
@@ -67,12 +68,13 @@ export function profileSidebarBehavior()
 		gameHistorySubmenu?.classList.add('hidden');
 		dashboardSubmenu?.classList.remove('hidden');
 		openMenu('largeSubmenu');
-		openMenu('dashboardSubmenu');
+		// openMenu('dashboardSubmenu');
 		const backBtnDasboardSubmenu = document.getElementById("backBtnDasboardSubmenu");
 		backBtnDasboardSubmenu?.addEventListener('click', () => {
 			closeAllMenus(submenus);
 			toggleMenuVisibility('profileSubmenu', submenus);
 		});
+		showDashboard();
 	});
 	
 	const friendsBtn = document.getElementById("friendsListBtn");
