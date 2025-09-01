@@ -139,7 +139,9 @@ function beginEditProfile2FAFlow(email: string, changes: any) {
     return;
   }
 
-  // Hide form + footer, show 2FA
+  // Hide form + footer, clear and show 2FA
+  twofa.innerHTML = '';
+
   form.classList.add('hidden');
   twofa.classList.remove('hidden');
 
