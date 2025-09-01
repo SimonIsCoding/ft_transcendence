@@ -1,5 +1,5 @@
 import { Router } from "../../../router";
-import { editProfileService, GDPRChangeValueService, GDPRCheckService, twofaChangeValueService, twofaCheckService } from "../../../services/sidebarService/editProfileService";
+import { changeValueService, checkService, editProfileService } from "../../../services/sidebarService/editProfileService";
 import { eraseAccountService } from "../../../services/sidebarService/eraseAccountService"; 
 import { showSuccessPopup } from "../../../utils/utils";
 import { handleSidebar } from "../sidebarBehavior";
@@ -11,8 +11,8 @@ export function userChangingInfo()
 	saveBtnEditProfile?.addEventListener('click', () => {
 		editProfileService();
 	});
-	setupToggle("2FAtoggleSwitch", twofaCheckService, twofaChangeValueService);
-	setupToggle("anonymousToggleSwitch", GDPRCheckService, GDPRChangeValueService);
+	setupToggle("2FAtoggleSwitch", () => checkService("twofa", "2FAtoggleSwitch"), () => changeValueService("twofa"));
+	setupToggle("anonymousToggleSwitch", () => checkService("GDPR", "anonymousToggleSwitch"), () => changeValueService("GDPR"));
 	eraseAccount();
 }
 

@@ -1,13 +1,5 @@
 import { showErrorPopup, isValidEmail, showSuccessPopup, getCurrentUser } from "../../utils/utils";
 
-// interface User {
-//   id: number;
-//   login: string;
-//   mail: string;
-//   profile_picture: string,
-//   token: string;
-// }
-
 export async function reloadUserInfo(): Promise<void>
 {
 	try
@@ -81,20 +73,21 @@ export async function editProfileService()
 	}
 }
 
-export async function twofaCheckService(): Promise<number>
+export async function checkService(endpoint: string, buttonId: string): Promise<number>
 {
 	try
 	{
-		const res = await fetch("/api/auth/me/twofa", { credentials: "include" });
+		const res = await fetch(`/api/auth/me/${endpoint}`, { credentials: "include" });
 		if (!res.ok)
 		{
-			console.error("Error fetching twofaCheck:", res.status);
+			console.error(`Error fetching ${endpoint} check:`, res.status);
 			return -1;
 		}
 		const data = await res.json();
 
-		const toggle = document.getElementById("2FAtoggleSwitch") as HTMLButtonElement;
+		const toggle = document.getElementById(buttonId) as HTMLButtonElement;
 		const circle = toggle.querySelector("span")!;
+
 		if (data.is_activated === 1)
 		{
 			toggle.classList.remove("bg-gray-400");
@@ -107,65 +100,19 @@ export async function twofaCheckService(): Promise<number>
 			toggle.classList.add("bg-gray-400");
 			circle.classList.remove("translate-x-6");
 		}
+
 		return data.is_activated;
 	}
 	catch (err)
 	{
-		console.error("Network error:", err);
+		console.error(`Network error (${endpoint}):`, err);
 		return -1;
 	}
 }
 
-export async function twofaChangeValueService()
+export async function changeValueService(endpoint: string)
 {
-	const res = await fetch('/api/auth/me/twofa', {
-		method: 'PUT',
-		credentials: 'include',
-		})
-	const backend_answer = await res.json()
-
-	if (res.status === 409)
-		showErrorPopup(backend_answer.error, "popup")
-}
-
-export async function GDPRCheckService(/*name: string, nb: number*/): Promise<number>
-{
-	try
-	{
-		const res = await fetch("/api/auth/me/GDPR", { credentials: "include" });
-		if (!res.ok)
-		{
-			console.error("Error fetching GDPR get:", res.status);
-			return -1;
-		}
-		const data = await res.json();
-
-		const toggle = document.getElementById("anonymousToggleSwitch") as HTMLButtonElement;
-		const circle = toggle.querySelector("span")!;
-		if (data.is_activated === 1)
-		{
-			toggle.classList.remove("bg-gray-400");
-			toggle.classList.add("bg-green-500");
-			circle.classList.add("translate-x-6");
-		}
-		else
-		{
-			toggle.classList.remove("bg-green-500");
-			toggle.classList.add("bg-gray-400");
-			circle.classList.remove("translate-x-6");
-		}
-		return data.is_activated;
-	}
-	catch (err)
-	{
-		console.error("Network error:", err);
-		return -1;
-	}
-}
-
-export async function GDPRChangeValueService()
-{
-	const res = await fetch('/api/auth/me/GDPR', {
+	const res = await fetch(`/api/auth/me/${endpoint}`, {
 		method: 'PUT',
 		credentials: 'include',
 	})
@@ -173,7 +120,6 @@ export async function GDPRChangeValueService()
 
 	if (res.status === 409)
 		showErrorPopup(backend_answer.error, "popup")
-	
 }
 
 export async function checkFriendHasGDPRActivated(friendId: number)
