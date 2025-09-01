@@ -1,9 +1,21 @@
+import type { User } from "../../config";
 import { getUserInfo } from '../../services/sidebarService/utilsSidebarService'
 import { playSidebarBehavior } from './playBtn/playSidebarBehavior';
+import { loadProfileAndPrefill } from './profileBtn/editProfileSubmenuRender';
 import { userChangingInfo } from './profileBtn/userChangingInfo';
 import { seeFriendsList } from './profileBtn/manageFriendsSubmenu';
 import { setupGameSettingsListeners } from '../../controllers/gameSettingsControllers';
 import { checkService } from '../../services/sidebarService/editProfileService';
+
+let currentUser: User | null = null;
+
+export function setCurrentUser(user: User): void {
+  currentUser = { ...user };
+}
+
+export function getCurrentUser(): User | null {
+  return currentUser;
+}
 
 export function renderBackButton(id: string): string
 {
@@ -107,6 +119,7 @@ export function editProfileSubmenuBehavior()
 	const backBtnEditProfileSubmenu = document.getElementById("backBtnEditProfileSubmenu");
 
 	editProfileBtn?.addEventListener('click', () => {
+		loadProfileAndPrefill();
 		editProfileSubmenu?.classList.add("max-h-screen");
 		editProfileSubmenu?.classList.remove("max-h-0");
 		editProfileSubmenu?.classList.remove("hidden");

@@ -9,7 +9,7 @@ export async function infoUserRoute(app) {
 
       // Fetch complete user data
       const stmt = db.prepare(`
-        SELECT id, login, mail, profile_picture, provider
+        SELECT id, login, mail, profile_picture, provider, is_2fa_activated, GDPR_activated
         FROM users
         WHERE id = ?
       `);
