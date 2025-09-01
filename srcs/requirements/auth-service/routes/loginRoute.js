@@ -41,7 +41,7 @@ export async function loginRoute(fastify) {
 
 	// 4. check 2FA
 	const env2faDisabled = process.env.ENABLE_2FA === 'false';
-	const requires2FA = !env2faDisabled && user.is_2fa_activated;
+	const requires2FA = !env2faDisabled && Boolean(Number(user.is_2fa_activated));
 
     // 5. Response
     reply.send({
