@@ -5,6 +5,7 @@ import { showSuccessPopup } from '../../../utils/utils.ts';
 import { renderBackButton } from '../sidebarUtils.ts'
 import { checkFriendHasGDPRActivated } from '../../../services/sidebarService/editProfileService.ts';
 import { setCurrentUser } from "../sidebarUtils";
+import { loadGoogleAvatar } from "../../../utils/profilePictureUtils.ts";
 
 
 export const friendRequestCard = {
@@ -147,9 +148,9 @@ export const othersUsersCard = {
 
 	const othersUsersPhoto = document.getElementById(`othersUsersPhoto_${otherUser.id}`) as HTMLImageElement;
 	if (otherUser.profile_picture && otherUser.profile_picture.startsWith("https://lh3.googleusercontent.com"))
-			othersUsersPhoto.src = `${otherUser.profile_picture}`;
-		else
-			othersUsersPhoto.src = `https://localhost:4443/${otherUser.profile_picture}`;
+		await loadGoogleAvatar(othersUsersPhoto, otherUser.profile_picture);
+	else
+		othersUsersPhoto.src = `https://localhost:4443/${otherUser.profile_picture}`;
 	
 	const addFriendBtn = document.getElementById(`addFriendBtn_${otherUser.id}`);
 	const othersUsersCard = document.getElementById(`othersUsers_${otherUser.id}_card`);
