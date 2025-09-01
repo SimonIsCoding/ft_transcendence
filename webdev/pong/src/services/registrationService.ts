@@ -95,6 +95,9 @@ export async function initRegistration() {
 			showErrorPopup(data.error || "Registration form problem", "popup");
         	return;
 		}
+		
+		twoFaContainer.innerHTML='';
+
         registerForm.classList.add('hidden');
         twoFaContainer.classList.remove('hidden');
 
