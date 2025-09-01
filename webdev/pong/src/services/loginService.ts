@@ -53,7 +53,7 @@ export async function initLogin() {
 
           const controller = new TwoFAController(
 		    loginData.mail,
-		    'login',
+		    // 'login',
 		    async () => { 
 		      console.log('2FA Success callback triggered');
 		  		  
