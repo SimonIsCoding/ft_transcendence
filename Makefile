@@ -14,7 +14,7 @@ all:
 	sleep 2
 	docker ps
 
-webupdate:
+w webupdate:
 	mkdir -p srcs/data/pong
 	cd webdev/pong && \
 	  rm -rf dist && \
