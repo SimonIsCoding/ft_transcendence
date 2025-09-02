@@ -1,6 +1,6 @@
 import type { Match } from '../models/TournamentModel';
 import { Router } from '../router';
-import { currentTournament, setMatchInfo, matchInfo } from '../models/TournamentStore';
+import { currentTournament, getTournament } from '../models/TournamentStore';
 // import { Game } from '../pong-erik/Game';
 import { TournamentUIManager } from '../views/TournamentUIManager';
 import { Game } from '../pong-erik/Game';
@@ -96,6 +96,8 @@ export class TournamentController {
             await TournamentUIManager.showPreGame(match.player1.alias, match.player2.alias);
             await TournamentUIManager.startCountdown();
             this.mostrarVistaJuego();
+            Router.navigate('tournament');
+            await new Promise(resolve => setTimeout(resolve, 100));
             // const res = game.start();
             // console.log(res)
             // this.gameInstance = new Game({
@@ -115,15 +117,17 @@ export class TournamentController {
             //     this.gameInstance!.start();
             // }, 100);
             const game = new Game({
-                leftPlayer: 'player',
-                rightPlayer: '2', maxScore: 2, gameMode: 'p-vs-p',
+                leftPlayer: match.player1.alias,
+                rightPlayer: match.player2.alias, maxScore: 8, gameMode: 'p-vs-p',
                 onFinish: (winnerAlias: string, player1Score: number, player2Score: number) => {
+                    console.log(player1Score, player2Score);
                     match.player1.score = player1Score;
                     match.player2.score = player2Score;
                     match.winner = (match.player1.alias === winnerAlias) ? match.player1 : match.player2;
                     console.log('entra en onMatchEnd');
-                    if (matchInfo)
-                        setMatchInfo({ ...matchInfo, partidoActivo: false });
+                    const torneo = getTournament();
+                    if (torneo)
+                        TournamentUIManager.updateBracket(torneo);
                     resolve();
                 },
             });
@@ -152,7 +156,7 @@ export class TournamentController {
             //         resolve();
             //     }
             // });
-            Router.navigate('tournament');
+            // Router.navigate('tournament');
         });
     }
     // private enviarLog(eventType: string, data: any) {

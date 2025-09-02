@@ -123,7 +123,6 @@ export const TournamentArea = {
   },
 
   init(): void {
-    console.log('entra')
     const playtournamentBtn = document.getElementById('playtournamentBtn') as HTMLButtonElement | null;
 
     let login = localStorage.getItem('login');
@@ -132,26 +131,22 @@ export const TournamentArea = {
     if (alias1)
       alias1.value = login || '';
     playtournamentBtn?.addEventListener('click', () => {
-      const player1 = (document.getElementById("alias1") as HTMLInputElement).value;
-      const player2 = (document.getElementById("alias2") as HTMLInputElement).value;
-      const player3 = (document.getElementById("alias3") as HTMLInputElement).value;
-      const player4 = (document.getElementById("alias4") as HTMLInputElement).value;
+      let player1 = (document.getElementById("alias1") as HTMLInputElement).value;
+      let player2 = (document.getElementById("alias2") as HTMLInputElement).value;
+      let player3 = (document.getElementById("alias3") as HTMLInputElement).value;
+      let player4 = (document.getElementById("alias4") as HTMLInputElement).value;
 
+      if (!player2.trim()) player2 = 'user2';
+      if (!player3.trim()) player3 = 'user3'; 
+      if (!player4.trim()) player4 = 'user4';
+      const alias2Input = document.getElementById("alias2") as HTMLInputElement;
+      const alias3Input = document.getElementById("alias3") as HTMLInputElement;
+      const alias4Input = document.getElementById("alias4") as HTMLInputElement;
+    
+      if (alias2Input) alias2Input.value = player2;
+      if (alias3Input) alias3Input.value = player3;
+      if (alias4Input) alias4Input.value = player4;
 
-      if (!player2.trim() || !player3.trim() || !player4.trim()) {
-        const alias2Input = document.getElementById("alias2") as HTMLInputElement | null;
-        if (alias2Input) {
-          alias2Input.value = 'user 2';
-        }
-        const alias3Input = document.getElementById("alias3") as HTMLInputElement | null;
-        if (alias3Input) {
-          alias3Input.value = 'user 3';
-        }
-        const alias4Input = document.getElementById("alias4") as HTMLInputElement | null;
-        if (alias4Input) {
-          alias4Input.value = 'user 4';
-        }
-      }
       let torneo = getTournament();
       if (!torneo)
       {
@@ -161,8 +156,6 @@ export const TournamentArea = {
         torneoNew.addPlayer(player3);
         torneoNew.addPlayer(player4);
         setTournament(torneoNew);
-        console.log('asignando jugadores sin tener el valor?')
-
       }
       const currentMatchInfo = getMatchInfo();
       if (!currentMatchInfo)
@@ -173,7 +166,7 @@ export const TournamentArea = {
           partidoActivo: true,
           onMatchEnd: (winnerAlias: string, player1Score: number, player2Score: number) => {
             console.log(`Match ended. Winner: ${winnerAlias}, Scores: ${player1Score} - ${player2Score}`);
-            // Placeholder for match end logic
+            
           }
         })
       }

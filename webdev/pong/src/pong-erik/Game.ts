@@ -282,7 +282,7 @@ export class Game {
       this.isPaused = true; // Stop the game loop
       const winner = result === GameResult.LEFT_WINS ? this.options.leftPlayer : this.options.rightPlayer;
       if (this.onFinishCallback) {
-        this.onFinishCallback(winner, GameResult.LEFT_WINS, GameResult.RIGHT_WINS);
+        this.onFinishCallback(winner, GameResult.LEFT_SCORES, GameResult.RIGHT_SCORES);
         // alert(`${winner} ha ganado esta partida`);
       }
       // setTimeout(() => {

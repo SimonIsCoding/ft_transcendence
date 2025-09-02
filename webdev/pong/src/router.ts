@@ -8,7 +8,7 @@ import { matchInfo } from './models/TournamentStore';
 // import { TournamentUIManager } from './views/TournamentUIManager';
 // import { Game } from './pong-erik/Game';
 import { GameRender } from './pong-erik/GameRender';
-import { TournamentController } from './controllers/TournamentController';
+// import { TournamentController } from './controllers/TournamentController';
 
 export class Router {
   private static app = document.getElementById('app');
@@ -87,8 +87,8 @@ export class Router {
           // console.log(game)
           console.log('✅ DESPUÉS de game.start()');
 
-          const controller = new TournamentController();
-          controller.iniciarTorneo();
+          // const controller = new TournamentController();
+          // controller.iniciarTorneo();
           // console.log(res)
         }
         // } 
