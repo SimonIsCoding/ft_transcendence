@@ -11,8 +11,8 @@ export const playButton = {
 
 	render(): string {
 	return `
-	<main id="gameArea" class="flex-1 flex items-center justify-center bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center w-full h-full">
-		<button id="playBtn" class="text-[#fbd11b] text-5xl rounded-lg border border-[#fbd11b] px-12 py-6 rounded-lg hover:bg-[#fbd11b] hover:text-black transition">
+	<main id="gameArea" class="flex-1 bg-black flex items-center justify-center bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center w-full h-full">
+		<button id="playBtn" class="text-[#fbd11b] text-5xl border border-[#fbd11b] px-12 py-6 rounded-lg hover:bg-[#fbd11b] hover:text-black transition">
 		PLAY
 		</button>
 	 </main>
