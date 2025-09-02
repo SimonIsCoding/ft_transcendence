@@ -1,8 +1,16 @@
+
 import Fastify from 'fastify';
 import fetch from 'node-fetch';  // Explicit import
 import fastifyHttpProxy from '@fastify/http-proxy';
 import fs from 'fs';
 import fastifyCors from '@fastify/cors';
+
+// Leer puertos de servicios desde variables de entorno o usar valores por defecto
+const AUTH_SERVICE_PORT = process.env.AUTH_SERVICE_PORT || 3001;
+const TWOFA_SERVICE_PORT = process.env.TWOFA_SERVICE_PORT || 3003;
+
+const AUTH_SERVICE_URL = `http://auth-service:${AUTH_SERVICE_PORT}`;
+const TWOFA_SERVICE_URL = `http://2fa-service:${TWOFA_SERVICE_PORT}`;
 
 const fastify = Fastify({
 //   logger: true,
@@ -32,7 +40,7 @@ fastify.get('/api', async (request, reply) => {
 
 // Proxy to Auth Service
 fastify.register(fastifyHttpProxy, {
-  upstream: 'http://auth-service:3001',
+  upstream: AUTH_SERVICE_URL,
   prefix: '/api/auth',
   rewritePrefix: '/',
     http2: false,
@@ -53,7 +61,7 @@ fastify.register(fastifyHttpProxy, {
 });
 
 fastify.register(fastifyHttpProxy, {
-  upstream: 'http://2fa-service:3003',
+  upstream: TWOFA_SERVICE_URL,
   prefix: '/api/2fa',
   rewritePrefix: '/',
     http2: false,
@@ -75,7 +83,7 @@ fastify.register(fastifyHttpProxy, {
 });
 
 fastify.register(fastifyHttpProxy, {
-  upstream: 'http://auth-service:3001',
+  upstream: AUTH_SERVICE_URL,
   prefix: '/api/game',
   rewritePrefix: '/game',
     http2: false,
