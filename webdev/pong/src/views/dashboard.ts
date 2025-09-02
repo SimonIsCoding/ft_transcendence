@@ -16,13 +16,16 @@ export function showDashboard(data: DashboardData) {
    const dashboardContainer = document.getElementById('dashboard-container');
 	if (!dashboardContainer)
 		return;
+  
+  // <header class="text-center py-1">
+  //   <h1 class="text-base font-bold text-custom-black">Dashboard</h1>
+  // </header>
 
 	dashboardContainer.innerHTML = `
-        <div class="bg-custom-yellow h-screen shadow-lg p-2 space-y-2 flex flex-col"
-          style="border-radius:0;width:256px;min-width:256px;max-width:256px;overflow:hidden;">
-        <header class="text-center py-1">
-          <h1 class="text-base font-bold text-custom-black">Dashboard</h1>
-        </header>
+        <div class="bg-custom-yellow h-auto space-y-2 flex flex-col rounded-none w-full overflow-hidden mx-auto">        
+        <p id="submenuFriendsName" class="font-bold text-center pt-5">Dashboard</p>
+        <hr class="w-full border-t-1.5 border-black" />
+        <div class="p-4 space-y-2">
         <div class="flex justify-between items-center px-1">
           <h2 id="username" class="text-base font-bold text-custom-black truncate"></h2>
         </div>
@@ -85,6 +88,7 @@ export function showDashboard(data: DashboardData) {
           </div>
         </div>
         </div>
+        </div>
     `;
   
     if (!document.getElementById('dashboard-custom-style')) {
@@ -93,11 +97,12 @@ export function showDashboard(data: DashboardData) {
       style.innerHTML = `
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #191A1A; }
-        .bg-custom-yellow { background-color: #EDD24E; }
+        .bg-custom-yellow { background-color: #fbd11b; }
         .bg-custom-black { background-color: #191A1A; }
-        .text-custom-yellow { color: #EDD24E; }
+        .bg-custom-white { background-color: #D9D9D9; }
+        .text-custom-yellow { color: #fbd11b; }
         .text-custom-white { color: #D9D9D9; }
-        .fill-custom-yellow { fill: #EDD24E; }
+        .fill-custom-yellow { fill: #fbd11b; }
         .fill-custom-white { fill: #D9D9D9; }
       `;
       document.head.appendChild(style);
