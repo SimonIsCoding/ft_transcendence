@@ -54,7 +54,6 @@ services:
     restart: unless-stopped
     volumes:
       - 2fa_data:/usr/src/app/data
-
   
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
