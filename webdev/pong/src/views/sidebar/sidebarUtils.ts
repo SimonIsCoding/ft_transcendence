@@ -5,7 +5,6 @@ import { loadProfileAndPrefill } from './profileBtn/editProfileSubmenuRender';
 import { userChangingInfo } from './profileBtn/userChangingInfo';
 import { seeFriendsList } from './profileBtn/manageFriendsSubmenu';
 import { setupGameSettingsListeners } from '../../controllers/gameSettingsControllers';
-// import { checkService } from '../../services/sidebarService/editProfileService';
 import { showDashboard, type DashboardData } from "../dashboard";
 
 let currentUser: User | null = null;
