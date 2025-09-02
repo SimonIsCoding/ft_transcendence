@@ -6,6 +6,7 @@ import { userChangingInfo } from './profileBtn/userChangingInfo';
 import { seeFriendsList } from './profileBtn/manageFriendsSubmenu';
 import { setupGameSettingsListeners } from '../../controllers/gameSettingsControllers';
 import { checkService } from '../../services/sidebarService/editProfileService';
+import { showDashboard, type DashboardData } from "../dashboard";
 
 let currentUser: User | null = null;
 
@@ -65,6 +66,22 @@ export function closeAllMenus(submenus: NodeListOf<HTMLElement>)
 	});
 }
 
+//toErase
+export const mockDashboardData: DashboardData = {
+	username: "PlayerOne",
+	stats: {
+		won: 12,
+		lost: 8,
+		scores: 230,
+		friends: 5
+	},
+	points: {
+		scored: 150,
+		received: 180
+	}
+};
+
+
 export function profileSidebarBehavior()
 {
 	getUserInfo();
@@ -80,6 +97,7 @@ export function profileSidebarBehavior()
 		dashboardSubmenu?.classList.remove('hidden');
 		openMenu('largeSubmenu');
 		openMenu('dashboardSubmenu');
+		showDashboard(mockDashboardData);// mockDashboardData is just for testing 
 		const backBtnDasboardSubmenu = document.getElementById("backBtnDasboardSubmenu");
 		backBtnDasboardSubmenu?.addEventListener('click', () => {
 			closeAllMenus(submenus);
