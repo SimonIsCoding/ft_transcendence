@@ -1,12 +1,6 @@
-// import { Router } from "../router";
+import type { User } from "../config";
 import { oneVsOneAreaInit, oneVsAIAreaInit } from "./sidebar/playBtn/playSidebarBehavior";
 
-interface User {
-  login: string;
-  password: string;
-  mail: string;
-  token: string;
-}
 
 function swapSvg():string
 {

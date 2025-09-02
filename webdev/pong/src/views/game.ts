@@ -2,6 +2,8 @@ import { VirtualCanvas } from '../models/VirtualCanvas';
 import { Ball } from '../models/Ball';
 import { Paddle } from '../models/Paddle';
 import { GAME_CONFIG } from '../config';
+import { handleSidebar } from './sidebar/sidebarBehavior.ts';
+
 //import { GameSounds } from '../models/GameSounds';
 
 class Game {
@@ -21,8 +23,10 @@ class Game {
   private player1Name: string = "";
   private player2Name: string = "";
 
-  init(player1Alias = "Jugador 1", player2Alias = "Jugador 2", onFinish?: (winner: string, score1: number, score2: number) => void) {
-    this.player1Name = player1Alias;
+  async init(player1Alias = "Jugador 1", player2Alias = "Jugador 2", onFinish?: (winner: string, score1: number, score2: number) => void) {
+  	await handleSidebar();
+  
+	this.player1Name = player1Alias;
     this.player2Name = player2Alias;
     console.log(this.player1Name)
     console.log(this.player2Name)
@@ -272,6 +276,15 @@ class Game {
 
   render(): string {
     return `
+		<div class="w-screen h-screen flex bg-[#fbd11b] overflow-hidden">
+	
+	<div id="popup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50"></div>
+	
+		<div id="sidebar" class="bg-[#fbd11b] h-screen flex flex-col overflow-hidden transition-all duration-500 ease-in-out w-[64px]">
+		</div>
+		
+			<main id="loginArea" class="flex-1 bg-black flex items-center justify-center bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center w-full h-full" style="background-image: url('/pongBackgroundPlay.png');">
+
       <div class="flex items-center justify-center w-full bg-[#fbd11b] px-4 py-2 overflow-hidden">
         <div class="relative aspect-[4/3] w-full max-w-[1024px] min-w-[600px] flex items-center justify-center">
   
@@ -286,8 +299,10 @@ class Game {
       			id="game-canvas"
       			class="w-full h-full block rounded-[20px]"
     		></canvas>
-	 </div> 
+	 	  </div> 
       </div>
+	</main>
+    </div>
     `;
   }
 }

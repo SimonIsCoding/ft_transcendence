@@ -1,3 +1,4 @@
+import type { User } from "./config";
 import { HomeView } from './views/home';
 import { loginView } from './views/loginView';
 import { registerView } from './views/registerView';
@@ -8,15 +9,6 @@ import { matchInfo } from './models/TournamentStore';
 // import { Game } from './pong-erik/Game';
 import { GameRender } from './pong-erik/GameRender';
 import { TournamentController } from './controllers/TournamentController';
-
-
-interface User {
-  login: string;
-  password: string;
-  mail: string;
-  photo: string;
-  token: string;
-}
 
 export class Router {
   private static app = document.getElementById('app');

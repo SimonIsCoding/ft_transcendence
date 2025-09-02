@@ -18,8 +18,10 @@ export default fp(async (fastify) => {
     // 1. Check if auth_phase cookie exists and is correct
     const authPhase = request.cookies?.auth_phase;
 	const pendingCookie = request.cookies?.pending_registration;
+	const pending2FAEdit = request.cookies?.pending_2fa_edit;
 
-    if (authPhase !== 'password_verified' && !pendingCookie) {
+    if (authPhase !== 'password_verified' && !pendingCookie && !pending2FAEdit) {
+	  
       return reply.code(401).send({
         success: false,
         error: 'Not authorized for 2FA request'
@@ -28,6 +30,7 @@ export default fp(async (fastify) => {
 
       const result = await initiate2FA(request.body.email);
       return result;
+	  
     } catch (error) {
       fastify.log.error(error);
       reply.code(500).send({ error: 'Failed to initiate 2FA' });

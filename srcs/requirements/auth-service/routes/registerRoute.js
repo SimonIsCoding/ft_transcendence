@@ -17,8 +17,8 @@ export function getRandomAvatar()
 export async function registerRoute(fastify)
 {
 	//to create an account
-	fastify.post('/register', async (request, reply) => {
-		const { login, mail } = request.body;
+	fastify.post('/users/verify', async (request, reply) => {
+		const { login, mail, anonymisationEnabled } = request.body;
 		
 		if (!login || !mail)
 			return reply.status(400).send({ success: false, error: "All fields required" });
@@ -28,7 +28,7 @@ export async function registerRoute(fastify)
 	  if (existsMail) return reply.code(409).send({ success: false, error: "Email already used" });
 
 	  // 2. store pending info in signed cookie
-	  reply.setCookie('pending_registration', JSON.stringify({ login, mail }), {
+	  reply.setCookie('pending_registration', JSON.stringify({ login, mail, anonymisationEnabled }), {
 	    httpOnly: true,
 	    secure: true,
 	    signed: true,   // <--- requires fastify-cookie secret
@@ -40,27 +40,40 @@ export async function registerRoute(fastify)
 	  return reply.send({ success: true, requires2FA: process.env.ENABLE_2FA === 'true' });
 	});
 
-	fastify.post('/register-end', async (req, reply) => {
+	fastify.post('/users', async (req, reply) => {
 	  const pending = req.unsignCookie(req.cookies.pending_registration || '');
 	  if (!pending.valid) return reply.code(400).send({ success: false, error: "No pending registration" });
-
-	  const { login, mail } = JSON.parse(pending.value);
+	  const { login, mail, anonymisationEnabled } = JSON.parse(pending.value);
   	  // extract password from request body
 	  const { password } = req.body;
 	  if (!password) return reply.code(400).send({ success: false, error: "Password required" });
 
 	  // If 2FA required, check that auth_phase is verified
 	  if (process.env.ENABLE_2FA === 'true' && req.cookies.auth_phase !== '2fa_verified') {
-	    return reply.code(401).send({ success: false, error: "2FA not verified" });
+	    return reply.code(401).send({ success: false, error: "2FA not verified" });// if ENABLE_2FA is false then error 500 here
 	  }
 
-	  const encryptedPassword = await bcrypt.hash(password, 10);
-	  const avatarPath = getRandomAvatar();
-	  db.prepare("INSERT INTO users (login, password, mail, profile_picture) VALUES (?, ?, ?, ?)")
-	    .run(login, encryptedPassword, mail, avatarPath);
+	  try {
 
-	  reply.clearCookie('pending_registration').clearCookie('auth_phase');
-	  return reply.send({ success: true, message: "User registered" });
+	    const encryptedPassword = await bcrypt.hash(password, 10);
+	    const avatarPath = getRandomAvatar();
+		if (anonymisationEnabled === false)
+			db.prepare("INSERT INTO users (login, password, mail, profile_picture) VALUES (?, ?, ?, ?)").run(login, encryptedPassword, mail, avatarPath);
+		else
+			db.prepare("INSERT INTO users (login, password, mail, profile_picture, GDPR_activated) VALUES (?, ?, ?, ?, 1)").run(login, encryptedPassword, mail, avatarPath);
+  
+	    reply.clearCookie('pending_registration').clearCookie('auth_phase');
+	    return reply.send({ success: true, message: "User registered" });
+	  } catch (err) {
+	     // Constraint violation: e.g. duplicate login/mail
+	     if (err.code === 'SQLITE_CONSTRAINT') {
+	       return reply.code(409).send({ success: false, error: "User or mail already exists" });
+	     }
+	 
+	     // Any other db error
+	     req.log.error(err); // log for debugging
+	     return reply.code(500).send({ success: false, error: "Database error" });
+	  }
 	});
 
 }

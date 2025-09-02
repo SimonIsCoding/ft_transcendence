@@ -4,9 +4,9 @@ import {hashToken, createSessionToken} from '../utils/sessionTokens.js';
 
 export async function loginRoute(fastify) {
   // POST /login
-  fastify.post('/login', async (request, reply) => {
+  fastify.post('/users/check', async (request, reply) => {
     const { login, password } = request.body;
-	console.log(`password = ${password}`);
+	// console.log(`password = ${password}`);
     
     // 1. Input validation
     if (!login || !password) {
@@ -23,7 +23,7 @@ export async function loginRoute(fastify) {
     const valid = await bcrypt.compare(password, user.password);
 
     if (!valid) {
-      return reply.code(402).send({ 
+      return reply.code(401).send({ 
         success: false,
         error: 'Invalid credentials',
         requires2FA: process.env.ENABLE_2FA === 'true'
@@ -39,10 +39,14 @@ export async function loginRoute(fastify) {
       path: '/'
     });
 
-    // 4. Response
+	// 4. check 2FA
+	const env2faDisabled = process.env.ENABLE_2FA === 'false';
+	const requires2FA = !env2faDisabled && Boolean(Number(user.is_2fa_activated));
+
+    // 5. Response
     reply.send({
       success: true,
-      requires2FA: process.env.ENABLE_2FA === 'true',
+      requires2FA,
       userId: user.id, // Critical for /generate-token
       mail: user.mail // Add this field
 
@@ -50,7 +54,7 @@ export async function loginRoute(fastify) {
   });
 
   // POST /generate-token
-   fastify.post('/generate-token', {
+   fastify.post('/users/sessions', {
     schema: {
       body: {
         type: 'object',
@@ -64,15 +68,22 @@ export async function loginRoute(fastify) {
 	  ? parseInt(process.env.SESSION_LIFETIME, 10)
 	  : 86400; // default 24h if not set
     // 1. Validate user
-    const user = db.prepare('SELECT id FROM users WHERE id = ?')
+    const user = db.prepare('SELECT id, is_2fa_activated FROM users WHERE id = ?')
                   .get(request.body.userId);
     if (!user) return reply.code(404).send({ error: 'User not found' });
   
     // 2. Determine verification status
-    const is2FAVerified = process.env.ENABLE_2FA === 'true' 
+    const env2faDisabled = process.env.ENABLE_2FA === 'false';
+	const requires2FA = !env2faDisabled && user.is_2fa_activated;
+
+	const is2FAVerified = requires2FA
       ? request.cookies.auth_phase === '2fa_verified' // Check phase if 2FA enabled
       : true; // Auto-verify if 2FA disabled
-  
+  	
+	if (!is2FAVerified) {
+	  return reply.code(403).send({ error: '2FA verification required' });
+	}
+
  	// 3. Create session_token (random string / UUID)
 	const rawSessionToken = createSessionToken();  // to send back
 	const hashedToken = hashToken(rawSessionToken);  // to store in db
@@ -93,12 +104,10 @@ export async function loginRoute(fastify) {
     // 5. Generate token
     const token = await reply.jwtSign({
       userId: user.id,
-      is2FAVerified,
 	  sessionToken: rawSessionToken
       },
       { expiresIn: SESSION_LIFETIME }
 	);
-	console.error(`in /login token = ${token.userId} `);
   
     // 6. Set cookie
     reply

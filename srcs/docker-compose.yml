@@ -35,8 +35,7 @@ services:
     secrets:
       - secret_key
     volumes:
-      - pong:/var/www/html/pong
-      - ${PROJECT_PATH}/srcs/data/pong:/app/database #share db file - PROJECT_PATH defined in Makefile
+      - pong_db:/app/database #share db file 
     environment:
       - SECRET_KEY_FILE=/run/secrets/secret_key
   
@@ -55,25 +54,6 @@ services:
     restart: unless-stopped
     volumes:
       - 2fa_data:/usr/src/app/data
-
-  # New WebSocket service
-  ws-server:
-    container_name: ws-server
-    build: requirements/ws-server
-    secrets:
-      - server_cert  # Share the same certs as nginx
-      - server_key
-    environment:
-      - NODE_ENV=production
-      - CERT_PATH=/run/secrets/server_cert
-      - KEY_PATH=/run/secrets/server_key
-    ports:
-      - "3002:3002"  # Internal port for WebSocket server
-    depends_on:
-      - auth-service  # If you need authentication
-    restart: unless-stopped
-    healthcheck:
-      disable: true
   
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
@@ -151,7 +131,13 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: ${PWD}/srcs/data/pong
+      device: ./data/pong
+      o: bind
+  pong_db:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./data/DB
       o: bind
   2fa_data:
     driver: local

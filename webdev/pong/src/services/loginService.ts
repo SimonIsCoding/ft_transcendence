@@ -5,7 +5,7 @@ import { TwoFAController } from '../controllers/twofaController';
 export async function initLogin() {
   console.log('1 - Login service initialized'); // Basic log
 
-  const status = await fetch('/api/auth/status', { credentials: 'include' })
+  const status = await fetch('/api/auth/me/status', { credentials: 'include' })
     .then(res => res.json());
   
   if (status.authenticated) {
@@ -20,7 +20,7 @@ export async function initLogin() {
     const password = (document.getElementById("password") as HTMLInputElement).value;
     submitBtn.disabled = true;
     try {
-      const loginResponse = await fetch('/api/auth/login', {
+      const loginResponse = await fetch('/api/auth/users/check', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ login, password }),
@@ -44,6 +44,7 @@ export async function initLogin() {
 
 
         if (loginForm && twofaContainer) {
+		  twofaContainer.innerHTML='';
           loginForm.classList.add('hidden');
           twofaContainer.classList.remove('hidden');
 
@@ -53,7 +54,7 @@ export async function initLogin() {
 
           const controller = new TwoFAController(
 		    loginData.mail,
-		    'login',
+		    // 'login',
 		    async () => { 
 		      console.log('2FA Success callback triggered');
 		  		  
@@ -98,10 +99,10 @@ export async function initLogin() {
   });
 }
 
-async function handleSuccessfulLogin(username: string, userId: string): Promise<void> {
+export async function handleSuccessfulLogin(username: string, userId: string): Promise<void> {
   try {
     // 1. Generate token (works for both 2FA and non-2FA flows)
-    const tokenRes = await fetch('/api/auth/generate-token', {
+    const tokenRes = await fetch('/api/auth/users/sessions', {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
@@ -114,9 +115,6 @@ async function handleSuccessfulLogin(username: string, userId: string): Promise<
 
     // 2. Store username and fetch user info
     localStorage.setItem('login', username);
-    
-    //const userInfoRes = await fetch('/api/auth/info', { credentials: 'include' });
-    //if (!userInfoRes.ok) throw new Error("Failed to get user info");
 
     // 3. Navigate to home
 	console.log(`in loginService tokenRes = ${tokenRes}`);

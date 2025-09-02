@@ -14,7 +14,7 @@ all:
 	sleep 2
 	docker ps
 
-webupdate:
+w webupdate:
 	mkdir -p srcs/data/pong
 	cd webdev/pong && \
 	  rm -rf dist && \
@@ -39,6 +39,8 @@ status:
 	docker compose -f $(COMPOSE_FILE) ps
 
 clean:
+	sudo rm -rf srcs/data/pong/users.db
+	sudo rm -rf srcs/srcs
 	docker compose -f $(COMPOSE_FILE) down --rmi all -v
 	docker image prune -af
 	docker volume prune -f
