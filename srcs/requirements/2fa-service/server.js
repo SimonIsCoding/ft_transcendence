@@ -8,7 +8,6 @@ import cors from '@fastify/cors';
 import { config } from './config.js';
 import authRoutes from './routes/twofaRoutes.js';
 import dotenv from 'dotenv';
-import { getSecretFromFile } from '../utils/loadSecretKey.js';
 
 
 // Load environment variables

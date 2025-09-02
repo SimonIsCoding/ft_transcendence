@@ -34,7 +34,7 @@ const app = fastify({
 await app.register(multipart);//to receive images
 
 app.register(fastifyCookie, {
-  secret: getSecretFromFile(COOKIE_SECRET,'super-secret-key'), //to sign ur cookie // you should put it in a env file
+  secret: getSecretFromFile('COOKIE_SECRET','super-secret-key'), //to sign ur cookie // you should put it in a env file
 });
 
 app.register(fastifyCors, {
@@ -44,7 +44,7 @@ app.register(fastifyCors, {
 
 
 app.register(fastifyJwt, {
-  secret: getSecretFromFile(JWT_SECRET, 'super-secret-key'),// you should put it in a env file
+  secret: getSecretFromFile('JWT_SECRET', 'super-secret-key'),// you should put it in a env file
   cookie: {
     cookieName: 'auth_token',
     signed: false,
