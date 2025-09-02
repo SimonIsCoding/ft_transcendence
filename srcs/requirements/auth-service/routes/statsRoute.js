@@ -5,29 +5,29 @@ export async function statsRoutes(fastify) {
         try {
             const userId = req.user.id;
 
-            // Get total matches
+            // Get total matches where user participated (user_player > 0)
             const totalMatches = db.prepare(
-                `SELECT COUNT(*) as count FROM matches WHERE userid = ?`
+                `SELECT COUNT(*) as count FROM matches WHERE userid = ? AND user_player > 0`
             ).get(userId);
 
             // Get won matches (user is player 1 and won, or player 2 and won)
             const wonMatches = db.prepare(
                 `SELECT COUNT(*) as count FROM matches 
-                 WHERE userid = ? AND is_finished = 1 
+                 WHERE userid = ? AND is_finished = 1 AND user_player > 0
                  AND ((user_player = 1 AND score1 > score2) OR (user_player = 2 AND score2 > score1))`
             ).get(userId);
 
             // Get lost matches (user is player 1 and lost, or player 2 and lost)
             const lostMatches = db.prepare(
                 `SELECT COUNT(*) as count FROM matches 
-                 WHERE userid = ? AND is_finished = 1 
+                 WHERE userid = ? AND is_finished = 1 AND user_player > 0
                  AND ((user_player = 1 AND score1 < score2) OR (user_player = 2 AND score2 < score1))`
             ).get(userId);
 
-            // Get matches in progress
+            // Get matches in progress where user participated
             const inProgressMatches = db.prepare(
                 `SELECT COUNT(*) as count FROM matches 
-                 WHERE userid = ? AND is_finished = 0`
+                 WHERE userid = ? AND is_finished = 0 AND user_player > 0`
             ).get(userId);
 
             // Get win rate
@@ -56,29 +56,28 @@ export async function statsRoutes(fastify) {
         try {
             const userId = req.user.id;
 
-            // Get total tournaments
+            // Get total tournaments where user participated (user_player > 0)
             const totalTournaments = db.prepare(
-                `SELECT COUNT(*) as count FROM tournaments WHERE userid = ?`
+                `SELECT COUNT(*) as count FROM tournaments WHERE userid = ? AND user_player > 0`
             ).get(userId);
 
-            // Get finished tournaments
+            // Get finished tournaments where user participated
             const finishedTournaments = db.prepare(
-                `SELECT COUNT(*) as count FROM tournaments WHERE userid = ? AND is_finished = 1`
+                `SELECT COUNT(*) as count FROM tournaments WHERE userid = ? AND is_finished = 1 AND user_player > 0`
             ).get(userId);
 
-            // Get tournaments where user reached final
+            // Get tournaments where user reached final and participated
             const finalsReached = db.prepare(
                 `SELECT COUNT(*) as count FROM tournaments t
-                 WHERE t.userid = ? AND t.is_finished = 1
-                 AND t.final_matchid IS NOT NULL
-                 AND (t.user_player IN (1, 2, 3, 4))`
+                 WHERE t.userid = ? AND t.is_finished = 1 AND t.user_player > 0
+                 AND t.final_matchid IS NOT NULL`
             ).get(userId);
 
             // Get tournaments where user won (user's player won the final)
             const tournamentsWon = db.prepare(
                 `SELECT COUNT(*) as count FROM tournaments t
                  JOIN matches m ON t.final_matchid = m.matchid
-                 WHERE t.userid = ? AND t.is_finished = 1
+                 WHERE t.userid = ? AND t.is_finished = 1 AND t.user_player > 0
                  AND (
                    (t.user_player = 1 AND m.alias1 IN (t.player1_alias, t.player2_alias, t.player3_alias, t.player4_alias) AND m.score1 > m.score2) OR
                    (t.user_player = 2 AND m.alias2 IN (t.player1_alias, t.player2_alias, t.player3_alias, t.player4_alias) AND m.score2 > m.score1) OR
@@ -87,7 +86,7 @@ export async function statsRoutes(fastify) {
                  )`
             ).get(userId);
 
-            // Get recent winners for the last 5 tournaments
+            // Get recent winners for the last 5 tournaments where user participated
             const recentWinners = db.prepare(
                 `SELECT t.tournamentid, 
                         CASE 
@@ -96,7 +95,7 @@ export async function statsRoutes(fastify) {
                         END as winner
                  FROM tournaments t
                  JOIN matches m ON t.final_matchid = m.matchid
-                 WHERE t.userid = ? AND t.is_finished = 1
+                 WHERE t.userid = ? AND t.is_finished = 1 AND t.user_player > 0
                  ORDER BY t.finished_at DESC
                  LIMIT 5`
             ).all(userId);
@@ -127,7 +126,7 @@ export async function statsRoutes(fastify) {
         try {
             const userId = req.user.id;
 
-            // Get match stats
+            // Get match stats where user participated
             const matchStats = db.prepare(
                 `SELECT 
                   COUNT(*) as total_matches,
@@ -136,16 +135,16 @@ export async function statsRoutes(fastify) {
                   SUM(CASE WHEN (user_player = 1 AND score1 > score2) OR (user_player = 2 AND score2 > score1) THEN 1 ELSE 0 END) as wins,
                   SUM(CASE WHEN (user_player = 1 AND score1 < score2) OR (user_player = 2 AND score2 < score1) THEN 1 ELSE 0 END) as losses
                  FROM matches 
-                 WHERE userid = ?`
+                 WHERE userid = ? AND user_player > 0`
             ).get(userId);
 
-            // Get tournament stats
+            // Get tournament stats where user participated
             const tournamentStats = db.prepare(
                 `SELECT 
                   COUNT(*) as total_tournaments,
                   SUM(CASE WHEN is_finished = 1 THEN 1 ELSE 0 END) as finished_tournaments
                  FROM tournaments 
-                 WHERE userid = ?`
+                 WHERE userid = ? AND user_player > 0`
             ).get(userId);
 
             // Calculate percentages
