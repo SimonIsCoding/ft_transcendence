@@ -55,74 +55,73 @@ services:
     restart: unless-stopped
     volumes:
       - 2fa_data:/usr/src/app/data
-
   
-  # elasticsearch:
-  #   image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
-  #   container_name: es01
-  #   environment:
-  #     - node.name=es01
-  #     - discovery.type=single-node
-  #     - xpack.security.enabled=true
-  #     # Para dev local: HTTPS desactivado (actívalo en prod)
-  #     - xpack.security.http.ssl.enabled=false
-  #     - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-  #     - ES_JAVA_OPTS=${ES_JAVA_OPTS}
-  #     - KIBANA_PASSWORD=${KIBANA_SYSTEM_PASSWORD}
-  #   ulimits:
-  #     memlock:
-  #       soft: -1
-  #       hard: -1
-  #   ports:
-  #     - "127.0.0.1:9200:9200"
-  #   volumes:
-  #     - esdata:/usr/share/elasticsearch/data
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "curl -s -u elastic:${ELASTIC_PASSWORD} http://localhost:9200 >/dev/null || exit 1"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 30
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
+    container_name: es01
+    environment:
+      - node.name=es01
+      - discovery.type=single-node
+      - xpack.security.enabled=true
+      # Para dev local: HTTPS desactivado (actívalo en prod)
+      - xpack.security.http.ssl.enabled=false
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - ES_JAVA_OPTS=${ES_JAVA_OPTS}
+      - KIBANA_PASSWORD=${KIBANA_SYSTEM_PASSWORD}
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "127.0.0.1:9200:9200"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s -u elastic:${ELASTIC_PASSWORD} http://localhost:9200 >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
 
-  # kibana:
-  #   image: docker.elastic.co/kibana/kibana:${ELASTIC_VERSION}
-  #   container_name: kib01
-  #   environment:
-  #     - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-  #     - ELASTICSEARCH_USERNAME=kibana_system
-  #     - ELASTICSEARCH_PASSWORD=${KIBANA_SYSTEM_PASSWORD}
-  #     - ELASTICSEARCH_REQUEST_TIMEOUT=120000
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${ELASTIC_VERSION}
+    container_name: kib01
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=${KIBANA_SYSTEM_PASSWORD}
+      - ELASTICSEARCH_REQUEST_TIMEOUT=120000
 
-  #   ports:
-  #     - "127.0.0.1:5601:5601"
-  #   depends_on:
-  #     elasticsearch:
-  #       condition: service_healthy
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "curl -s http://localhost:5601/api/status >/dev/null || exit 1"]
-  #     interval: 10s
-  #     timeout: 10s
-  #     retries: 30
-  # logstash:
-  #   image: docker.elastic.co/logstash/logstash:${ELASTIC_VERSION}
-  #   container_name: ls01
-  #   environment:
-  #     - LS_JAVA_OPTS=${LS_JAVA_OPTS}
-  #     - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-  #     - ELASTICSEARCH_USERNAME=elastic
-  #     - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-  #     - XPACK_MONITORING_ENABLED=false
-  #     - XPACK_MONITORING_ELASTICSEARCH_USERNAME=elastic
-  #     - XPACK_MONITORING_ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD}
-  #     - http.host=0.0.0.0
-  #   volumes:
-  #     - ./requirements/logstash/pipeline:/usr/share/logstash/pipeline  # ← Ruta actualizada
-  #     - ./requirements/logstash/config:/usr/share/logstash/config
-  #   ports:
-  #     - "127.0.0.1:5050:5050" # TCP JSON input (app -> Logstash)
-  #     - "127.0.0.1:5044:5044" # Beats input (Filebeat -> Logstash)
-  #   depends_on:
-  #     elasticsearch:
-  #       condition: service_healthy
+    ports:
+      - "127.0.0.1:5601:5601"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:5601/api/status >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+  logstash:
+    image: docker.elastic.co/logstash/logstash:${ELASTIC_VERSION}
+    container_name: ls01
+    environment:
+      - LS_JAVA_OPTS=${LS_JAVA_OPTS}
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=elastic
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - XPACK_MONITORING_ENABLED=false
+      - XPACK_MONITORING_ELASTICSEARCH_USERNAME=elastic
+      - XPACK_MONITORING_ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD}
+      - http.host=0.0.0.0
+    volumes:
+      - ./requirements/logstash/pipeline:/usr/share/logstash/pipeline  # ← Ruta actualizada
+      - ./requirements/logstash/config:/usr/share/logstash/config
+    ports:
+      - "127.0.0.1:5050:5050" # TCP JSON input (app -> Logstash)
+      - "127.0.0.1:5044:5044" # Beats input (Filebeat -> Logstash)
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
 
 networks:
   default:
