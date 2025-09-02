@@ -3,7 +3,7 @@ import db from '../src/database.js';
 
 export async function matchesRoutes(fastify)
 {
-	fastify.get('/games/matches/:id', { preHandler: fastify.auth }, async (req, reply) => {
+	fastify.get('/game/matches/:id', { preHandler: fastify.auth }, async (req, reply) => {
 	  try {
 	    const matchId = req.params.id;
 	    const userId = req.user.id;
@@ -50,7 +50,7 @@ export async function matchesRoutes(fastify)
 	  }
 	});
 
-	fastify.put('/games/matches/:id', { preHandler: fastify.auth }, async (req, reply) => {
+	fastify.put('/game/matches/:id', { preHandler: fastify.auth }, async (req, reply) => {
 	  try {
 	    const matchId = req.params.id;
 	    const userId = req.user.id;
@@ -152,7 +152,7 @@ export async function matchesRoutes(fastify)
 	  }
 	});
 
-	fastify.put('/games/matches/:id/finish', { preHandler: fastify.auth }, async (req, reply) => {
+	fastify.put('/game/matches/:id/finish', { preHandler: fastify.auth }, async (req, reply) => {
 	  try {
 	    const matchId = req.params.id;
 	    const userId = req.user.id;
@@ -236,7 +236,7 @@ export async function matchesRoutes(fastify)
 	  }
 	});
 
-	fastify.post('/games/matches', { preHandler: fastify.auth }, async (req, reply) => {
+	fastify.post('/game/matches', { preHandler: fastify.auth }, async (req, reply) => {
 	  try {
 	    const { 
 	      alias1, 
