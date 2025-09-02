@@ -28,29 +28,46 @@ services:
     depends_on:
       - auth-service
       - 2fa-service
+    environment:
+      - AUTH_SERVICE_PORT=${AUTH_PORT:-3001}
+      - TWOFA_SERVICE_PORT=${TWOFA_PORT:-3003}
 
   auth-service:
     container_name: auth-service
     build: requirements/auth-service
     secrets:
       - secret_key
+      - cookie_secret
+      - jwt_secret
     volumes:
       - pong_db:/app/database #share db file 
     environment:
+      - PORT=${AUTH_PORT:-3001}
+      - CORS_ORIGINS=http://localhost:4443
       - SECRET_KEY_FILE=/run/secrets/secret_key
-  
+      - SESSION_LIFETIME=86400
+      - COOKIE_SECRET=/run/secrets/cookie_secret
+      - JWT_SECRET=/run/secrets/jwt_secret
   2fa-service:
     container_name: 2fa-service
     build: requirements/2fa-service
     secrets:
       - email_user
       - email_password
+      - cookie_secret
+      - jwt_secret
     environment:
       - NODE_ENV=production
-      - PORT=3003
+      - PORT=${TWOFA_PORT:-3003}
       - CORS_ORIGINS=http://localhost:4443
+      - TOKEN_EXPIRY=300
+      - EMAIL_SERVICE=gmail
+      - APP_NAME="Transcendence Pong"
       - EMAIL_USER_FILE=/run/secrets/email_user
       - EMAIL_PASSWORD_FILE=/run/secrets/email_password
+      - COOKIE_SECRET=/run/secrets/cookie_secret
+      - JWT_SECRET=/run/secrets/jwt_secret
+      - SHOW_2FA=true
     restart: unless-stopped
     volumes:
       - 2fa_data:/usr/src/app/data
@@ -159,5 +176,7 @@ secrets:
     file: ./secrets/email_password.txt
   secret_key:
     file: ./secrets/secret_key.txt
-  
-
+  cookie_secret:
+    file: ./secrets/cookie_secret.txt  
+  jwt_secret:
+    file: ./secrets/jwt_secret.txt 

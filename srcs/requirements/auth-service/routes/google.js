@@ -9,7 +9,11 @@ export async function googleRoute(fastify)
 {
 	// this could be a get I think
 	fastify.post("/google", async (request, reply) => {
-		const { id_token } = request.body;
+	  const SESSION_LIFETIME = process.env.SESSION_LIFETIME
+	    ? parseInt(process.env.SESSION_LIFETIME, 10)
+	    : 86400; // default 24h if not set
+
+	  const { id_token } = request.body;
 		if (!id_token)
 			return reply.status(400).send({ error: "Missing id_token" });
 
@@ -23,7 +27,7 @@ export async function googleRoute(fastify)
 			const payload = ticket.getPayload();
 			const sessionToken = crypto.randomBytes(32).toString("hex");
 			// const Gprovider = "google";
-			const internalToken = jwt.sign(
+			const internalToken = await reply.jwtSign(
 				{
 					userId: payload.sub,
 					email: payload.email,
@@ -32,8 +36,7 @@ export async function googleRoute(fastify)
 					sessionToken: sessionToken,
 					provider: "google"
 				},
-				process.env.JWT_SECRET,
-				{ expiresIn: "24h" }
+				{ expiresIn: SESSION_LIFETIME }
 			);
 			return reply.setCookie("auth_token", internalToken, {
 				httpOnly: true,
