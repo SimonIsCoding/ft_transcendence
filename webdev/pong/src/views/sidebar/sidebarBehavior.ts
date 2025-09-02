@@ -1,3 +1,4 @@
+import type { User } from "../../config";
 import { Router } from "../../router";
 import { isConnected } from "../../services/sidebarService/utilsSidebarService"
 import { loadExistingProfilePicture, uploadProfilePicture } from "../../utils/profilePictureUtils";
@@ -12,12 +13,6 @@ import { dashboardSubmenuRender } from './profileBtn/dashboardSubmenuRender'
 import { gameHistorySubmenuRender } from './profileBtn/gameHistorySubmenuRender'
 import { editProfileSubmenuRender } from './profileBtn/editProfileSubmenuRender'
 
-interface User {
-  login: string;
-  password: string;
-  mail: string;
-  token: string;
-}
 
 export const userUnloggedSidebar = {
   currentUser: null as User | null,
@@ -89,6 +84,8 @@ export const userLoggedSidebar = {
   init(): void
   {
 	setupMenuHandlers();
+	const tournamentBtn = document.getElementById('tournamentBtn');
+	tournamentBtn?.addEventListener('click', () => { Router.navigate('tournament') });
   }
 }
 

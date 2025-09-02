@@ -1,43 +1,46 @@
 import db from '../src/database.js';
-import {verifyAndUpdateSession} from '../utils/sessionTokens.js';
 
-export async function infoUserRoute(fastify) {
- fastify.get('/info', async (request, reply) => {
-  try {
-    console.log('Incoming cookies:', request.cookies); // Debug cookie reception
-    const token = request.cookies.auth_token;
-    if (!token) {
-      console.log('No token found');
-      throw new Error('Missing token');
+export async function infoUserRoute(app) {
+  // 🔒 Protected route: use preHandler fastify.auth
+  app.get('/me', { preHandler: app.auth }, async (request, reply) => {
+    try {
+      // request.user is already set by authCheck
+      const userId = request.user.id;
+
+      // Fetch complete user data
+      const stmt = db.prepare(`
+        SELECT id, login, mail, profile_picture, provider, is_2fa_activated, GDPR_activated
+        FROM users
+        WHERE id = ?
+      `);
+      const user = stmt.get(userId);
+
+      if (!user) {
+        return reply.status(404).send({ error: 'User not found' });
+      }
+
+      return reply.send({ user });
+    } catch (error) {
+      console.error('Unexpected error in /info:', error);
+      return reply.code(500).send({ error: 'Internal server error' });
     }
+  });
 
-    // console.log('Verifying token:', token); // Debug raw token
-    const decoded = await request.jwtVerify(token);
-    // console.error('Decoded token:', decoded); // Debug decoded content
+  app.get('/me/status', { preHandler: app.auth }, async (request, reply) => {
+    try {
+      // if arrived here app.auth has validated token
+      const userId = request.user.id;
 
-      if (!decoded.userId || !decoded.sessionToken)
-		throw new Error('Invalid payload');
+      return reply.send({
+        authenticated: true,
+        user: {
+          id: userId,
+        }
+      });
 
-	// 2. Verify session
-    verifyAndUpdateSession(decoded.userId, decoded.sessionToken);
-
-	// 3. Fetch complete user data from database
-    const stmt = db.prepare(`
-      SELECT id, login, mail, profile_picture 
-      FROM users 
-      WHERE id = ?
-    `);
-    const user = stmt.get(decoded.userId);
-
-    if (!user) {
-      return reply.status(404).send({ error: 'User not found' });
+    } catch (error) {
+      console.error('Unexpected error in /status:', error);
+      return reply.code(500).send({ error: 'Internal server error' });
     }
-
-    // 4. Return complete user data
-    return reply.send({ user });
-  } catch (error) {
-    console.error('Auth failed:', error.message); // Debug why verification failed
-    reply.code(401).send({ error: 'Not authenticated' });
-  }
- });
+  });
 }

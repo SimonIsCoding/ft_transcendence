@@ -1,47 +1,39 @@
-import { getCurrentUser } from "../../utils/utils";
+import type { User } from "../../config";
+import { getCurrentUser } from "../../views/sidebar/sidebarUtils";
+import { addFriendRequestCard, displayAllFriends } from "../../views/sidebar/profileBtn/manageFriendsSubmenu";
 
-interface User {
-  id: number;
-  login: string;
-  mail: string;
-  profile_picture: string,
-  token: string;
-}
+
 
 //function to check how many user there is in the db
 export async function getTotalUser()
 {
-	const res = await fetch('/api/auth/countTotalUsers', {
+	const res = await fetch('/api/auth/users/count', {
 		method: 'GET',
 		credentials: 'include'
 	})
-	const data = await res.json();//issue
-	return data;
+	const { total } = await res.json();
+	return total;
 }
 
-export async function getUserById(userId: number)
-{
-	const user: User = await fetch('/api/auth/getUserById', {
-	method: 'POST',
-	headers: { 'Content-Type': 'application/json' },
-	body: JSON.stringify({ userId: userId }),
-	credentials: 'include'
-	})
+export async function getUserById(userId: number): Promise<User> {
+  const user: User = await fetch(`/api/auth/friends/${userId}`, {
+    method: 'GET',
+    credentials: 'include'
+  })
 	.then(res => res.json())
-	.then(data => { return data })
-	return (user);
+    .then(data => data);
+
+  return user;
 }
 
-export async function sendFriendRequestOtherUser(currentUser: User, otherUser: User)
+export async function sendFriendRequestOtherUser(otherUser: User)
 {
-	fetch('/api/auth/sendFriendRequest', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ currentUser: currentUser, otherUser: otherUser }),
-		credentials: 'include'
-	})
-	// .then(res => res.json())
-	// .then(data => { return data })
+  fetch('/api/auth/friends', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ toUserId: otherUser.id }),
+    credentials: 'include'
+  });
 }
 
 type FriendRequest = {
@@ -49,31 +41,10 @@ type FriendRequest = {
 	to_user_id: number;
 };
 
-export async function alreadyFriends(currentUser: User, otherUser: User): Promise<Boolean> 
-{
-	const friends = await fetch('/api/auth/friends', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ currentUser: currentUser, otherUser: otherUser }),
-		credentials: 'include'
-	})
-	.then(async res => {
-		const text = await res.text();
-		if (!text) return null;
-		return JSON.parse(text);
-	})
-	.then(data => { return data })
-	if (friends)
-		return true;
-	return false;
-}
-
-export async function getRandomEligibleOtherUser(currentUser: User): Promise<User | null>
+export async function getRandomEligibleOtherUser(): Promise<User | null>
 {
 	const eligibleUser = await fetch('/api/auth/randomEligibleOtherUser', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ currentUser: currentUser }),
+		method: 'GET',
 		credentials: 'include'
 	})
 	.then(res => {
@@ -87,32 +58,12 @@ export async function getRandomEligibleOtherUser(currentUser: User): Promise<Use
 	return null;
 }
 
-export async function friendInvitationReceived(currentUser: User, otherUser: User): Promise<Boolean> 
-{
-	const invitationReceived = await fetch('/api/auth/invitationReceived', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ currentUser: currentUser, otherUser: otherUser }),
-		credentials: 'include'
-	})
-	.then(async res => {
-		const text = await res.text();
-		if (!text) return null;
-		return JSON.parse(text);
-	})
-	.then(data => { return data })
-	if (invitationReceived)
-		return true;
-	return false;
-}
-
 export async function howManyFriendsRequests(): Promise<number>
 {
 	const nbFriendsRequests = await fetch('/api/auth/requestFriendExists', { credentials: 'include' })
 	.then(res => res.json())
 	.then(async (data: FriendRequest[]) => {
-		const currentUser: User = await getCurrentUser();
-		return data.filter(item => item.to_user_id === currentUser.id).length;
+		return data.length;
 	});
 	return nbFriendsRequests;
 }
@@ -122,12 +73,12 @@ export async function friendsRequest(i :number): Promise<User | null>
 	const allFriendsRequest: FriendRequest[] = await fetch('/api/auth/requestFriendExists', { credentials: 'include' })
 	.then(res => res.json())
 	.then(async (data: FriendRequest[]) => {
-		const currentUser: User = await getCurrentUser();
-		return data.filter(item => item.to_user_id === currentUser.id);
+		return data;
 	});
 	return await getUserById(allFriendsRequest[i].from_user_id);
 }
 
+//check if 2 users are friends
 export async function updateFriendshipStatus(currentUser: User, otherUser: User , status: Boolean)
 {
 	fetch('/api/auth/updateFriendshipStatus', {
@@ -136,8 +87,6 @@ export async function updateFriendshipStatus(currentUser: User, otherUser: User 
 		body: JSON.stringify({ currentUser: currentUser, otherUser: otherUser, status: status }),
 		credentials: 'include'
 	})
-	// .then(res => res.json())
-	// .then(data => { return data })
 }
 
 type FriendsConnexion = {
@@ -147,43 +96,59 @@ type FriendsConnexion = {
 
 export async function howManyFriends(): Promise<number>
 {
-	const currentUser = await getCurrentUser();
-	const nbFriends = await fetch('/api/auth/getFriends', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ userId: currentUser.id }),
+	const friendConnections: FriendsConnexion[] = await fetch('/api/auth/getFriends', {
+		method: 'GET',
 		credentials: 'include'
-	})
-	.then(res => res.json())
-	.then(async (data: FriendsConnexion[]) => {
-		const currentUser: User = await getCurrentUser();
-		let nbFriendsFirstRow = data.filter(item => item.user_a_id === currentUser.id).length;
-		let nbFriendsSecondRow = data.filter(item => item.user_b_id === currentUser.id).length;
-		let nbFriends = nbFriendsFirstRow + nbFriendsSecondRow;
-		return nbFriends;
-	});
-	return nbFriends;
+	}).then(res => res.json());
+
+	return friendConnections.length;
 }
 
 // getFriends fetch returns:  [ { user_a_id: 2, user_b_id: 3 } ]
 export async function displayFriend(i: number): Promise<User>
 {
-	const currentUser: User = await getCurrentUser();
+	const currentUser = getCurrentUser();
+  	if (!currentUser) throw new Error("Current user not set");
 	const allFriends: FriendsConnexion[] = await fetch('/api/auth/getFriends', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ userId: currentUser.id }),
+		method: 'GET',
 		credentials: 'include'
 	})
-	.then(res => res.json())
-	.then((data: FriendsConnexion[]) => {
-		return data.filter(item =>
-			item.user_a_id === currentUser.id || item.user_b_id === currentUser.id
-		);
-	});
+	.then(res => res.json());
 
 	if (!allFriends || i < 0 || i >= allFriends.length)
 		throw new Error("Invalid index || no friends found");
 	const friendId = allFriends[i].user_a_id === currentUser.id ? allFriends[i].user_b_id : allFriends[i].user_a_id;
 	return await getUserById(friendId);
+}
+
+export async function checkFriendIsConnected(friendId: number)
+{
+	const res = await fetch(`/api/auth/friends/${friendId}/online`, {
+      method: 'GET',
+      credentials: 'include'
+    });
+	const bool = await res.json();
+	return bool.success;
+}
+
+export async function reloadFriendshipsStatus(/*currentUser: User*/)
+{
+	// reload all Friend_requests
+	const nbFriendsRequests = await howManyFriendsRequests();
+	let i: number = 0;
+	while (i < nbFriendsRequests)
+	{
+		const userToFriend: User | null = await friendsRequest(i);
+		await addFriendRequestCard(userToFriend);
+		i++;
+	}
+
+	// reload all friends
+	const nbFriends = await howManyFriends();
+	let j: number = 0;
+	while (j < nbFriends)
+	{
+		displayAllFriends(j);
+		j++;
+	}
 }

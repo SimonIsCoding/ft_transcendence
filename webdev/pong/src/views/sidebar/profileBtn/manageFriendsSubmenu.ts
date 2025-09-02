@@ -1,24 +1,23 @@
+import type { User } from "../../../config";
 import { openMenu, closeAllMenus, toggleMenuVisibility } from "../sidebarUtils";
 import { getTotalUser, friendsRequest, howManyFriendsRequests, displayFriend, howManyFriends, getRandomEligibleOtherUser } from "../../../services/sidebarService/friendsSubmenuService";
 import { othersUsersCard, friendRequestCard, friendsCard } from "./friendsSubmenuRender";
-import { getCurrentUser } from "../../../utils/utils";
+//import { getCurrentUser } from "../../../utils/utils";
 
-interface User {
-  id: number;
-  login: string;
-  mail: string;
-  profile_picture: string,
-  token: string;
-}
-
-async function addFriendRequestCard(userToFriend: User | null)
+export async function addFriendRequestCard(userToFriend: User | null)
 {
 	const friendRequestDiv = document.getElementById("friendRequestDiv");
+	const existingCard = document.getElementById(`newRequestsFrom_${userToFriend!.id}`);
 	if (userToFriend)
 	{
 		friendRequestDiv?.classList.remove("hidden");
-		document.getElementById("friendRequestCard")?.insertAdjacentHTML("beforeend", friendRequestCard.render(userToFriend));
-		await friendRequestCard.init(userToFriend);
+		if (!existingCard)
+		{
+			document.getElementById("friendRequestCard")?.insertAdjacentHTML("beforeend", friendRequestCard.render(userToFriend));
+			await friendRequestCard.init(userToFriend);
+		}
+		else
+			await friendRequestCard.init(userToFriend);
 	}
 	else
 	{
@@ -54,15 +53,23 @@ export const manageFriendsRequestsCard = (() => {
 Begin space for friendsCard
 */
 
-async function displayAllFriends(i: number)
+export async function displayAllFriends(i: number)
 {
 	const friendsListDiv = document.getElementById("friendsListDiv");
 	const userToDisplay = await displayFriend(i);
 	if (friendsListDiv)
 	{
+		// document.getElementById("friendsCard")?.insertAdjacentHTML("beforeend", friendsCard.render(userToDisplay));
+		// await friendsCard.init(userToDisplay);
 		friendsListDiv.classList.remove("hidden");
-		document.getElementById("friendsCard")?.insertAdjacentHTML("beforeend", friendsCard.render(userToDisplay));
-		await friendsCard.init(userToDisplay);
+		const existingCard = document.getElementById(`friendBox_${userToDisplay.id}`);
+		if (!existingCard)
+		{
+			document.getElementById("friendsCard")?.insertAdjacentHTML("beforeend", friendsCard.render(userToDisplay));
+			await friendsCard.init(userToDisplay);
+		}
+		else
+			await friendsCard.init(userToDisplay); // juste mettre à jour (status, image, etc.)
 	}
 	// else
 	// {
@@ -107,26 +114,27 @@ export const manageOthersUsersCard = (() => {
 	const othersUsersDiv = document.getElementById("othersUsersDiv");
 	othersUsersDiv?.classList.remove("hidden");
 	const totalUsers = await getTotalUser();
-	const currentUser: User = await getCurrentUser();
+	//const currentUser: User = await getCurrentUser();
 
 	if (totalUsers > 1)
 	{
 		let max: number = totalUsers - 1 > 2 ? 2 : totalUsers - 1;
-		if (totalUsers == 2)
-			max = 1;
+		// if (totalUsers == 2)
+			// max = 1;
+		console.log(`max user is ${max}`);
 		let randomUser: User | null;
 		let listOthersFriends: User[] = [];
 		let noOtherFriend = 0;
 		while (i < max)
 		{
-			randomUser = await getRandomEligibleOtherUser(currentUser);
+			randomUser = await getRandomEligibleOtherUser();
 			if (randomUser) listOthersFriends.push(randomUser);
 			if (i > 0)
 			{
-				while (randomUser && listOthersFriends[0].login === listOthersFriends[1].login)
+				while (randomUser && listOthersFriends[0].id === listOthersFriends[1].id)
 				{
 					listOthersFriends.pop();
-					randomUser = await getRandomEligibleOtherUser(currentUser);
+					randomUser = await getRandomEligibleOtherUser();
 					if (randomUser) listOthersFriends.push(randomUser);
 					if (j >= totalUsers)
 						randomUser = null;
@@ -138,8 +146,9 @@ export const manageOthersUsersCard = (() => {
 			const othersUsersP = document.getElementById("othersUsersP");
 			if (randomUser && container)
 			{
-				let name: string = `othersUsers_${randomUser.login}_card`;
-				container.insertAdjacentHTML("beforeend", othersUsersCard.render(name, randomUser.login));
+				let name: string = `othersUsers_${randomUser.id}_card`;
+				let userId: string = randomUser.id.toString();
+				container.insertAdjacentHTML("beforeend", othersUsersCard.render(name, userId));
 				othersUsersCard.init(randomUser);
 				othersUsersP!.textContent = "Others Users";
 				noOtherFriend++;

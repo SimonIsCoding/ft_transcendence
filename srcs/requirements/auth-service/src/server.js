@@ -10,17 +10,19 @@ import { dirname } from 'path';
 import dotenv from 'dotenv';
 import { loginRoute } from '../routes/loginRoute.js';
 import { registerRoute } from '../routes/registerRoute.js';
-import { auth } from '../plugins/auth.js';
+import { authCheck } from '../plugins/auth.js';
 import { uploadProfilePictureRoute } from '../routes/uploadProfilePictureRoute.js';
 import { logoutRoute } from '../routes/logoutRoute.js';
-import { statusRoute/*, currentUserInfoRoute*/ } from '../routes/userLoggedRoute.js';
-import { editProfileRoute } from '../routes/editProfileRoute.js';
+import { editProfileRoute, GDPRManagementRoute, twofaManagementRoute } from '../routes/editProfileRoute.js';
 import { eraseAccountRoute } from '../routes/eraseAccountRoute.js';
 //import { loadSecretKey } from '../utils/loadSecretKey.js';
-import { countTotalUsers, requestFriendExistsRoute, getFriendsListRoute, getUserByIdRoute, randomEligibleOtherUserRoute, sendFriendRequestRoute, updateFriendshipStatusRoute, FriendsRoute, invitationReceivedRoute } from '../routes/manageFriends.js';
+import { FriendsRoute } from '../routes/manageFriends.js';
 import { infoUserRoute } from '../routes/infoUserRoute.js';
 import {deleteExpiredSessions} from '../utils/sessionTokens.js';
-
+import { googleRoute } from '../routes/google.js';
+import { matchesRoutes } from '../routes/matchesRoute.js';
+import { tournamentsRoutes } from '../routes/tournamentsRoute.js';
+import { statsRoutes } from '../routes/statsRoute.js';
 
 // Load environment variables
 dotenv.config();
@@ -49,7 +51,7 @@ app.register(fastifyJwt, {
   }
 });
 
-app.decorate('auth', auth);
+app.decorate('auth', authCheck);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -59,23 +61,20 @@ app.register(fastifyStatic, {
   prefix: '/profile_pictures/',
 });
 
-app.register(loginRoute);
-app.register(registerRoute);
-await uploadProfilePictureRoute(app);
-await countTotalUsers(app);
-await statusRoute(app);
-await requestFriendExistsRoute(app);//get
-await infoUserRoute(app);
+app.register(loginRoute); // users/check and /users/sesions
+app.register(registerRoute); // /users/verify and /users
+app.register(uploadProfilePictureRoute);
+app.register(infoUserRoute);  // me/info and me/status api calls
+app.register(twofaManagementRoute);
+app.register(GDPRManagementRoute);
 app.register(editProfileRoute);//post
-app.register(eraseAccountRoute);
-app.register(sendFriendRequestRoute);
-app.register(FriendsRoute);
-app.register(getFriendsListRoute);
-app.register(invitationReceivedRoute);
-app.register(updateFriendshipStatusRoute);
-app.register(getUserByIdRoute);
-app.register(randomEligibleOtherUserRoute);
-app.register(logoutRoute);
+app.register(eraseAccountRoute); // delete /me
+app.register(FriendsRoute); // /friends routes
+app.register(logoutRoute);  // delete /me/sessions
+app.register(googleRoute);
+app.register(statsRoutes);
+app.register(matchesRoutes);
+app.register(tournamentsRoutes);
 
 // --- Cleanup expired sessions daily ---
 setInterval(() => {
@@ -98,3 +97,4 @@ app.listen({
   }
   console.log(`Auth service running on ${app.server.address().port}`);
 });
+

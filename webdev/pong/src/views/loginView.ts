@@ -1,7 +1,9 @@
-import { initLogin } from '../services/loginService';
-import { setupPasswordToggle } from '../utils/utils';
+import { handleSuccessfulLogin, initLogin } from '../services/loginService';
+import { setupPasswordToggle, showErrorPopup/*, showSuccessPopup*/ } from '../utils/utils';
 import { Router } from '../router.ts';
 import { handleSidebar } from './sidebar/sidebarBehavior.ts';
+
+declare const google: any;
 
 export const loginView = {
   render: (): string => `
@@ -12,7 +14,7 @@ export const loginView = {
 		<div id="sidebar" class="bg-[#fbd11b] h-screen flex flex-col overflow-hidden transition-all duration-500 ease-in-out w-[64px]">
 		</div>
 		
-			<main id="gameArea" class="flex-1 bg-black flex items-center justify-center bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center w-full h-full" style="background-image: url('/pongBackgroundPlay.png');">
+			<main id="loginArea" class="flex-1 bg-black flex items-center justify-center bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center w-full h-full" style="background-image: url('/pongBackgroundPlay.png');">
 
 			<div id="loginCredentials" class="flex flex-col justify-center items-center w-full space-y-10">
 				<input id="login" type="text" placeholder="Login" class="w-80 inline-block text-white font-bold text-lg border border-[#fbd11b] rounded-lg p-2.75" />
@@ -26,6 +28,7 @@ export const loginView = {
 				</div>
 				<button id="connectionBtn" class="w-80 inline-block text-white font-bold text-lg border border-[#fbd11b] rounded-lg p-2.75">Log in</button>
 				<button id="backToRegister" class="text-white px-2 text-xl underline">Click here to create an account</button>
+				<button id="googleConnectionBtn"></button>
 			</div>
 			<div id="twofa-container" class="hidden flex-col justify-center items-center w-full space-y-10"><!-- Will be populated by TwoFAController --></div>
 		</main>
@@ -37,8 +40,72 @@ export const loginView = {
 
 	setupPasswordToggle("password", "togglePasswordLogin", "eyeIconClosedLogin", "eyeIconOpenedLogin");
 	initLogin();
+	initGoogleSignIn();
 
 	const backToRegister = document.getElementById('backToRegister') as HTMLButtonElement | null;
 	backToRegister!.addEventListener('click', () => Router.navigate('register'));
   }
 };
+
+
+function initGoogleSignIn()
+{
+	google.accounts.id.initialize({
+		client_id: "11816073281-ka847kttjiaqlci012l9p7kpip87kocr.apps.googleusercontent.com",
+		callback: handleCredentialResponse
+	});
+
+	google.accounts.id.renderButton(
+		document.getElementById("googleConnectionBtn"),
+		{
+			theme: "outline",
+			size: "large",
+			text: "signin_with",
+			shape: "rectangular", // or pill
+			width: 315
+		}
+	);
+}
+
+async function handleCredentialResponse(response: any)
+{
+	console.log("ID Google Token:", response.credential);
+	const res = await fetch("/api/auth/google", {
+		method: "POST",
+		credentials: "include",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify({ id_token: response.credential })
+	});
+	const data = await res.json();
+	console.log("Internal JWT:", data.success);
+	console.log(`Gprovider = ${data.provider}`);
+	if (!data.success)
+		showErrorPopup("Google SignIn failed", "popup");
+	getGoogleProfile();
+}
+
+async function getGoogleProfile()
+{
+	const res = await fetch("/api/auth/googleSession", {
+		method: "POST",
+		credentials: "include"
+	});
+
+	if (res.status === 401)
+	{
+		console.log("Not authenticated");
+		return;
+	}
+
+	const data = await res.json();
+	console.log(`data = ${data}`);
+	console.log(`data.provider = ${data.provider}`);
+	if (res.status === 201)
+	{
+		// console.log("in res.status === 201, data.provider =", data.provider );
+		console.log(`data.name = ${data.login}, data.userId = ${data.userId}`);
+
+		handleSuccessfulLogin(data.login, data.userId);
+	}
+	console.log("Protected data:", data);
+}

@@ -113,7 +113,7 @@ export function oneVsAIAreaInit()
 	});
 
 	const playBtn = document.getElementById('playOneVsAIBtn') as HTMLButtonElement | null;
-	playBtn!.addEventListener('click', () => { 
+	playBtn!.addEventListener('click', () => {
 		const player1VSAI = document.getElementById("player1VSAI") as HTMLInputElement;
 		if (!player1VSAI.value.trim())
 		{

@@ -12,9 +12,9 @@ export const registerView = {
 	  <div id="popup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50"></div>
       <div id="sidebar" class="bg-[#fbd11b] h-screen flex flex-col overflow-hidden transition-all duration-500 ease-in-out w-[64px]"></div>
   
-      <main id="gameArea" class="flex-1 bg-black flex items-center justify-center bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center w-full h-full">
+      <main id="registerArea" class="flex-1 bg-black flex items-center justify-center bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center w-full h-full">
 
-        <div id="registerForm" class="flex flex-col justify-center items-center w-full space-y-10">
+        <div id="registerForm" class="flex flex-col justify-center items-center w-full space-y-7">
 
           <div class="relative">
             <input id="newUsername" placeholder="Username" class="w-80 inline-block text-white font-bold text-lg border border-[#fbd11b] rounded-lg p-2.75"/>
@@ -48,6 +48,15 @@ export const registerView = {
 		      </svg>
 		    </button>
 		  </div>
+		  
+		  <div class="text-white text-center text-sm">
+			<label class="font-bold">
+				<input id="anonymizedCheckbox" type="checkbox" />
+				Would you like to not share your data ?
+			</label><br>
+			<button id="showPoliciesBtn" class="underline">See data policies</button>
+		  </div>
+
           <button id="createAccountBtn" class="w-80 inline-block text-white font-bold text-lg border border-[#fbd11b] rounded-lg p-2.75">Create Account</button>
           <button id="backToLogin" class="text-white px-2 py-1 text-xl underline">Click here to go back to log in</button>
 
@@ -68,8 +77,46 @@ export const registerView = {
     setupPasswordToggle("confirmPassword", "toggleConfirmPassword", "confirmEyeIconClosed", "confirmEyeIconOpened");
 
     initRegistration();
+	document.body.insertAdjacentHTML('beforeend', policiesRelatedRender());
+	showPolicies();
 
     const backToLogin = document.getElementById('backToLogin') as HTMLButtonElement | null;
     backToLogin!.addEventListener('click', () => { Router.navigate('login'); });
   }
 };
+
+function policiesRelatedRender()
+{
+	return `
+	<div id="policiesPopup" class="hidden bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+		<div class="bg-white rounded-lg shadow-lg p-6 w-3/4 h-3/4 relative overflow-y-auto">
+			<button id="closePoliciesBtn" class="absolute top-1 right-3 text-gray-500 hover:text-black text-2xl font-bold">&times;</button>
+			<h2 class="text-xl font-bold mb-4 text-center">Our Data Sharing Policy</h2>
+			<p class="text-gray-700 mb-4">
+				We value your privacy. Here is how we collect, use, and store your data:
+			</p>
+			<ul class="list-disc pl-6 text-gray-700 space-y-2">
+				<li>We do not sell your personal data.</li>
+				<li>By sharing your data, you agree to be in the list of potential users to be friends with other. You will appear in 'Other Users' list. Once being friend with another user, your mail address will be shared with your friend reciprocatively.</li>
+				<li>You may opt-out of data sharing at any time.</li>
+			</ul>
+		</div>
+	</div>
+	`
+}
+
+function showPolicies()
+{
+	const popup = document.getElementById("policiesPopup") as HTMLDivElement;
+	const showBtn = document.getElementById("showPoliciesBtn") as HTMLButtonElement;
+	const closeBtn = document.getElementById("closePoliciesBtn") as HTMLButtonElement;
+
+	if (!popup || !showBtn || !closeBtn) return;
+
+	showBtn.addEventListener("click", () => popup.classList.remove("hidden"));
+	closeBtn.addEventListener("click", () => popup.classList.add("hidden"));
+	popup.addEventListener("click", (event) => {
+		if (event.target === popup) popup.classList.add("hidden");
+	});
+}
+

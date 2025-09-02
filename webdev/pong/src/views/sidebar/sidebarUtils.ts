@@ -1,7 +1,22 @@
+import type { User } from "../../config";
 import { getUserInfo } from '../../services/sidebarService/utilsSidebarService'
 import { playSidebarBehavior } from './playBtn/playSidebarBehavior';
+import { loadProfileAndPrefill } from './profileBtn/editProfileSubmenuRender';
 import { userChangingInfo } from './profileBtn/userChangingInfo';
 import { seeFriendsList } from './profileBtn/manageFriendsSubmenu';
+import { setupGameSettingsListeners } from '../../controllers/gameSettingsControllers';
+// import { checkService } from '../../services/sidebarService/editProfileService';
+import { showDashboard, type DashboardData } from "../dashboard";
+
+let currentUser: User | null = null;
+
+export function setCurrentUser(user: User): void {
+  currentUser = { ...user };
+}
+
+export function getCurrentUser(): User | null {
+  return currentUser;
+}
 
 export function renderBackButton(id: string): string
 {
@@ -51,6 +66,22 @@ export function closeAllMenus(submenus: NodeListOf<HTMLElement>)
 	});
 }
 
+//toErase
+export const mockDashboardData: DashboardData = {
+	username: "PlayerOne",
+	stats: {
+		won: 12,
+		lost: 8,
+		scores: 230,
+		friends: 5
+	},
+	points: {
+		scored: 150,
+		received: 180
+	}
+};
+
+
 export function profileSidebarBehavior()
 {
 	getUserInfo();
@@ -66,6 +97,7 @@ export function profileSidebarBehavior()
 		dashboardSubmenu?.classList.remove('hidden');
 		openMenu('largeSubmenu');
 		openMenu('dashboardSubmenu');
+		showDashboard(mockDashboardData);// mockDashboardData is just for testing 
 		const backBtnDasboardSubmenu = document.getElementById("backBtnDasboardSubmenu");
 		backBtnDasboardSubmenu?.addEventListener('click', () => {
 			closeAllMenus(submenus);
@@ -91,7 +123,6 @@ export function profileSidebarBehavior()
 			toggleMenuVisibility('profileSubmenu', submenus);
 		});
 	});
-
 	editProfileSubmenuBehavior();
 	userChangingInfo();
 }
@@ -106,6 +137,7 @@ export function editProfileSubmenuBehavior()
 	const backBtnEditProfileSubmenu = document.getElementById("backBtnEditProfileSubmenu");
 
 	editProfileBtn?.addEventListener('click', () => {
+		loadProfileAndPrefill();
 		editProfileSubmenu?.classList.add("max-h-screen");
 		editProfileSubmenu?.classList.remove("max-h-0");
 		editProfileSubmenu?.classList.remove("hidden");
@@ -114,6 +146,8 @@ export function editProfileSubmenuBehavior()
 			editProfileSubmenu?.classList.add("max-h-0");
 			editProfileSubmenu?.classList.remove("max-h-screen");
 		});
+		// checkService("twofa", "2FAtoggleSwitch");
+		// checkService("GDPR", "anonymousToggleSwitch");
 	});
 
 	profileSidebarBtn?.addEventListener('click', () => {
@@ -167,4 +201,5 @@ export function setupMenuHandlers()
 	playSidebarBehavior();
 	profileSidebarBehavior();
 	settingsSidebarBehavior();
+	setupGameSettingsListeners();
 }

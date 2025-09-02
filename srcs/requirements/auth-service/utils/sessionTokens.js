@@ -7,12 +7,14 @@ export function createSessionToken() {
 }
 
 // Hash a token with SHA-256 for DB storage
-export function hashToken(token) {
+export function hashToken(token)
+{
   return crypto.createHash('sha256').update(token).digest('hex');
 }
 
 // Verify a session exists and update last_seen_at
 export function verifyAndUpdateSession(userId, rawSessionToken) {
+	// console.log(`rawSessionToken = ${rawSessionToken}`);
   const hashedToken = hashToken(rawSessionToken);
 
   // Look up session and ensure valid_until is in the future
