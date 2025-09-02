@@ -53,6 +53,12 @@ export async function initRegistration() {
       showErrorPopup("Passwords do not match", "popup");
       return;
     }
+
+	if (login.length > 40 || password.length > 40 || mail.length > 40)
+	{
+	  showErrorPopup("Inputs should contain no more than 40 caracters", "popup");
+      return;
+    }
 /*
     // --- Password rules ---
     // Example: min 8 chars, at least 1 uppercase, 1 lowercase, 1 number, 1 special char
