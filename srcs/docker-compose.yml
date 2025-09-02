@@ -72,6 +72,7 @@ services:
     volumes:
       - 2fa_data:/usr/src/app/data
   
+
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
     container_name: es01
@@ -84,6 +85,7 @@ services:
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
       - ES_JAVA_OPTS=${ES_JAVA_OPTS}
       - KIBANA_PASSWORD=${KIBANA_SYSTEM_PASSWORD}
+      - xpack.security.autoconfiguration.enabled=true
     ulimits:
       memlock:
         soft: -1
@@ -93,29 +95,10 @@ services:
     volumes:
       - esdata:/usr/share/elasticsearch/data
     healthcheck:
-      test: ["CMD-SHELL", "curl -s -u elastic:${ELASTIC_PASSWORD} http://localhost:9200 >/dev/null || exit 1"]
+      test: ["CMD-SHELL", "curl -s -u elastic:${ELASTIC_PASSWORD}
+              http://localhost:9200 >/dev/null || exit 1"]
       interval: 10s
       timeout: 5s
-      retries: 30
-
-  kibana:
-    image: docker.elastic.co/kibana/kibana:${ELASTIC_VERSION}
-    container_name: kib01
-    environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-      - ELASTICSEARCH_USERNAME=kibana_system
-      - ELASTICSEARCH_PASSWORD=${KIBANA_SYSTEM_PASSWORD}
-      - ELASTICSEARCH_REQUEST_TIMEOUT=120000
-
-    ports:
-      - "127.0.0.1:5601:5601"
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD-SHELL", "curl -s http://localhost:5601/api/status >/dev/null || exit 1"]
-      interval: 10s
-      timeout: 10s
       retries: 30
   logstash:
     image: docker.elastic.co/logstash/logstash:${ELASTIC_VERSION}
@@ -130,15 +113,29 @@ services:
       - XPACK_MONITORING_ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD}
       - http.host=0.0.0.0
     volumes:
-      - ./requirements/logstash/pipeline:/usr/share/logstash/pipeline  # ← Ruta actualizada
+      - ./requirements/logstash/pipeline:/usr/share/logstash/pipeline
       - ./requirements/logstash/config:/usr/share/logstash/config
     ports:
-      - "127.0.0.1:5050:5050" # TCP JSON input (app -> Logstash)
-      - "127.0.0.1:5044:5044" # Beats input (Filebeat -> Logstash)
+      - "127.0.0.1:5050:5050"
+      - "127.0.0.1:5051:5051"
+      - "127.0.0.1:5044:5044"
     depends_on:
-      elasticsearch:
-        condition: service_healthy
+      - elasticsearch
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${ELASTIC_VERSION}
+    container_name: kib01
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=${KIBANA_SYSTEM_PASSWORD}
+      - ELASTICSEARCH_REQUEST_TIMEOUT=120000
 
+    ports:
+      - "127.0.0.1:5601:5601"
+    depends_on:
+      - elasticsearch
+
+  
 networks:
   default:
     name: transcendence-network
@@ -160,6 +157,7 @@ volumes:
   2fa_data:
     driver: local
   esdata:
+    driver: local
 
 secrets:
   server_cert:
@@ -180,3 +178,4 @@ secrets:
     file: ./secrets/cookie_secret.txt  
   jwt_secret:
     file: ./secrets/jwt_secret.txt 
+
