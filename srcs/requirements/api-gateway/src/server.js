@@ -41,6 +41,12 @@ fastify.register(fastifyHttpProxy, {
       return {
         ...headers,
         host: 'auth-service',
+		'x-real-ip': originalReq.headers['x-real-ip'] || originalReq.ip,
+        'x-forwarded-for': originalReq.headers['x-forwarded-for'] 
+        	? `${originalReq.headers['x-forwarded-for']}, ${originalReq.ip}`
+        	: originalReq.ip,
+      // Forward other security headers
+        'x-forwarded-proto': originalReq.headers['x-forwarded-proto'] || 'http',
       };
     },
   },
@@ -68,6 +74,26 @@ fastify.register(fastifyHttpProxy, {
   proxyPayload: true,
 });
 
+fastify.register(fastifyHttpProxy, {
+  upstream: 'http://auth-service:3001',
+  prefix: '/api/game',
+  rewritePrefix: '/game',
+    http2: false,
+  replyOptions: {
+    rewriteRequestHeaders: (originalReq, headers) => {
+      return {
+        ...headers,
+        host: 'auth-service',
+		'x-real-ip': originalReq.headers['x-real-ip'] || originalReq.ip,
+        'x-forwarded-for': originalReq.headers['x-forwarded-for'] 
+        	? `${originalReq.headers['x-forwarded-for']}, ${originalReq.ip}`
+        	: originalReq.ip,
+      // Forward other security headers
+        'x-forwarded-proto': originalReq.headers['x-forwarded-proto'] || 'http',
+      };
+    },
+  },
+});
 
 // Start server
 fastify.listen({ port: 3000, host: '0.0.0.0' }, (err) => {

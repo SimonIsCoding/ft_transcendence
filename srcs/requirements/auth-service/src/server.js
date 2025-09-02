@@ -20,6 +20,9 @@ import { FriendsRoute } from '../routes/manageFriends.js';
 import { infoUserRoute } from '../routes/infoUserRoute.js';
 import {deleteExpiredSessions} from '../utils/sessionTokens.js';
 import { googleRoute } from '../routes/google.js';
+import { matchesRoutes } from '../routes/matchesRoute.js';
+import { tournamentsRoutes } from '../routes/tournamentsRoute.js';
+import { statsRoutes } from '../routes/statsRoute.js';
 
 // Load environment variables
 dotenv.config();
@@ -69,6 +72,9 @@ app.register(eraseAccountRoute); // delete /me
 app.register(FriendsRoute); // /friends routes
 app.register(logoutRoute);  // delete /me/sessions
 app.register(googleRoute);
+app.register(statsRoutes);
+app.register(matchesRoutes);
+app.register(tournamentsRoutes);
 
 // --- Cleanup expired sessions daily ---
 setInterval(() => {
