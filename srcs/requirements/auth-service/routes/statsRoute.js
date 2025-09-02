@@ -3,16 +3,16 @@ import db from '../src/database.js';
 
 export async function statsRoutes(fastify)
 {
-	fastify.get('/games/stats/matches', { preHandler: fastify.auth }, async (req, reply) => {
+	fastify.get('/game/stats/matches', { preHandler: fastify.auth }, async (req, reply) => {
 	  try {
 	    const userId = req.user.id;
-	
+
 	    // Get total matches
 	    const totalMatches = await db.get(
 	      `SELECT COUNT(*) as count FROM matches WHERE userid = ?`,
 	      [userId]
 	    );
-	
+
 	    // Get won matches (user is player 1 and won, or player 2 and won)
 	    const wonMatches = await db.get(
 	      `SELECT COUNT(*) as count FROM matches 
@@ -20,7 +20,7 @@ export async function statsRoutes(fastify)
 	       AND ((user_player = 1 AND score1 > score2) OR (user_player = 2 AND score2 > score1))`,
 	      [userId]
 	    );
-	
+
 	    // Get lost matches (user is player 1 and lost, or player 2 and lost)
 	    const lostMatches = await db.get(
 	      `SELECT COUNT(*) as count FROM matches 
@@ -28,18 +28,18 @@ export async function statsRoutes(fastify)
 	       AND ((user_player = 1 AND score1 < score2) OR (user_player = 2 AND score2 < score1))`,
 	      [userId]
 	    );
-	
+
 	    // Get matches in progress
 	    const inProgressMatches = await db.get(
 	      `SELECT COUNT(*) as count FROM matches 
 	       WHERE userid = ? AND is_finished = 0`,
 	      [userId]
 	    );
-	
+
 	    // Get win rate
 	    const totalFinished = wonMatches.count + lostMatches.count;
 	    const winRate = totalFinished > 0 ? (wonMatches.count / totalFinished * 100).toFixed(1) : 0;
-	
+
 	    return reply.status(200).send({
 	      total_matches: totalMatches.count,
 	      won_matches: wonMatches.count,
@@ -48,7 +48,7 @@ export async function statsRoutes(fastify)
 	      win_rate: `${winRate}%`,
 	      total_finished_matches: totalFinished
 	    });
-	
+
 	  } catch (error) {
 	    fastify.log.error('Error fetching match stats:', error);
 	    return reply.status(500).send({
@@ -57,23 +57,23 @@ export async function statsRoutes(fastify)
 	    });
 	  }
 	});
-	
-	fastify.get('/games/stats/tournaments', { preHandler: fastify.auth }, async (req, reply) => {
+
+	fastify.get('stats/tournaments', { preHandler: fastify.auth }, async (req, reply) => {
 	  try {
 	    const userId = req.user.id;
-	
+
 	    // Get total tournaments
 	    const totalTournaments = await db.get(
 	      `SELECT COUNT(*) as count FROM tournaments WHERE userid = ?`,
 	      [userId]
 	    );
-	
+
 	    // Get finished tournaments
 	    const finishedTournaments = await db.get(
 	      `SELECT COUNT(*) as count FROM tournaments WHERE userid = ? AND is_finished = 1`,
 	      [userId]
 	    );
-	
+
 	    // Get tournaments where user reached final
 	    const finalsReached = await db.get(
 	      `SELECT COUNT(*) as count FROM tournaments t
@@ -82,7 +82,7 @@ export async function statsRoutes(fastify)
 	       AND (t.user_player IN (1, 2, 3, 4))`, // User participated as a player
 	      [userId]
 	    );
-	
+
 	    // Get tournaments where user won (user's player won the final)
 	    const tournamentsWon = await db.get(
 	      `SELECT COUNT(*) as count FROM tournaments t
@@ -96,7 +96,7 @@ export async function statsRoutes(fastify)
 	       )`,
 	      [userId]
 	    );
-	
+
 	    // Get recent winners for the last 5 tournaments
 	    const recentWinners = await db.all(
 	      `SELECT t.tournamentid, 
@@ -111,11 +111,11 @@ export async function statsRoutes(fastify)
 	       LIMIT 5`,
 	      [userId]
 	    );
-	
+
 	    // Calculate win rate
 	    const winRate = finishedTournaments.count > 0 ? 
 	      (tournamentsWon.count / finishedTournaments.count * 100).toFixed(1) : 0;
-	
+
 	    return reply.status(200).send({
 	      total_tournaments: totalTournaments.count,
 	      finished_tournaments: finishedTournaments.count,
@@ -124,7 +124,7 @@ export async function statsRoutes(fastify)
 	      win_rate: `${winRate}%`,
 	      recent_winners: recentWinners
 	    });
-	
+
 	  } catch (error) {
 	    fastify.log.error('Error fetching tournament stats:', error);
 	    return reply.status(500).send({
@@ -133,11 +133,11 @@ export async function statsRoutes(fastify)
 	    });
 	  }
 	});
-	
-	fastify.get('/games/stats/overview', { preHandler: fastify.auth }, async (req, reply) => {
+
+	fastify.get('stats/overview', { preHandler: fastify.auth }, async (req, reply) => {
 	  try {
 	    const userId = req.user.id;
-	
+
 	    // Get match stats
 	    const matchStats = await db.get(
 	      `SELECT 
@@ -150,7 +150,7 @@ export async function statsRoutes(fastify)
 	       WHERE userid = ?`,
 	      [userId]
 	    );
-	
+
 	    // Get tournament stats
 	    const tournamentStats = await db.get(
 	      `SELECT 
@@ -160,15 +160,15 @@ export async function statsRoutes(fastify)
 	       WHERE userid = ?`,
 	      [userId]
 	    );
-	
+
 	    // Calculate percentages
 	    const totalFinishedMatches = matchStats.wins + matchStats.losses;
 	    const matchWinRate = totalFinishedMatches > 0 ? 
 	      (matchStats.wins / totalFinishedMatches * 100).toFixed(1) : 0;
-	
+
 	    const tournamentWinRate = tournamentStats.finished_tournaments > 0 ? 
 	      ((matchStats.wins || 0) / tournamentStats.finished_tournaments * 100).toFixed(1) : 0;
-	
+
 	    return reply.status(200).send({
 	      matches: {
 	        total: matchStats.total_matches,
@@ -184,7 +184,7 @@ export async function statsRoutes(fastify)
 	        win_rate: `${tournamentWinRate}%`
 	      }
 	    });
-	
+
 	  } catch (error) {
 	    fastify.log.error('Error fetching overview stats:', error);
 	    return reply.status(500).send({

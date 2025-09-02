@@ -78,7 +78,7 @@ export async function tournamentsRoutes(fastify)
 	  }
 	});
 
-	fastify.put('/games/tournaments/:id', { preHandler: fastify.auth }, async (req, reply) => {
+	fastify.put('/game/tournaments/:id', { preHandler: fastify.auth }, async (req, reply) => {
 	  try {
 	    const tournamentId = req.params.id;
 	    const userId = req.user.id;
