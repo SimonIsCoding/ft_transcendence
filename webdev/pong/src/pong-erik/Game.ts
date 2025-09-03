@@ -282,27 +282,10 @@ export class Game {
       this.isPaused = true; // Stop the game loop
       const winner = result === GameResult.LEFT_WINS ? this.options.leftPlayer : this.options.rightPlayer;
       if (this.onFinishCallback) {
-        this.onFinishCallback(winner, GameResult.LEFT_SCORES, GameResult.RIGHT_SCORES);
+        const scores = this.scoreManager.getScores();
+        this.onFinishCallback(winner, scores.left, scores.right);
         // alert(`${winner} ha ganado esta partida`);
       }
-      // setTimeout(() => {
-      //   import('./Dashboard').then(({ showDashboard }) => {
-      //     const scores = this.scoreManager.getScores();
-      //     showDashboard({
-      //       username: this.options.leftPlayer, // or rightPlayer, adjust as needed
-      //       stats: {
-      //         won: scores.left,
-      //         lost: scores.right,
-      //         scores: scores.left,
-      //         friends: 3
-      //       },
-      //       points: {
-      //         scored: scores.left,
-      //         received: scores.right
-      //       }
-      //     });
-      //   });
-      // }, 500); // Small delay to allow last frame to render
     }
     this.ball.reset();
   }
