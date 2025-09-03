@@ -59,7 +59,6 @@ export async function googleRoute(fastify)
 			if (!cookie)
 				return reply.status(401).send({ error: "No session cookie" });
 	
-			// const payload = jwt.verify(cookie, process.env.JWT_SECRET);
 			const payload = jwt.verify(cookie, config.JWT_SECRET);
 			let user = db.prepare("SELECT * FROM users WHERE mail = ?").get(payload.email);
 			if (!user)
