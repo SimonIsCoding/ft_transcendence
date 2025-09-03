@@ -18,7 +18,13 @@ export class ShowGame {
     // }
 
     private renderGameCanvas() {
-        let gameCanvasContainer = document.getElementById('gameCanvasContainer');
+        let gameCanvasContainer = document.getElementById('oneVsOneArea');
+
+        // if (!gameCanvasContainer) {
+        //   gameCanvasContainer = document.createElement('div');
+        //   gameCanvasContainer.id = 'gameCanvasContainer';
+        //   gameCanvasContainer.className = 'hidden content bg-[#fbd11b] h-full';
+        // }
         
         const renderGame = new GameRender().render();
         if (gameCanvasContainer) {
