@@ -36,7 +36,6 @@ export class TournamentModel {
         winner: null
     };
   }
-  
 
 
   generateFinal() {

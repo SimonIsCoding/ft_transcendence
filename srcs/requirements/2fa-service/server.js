@@ -9,6 +9,7 @@ import { config } from './config.js';
 import authRoutes from './routes/twofaRoutes.js';
 import dotenv from 'dotenv';
 
+
 // Load environment variables
 dotenv.config();
 
@@ -19,11 +20,11 @@ const server = fastify({
 });
 
 await server.register(fastifyJwt, {
-  secret: process.env.JWT_SECRET || 'super-secret-key',// I should put it in a env file
+  secret: config.JWT_SECRET,
 });
 
 server.register(fastifyCookie, {
-  secret: process.env.COOKIE_SECRET || 'super-secret-key', //to sign ur cookie // you should put it in a env file
+  secret: config.COOKIE_SECRET, //to sign ur cookie // you should put it in a env file
 });
 
 // Security Middleware
