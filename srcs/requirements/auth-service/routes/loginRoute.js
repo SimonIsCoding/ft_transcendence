@@ -6,7 +6,6 @@ export async function loginRoute(fastify) {
   // POST /login
   fastify.post('/users/check', async (request, reply) => {
     const { login, password } = request.body;
-	// console.log(`password = ${password}`);
     
     // 1. Input validation
     if (!login || !password) {

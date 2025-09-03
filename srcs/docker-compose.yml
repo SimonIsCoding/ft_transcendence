@@ -146,13 +146,13 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: ./data/pong
+      device: ${PROJECT_PATH}/srcs/data/pong
       o: bind
   pong_db:
     driver: local
     driver_opts:
       type: none
-      device: ./data/DB
+      device: ${PROJECT_PATH}/srcs/data/DB
       o: bind
   2fa_data:
     driver: local
