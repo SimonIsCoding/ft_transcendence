@@ -2,7 +2,6 @@
 export class GameRender {
     render(): string {
         return `
-          <main class="m-0 overflow-hidden flex h-screen font-sans" style="background-color: #EDD24E;">
 
   <!-- Main container - remaining width -->
   <div class="flex-1 h-screen flex flex-col" style="background-color: #EDD24E;">
@@ -98,7 +97,6 @@ export class GameRender {
     </div>
     <div class="h-[2vh]" style="background-color: #EDD24E;"></div>
   </div>
-</main>
         `;
     }
 
