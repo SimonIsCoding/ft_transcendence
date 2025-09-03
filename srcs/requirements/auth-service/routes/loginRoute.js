@@ -11,7 +11,7 @@ export async function loginRoute(fastify) {
     if (!login || !password) {
       return reply.code(400).send({ 
         success: false,
-        error: "Missing credentials" 
+        error: "Missing credentials"
       });
     }
 

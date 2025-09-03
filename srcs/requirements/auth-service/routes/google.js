@@ -2,6 +2,7 @@ import { OAuth2Client } from "google-auth-library";
 import jwt from 'jsonwebtoken';
 import db from '../src/database.js';
 import crypto from 'crypto';
+import { config } from '../src/config.js';
 
 const client = new OAuth2Client("11816073281-ka847kttjiaqlci012l9p7kpip87kocr.apps.googleusercontent.com");
 
@@ -26,7 +27,6 @@ export async function googleRoute(fastify)
 
 			const payload = ticket.getPayload();
 			const sessionToken = crypto.randomBytes(32).toString("hex");
-			// const Gprovider = "google";
 			const internalToken = await reply.jwtSign(
 				{
 					userId: payload.sub,
@@ -59,7 +59,8 @@ export async function googleRoute(fastify)
 			if (!cookie)
 				return reply.status(401).send({ error: "No session cookie" });
 	
-			const payload = jwt.verify(cookie, process.env.JWT_SECRET);
+			// const payload = jwt.verify(cookie, process.env.JWT_SECRET);
+			const payload = jwt.verify(cookie, config.JWT_SECRET);
 			let user = db.prepare("SELECT * FROM users WHERE mail = ?").get(payload.email);
 			if (!user)
 			{
