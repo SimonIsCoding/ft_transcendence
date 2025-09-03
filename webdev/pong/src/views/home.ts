@@ -30,7 +30,7 @@ export const HomeView = {
 
   async init(): Promise<void>
   {
-	await handleSidebar();
-	playButton.init();
+    await handleSidebar();
+    playButton.init();
   }
 };
