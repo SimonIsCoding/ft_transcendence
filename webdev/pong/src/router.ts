@@ -92,13 +92,9 @@ export class Router {
           // console.log(res)
         }
         // } 
-        else {
+        else if (window.location.pathname === "/tournament"){
           console.log('no hay partido activo, se muestra torneo');
-          // gameCanvasContainer?.classList.add('hidden');
-          // tournamentArea?.classList.remove('hidden');
-          // if (matchInfo) {
-          //   TournamentUIManager.updateBracket(currentTournament);
-          // }
+            Router.navigate('home');
         }
         break;
     }
