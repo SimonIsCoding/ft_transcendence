@@ -47,15 +47,15 @@ export class Router {
         // this.app.innerHTML = GameView.renderGameCanvas();
         // GameView.initGameCanvas();
         // this.app.innerHTML = new GameRender().render();
-        const tournamenArea = document.getElementById('tournamentArea');
-        let gameCanvaContainer = document.getElementById('gameCanvasContainer');
+        // const tournamenArea = document.getElementById('gamesArea');
+        // let gameCanvaContainer = document.getElementById('gameCanvasContainer');
 
-        if (!gameCanvaContainer && tournamenArea?.parentNode) {
-          gameCanvaContainer = document.createElement('div');
-          gameCanvaContainer.id = 'gameCanvasContainer';
-          gameCanvaContainer.className = 'hidden content bg-[#fbd11b] h-full';
-          tournamenArea.appendChild(gameCanvaContainer);
-        }
+        // if (!gameCanvaContainer && tournamenArea?.parentNode) {
+        //   gameCanvaContainer = document.createElement('div');
+        //   gameCanvaContainer.id = 'gameCanvasContainer';
+        //   gameCanvaContainer.className = 'hidden content bg-[#fbd11b] h-full';
+        //   tournamenArea.appendChild(gameCanvaContainer);
+        // }
         // this.app.innerHTML = HomeView.render();
         new ShowGame().initGame({
           player1: { alias: 'Erik' },
