@@ -1,4 +1,5 @@
 import type { TournamentModel } from "../models/TournamentModel";
+import { Router } from "../router";
 import { TournamentArea } from "./TournamentArea";
 
 class UIManager {
@@ -167,6 +168,7 @@ class UIManager {
             let next = document.getElementById('nextMatchBtn');
             next?.classList.add('hidden');
             TournamentArea.render();
+            Router.navigate('home');
         }
     }
 
