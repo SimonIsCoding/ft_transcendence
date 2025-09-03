@@ -1,6 +1,7 @@
 import { Router } from '../router';
 import { showSuccessPopup, showErrorPopup } from '../utils/utils';
 import { TwoFAController } from '../controllers/twofaController';
+import { enviarLogALogstash } from '../utils/logstash';
 
 export async function initRegistration() {
   console.log('1 - Registration service initialized');
@@ -115,7 +116,7 @@ export async function initRegistration() {
             async () => {
               registerForm.classList.add('hidden');
               twoFaContainer.classList.add('hidden');
-              handleSuccessfulRegistration(login, password, anonymisationEnabled);
+              handleSuccessfulRegistration(login, mail, password, anonymisationEnabled);
             },
             twoFaContainer,
             (message, isFinal) => {
@@ -135,7 +136,7 @@ export async function initRegistration() {
           twoFaContainer.appendChild(view);
         }
       } else {
-        handleSuccessfulRegistration(login, password, anonymisationEnabled);
+        handleSuccessfulRegistration(login, mail, password, anonymisationEnabled);
       }
 
     } catch (error) {
@@ -147,7 +148,7 @@ export async function initRegistration() {
   });
 }
 
-async function handleSuccessfulRegistration(login: string, password: string, anonymisationEnabled: boolean): Promise<void> {
+async function handleSuccessfulRegistration(login: string, mail: string, password: string, anonymisationEnabled: boolean): Promise<void> {
   try {
     const tokenRes = await fetch('/api/auth/users', {
       method: 'POST',
@@ -159,6 +160,12 @@ async function handleSuccessfulRegistration(login: string, password: string, ano
     if (!tokenRes.ok) throw new Error('Token generation failed');
 
     localStorage.setItem('login', login);
+	enviarLogALogstash('new_account_created', {
+				register_id: 'new_account_created-' + Date.now(),
+				player_username: login,
+				mail_user: mail,
+				GDPR_user: anonymisationEnabled,
+			});
     showSuccessPopup("Account created successfully", 3500, "popup");
     Router.navigate('login');
   } catch (error) {
