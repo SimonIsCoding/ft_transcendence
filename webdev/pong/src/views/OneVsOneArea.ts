@@ -1,6 +1,8 @@
 import type { User } from "../config";
-import { oneVsOneAreaInit, oneVsAIAreaInit } from "./sidebar/playBtn/playSidebarBehavior";
+// import { ShowGame } from "../pong-erik/ShowGame";
+// import { GameRender } from '../pong-erik/GameRender';
 
+import { oneVsOneAreaInit, oneVsAIAreaInit } from "./sidebar/playBtn/playSidebarBehavior";
 
 function swapSvg():string
 {
@@ -33,8 +35,7 @@ export const oneVsOneArea = {
 	`;
 	},
 
-  init(): void
-  {
+  init(): void {
 	oneVsOneAreaInit();
   }
 }
