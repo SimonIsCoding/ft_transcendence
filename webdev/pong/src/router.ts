@@ -2,12 +2,14 @@ import type { User } from "./config";
 import { HomeView } from './views/home';
 import { loginView } from './views/loginView';
 import { registerView } from './views/registerView';
-import { GameView } from './views/game';
-import { gameController } from './controllers/gameController';
+// import { GameView } from './views/game';
+// import { gameController } from './controllers/gameController';
+
 import { matchInfo } from './models/TournamentStore';
 // import { TournamentUIManager } from './views/TournamentUIManager';
 // import { Game } from './pong-erik/Game';
 import { GameRender } from './pong-erik/GameRender';
+import { ShowGame } from './pong-erik/ShowGame';
 // import { TournamentController } from './controllers/TournamentController';
 
 export class Router {
@@ -42,9 +44,16 @@ export class Router {
         break;
 
       case 'game':
-        this.app.innerHTML = GameView.renderGameCanvas();
-        GameView.initGameCanvas();
-        gameController.init();
+        // this.app.innerHTML = GameView.renderGameCanvas();
+        // GameView.initGameCanvas();
+        // this.app.innerHTML = new GameRender().render();
+        new ShowGame().initGame({
+          player1: { alias: 'Erik' },
+          player2: { alias: 'Simon' },
+          winner: null
+        });
+        // new GameRender().render();
+
         break;
 
       case 'tournament':
@@ -58,40 +67,18 @@ export class Router {
           gameCanvasContainer.className = 'hidden content bg-[#fbd11b] h-full';
           tournamentArea.appendChild(gameCanvasContainer);
         }
-        // if (matchInfo && matchInfo.partidoActivo) {
-        // gameCanvasContainer?.classList.remove('hidden');
-        // console.log('entraaa???')
-        // anterior
-        // if (gameCanvasContainer && gameCanvasContainer.innerHTML === '') {
-        //   gameCanvasContainer.innerHTML = GameView.renderGameCanvas();
-        //   GameView.initGameCanvas();
-        // }
 
-        //  new 
         console.log('matchInfo en router', matchInfo)
         if (gameCanvasContainer && matchInfo && matchInfo.partidoActivo) {
           const renderGame = new GameRender().render();
           gameCanvasContainer.innerHTML = renderGame;
           // console.log('renderGame', renderGame);
           console.log('✅ ANTES de crear Game instance');
-          // const game = new Game({
-          //       leftPlayer: matchInfo.player1,
-          //       rightPlayer: matchInfo.player2, maxScore: 2, gameMode: 'p-vs-p',
-          //       onFinish(winner, score1, score2) {
-          //         console.log('🏆 Partido terminado. Ganador:', winner, score1, score2);
-          //       },
-          //   });
           console.log('✅ Game instance creada - ¿Ya empezó el juego?');
 
-          // game.start();
-          // console.log(game)
           console.log('✅ DESPUÉS de game.start()');
 
-          // const controller = new TournamentController();
-          // controller.iniciarTorneo();
-          // console.log(res)
         }
-        // } 
         else if (window.location.pathname === "/tournament"){
           console.log('no hay partido activo, se muestra torneo');
             Router.navigate('home');
