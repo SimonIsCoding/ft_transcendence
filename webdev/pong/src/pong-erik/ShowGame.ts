@@ -18,8 +18,9 @@ export class ShowGame {
     // }
 
     private renderGameCanvas() {
-        let gameCanvasContainer = document.getElementById('oneVsOneArea');
-
+        let gameCanvasContainer = document.getElementById('gamesArea');
+        let oneVsOneArea = document.getElementById('oneVsOneArea');
+        let oneVsAIArea = document.getElementById('oneVsAIArea');
         // if (!gameCanvasContainer) {
         //   gameCanvasContainer = document.createElement('div');
         //   gameCanvasContainer.id = 'gameCanvasContainer';
@@ -29,6 +30,9 @@ export class ShowGame {
         const renderGame = new GameRender().render();
         if (gameCanvasContainer) {
             gameCanvasContainer.innerHTML = renderGame;
+            oneVsAIArea?.classList.add('hidden')
+            oneVsOneArea?.classList.add('hidden')
+            gameCanvasContainer.classList.remove('hidden')
         }
     }
     
@@ -48,7 +52,7 @@ export class ShowGame {
     }
 
     public playGame(match: Match): Promise<void> {
-        return new Promise(async (resolve) => {
+        return new Promise(async () => {
 
             // await TournamentUIManager.showPreGame(match.player1.alias, match.player2.alias);
             // await TournamentUIManager.startCountdown();
@@ -60,14 +64,17 @@ export class ShowGame {
 
             const game = new Game({
                 leftPlayer: match.player1.alias,
-                rightPlayer: match.player2.alias, maxScore: 3, gameMode: 'p-vs-p',
+                rightPlayer: match.player2.alias, maxScore: 3, gameMode: 'p-vs-ai',
                 onFinish: (winnerAlias: string, player1Score: number, player2Score: number) => {
                     console.log(player1Score, player2Score);
                     match.player1.score = player1Score;
                     match.player2.score = player2Score;
                     match.winner = (match.player1.alias === winnerAlias) ? match.player1 : match.player2;
                     console.log('entra en onMatchEnd');
-                    resolve();
+                    let winner = document.getElementById('winner-screen');
+                    winner?.classList.remove('hidden')
+                    alert('ganador')
+                    // resolve();
                 },
             });
             game.start();
