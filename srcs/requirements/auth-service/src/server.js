@@ -15,11 +15,14 @@ import { uploadProfilePictureRoute } from '../routes/uploadProfilePictureRoute.j
 import { logoutRoute } from '../routes/logoutRoute.js';
 import { editProfileRoute, GDPRManagementRoute, twofaManagementRoute } from '../routes/editProfileRoute.js';
 import { eraseAccountRoute } from '../routes/eraseAccountRoute.js';
-//import { loadSecretKey } from '../utils/loadSecretKey.js';
+import { getSecretFromFile } from '../utils/loadSecretKey.js';
 import { FriendsRoute } from '../routes/manageFriends.js';
 import { infoUserRoute } from '../routes/infoUserRoute.js';
 import {deleteExpiredSessions} from '../utils/sessionTokens.js';
 import { googleRoute } from '../routes/google.js';
+import { matchesRoutes } from '../routes/matchesRoute.js';
+import { tournamentsRoutes } from '../routes/tournamentsRoute.js';
+import { statsRoutes } from '../routes/statsRoute.js';
 
 // Load environment variables
 dotenv.config();
@@ -31,7 +34,7 @@ const app = fastify({
 await app.register(multipart);//to receive images
 
 app.register(fastifyCookie, {
-  secret: process.env.COOKIE_SECRET || 'super-secret-key', //to sign ur cookie // you should put it in a env file
+  secret: getSecretFromFile('COOKIE_SECRET','super-secret-key'), //to sign ur cookie // you should put it in a env file
 });
 
 app.register(fastifyCors, {
@@ -41,7 +44,7 @@ app.register(fastifyCors, {
 
 
 app.register(fastifyJwt, {
-  secret: process.env.JWT_SECRET || 'super-secret-key',// you should put it in a env file
+  secret: getSecretFromFile('JWT_SECRET', 'super-secret-key'),// you should put it in a env file
   cookie: {
     cookieName: 'auth_token',
     signed: false,
@@ -69,6 +72,9 @@ app.register(eraseAccountRoute); // delete /me
 app.register(FriendsRoute); // /friends routes
 app.register(logoutRoute);  // delete /me/sessions
 app.register(googleRoute);
+app.register(statsRoutes);
+app.register(matchesRoutes);
+app.register(tournamentsRoutes);
 
 // --- Cleanup expired sessions daily ---
 setInterval(() => {

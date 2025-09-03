@@ -79,7 +79,7 @@ export function tournamentAreaInit()
 	
 	const tournamentBtn = document.getElementById("tournamentBtn");
 	const gameArea = document.getElementById("gameArea");
-	const tournamentArea = document.getElementById("");
+	const tournamentArea = document.getElementById("tournamentArea");
 	const oneVsOneArea = document.getElementById("oneVsOneArea");
 	const oneVsAIArea = document.getElementById("oneVsAIArea");
 	const esquemaTorneo = document.getElementById("esquemaTorneo");
@@ -89,6 +89,7 @@ export function tournamentAreaInit()
 		oneVsAIArea?.classList.add('hidden');
 		tournamentArea?.classList.remove('hidden');
 		esquemaTorneo?.classList.remove('hidden');
+		TournamentArea.init();
 	});
 }
 
@@ -132,6 +133,6 @@ export function playSidebarBehavior()
 		oneVsOneAreaInit();
 		oneVsAIAreaInit();
 		tournamentAreaInit();
-		TournamentArea.init();
+		// TournamentArea.init();
 	});
 }

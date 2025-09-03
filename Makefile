@@ -12,6 +12,7 @@ all:
 	docker compose -f $(COMPOSE_FILE) build --no-cache
 	docker compose -f $(COMPOSE_FILE) up -d --remove-orphans
 	sleep 2
+	$(MAKE) configure-kibana-password
 	docker ps
 
 w webupdate:
@@ -37,6 +38,9 @@ retry: stop all
 
 status:
 	docker compose -f $(COMPOSE_FILE) ps
+
+configure-kibana-password:
+	./srcs/configure-kibana-password.sh
 
 clean:
 	sudo rm -rf srcs/data/pong/users.db
