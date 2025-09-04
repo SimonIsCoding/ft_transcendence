@@ -7,13 +7,15 @@ import { GameRender } from './GameRender';
 type GameMode = 'p-vs-ai' | 'ai-vs-p' | 'p-vs-p' | 'ai-vs-ai';
 
 export class ShowGame {
-        private renderGameCanvas() {
-        let gameCanvasContainer = document.getElementById('gamesArea');
-        let oneVsOneArea = document.getElementById('oneVsOneArea');
-        let oneVsAIArea = document.getElementById('oneVsAIArea');
-        
-        const renderGame = new GameRender().render();
-        if (gameCanvasContainer) {
+    static gameType: GameMode = 'p-vs-p';
+    static otherPlayer: string = "Erik"; 
+    private renderGameCanvas() {
+    let gameCanvasContainer = document.getElementById('gamesArea');
+    let oneVsOneArea = document.getElementById('oneVsOneArea');
+    let oneVsAIArea = document.getElementById('oneVsAIArea');
+    
+    const renderGame = new GameRender().render();
+    if (gameCanvasContainer) {
             gameCanvasContainer.innerHTML = renderGame;
             oneVsAIArea?.classList.add('hidden')
             oneVsOneArea?.classList.add('hidden')
@@ -60,10 +62,12 @@ export class ShowGame {
             await handleSidebar();
             this.renderGameCanvas();
             await new Promise(resolve => setTimeout(resolve, 100));
-            
+            console.log(type);
             const game = new Game({
                 leftPlayer: match.player1.alias,
-                rightPlayer: match.player2.alias, maxScore: 3, gameMode: type,
+                rightPlayer: match.player2.alias,
+                maxScore: 3,
+                gameMode: ShowGame.gameType,
                 onFinish: (winnerAlias: string, player1Score: number, player2Score: number) => {
                     console.log(player1Score, player2Score);
                     match.player1.score = player1Score;
@@ -72,12 +76,7 @@ export class ShowGame {
                     console.log('entra en onMatchEnd');
                     this.showWinner(match);
                     let winner = document.getElementById('winner-screen');
-                    winner?.classList.remove('hidden')
-                    // console.log("left", player1Score, "right", player2Score, "winnerAlias", winnerAlias);
-                    debugger;
-                    // Router.navigate('home');
-                    // alert('ganador')
-                    // resolve();
+                    winner?.classList.remove('hidden');
                 },
             });
             game.start();
