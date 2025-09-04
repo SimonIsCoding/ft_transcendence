@@ -44,8 +44,13 @@ export class Router {
         break;
 
       case 'game':    
-        type GameMode = 'p-vs-ai' |  'ai-vs-p' | 'p-vs-p' | 'ai-vs-ai';
-        let gameMode: GameMode = 'p-vs-p'; // ---------------- Give the right mode here ----------------
+        // type GameMode = 'p-vs-ai' |  'ai-vs-p' | 'p-vs-p' | 'ai-vs-ai';
+        // let gameMode: GameMode = 'p-vs-p'; // ---------------- Give the right mode here ----------------
+        if (!ShowGame.inGame) {
+          Router.navigate('home');
+          ShowGame.inGame = false;
+          return;
+        }
         const player1 = document.getElementById("player1") as HTMLInputElement;
         const player2 = document.getElementById("player2") as HTMLInputElement;
         const player1VSAI = document.getElementById("player1VSAI") as HTMLInputElement;
@@ -54,11 +59,19 @@ export class Router {
           tmp = player1VSAI;
           ShowGame.otherPlayer = tmp.value;
         }
-        new ShowGame().initGame({
+        if (!tmp && !player1) {
+          new ShowGame().initGame({
+          player1: { alias: "User 1" }, // ---------------- Give the right name here ----------------
+            player2: { alias: "User 2" }, // ---------------- Give the right name here ----------------
+            winner: null
+          });
+        } else {
+          new ShowGame().initGame({
           player1: { alias: player1.value }, // ---------------- Give the right name here ----------------
-          player2: { alias: tmp.value }, // ---------------- Give the right name here ----------------
-          winner: null
-        }, gameMode);
+            player2: { alias: tmp.value }, // ---------------- Give the right name here ----------------
+            winner: null
+          });
+        }
         break;
         
 
