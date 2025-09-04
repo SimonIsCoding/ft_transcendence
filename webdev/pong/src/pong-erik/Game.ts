@@ -5,6 +5,7 @@ import { InputManager, KeyAction } from "./InputManager.js";
 import { AIManager, PlayerSide } from "./AIManager.js";
 import { ScoreManager, GameResult } from "./ScoreManager.js";
 import { UIManager } from "./UIManager.js";
+import { ShowGame } from "./ShowGame.js";
 
 export interface GameOptions {
   leftPlayer: string;
@@ -104,6 +105,7 @@ export class Game {
     switch (this.options.gameMode) {
       case 'p-vs-ai':
         this.options.rightPlayer = "ChatGPT";
+        this.options.leftPlayer = ShowGame.otherPlayer;
         this.aiManager.disableAI(PlayerSide.LEFT); // Only disable left, right stays AI
         break;
       case 'ai-vs-p':
