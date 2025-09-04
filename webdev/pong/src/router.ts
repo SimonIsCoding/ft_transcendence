@@ -43,9 +43,16 @@ export class Router {
         registerView.init();
         break;
 
-      case 'game':    
-        // type GameMode = 'p-vs-ai' |  'ai-vs-p' | 'p-vs-p' | 'ai-vs-ai';
-        // let gameMode: GameMode = 'p-vs-p'; // ---------------- Give the right mode here ----------------
+      case 'game':
+        // window.addEventListener('popstate', (event) => {
+        //   const gamesArea = document.getElementById("gamesArea") as HTMLInputElement;
+        //   gamesArea.innerHTML = "";
+        //   const app = document.getElementById("app") as HTMLInputElement;
+        //   app.innerHTML = "";
+        //   Router.navigate('home');
+        //   console.log('Back or forward navigation detected!', event);
+        //   return;
+        // });
         if (!ShowGame.inGame) {
           Router.navigate('home');
           ShowGame.inGame = false;
