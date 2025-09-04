@@ -5,6 +5,7 @@ import { currentTournament, getTournament } from '../models/TournamentStore';
 import { TournamentUIManager } from '../views/TournamentUIManager';
 import { Game } from '../pong-erik/Game';
 import { enviarLogALogstash } from '../utils/logstash';
+import { closeAllMenus } from '../views/sidebar/sidebarUtils';
 
 export class TournamentController {
     // private tournamentStartTime: number = 0;
@@ -55,6 +56,8 @@ export class TournamentController {
                 return;
             }
             const handler = () => {
+				const submenus = document.querySelectorAll<HTMLElement>('.submenu');
+				closeAllMenus(submenus);
                 btn.removeEventListener('click', handler);
                 resolve();
             };
