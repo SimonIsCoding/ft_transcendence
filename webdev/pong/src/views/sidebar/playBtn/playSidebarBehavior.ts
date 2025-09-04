@@ -6,6 +6,7 @@ import { showErrorPopup } from '../../../utils/utils';
 // import { setTournament } from '../../../models/TournamentStore';
 // import { playersName } from '../../tournamentStart';
 import { TournamentArea } from '../../TournamentArea';
+import { ShowGame } from '../../../pong-erik/ShowGame';
 
 function swapPlayer(id1: string, id2: string): void
 {
@@ -70,6 +71,7 @@ export function oneVsOneAreaInit()
 			showErrorPopup("You need 2 players to play.", "oneVsOneAreaPopup");
 			return ;
 		}
+		ShowGame.gameType = 'p-vs-p';
 		Router.navigate('game'); 
 	});
 }
@@ -120,6 +122,7 @@ export function oneVsAIAreaInit()
 			showErrorPopup("You need 1 player to play.", "oneVsAIAreaPopup");
 			return ;
 		}
+		ShowGame.gameType = 'p-vs-ai';
 		Router.navigate('game');
 	});
 }
