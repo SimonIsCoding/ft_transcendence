@@ -50,7 +50,7 @@ export class Router {
       case 'tournament':
 
         const tournamentArea = document.getElementById('tournamentArea');
-        let gameCanvasContainer = document.getElementById('gameCanvasContainer');
+		let gameCanvasContainer = document.getElementById('gameCanvasContainer');
 
         if (!gameCanvasContainer && tournamentArea?.parentNode) {
           gameCanvasContainer = document.createElement('div');
@@ -58,14 +58,6 @@ export class Router {
           gameCanvasContainer.className = 'hidden content bg-[#fbd11b] h-full';
           tournamentArea.appendChild(gameCanvasContainer);
         }
-        // if (matchInfo && matchInfo.partidoActivo) {
-        // gameCanvasContainer?.classList.remove('hidden');
-        // console.log('entraaa???')
-        // anterior
-        // if (gameCanvasContainer && gameCanvasContainer.innerHTML === '') {
-        //   gameCanvasContainer.innerHTML = GameView.renderGameCanvas();
-        //   GameView.initGameCanvas();
-        // }
 
         //  new 
         console.log('matchInfo en router', matchInfo)
