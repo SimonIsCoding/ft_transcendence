@@ -46,12 +46,21 @@ export class Router {
       case 'game':    
         type GameMode = 'p-vs-ai' |  'ai-vs-p' | 'p-vs-p' | 'ai-vs-ai';
         let gameMode: GameMode = 'p-vs-p'; // ---------------- Give the right mode here ----------------
+        const player1 = document.getElementById("player1") as HTMLInputElement;
+        const player2 = document.getElementById("player2") as HTMLInputElement;
+        const player1VSAI = document.getElementById("player1VSAI") as HTMLInputElement;
+        let tmp = player2;
+        if (ShowGame.gameType === 'p-vs-ai') {
+          tmp = player1VSAI;
+          ShowGame.otherPlayer = tmp.value;
+        }
         new ShowGame().initGame({
-          player1: { alias: 'Erik' }, // ---------------- Give the right name here ----------------
-          player2: { alias: 'Simon' }, // ---------------- Give the right name here ----------------
+          player1: { alias: player1.value }, // ---------------- Give the right name here ----------------
+          player2: { alias: tmp.value }, // ---------------- Give the right name here ----------------
           winner: null
         }, gameMode);
         break;
+        
 
       case 'tournament':
 
