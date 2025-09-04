@@ -43,27 +43,14 @@ export class Router {
         registerView.init();
         break;
 
-      case 'game':
-        // this.app.innerHTML = GameView.renderGameCanvas();
-        // GameView.initGameCanvas();
-        // this.app.innerHTML = new GameRender().render();
-        // const tournamenArea = document.getElementById('gamesArea');
-        // let gameCanvaContainer = document.getElementById('gameCanvasContainer');
-
-        // if (!gameCanvaContainer && tournamenArea?.parentNode) {
-        //   gameCanvaContainer = document.createElement('div');
-        //   gameCanvaContainer.id = 'gameCanvasContainer';
-        //   gameCanvaContainer.className = 'hidden content bg-[#fbd11b] h-full';
-        //   tournamenArea.appendChild(gameCanvaContainer);
-        // }
-        // this.app.innerHTML = HomeView.render();
+      case 'game':    
+        type GameMode = 'p-vs-ai' |  'ai-vs-p' | 'p-vs-p' | 'ai-vs-ai';
+        let gameMode: GameMode = 'p-vs-p'; // ---------------- Give the right mode here ----------------
         new ShowGame().initGame({
-          player1: { alias: 'Erik' },
-          player2: { alias: 'Simon' },
+          player1: { alias: 'Erik' }, // ---------------- Give the right name here ----------------
+          player2: { alias: 'Simon' }, // ---------------- Give the right name here ----------------
           winner: null
-        });
-        // new GameRender().render();
-
+        }, gameMode);
         break;
 
       case 'tournament':
