@@ -1,4 +1,5 @@
 import type { User } from "../config";
+import { ShowGame } from "../pong-erik/ShowGame";
 import { Router } from "../router";
 // import { isConnected } from "../services/sidebarService/utilsSidebarService";
 // import { oneVsAIAreaInit, oneVsOneAreaInit } from "./sidebar/playBtn/playSidebarBehavior";
@@ -37,6 +38,10 @@ export const playButton = {
 	// {
 	// }
 		const playBtn = document.getElementById('playBtn') as HTMLButtonElement | null;
-		playBtn?.addEventListener('click', () => { Router.navigate('game'); })
+		playBtn?.addEventListener('click', () => {
+			ShowGame.gameType = 'p-vs-p';
+			ShowGame.inGame = true;
+			Router.navigate('game'); 
+		})
   }
 }

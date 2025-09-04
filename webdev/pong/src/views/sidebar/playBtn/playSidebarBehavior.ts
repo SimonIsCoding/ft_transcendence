@@ -72,6 +72,7 @@ export function oneVsOneAreaInit()
 			return ;
 		}
 		ShowGame.gameType = 'p-vs-p';
+		ShowGame.inGame = true;
 		Router.navigate('game'); 
 	});
 }
@@ -123,6 +124,7 @@ export function oneVsAIAreaInit()
 			return ;
 		}
 		ShowGame.gameType = 'p-vs-ai';
+		ShowGame.inGame = true;
 		Router.navigate('game');
 	});
 }
