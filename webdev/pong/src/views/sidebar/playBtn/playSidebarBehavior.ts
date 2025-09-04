@@ -134,10 +134,16 @@ export function playSidebarBehavior()
 	const submenus = document.querySelectorAll<HTMLElement>('.submenu');
 	const playSidebarBtn = document.getElementById('playSidebarBtn');
 	playSidebarBtn?.addEventListener('click', () => {
-		toggleMenuVisibility('playSubmenu', submenus);
-		oneVsOneAreaInit();
-		oneVsAIAreaInit();
-		tournamentAreaInit();
-		// TournamentArea.init();
+		const location = window.location.pathname;
+		if (location !== '/')
+			Router.navigate("home");
+		else
+		{
+			toggleMenuVisibility('playSubmenu', submenus);
+			oneVsOneAreaInit();
+			oneVsAIAreaInit();
+			tournamentAreaInit();
+			// TournamentArea.init();
+		}
 	});
 }
