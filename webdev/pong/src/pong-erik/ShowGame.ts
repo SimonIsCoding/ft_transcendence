@@ -74,7 +74,6 @@ export class ShowGame {
                     let winner = document.getElementById('winner-screen');
                     winner?.classList.remove('hidden')
                     // console.log("left", player1Score, "right", player2Score, "winnerAlias", winnerAlias);
-                    debugger;
                     // Router.navigate('home');
                     // alert('ganador')
                     // resolve();
