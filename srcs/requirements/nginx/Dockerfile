@@ -1,16 +1,37 @@
+# --- Stage 1: build frontend ---
+FROM node:18-bullseye AS builder
+WORKDIR /app
+COPY webdev/pong/package*.json ./
+RUN npm install
+COPY webdev/pong .
+RUN npm run build
+
+
+# --- Stage 2: nginx ---
 FROM debian:bullseye
 
-#Install nginx openssl
+# Install nginx + tools
 RUN apt-get update && apt-get -y install \
-	nginx \
-	gosu \
-	openssl
+    nginx \
+    gosu \
+    openssl \
+ && rm -rf /var/lib/apt/lists/*
 
 COPY ./tools/nginxentry.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/nginxentry.sh
 
-EXPOSE 443
+# Default location where nginx will serve files
+RUN mkdir -p /var/www/html/pong
 
+# Copy freshly built frontend into the image
+# ⚠️ This will be overridden by the volume at runtime,
+# but ensures the image is usable even without the volume.
+COPY --from=builder /app/dist/ /var/www/html/pong/
+
+RUN chown -R www-data:www-data /var/www/html/pong
+
+EXPOSE 443
 ENTRYPOINT ["nginxentry.sh"]
+
 
 #CMD ["nginx", "-g", "daemon off;"]
