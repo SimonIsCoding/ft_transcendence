@@ -1,10 +1,6 @@
 import{ toggleMenuVisibility } from '../sidebarUtils'
 import { Router } from '../../../router';
 import { showErrorPopup } from '../../../utils/utils';
-// import { tournamentAreaInit } from './TournamentArea';
-// import { TournamentModel } from '../../../models/TournamentModel';
-// import { setTournament } from '../../../models/TournamentStore';
-// import { playersName } from '../../tournamentStart';
 import { TournamentArea } from '../../TournamentArea';
 import { ShowGame } from '../../../pong-erik/ShowGame';
 
@@ -134,16 +130,10 @@ export function playSidebarBehavior()
 	const submenus = document.querySelectorAll<HTMLElement>('.submenu');
 	const playSidebarBtn = document.getElementById('playSidebarBtn');
 	playSidebarBtn?.addEventListener('click', () => {
-		const location = window.location.pathname;
-		if (location !== '/')
-			Router.navigate("home");
-		else
-		{
 			toggleMenuVisibility('playSubmenu', submenus);
 			oneVsOneAreaInit();
 			oneVsAIAreaInit();
 			tournamentAreaInit();
 			// TournamentArea.init();
-		}
 	});
 }

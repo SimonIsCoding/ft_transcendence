@@ -1,6 +1,6 @@
 import type { Match } from '../models/TournamentModel';
 import { Router } from '../router';
-import { currentTournament, getTournament } from '../models/TournamentStore';
+import { currentTournament, getTournament, resetTournament } from '../models/TournamentStore';
 // import { Game } from '../pong-erik/Game';
 import { TournamentUIManager } from '../views/TournamentUIManager';
 import { Game } from '../pong-erik/Game';
@@ -8,12 +8,9 @@ import { enviarLogALogstash } from '../utils/logstash';
 import { closeAllMenus } from '../views/sidebar/sidebarUtils';
 
 export class TournamentController {
-    // private tournamentStartTime: number = 0;
-    // private matchStartTimes: Map<Match, number> = new Map();
     async iniciarTorneo() {
         if (!currentTournament?.isReady()) return;
-        // console.log('cuantas veces entra???')
-        // this.tournamentStartTime = Date.now();
+
         enviarLogALogstash('tournament_created', {
             tournament_id: 'tourn-' + Date.now(),
             players_count: 4,
@@ -37,7 +34,7 @@ export class TournamentController {
             TournamentUIManager.updateBracket(currentTournament);
             this.mostrarVistaTorneo();
             TournamentUIManager.showTournamentWinner(ganador.alias);
-            currentTournament.saveToLocalStorage();
+            resetTournament();
         }
     }
 
@@ -94,7 +91,6 @@ export class TournamentController {
                     match.player1.score = player1Score;
                     match.player2.score = player2Score;
                     match.winner = (match.player1.alias === winnerAlias) ? match.player1 : match.player2;
-                    console.log('entra en onMatchEnd');
                     const torneo = getTournament();
                     if (torneo)
                         TournamentUIManager.updateBracket(torneo);
@@ -104,48 +100,4 @@ export class TournamentController {
             game.start();
         });
     }
-    // private enviarLog(eventType: string, data: any) {
-    // TournamentLogger.enviarLog(eventType, data);
-    // }
-
-    // private obtenerTipoPartido(match: Match): string {
-    //     if (match === currentTournament?.semifinal1) return 'semifinal_1';
-    //     if (match === currentTournament?.semifinal2) return 'semifinal_2';
-    //     if (match === currentTournament?.finalMatch) return 'final';
-    //     return 'unknown';
-    // }
 }
-
-// class TournamentLogger {
-
-//     static enviarLog(eventType: string, data: any) {
-//         const logEntry = JSON.stringify({
-//             service: 'tournament-service',
-//             level: 'INFO',
-//             event_type: eventType,
-//             timestamp: new Date().toISOString(),
-//             environment: 'development',
-//             ...data
-//         });
-
-//         // Usar TCP en lugar de HTTP - MUCHO más fiable
-//         this.enviarLogTCP(logEntry);
-//     }
-//     static enviarLogTCP(logData: string) {
-//         // Usar XMLHttpRequest para TCP (funciona en navegador)
-//         // const xhr = new XMLHttpRequest();
-//         // xhr.open('POST', 'http://localhost:5050', false); // Puerto 5050 para TCP
-//         // xhr.setRequestHeader('Content-Type', 'application/json');
-//         // xhr.send(logData);
-
-//         // Alternative: usar fetch con modo 'no-cors' para desarrollo
-//         fetch('http://localhost:5050', {
-//             method: 'POST',
-//             mode: 'no-cors', // ← Importante para evitar problemas CORS
-//             headers: { 'Content-Type': 'application/json' },
-//             body: logData
-//         }).catch(() => {
-//             console.log('Log enviado via TCP (puerto 5050)');
-//         });
-//     }
-// }
