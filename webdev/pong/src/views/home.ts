@@ -1,9 +1,6 @@
 import type { User } from "../config";
 import { playButton } from "./playButton";
 import { handleSidebar } from "./sidebar/sidebarBehavior";
-import { oneVsOneArea } from "./OneVsOneArea";
-import { oneVsAIArea } from "./OneVsOneArea";
-import { TournamentArea } from "./TournamentArea";
 
 export const HomeView = {
   currentUser: null as User | null,
@@ -20,10 +17,6 @@ export const HomeView = {
 		</div>
 
       ${playButton.render()}
-      ${oneVsOneArea.render()}
-      ${oneVsAIArea.render()}
-      ${TournamentArea.render()}
-
     </div>
   `;
   },
