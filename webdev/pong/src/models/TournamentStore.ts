@@ -7,7 +7,7 @@ export function setTournament(tournament: TournamentModel): void {
 }
 
 export function resetTournament(): void {
-	currentTournament = null;
+    currentTournament = null;
 }
 
 export function getTournament(): TournamentModel | null {

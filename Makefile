@@ -4,6 +4,7 @@ export PROJECT_PATH
 
 all:
 	mkdir -p srcs/data/pong
+	mkdir -p srcs/data/DB
 	cd webdev/pong && \
 	  npm install && \
 	  npm run build && \
@@ -44,6 +45,7 @@ configure-kibana-password:
 
 clean:
 	sudo rm -rf srcs/data/pong/users.db
+	sudo rm -rf srcs/data/DB
 	sudo rm -rf srcs/srcs
 	docker compose -f $(COMPOSE_FILE) down --rmi all -v
 	docker image prune -af
