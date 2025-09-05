@@ -36,18 +36,20 @@ configure-kibana-password:
 	./srcs/configure-kibana-password.sh
 
 clean:
-	sudo rm -rf srcs/data/pong/*
-	sudo rm -rf srcs/data/DB/users.db
-	sudo rm -rf srcs/srcs
+clean:
 	docker compose -f $(COMPOSE_FILE) down --rmi all -v
 	docker image prune -af
 	docker volume prune -f
 	docker network prune -f
-# 	sudo rm -rf srcs/data/pong/assets/index-*
-	cd webdev/pong && \
-	  npm run clean
 
 fclean: clean
+	# clean db
+	rm -rf srcs/data/DB/users.db
+	# temporal docker command to clean pong data
+	docker run --rm -v $(PWD)/srcs/data/pong:/pong alpine sh -c "rm -rf /pong/*"
+
+	# Opcional: limpiar la carpeta de build del frontend
+	cd webdev/pong && npm run clean || true
 
 re: fclean all
 
