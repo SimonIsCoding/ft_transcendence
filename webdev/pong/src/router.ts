@@ -54,6 +54,8 @@ export class Router {
         //   return;
         // });
         if (!ShowGame.inGame) {
+          const app = document.getElementById("app") as HTMLInputElement;
+          app.innerHTML = "";
           Router.navigate('home');
           ShowGame.inGame = false;
           return;
@@ -68,14 +70,14 @@ export class Router {
         }
         if (!tmp && !player1) {
           new ShowGame().initGame({
-          player1: { alias: "User 1" }, // ---------------- Give the right name here ----------------
-            player2: { alias: "User 2" }, // ---------------- Give the right name here ----------------
+          player1: { alias: "User 1" },
+            player2: { alias: "User 2" },
             winner: null
           });
         } else {
           new ShowGame().initGame({
-          player1: { alias: player1.value }, // ---------------- Give the right name here ----------------
-            player2: { alias: tmp.value }, // ---------------- Give the right name here ----------------
+          player1: { alias: player1.value },
+            player2: { alias: tmp.value },
             winner: null
           });
         }

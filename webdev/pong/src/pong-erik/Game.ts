@@ -23,7 +23,7 @@ export class Game {
   // Game state
   private isPaused = false;
   private lastTime?: number;
-  private isGameActive: boolean = true;
+  static isGameActive: boolean = true;
   // Game objects
   private ball!: Ball;
   private leftPlayerPaddle!: Paddle;
@@ -168,7 +168,7 @@ export class Game {
   // Main game loop
   public start(): void {
     const gameLoop = (time: number) => {
-      if (!this.isGameActive) return;
+      if (!Game.isGameActive) return;
       if (this.lastTime != null) {
         const delta = time - this.lastTime;
         
@@ -286,7 +286,7 @@ export class Game {
       const winner = result === GameResult.LEFT_WINS ? this.options.leftPlayer : this.options.rightPlayer;
       if (this.onFinishCallback) {
         const scores = this.scoreManager.getScores();
-        this.isGameActive = false;
+        Game.isGameActive = false;
         this.onFinishCallback(winner, scores.left, scores.right);
         // alert(`${winner} ha ganado esta partida`);
       }

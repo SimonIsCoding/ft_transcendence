@@ -7,6 +7,8 @@ import { showErrorPopup } from '../../../utils/utils';
 // import { playersName } from '../../tournamentStart';
 import { TournamentArea } from '../../TournamentArea';
 import { ShowGame } from '../../../pong-erik/ShowGame';
+// import { gameController } from '../../../controllers/gameController';
+import { Game } from '../../../pong-erik/Game';
 
 function swapPlayer(id1: string, id2: string): void
 {
@@ -135,8 +137,14 @@ export function playSidebarBehavior()
 	const playSidebarBtn = document.getElementById('playSidebarBtn');
 	playSidebarBtn?.addEventListener('click', () => {
 		const location = window.location.pathname;
-		if (location !== '/')
+		if (location !== '/') {
+			let appInfo = document.getElementById("app");
+			if (appInfo) appInfo.innerHTML = "";
+			Game.isGameActive = false;
 			Router.navigate("home");
+			// const appI = document.getElementById("app") as HTMLInputElement;
+			// console.log(appI);
+		}
 		else
 		{
 			toggleMenuVisibility('playSubmenu', submenus);
