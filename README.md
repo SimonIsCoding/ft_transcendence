@@ -1,6 +1,6 @@
 # FT_TRANSCENDENCE
 
-<!-- Description of the project -->
+<!-- Description of the project    -->
 
 <!-- ## Final score
 <div align=center>
