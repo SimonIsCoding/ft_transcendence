@@ -3,12 +3,6 @@ PROJECT_PATH := $(shell pwd)
 export PROJECT_PATH
 
 all:
-	mkdir -p srcs/data/pong
-	mkdir -p srcs/data/DB
-	cd webdev/pong && \
-	  npm install && \
-	  npm run build && \
-	  sudo cp -r dist/* ../../srcs/data/pong
 	# docker compose -f $(COMPOSE_FILE) up -d --build
 	docker compose -f $(COMPOSE_FILE) build --no-cache
 	docker compose -f $(COMPOSE_FILE) up -d --remove-orphans
@@ -43,9 +37,6 @@ configure-kibana-password:
 	./srcs/configure-kibana-password.sh
 
 clean:
-	sudo rm -rf srcs/data/pong/users.db
-	sudo rm -rf srcs/data/DB
-	sudo rm -rf srcs/srcs
 	docker compose -f $(COMPOSE_FILE) down --rmi all -v
 	docker image prune -af
 	docker volume prune -f
@@ -56,9 +47,6 @@ fclean: clean
 	rm -rf srcs/data/DB/users.db
 	# temporal docker command to clean pong data
 	docker run --rm -v $(PWD)/srcs/data/pong:/pong alpine sh -c "rm -rf /pong/*"
-
-	# Opcional: limpiar la carpeta de build del frontend
-	cd webdev/pong && npm run clean || true
 
 re: fclean all
 
