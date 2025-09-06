@@ -3,7 +3,8 @@ PROJECT_PATH := $(shell pwd)
 export PROJECT_PATH
 
 all:
-	# docker compose -f $(COMPOSE_FILE) up -d --build
+	mkdir -p srcs/data/pong
+	mkdir -p srcs/data/DB
 	docker compose -f $(COMPOSE_FILE) build --no-cache
 	docker compose -f $(COMPOSE_FILE) up -d --remove-orphans
 	sleep 2
