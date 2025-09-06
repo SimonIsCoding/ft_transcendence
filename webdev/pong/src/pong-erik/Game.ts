@@ -22,6 +22,7 @@ export class Game {
 
   // Game state
   private isPaused = false;
+  private gameOn = false;
   private lastTime?: number;
   private isGameActive: boolean = true;
   // Game objects
@@ -139,6 +140,10 @@ export class Game {
     }
   }
 
+  public setGameOn() {
+    this.gameOn = true;
+  }
+
   // Public methods for controlling AI
   public enableAILeft(): void {
     this.aiManager.enableAI(PlayerSide.LEFT);
@@ -180,14 +185,17 @@ export class Game {
   // Main game loop
   public start(): void {
     const gameLoop = (time: number) => {
-      if (!this.isGameActive || !ShowGame.noWinner) return;
+      if (!this.isGameActive || !ShowGame.noWinner || !this.gameOn) {
+        this.resetGame();
+        return ;
+      }
       if (this.lastTime != null) {
         const delta = time - this.lastTime;
         
         // Limit frame rate to prevent excessive updates
         if (delta < GameConfig.FRAME_RATE_LIMIT) {
           window.requestAnimationFrame(gameLoop);
-          return;
+          return ;
         }
         
         if (!this.isPaused) {

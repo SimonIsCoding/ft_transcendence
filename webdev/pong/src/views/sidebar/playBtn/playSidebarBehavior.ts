@@ -7,6 +7,7 @@ import { showErrorPopup } from '../../../utils/utils';
 // import { playersName } from '../../tournamentStart';
 import { TournamentArea } from '../../TournamentArea';
 import { ShowGame } from '../../../pong-erik/ShowGame';
+// import { Game } from '../../../pong-erik/Game';
 
 function swapPlayer(id1: string, id2: string): void
 {
