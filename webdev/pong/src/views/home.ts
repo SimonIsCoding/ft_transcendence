@@ -1,11 +1,15 @@
 import type { User } from "../config";
 import { playButton } from "./playButton";
 import { handleSidebar } from "./sidebar/sidebarBehavior";
+import { oneVsOneArea } from "./OneVsOneArea";
+import { oneVsAIArea } from "./OneVsOneArea";
+import { TournamentArea } from "./TournamentArea";
+import { GameRender } from "../pong-erik/GameRender";
 
 export const HomeView = {
   currentUser: null as User | null,
   isLogin: true,
-
+  
  render(): string {
 	return `
 	<div class="w-screen h-screen flex bg-[#fbd11b] overflow-hidden">
@@ -15,15 +19,18 @@ export const HomeView = {
 
 		<div id="sidebar" class="bg-[#fbd11b] h-screen flex flex-col overflow-hidden transition-all duration-500 ease-in-out w-[64px]">
 		</div>
-
       ${playButton.render()}
+      ${oneVsOneArea.render()}
+      ${oneVsAIArea.render()}
+      ${TournamentArea.render()}
+      ${new GameRender().renderGame()}
     </div>
   `;
   },
 
   async init(): Promise<void>
   {
-	await handleSidebar();
-	playButton.init();
+    await handleSidebar();
+    playButton.init();
   }
 };
