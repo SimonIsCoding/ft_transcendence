@@ -19,12 +19,14 @@ export interface GameOptions {
 export class Game {
   // Game configuration
   private options: GameOptions;
+  private gameId: string; // Unique identifier for debugging
 
   // Game state
   private isPaused = false;
   private gameOn = false;
   private lastTime?: number;
   private isGameActive: boolean = true;
+  private animationFrameId: number | null = null; // Track animation frame for cleanup
   // Game objects
   private ball!: Ball;
   private leftPlayerPaddle!: Paddle;
@@ -52,6 +54,9 @@ export class Game {
     }
     
     // Set default options and merge with provided options
+    this.gameId = `game-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    console.log(`🎮 Creating new Game instance: ${this.gameId}`);
+    
     this.options = {
       leftPlayer: options?.leftPlayer || GameConfig.DEFAULT_LEFT_PLAYER,
       rightPlayer: options?.rightPlayer || GameConfig.DEFAULT_RIGHT_PLAYER,
@@ -169,6 +174,29 @@ export class Game {
     ShowGame.gameController = false;
   }
 
+  /**
+   * Stops the game completely and cleans up resources
+   */
+  public stopGame(): void {
+    console.log(`🛑 Stopping Game instance: ${this.gameId}`);
+    this.isGameActive = false;
+    this.gameOn = false;
+    this.isPaused = true;
+    
+    // Cancel any pending animation frame
+    if (this.animationFrameId !== null) {
+      cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
+      console.log(`🎬 Cancelled animation frame for Game: ${this.gameId}`);
+    }
+    
+    // Clear timing state
+    this.lastTime = undefined;
+    
+    // Reset the game state to clean up any ongoing processes
+    this.resetGame();
+  }
+
   // Getters for accessing game state
   public get gameAreaTop(): number { return GameConfig.GAME_AREA_TOP_PERCENT; }
   public get gameAreaBottom(): number { return GameConfig.GAME_AREA_BOTTOM_PERCENT; }
@@ -184,9 +212,12 @@ export class Game {
 
   // Main game loop
   public start(): void {
+    console.log(`▶️ Starting Game instance: ${this.gameId}`);
     const gameLoop = (time: number) => {
       if (!this.isGameActive || !ShowGame.noWinner || !this.gameOn) {
+        console.log(`⏹️ Game loop stopping for Game: ${this.gameId} (isActive: ${this.isGameActive}, noWinner: ${ShowGame.noWinner}, gameOn: ${this.gameOn})`);
         this.resetGame();
+        this.animationFrameId = null; // Clear the ID when stopping
         return ;
       }
       if (this.lastTime != null) {
@@ -194,7 +225,7 @@ export class Game {
         
         // Limit frame rate to prevent excessive updates
         if (delta < GameConfig.FRAME_RATE_LIMIT) {
-          window.requestAnimationFrame(gameLoop);
+          this.animationFrameId = window.requestAnimationFrame(gameLoop);
           return ;
         }
         
@@ -205,14 +236,15 @@ export class Game {
           this.updateRightPlayerPaddle(delta);
           
           if (this.isLose()) {
+            console.log(`⚽ Ball lost in Game: ${this.gameId}`);
             this.handleLose();
           }
         }
       }
       this.lastTime = time;
-      window.requestAnimationFrame(gameLoop);
+      this.animationFrameId = window.requestAnimationFrame(gameLoop);
     };
-    window.requestAnimationFrame(gameLoop);
+    this.animationFrameId = window.requestAnimationFrame(gameLoop);
   }
 
   private updateLeftPlayerPaddle(delta: number): void {
