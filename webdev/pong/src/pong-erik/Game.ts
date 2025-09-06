@@ -307,7 +307,7 @@ export class Game {
       if (this.onFinishCallback) {
         const scores = this.scoreManager.getScores();
         this.isGameActive = false;
-        this.gameOn = false;
+        this.gameOn = false; 
         this.resetGame();
         this.onFinishCallback(winner, scores.left, scores.right);
         // alert(`${winner} ha ganado esta partida`);
