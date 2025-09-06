@@ -45,6 +45,7 @@ export class Router {
     //const gameArea = document.getElementById('gameArea') as HTMLDivElement | null;
     switch (page) {
       case 'home':
+        // window.location.href = "https://localhost:4443/";
         ShowGame.cleanup(); // Clean up any running games
         ShowGame.gameController = false;
         this.app.innerHTML = HomeView.render();
@@ -151,7 +152,13 @@ export class Router {
     });
 
     // Clean up games when the page is about to unload
+    window.addEventListener('popstate', (event) => {
+      console.log('History changed:', event.state);
+    });
+    // 
     window.addEventListener('beforeunload', () => {
+      if (window.location.pathname === "/tournament")
+        Router.navigate('home');
       ShowGame.cleanup();
     });
   }

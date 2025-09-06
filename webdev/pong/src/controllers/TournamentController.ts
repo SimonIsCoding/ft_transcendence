@@ -6,6 +6,7 @@ import { TournamentUIManager } from '../views/TournamentUIManager';
 import { Game } from '../pong-erik/Game';
 import { enviarLogALogstash } from '../utils/logstash';
 import { closeAllMenus } from '../views/sidebar/sidebarUtils';
+import { ShowGame } from '../pong-erik/ShowGame';
 
 export class TournamentController {
     async iniciarTorneo() {
@@ -78,26 +79,62 @@ export class TournamentController {
 
     private jugarPartido(match: Match): Promise<void> {
         return new Promise(async (resolve) => {
-            await TournamentUIManager.showPreGame(match.player1.alias, match.player2.alias);
-            await TournamentUIManager.startCountdown();
-            this.mostrarVistaJuego();
-            Router.navigate('tournament');
-            await new Promise(resolve => setTimeout(resolve, 100));
-            const game = new Game({
-                leftPlayer: match.player1.alias,
-                rightPlayer: match.player2.alias, maxScore: 3, gameMode: 'p-vs-p',
-                onFinish: (winnerAlias: string, player1Score: number, player2Score: number) => {
-                    console.log(player1Score, player2Score);
-                    match.player1.score = player1Score;
-                    match.player2.score = player2Score;
-                    match.winner = (match.player1.alias === winnerAlias) ? match.player1 : match.player2;
-                    const torneo = getTournament();
-                    if (torneo)
-                        TournamentUIManager.updateBracket(torneo);
-                    resolve();
-                },
-            });
-            game.start();
+            // Prevent race conditions - only one game creation at a time
+            if (ShowGame.isCreatingGame) {
+                console.log('🚫 Game creation already in progress, skipping...');
+                return;
+            }
+            ShowGame.isCreatingGame = true;
+            console.log('🔒 Locking game creation');
+            try {
+                // Stop any existing game before starting a new one
+                if (ShowGame.currentGame) {
+                    console.log('🛑 Found existing game in playGame, stopping it');
+                    ShowGame.currentGame.stopGame();
+                    ShowGame.currentGame = null;
+                    // Add a small delay to ensure cleanup is complete
+                    await new Promise(resolve => setTimeout(resolve, 50));
+                }
+
+                await TournamentUIManager.showPreGame(match.player1.alias, match.player2.alias);
+                await TournamentUIManager.startCountdown();
+                this.mostrarVistaJuego();
+                Router.navigate('tournament');
+                await new Promise(resolve => setTimeout(resolve, 100));
+                const game = new Game({
+                    leftPlayer: match.player1.alias,
+                    rightPlayer: match.player2.alias, maxScore: 3, gameMode: 'p-vs-p',
+                    onFinish: (winnerAlias: string, player1Score: number, player2Score: number) => {
+                        console.log(player1Score, player2Score);
+                        match.player1.score = player1Score;
+                        match.player2.score = player2Score;
+                        match.winner = (match.player1.alias === winnerAlias) ? match.player1 : match.player2;
+                        const torneo = getTournament();
+                        if (match.winner.alias && match.winner.alias !== undefined) {
+                            if (torneo)
+                                TournamentUIManager.updateBracket(torneo);
+                            console.log('---------Yes');
+                        } else {
+                            console.log('---------No winner determined, resetting tournament');
+                            resetTournament();
+                            Router.navigate('home');
+                        }
+                        resolve();
+                    },
+                });
+                // Store the current game instance
+                ShowGame.currentGame = game;
+                console.log('🎮 New game instance stored in ShowGame.currentGame');
+                
+                game.resetGame();
+                game.setGameOn();
+
+                game.start();
+            } finally {
+                // Always unlock game creation
+                ShowGame.isCreatingGame = false;
+                console.log('🔓 Unlocking game creation');
+            }
         });
     }
 }

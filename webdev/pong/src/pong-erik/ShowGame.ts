@@ -35,8 +35,7 @@ export class ShowGame {
         // this.renderCanvas();
         const gameArea = document.getElementById('gameArea');
         gameArea?.classList.add('hidden');
-        // if (ShowGame.noWinner)
-        //     return ;
+
         ShowGame.noWinner = true;
         await this.playGame(match);
     }
