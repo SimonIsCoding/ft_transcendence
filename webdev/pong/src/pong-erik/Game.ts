@@ -305,6 +305,8 @@ export class Game {
       this.isPaused = true; // Stop the game loop
       const winner = result === GameResult.LEFT_WINS ? this.options.leftPlayer : this.options.rightPlayer;
       if (this.onFinishCallback) {
+        this.resetGame();
+        this.gameOn = false;
         const scores = this.scoreManager.getScores();
         this.isGameActive = false;
         this.onFinishCallback(winner, scores.left, scores.right);
