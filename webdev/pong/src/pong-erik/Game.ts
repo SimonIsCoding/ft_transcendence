@@ -5,6 +5,7 @@ import { InputManager, KeyAction } from "./InputManager.js";
 import { AIManager, PlayerSide } from "./AIManager.js";
 import { ScoreManager, GameResult } from "./ScoreManager.js";
 import { UIManager } from "./UIManager.js";
+import { ShowGame } from "./ShowGame.js";
 
 export interface GameOptions {
   leftPlayer: string;
@@ -18,11 +19,14 @@ export interface GameOptions {
 export class Game {
   // Game configuration
   private options: GameOptions;
+  private gameId: string; // Unique identifier for debugging
 
   // Game state
   private isPaused = false;
+  private gameOn = false;
   private lastTime?: number;
-
+  private isGameActive: boolean = true;
+  private animationFrameId: number | null = null; // Track animation frame for cleanup
   // Game objects
   private ball!: Ball;
   private leftPlayerPaddle!: Paddle;
@@ -50,6 +54,9 @@ export class Game {
     }
     
     // Set default options and merge with provided options
+    this.gameId = `game-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    console.log(`🎮 Creating new Game instance: ${this.gameId}`);
+    
     this.options = {
       leftPlayer: options?.leftPlayer || GameConfig.DEFAULT_LEFT_PLAYER,
       rightPlayer: options?.rightPlayer || GameConfig.DEFAULT_RIGHT_PLAYER,
@@ -104,6 +111,7 @@ export class Game {
     switch (this.options.gameMode) {
       case 'p-vs-ai':
         this.options.rightPlayer = "ChatGPT";
+        this.options.leftPlayer = ShowGame.otherPlayer;
         this.aiManager.disableAI(PlayerSide.LEFT); // Only disable left, right stays AI
         break;
       case 'ai-vs-p':
@@ -137,6 +145,10 @@ export class Game {
     }
   }
 
+  public setGameOn() {
+    this.gameOn = true;
+  }
+
   // Public methods for controlling AI
   public enableAILeft(): void {
     this.aiManager.enableAI(PlayerSide.LEFT);
@@ -148,6 +160,41 @@ export class Game {
 
   public disableAI(): void {
     this.aiManager.disableAI();
+  }
+
+  /**
+   * Resets the entire game: scores, paddles, and ball position.
+   */
+  public resetGame(): void {
+    this.scoreManager.reset(); // Reset scores to zero and update display
+    this.leftPlayerPaddle.reset();
+    this.rightPlayerPaddle.reset();
+    this.ball.reset();
+    this.isPaused = false;
+    ShowGame.gameController = false;
+  }
+
+  /**
+   * Stops the game completely and cleans up resources
+   */
+  public stopGame(): void {
+    console.log(`🛑 Stopping Game instance: ${this.gameId}`);
+    this.isGameActive = false;
+    this.gameOn = false;
+    this.isPaused = true;
+    
+    // Cancel any pending animation frame
+    if (this.animationFrameId !== null) {
+      cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
+      console.log(`🎬 Cancelled animation frame for Game: ${this.gameId}`);
+    }
+    
+    // Clear timing state
+    this.lastTime = undefined;
+    
+    // Reset the game state to clean up any ongoing processes
+    this.resetGame();
   }
 
   // Getters for accessing game state
@@ -165,14 +212,21 @@ export class Game {
 
   // Main game loop
   public start(): void {
+    console.log(`▶️ Starting Game instance: ${this.gameId}`);
     const gameLoop = (time: number) => {
+      if (!this.isGameActive || !ShowGame.noWinner || !this.gameOn) {
+        console.log(`⏹️ Game loop stopping for Game: ${this.gameId} (isActive: ${this.isGameActive}, noWinner: ${ShowGame.noWinner}, gameOn: ${this.gameOn})`);
+        this.resetGame();
+        this.animationFrameId = null; // Clear the ID when stopping
+        return ;
+      }
       if (this.lastTime != null) {
         const delta = time - this.lastTime;
         
         // Limit frame rate to prevent excessive updates
         if (delta < GameConfig.FRAME_RATE_LIMIT) {
-          window.requestAnimationFrame(gameLoop);
-          return;
+          this.animationFrameId = window.requestAnimationFrame(gameLoop);
+          return ;
         }
         
         if (!this.isPaused) {
@@ -182,14 +236,15 @@ export class Game {
           this.updateRightPlayerPaddle(delta);
           
           if (this.isLose()) {
+            console.log(`⚽ Ball lost in Game: ${this.gameId}`);
             this.handleLose();
           }
         }
       }
       this.lastTime = time;
-      window.requestAnimationFrame(gameLoop);
+      this.animationFrameId = window.requestAnimationFrame(gameLoop);
     };
-    window.requestAnimationFrame(gameLoop);
+    this.animationFrameId = window.requestAnimationFrame(gameLoop);
   }
 
   private updateLeftPlayerPaddle(delta: number): void {
@@ -283,6 +338,9 @@ export class Game {
       const winner = result === GameResult.LEFT_WINS ? this.options.leftPlayer : this.options.rightPlayer;
       if (this.onFinishCallback) {
         const scores = this.scoreManager.getScores();
+        this.isGameActive = false;
+        this.gameOn = false; 
+        this.resetGame();
         this.onFinishCallback(winner, scores.left, scores.right);
         // alert(`${winner} ha ganado esta partida`);
       }

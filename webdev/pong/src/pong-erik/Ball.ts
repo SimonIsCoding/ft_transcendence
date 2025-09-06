@@ -2,7 +2,7 @@ import Paddle from "./Paddle.js";
 
 const INITIAL_VELOCITY = 0.055;
 const PADDLE_HIT_SPEED_INCREASE = 1.10; // 5% speed increase per paddle hit
-const MAX_VELOCITY = 0.13; // Maximum speed limit
+const MAX_VELOCITY = 0.10; // Maximum speed limit
 
 interface Direction {
   x: number;

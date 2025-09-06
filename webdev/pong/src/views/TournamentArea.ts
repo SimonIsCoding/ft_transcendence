@@ -2,6 +2,7 @@ import { TournamentModel } from '../models/TournamentModel';
 import { getMatchInfo, getTournament, setTournament, setMatchInfo } from '../models/TournamentStore';
 import { TournamentController } from '../controllers/TournamentController';
 import { Router } from '../router';
+import { closeAllMenus } from './sidebar/sidebarUtils';
 
 function swapLineToRightSvg(): string {
   return `
@@ -88,7 +89,7 @@ export const TournamentArea = {
     <div class="absolute top-[62%] left-[70.5%]">
 		<button id="playtournamentBtn" class="inline-block text-yellow-400 hover:text-black hover:bg-yellow-400 transition-colors duration-300 border border-[#fbd11b] rounded-lg my-4 p-2.75 font-bold w-40 text-xl mt-10">Play</button>
 		<button id="nextMatchBtn" class="hidden text-yellow-400 hover:text-black hover:bg-yellow-400 transition-colors duration-300 border border-[#fbd11b] rounded-lg my-4 p-2.75 font-bold w-40 text-xl mt-10">Next</button>
-		<button id="resetTournamentBtn" class="hidden text-yellow-400 hover:text-black hover:bg-yellow-400 transition-colors duration-300 border border-[#fbd11b] rounded-lg my-4 p-2.75 font-bold w-40 text-xl mt-10">reset</button>
+		<button id="resetTournamentBtn" class="hidden text-yellow-400 hover:text-black hover:bg-yellow-400 transition-colors duration-300 border border-[#fbd11b] rounded-lg my-4 p-2.75 font-bold w-40 text-xl mt-10">Back to home</button>
     </div>
 </div>
 <div id="game-overlay" class="absolute inset-0 bg-black/80 flex-col items-center justify-center hidden z-50">
@@ -175,6 +176,8 @@ export const TournamentArea = {
       const controller = new TournamentController();
       controller.iniciarTorneo();
       Router.navigate('tournament');
+	  const submenus = document.querySelectorAll<HTMLElement>('.submenu');
+	  closeAllMenus(submenus);
     });
   }
 };
