@@ -11,12 +11,14 @@ all:
 	$(MAKE) configure-kibana-password
 	docker ps
 
-webupdate:
-	# Just rebuild nginx (this will also rebuild the frontend in builder stage)
-	docker compose -f $(COMPOSE_FILE) build nginx
-	docker compose -f $(COMPOSE_FILE) up -d --no-deps nginx
-	# optional reload if container is already running
-	docker exec nginx /usr/sbin/nginx -s reload || true
+w webupdate:
+	docker run --rm \
+	  -v $(PROJECT_PATH)/webdev/pong:/app \
+	  -v $(PROJECT_PATH)/srcs/data/pong:/var/www/html/pong \
+	  node:18-bullseye \
+	  sh -c "cd /app && npm install && npm run build && cp -r dist/* /var/www/html/pong/"
+	docker exec nginx /usr/sbin/nginx -s reload
+
 auth-service:
 	docker compose -f $(COMPOSE_FILE) up -d --build auth-service
 #to rebuild and restart the auth-service container - useful for User Management module
