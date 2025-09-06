@@ -29,17 +29,20 @@ export class Router {
     //const gameArea = document.getElementById('gameArea') as HTMLDivElement | null;
     switch (page) {
       case 'home':
+        ShowGame.cleanup(); // Clean up any running games
         ShowGame.gameController = false;
         this.app.innerHTML = HomeView.render();
         HomeView.init();
         break;
 
       case 'login':
+        ShowGame.cleanup(); // Clean up any running games
         this.app.innerHTML = loginView.render();
         loginView.init();
         break;
 
       case 'register':
+        ShowGame.cleanup(); // Clean up any running games
         this.app.innerHTML = registerView.render();
         registerView.init();
         break;
@@ -94,11 +97,6 @@ export class Router {
 
           const renderGame = new GameRender().render();
           gameCanvasContainer.innerHTML = renderGame;
-          console.log('✅ ANTES de crear Game instance');
-          console.log('✅ Game instance creada - ¿Ya empezó el juego?');
-
-          console.log('✅ DESPUÉS de game.start()');
-
         }
         else if (window.location.pathname === "/tournament"){
           console.log('no hay partido activo, se muestra torneo');
@@ -135,6 +133,11 @@ export class Router {
               path.includes('tournament') ? 'tournament' :
                 'home',
         false);
+    });
+
+    // Clean up games when the page is about to unload
+    window.addEventListener('beforeunload', () => {
+      ShowGame.cleanup();
     });
   }
 }

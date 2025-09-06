@@ -12,6 +12,8 @@ export class ShowGame {
     static noWinner: boolean = true;
     static gameController: boolean = true;
     static otherPlayer: string = "Erik"; 
+    static currentGame: Game | null = null; // Track current game instance
+    static isCreatingGame: boolean = false; // Prevent race conditions 
     private renderGameCanvas() {
     let gameCanvasContainer = document.getElementById('gamesArea');
     let oneVsOneArea = document.getElementById('oneVsOneArea');
@@ -27,6 +29,9 @@ export class ShowGame {
     }
     
     async initGame(match: Match) {
+        // Stop any existing game before starting a new one
+        await ShowGame.cleanup();
+        
         // this.renderCanvas();
         const gameArea = document.getElementById('gameArea');
         gameArea?.classList.add('hidden');
@@ -72,38 +77,94 @@ export class ShowGame {
 
     public playGame(match: Match): Promise<void> {
         return new Promise(async () => {
-            await handleSidebar();
-            this.renderGameCanvas();
-            await new Promise(resolve => setTimeout(resolve, 100));
-            const game = new Game({
-                leftPlayer: match.player1.alias,
-                rightPlayer: match.player2.alias,
-                maxScore: 3,
-                gameMode: ShowGame.gameType,
-                onFinish: (winnerAlias: string, player1Score: number, player2Score: number) => {
-                    console.log(player1Score, player2Score);
-                    match.player1.score = player1Score;
-                    match.player2.score = player2Score;
-                    match.winner = (match.player1.alias === winnerAlias) ? match.player1 : match.player2;
-                    console.log('entra en onMatchEnd');
-                    if (ShowGame.noWinner && window.location.pathname === "/game") {
-                        if (match.winner.alias && match.winner.alias !== undefined) {
-                            this.showWinner(match, player2Score > player1Score);
-                            let winner = document.getElementById('winner-screen');
-                            winner?.classList.remove('hidden');
-                            ShowGame.noWinner = false;
+            // Prevent race conditions - only one game creation at a time
+            if (ShowGame.isCreatingGame) {
+                console.log('🚫 Game creation already in progress, skipping...');
+                return;
+            }
+            
+            ShowGame.isCreatingGame = true;
+            console.log('🔒 Locking game creation');
+            
+            try {
+                // Stop any existing game before starting a new one
+                if (ShowGame.currentGame) {
+                    console.log('🛑 Found existing game in playGame, stopping it');
+                    ShowGame.currentGame.stopGame();
+                    ShowGame.currentGame = null;
+                    // Add a small delay to ensure cleanup is complete
+                    await new Promise(resolve => setTimeout(resolve, 50));
+                }
+                
+                await handleSidebar();
+                this.renderGameCanvas();
+                await new Promise(resolve => setTimeout(resolve, 100));
+                
+                const game = new Game({
+                    leftPlayer: match.player1.alias,
+                    rightPlayer: match.player2.alias,
+                    maxScore: 3,
+                    gameMode: ShowGame.gameType,
+                    onFinish: (winnerAlias: string, player1Score: number, player2Score: number) => {
+                        console.log(player1Score, player2Score);
+                        match.player1.score = player1Score;
+                        match.player2.score = player2Score;
+                        match.winner = (match.player1.alias === winnerAlias) ? match.player1 : match.player2;
+                        console.log('entra en onMatchEnd');
+                        if (ShowGame.noWinner && window.location.pathname === "/game") {
+                            if (match.winner.alias && match.winner.alias !== undefined) {
+                                this.showWinner(match, player2Score > player1Score);
+                                let winner = document.getElementById('winner-screen');
+                                winner?.classList.remove('hidden');
+                                ShowGame.noWinner = false;
+                            } else if (window.location.pathname === "/game") {
+                                Router.navigate('home');
+                            }
                         } else if (window.location.pathname === "/game") {
                             Router.navigate('home');
                         }
-                    } else if (window.location.pathname === "/game") {
-                        Router.navigate('home');
-                    }
-                    game.resetGame();
-                },
-            });
-            game.resetGame();
-            game.setGameOn();
-            game.start();
+                        
+                        // Clear the current game reference when finished
+                        ShowGame.currentGame = null;
+                        game.resetGame();
+                    },
+                });
+                
+                // Store the current game instance
+                ShowGame.currentGame = game;
+                console.log('🎮 New game instance stored in ShowGame.currentGame');
+                
+                game.resetGame();
+                game.setGameOn();
+                game.start();
+                
+            } finally {
+                // Always unlock game creation
+                ShowGame.isCreatingGame = false;
+                console.log('🔓 Unlocking game creation');
+            }
         });
+    }
+
+    /**
+     * Static method to cleanup any running game and prevent race conditions
+     */
+    static async cleanup() {
+        console.log('🧹 ShowGame.cleanup() called');
+        
+        // Wait if another game is being created
+        while (ShowGame.isCreatingGame) {
+            console.log('⏳ Waiting for game creation to complete...');
+            await new Promise(resolve => setTimeout(resolve, 10));
+        }
+        
+        if (ShowGame.currentGame) {
+            console.log('🛑 Found existing game, stopping it');
+            ShowGame.currentGame.stopGame();
+            ShowGame.currentGame = null;
+        }
+        
+        ShowGame.noWinner = true;
+        ShowGame.inGame = false;
     }
 }
