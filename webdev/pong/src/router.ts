@@ -42,10 +42,8 @@ export class Router {
     }
 
     // Handle route protection + rendering
-    //const gameArea = document.getElementById('gameArea') as HTMLDivElement | null;
     switch (page) {
       case 'home':
-        // window.location.href = "https://localhost:4443/";
         ShowGame.cleanup(); // Clean up any running games
         ShowGame.gameController = false;
         this.app.innerHTML = HomeView.render();
@@ -108,7 +106,6 @@ export class Router {
           tournamentArea.appendChild(gameCanvasContainer);
         }
 
-        console.log('matchInfo en router', matchInfo)
         if (gameCanvasContainer && matchInfo && matchInfo.partidoActivo) {
 
           const gameArea = document.getElementById('gameArea');

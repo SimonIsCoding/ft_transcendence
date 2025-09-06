@@ -3,12 +3,16 @@ import type { Match } from '../models/TournamentModel';
 import { handleSidebar } from '../views/sidebar/sidebarBehavior';
 import { Game } from "./Game";
 import { GameRender } from './GameRender';
+import { gameDifficulty, gameSettings } from "../controllers/gameSettingsControllers";
 import { sendGameService } from "../services/gameService";
 
 type GameMode = 'p-vs-ai' | 'ai-vs-p' | 'p-vs-p' | 'ai-vs-ai';
 
 export class ShowGame {
     static gameType: GameMode = 'p-vs-p';
+    static getAIDifficulty: number;
+    static getMaxScore: number;
+    
     static inGame: boolean = false;
     static noWinner: boolean = true;
     static gameController: boolean = true;
@@ -103,8 +107,9 @@ export class ShowGame {
                 const game = new Game({
                     leftPlayer: match.player1.alias,
                     rightPlayer: match.player2.alias,
-                    maxScore: 3,
+                    maxScore: parseInt(gameSettings.scoreLimit),
                     gameMode: ShowGame.gameType,
+                    aiDifficulty: gameDifficulty() as 1000 | 100 | 1,
                     onFinish: (winnerAlias: string, player1Score: number, player2Score: number) => {
                         console.log(player1Score, player2Score);
                         match.player1.score = player1Score;

@@ -1,7 +1,16 @@
 // For Erik: you can receive the data using this: Game.start(gameSettings);
 
+export const gameDifficulty = (): number => {
+	if (gameSettings.iaDifficulty === "Easy")
+		return 1000;
+	else if (gameSettings.iaDifficulty === "Medium")
+		return 100;
+	else
+		return 1
+}
+
 export const gameSettings = {
-	iaDifficulty: "Medium",
+	iaDifficulty: "Easy",
 	scoreLimit: "5"
 };
 
