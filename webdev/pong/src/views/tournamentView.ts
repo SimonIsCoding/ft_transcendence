@@ -1,7 +1,8 @@
-import type { User } from "../config";
+// import type { User } from "../config";
 import { handleSidebar } from "./sidebar/sidebarBehavior";
 import { TournamentArea } from "./TournamentArea";
 import { GameRender } from "../pong-erik/GameRender";
+import { matchInfo } from '../models/TournamentStore';
 
 export const TournamentView = {
   
@@ -22,6 +23,20 @@ export const TournamentView = {
 
   async init(): Promise<void>
   {
+	const tournamentArea = document.getElementById('tournamentArea');
+	let gameCanvasContainer = document.getElementById('gameCanvasContainer');
+    if (!gameCanvasContainer && tournamentArea?.parentNode) {
+      gameCanvasContainer = document.createElement('div');
+      gameCanvasContainer.id = 'gameCanvasContainer';
+      gameCanvasContainer.className = 'hidden content bg-[#fbd11b] h-full';
+      tournamentArea.appendChild(gameCanvasContainer);
+    }
+    if (gameCanvasContainer && matchInfo && matchInfo.partidoActivo) {
+      const gameArea = document.getElementById('gameArea');
+      gameArea?.classList.add('hidden');
+      const renderGame = new GameRender().render();
+      gameCanvasContainer.innerHTML = renderGame;
+	}
     await handleSidebar();
     TournamentArea.init();
   }

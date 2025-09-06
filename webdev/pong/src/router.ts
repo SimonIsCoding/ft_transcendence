@@ -5,10 +5,10 @@ import { registerView } from './views/registerView';
 // import { GameView } from './views/game';
 // import { gameController } from './controllers/gameController';
 
-import { matchInfo } from './models/TournamentStore';
+// import { matchInfo } from './models/TournamentStore';
 // import { TournamentUIManager } from './views/TournamentUIManager';
 // import { Game } from './pong-erik/Game';
-import { GameRender } from './pong-erik/GameRender';
+// import { GameRender } from './pong-erik/GameRender';
 import { ShowGame } from './pong-erik/ShowGame';
 // import { TournamentController } from './controllers/TournamentController';
 import { TournamentView } from './views/tournamentView';
