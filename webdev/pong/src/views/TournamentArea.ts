@@ -1,7 +1,7 @@
 import { TournamentModel } from '../models/TournamentModel';
 import { getMatchInfo, getTournament, setTournament, setMatchInfo } from '../models/TournamentStore';
 import { TournamentController } from '../controllers/TournamentController';
-import { Router } from '../router';
+// import { Router } from '../router';
 import { closeAllMenus } from './sidebar/sidebarUtils';
 
 function swapLineToRightSvg(): string {
@@ -175,7 +175,7 @@ export const TournamentArea = {
 
       const controller = new TournamentController();
       controller.iniciarTorneo();
-      Router.navigate('tournament');
+    //   Router.navigate('tournament');
 	  const submenus = document.querySelectorAll<HTMLElement>('.submenu');
 	  closeAllMenus(submenus);
     });

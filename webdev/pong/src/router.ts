@@ -11,22 +11,11 @@ import { matchInfo } from './models/TournamentStore';
 import { GameRender } from './pong-erik/GameRender';
 import { ShowGame } from './pong-erik/ShowGame';
 // import { TournamentController } from './controllers/TournamentController';
+import { TournamentView } from './views/tournamentView';
 
-
-function NotFound() {
-  const app = document.getElementById('app');
-  if (!app) return;
-  app.innerHTML = `
-    <div class="not-found">
-      <h1>404 - Page Not Found</h1>
-      <p>The page you are looking for doesn’t exist.</p>
-      <a href="/">Go Home</a>
-    </div>
-  `;
-}
 
 // at the top of router.ts
-export type Route = 'home' | 'login' | 'register' | 'game' | 'tournament' | 'notfound';
+export type Route = 'home' | 'login' | 'register' | 'game' | 'tournament';
 
 export class Router {
   private static app = document.getElementById('app');
@@ -91,38 +80,37 @@ export class Router {
         }
         break;
         
-
-      case 'notfound': NotFound(); break;
-
       case 'tournament':
+        this.app.innerHTML = TournamentView.render();
+        TournamentView.init();
 
-        const tournamentArea = document.getElementById('tournamentArea');
-		let gameCanvasContainer = document.getElementById('gameCanvasContainer');
+        // const tournamentArea = document.getElementById('tournamentArea');
+		// let gameCanvasContainer = document.getElementById('gameCanvasContainer');
 
-        if (!gameCanvasContainer && tournamentArea?.parentNode) {
-          gameCanvasContainer = document.createElement('div');
-          gameCanvasContainer.id = 'gameCanvasContainer';
-          gameCanvasContainer.className = 'hidden content bg-[#fbd11b] h-full';
-          tournamentArea.appendChild(gameCanvasContainer);
-        }
+        // if (!gameCanvasContainer && tournamentArea?.parentNode) {
+        //   gameCanvasContainer = document.createElement('div');
+        //   gameCanvasContainer.id = 'gameCanvasContainer';
+        //   gameCanvasContainer.className = 'hidden content bg-[#fbd11b] h-full';
+        //   tournamentArea.appendChild(gameCanvasContainer);
+        // }
 
-        if (gameCanvasContainer && matchInfo && matchInfo.partidoActivo) {
+        // if (gameCanvasContainer && matchInfo && matchInfo.partidoActivo) {
 
-          const gameArea = document.getElementById('gameArea');
-          gameArea?.classList.add('hidden');
+        //   const gameArea = document.getElementById('gameArea');
+        //   gameArea?.classList.add('hidden');
 
-          const renderGame = new GameRender().render();
-          gameCanvasContainer.innerHTML = renderGame;
-        }
-        else if (window.location.pathname === "/tournament"){
-          console.log('no hay partido activo, se muestra torneo');
-            Router.navigate('home');
-        }
+        //   const renderGame = new GameRender().render();
+        //   gameCanvasContainer.innerHTML = renderGame;
+        // }
+        // else if (window.location.pathname === "/tournament"){
+        //   console.log('no hay partido activo, se muestra torneo');
+        //     Router.navigate('home');
+        // }
         break;
     }
 
 
-    if (addToHistory && page !== 'notfound')
+    if (addToHistory)
       history.pushState({}, '', page === 'home' ? '/' : `/${page}`);
   }
 
@@ -132,7 +120,7 @@ export class Router {
     if (path.includes('game')) return 'game';
     if (path.includes('tournament')) return 'tournament';
     if (path === '/' || path === '') return 'home';
-    return 'notfound'; // 👈 fallback
+    return 'home'; // 👈 fallback
   }
 
   public static init(): void {
@@ -153,11 +141,11 @@ export class Router {
       console.log('History changed:', event.state);
     });
     // 
-    window.addEventListener('beforeunload', () => {
-      if (window.location.pathname === "/tournament")
-        Router.navigate('home');
-      ShowGame.cleanup();
-    });
+    // window.addEventListener('beforeunload', () => {
+    //   if (window.location.pathname === "/tournament")
+    //     Router.navigate('home');
+    //   ShowGame.cleanup();
+    // });
   }
 }
 
