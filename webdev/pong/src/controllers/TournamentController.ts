@@ -1,7 +1,6 @@
 import type { Match } from '../models/TournamentModel';
 import { Router } from '../router';
 import { currentTournament, getTournament, resetTournament } from '../models/TournamentStore';
-// import { Game } from '../pong-erik/Game';
 import { TournamentUIManager } from '../views/TournamentUIManager';
 import { Game } from '../pong-erik/Game';
 import { enviarLogALogstash } from '../utils/logstash';
@@ -81,15 +80,12 @@ export class TournamentController {
         return new Promise(async (resolve) => {
             // Prevent race conditions - only one game creation at a time
             if (ShowGame.isCreatingGame) {
-                console.log('🚫 Game creation already in progress, skipping...');
                 return;
             }
             ShowGame.isCreatingGame = true;
-            console.log('🔒 Locking game creation');
             try {
                 // Stop any existing game before starting a new one
                 if (ShowGame.currentGame) {
-                    console.log('🛑 Found existing game in playGame, stopping it');
                     ShowGame.currentGame.stopGame();
                     ShowGame.currentGame = null;
                     // Add a small delay to ensure cleanup is complete
@@ -113,9 +109,7 @@ export class TournamentController {
                         if (match.winner.alias && match.winner.alias !== undefined) {
                             if (torneo)
                                 TournamentUIManager.updateBracket(torneo);
-                            console.log('---------Yes');
                         } else {
-                            console.log('---------No winner determined, resetting tournament');
                             resetTournament();
                             Router.navigate('home');
                         }
@@ -123,9 +117,7 @@ export class TournamentController {
                     },
                 });
                 // Store the current game instance
-                ShowGame.currentGame = game;
-                console.log('🎮 New game instance stored in ShowGame.currentGame');
-                
+                ShowGame.currentGame = game;                
                 game.resetGame();
                 game.setGameOn();
 
@@ -133,7 +125,6 @@ export class TournamentController {
             } finally {
                 // Always unlock game creation
                 ShowGame.isCreatingGame = false;
-                console.log('🔓 Unlocking game creation');
             }
         });
     }
