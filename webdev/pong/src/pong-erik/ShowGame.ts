@@ -9,6 +9,7 @@ type GameMode = 'p-vs-ai' | 'ai-vs-p' | 'p-vs-p' | 'ai-vs-ai';
 export class ShowGame {
     static gameType: GameMode = 'p-vs-p';
     static inGame: boolean = false;
+    static noWinner: boolean = true;
     static otherPlayer: string = "Erik"; 
     private renderGameCanvas() {
     let gameCanvasContainer = document.getElementById('gamesArea');
@@ -26,6 +27,9 @@ export class ShowGame {
     
     async initGame(match: Match) {
         // this.renderCanvas();
+        const gameArea = document.getElementById('gameArea');
+        gameArea?.classList.add('hidden');
+        ShowGame.noWinner = true;
         await this.playGame(match);
     }
 
@@ -79,9 +83,13 @@ export class ShowGame {
                     match.player2.score = player2Score;
                     match.winner = (match.player1.alias === winnerAlias) ? match.player1 : match.player2;
                     console.log('entra en onMatchEnd');
-                    this.showWinner(match, player2Score > player1Score);
-                    let winner = document.getElementById('winner-screen');
-                    winner?.classList.remove('hidden');
+                    if (ShowGame.noWinner) {
+                        this.showWinner(match, player2Score > player1Score);
+                        let winner = document.getElementById('winner-screen');
+                        winner?.classList.remove('hidden');
+                    } else {
+                        game.resetGame();
+                    }
                 },
             });
             game.start();

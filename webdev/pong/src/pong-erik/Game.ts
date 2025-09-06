@@ -152,6 +152,17 @@ export class Game {
     this.aiManager.disableAI();
   }
 
+  /**
+   * Resets the entire game: scores, paddles, and ball position.
+   */
+  public resetGame(): void {
+    this.scoreManager.reset(); // Reset scores to zero and update display
+    this.leftPlayerPaddle.reset();
+    this.rightPlayerPaddle.reset();
+    this.ball.reset();
+    this.isPaused = false;
+  }
+
   // Getters for accessing game state
   public get gameAreaTop(): number { return GameConfig.GAME_AREA_TOP_PERCENT; }
   public get gameAreaBottom(): number { return GameConfig.GAME_AREA_BOTTOM_PERCENT; }
