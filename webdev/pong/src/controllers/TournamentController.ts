@@ -109,6 +109,7 @@ export class TournamentController {
                         match.player1.score = player1Score;
                         match.player2.score = player2Score;
                         match.winner = (match.player1.alias === winnerAlias) ? match.player1 : match.player2;
+						// sendGameService(gameT)
                         const torneo = getTournament();
                         if (match.winner.alias && match.winner.alias !== undefined) {
                             if (torneo)

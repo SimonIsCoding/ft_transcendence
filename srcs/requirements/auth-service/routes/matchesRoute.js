@@ -233,29 +233,45 @@ export async function matchesRoutes(fastify) {
 				winner,
 				gameMode
             } = req.body;
+			console.log('after req.body');
+				console.log(`
+				player1: ${player1},
+				player2: ${player2},
+				scorePlayer1: ${scorePlayer1},
+				scorePlayer2: ${scorePlayer2},
+				winner: ${winner},
+				gameMode: ${gameMode},
+			`)
         
-            const userId = req.user.id;
-
+			if (!player1 || !player2 || !winner || !gameMode)
+				return reply.code(400).send({ error: 'Missing required fields' });
+			console.log('req.user.id');
+			const userId = req.user.id;
+			console.log('before sending userId');
+			console.log(`userId = ${userId}`);
+			console.log("typeof userId =", typeof userId, "value =", userId);
+			if (!userId)
+				return reply.code(401).send({ error: 'Unauthorized' });
 			// Insert the new match
-			db.prepare(
-                `INSERT INTO matches 
-                 (userid, player1, player2, scorePlayer1, scorePlayer2, winner, gameMode, finished_at) 
-                 VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'))`
-            ).run(userId, player1, player2, scorePlayer1, scorePlayer2, winner, gameMode);
+			const stmt = db.prepare(`
+				INSERT INTO matches
+				(userid, player1, player2, scorePlayer1, scorePlayer2, winner, gameMode, finished_at)
+				VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'))
+			`);
 
-            // // Get the newly created match
-            // const match = db.prepare(
-            //     `SELECT * FROM matches WHERE matchid = ?`
-            // ).get(result.lastInsertRowid);
+			const result = stmt.run(userId, player1, player2, scorePlayer1, scorePlayer2, winner, gameMode);
+			// console.log(`after run`);
 
-            return reply.status(201).send({
-                message: 'Match created successfully',
-                match: match
-            });
+			return reply.code(201).send({ success: true, matchId: result.lastInsertRowid });
+            // return reply.status(201).send({
+                // message: 'Match created successfully'
+                // match: match
+            // });
 
         }
 		catch (error)
 		{
+			console.error("Error creating match:", error);
             fastify.log.error('Error creating match:', error);
             return reply.status(500).send({
                 error: 'Internal Server Error',
