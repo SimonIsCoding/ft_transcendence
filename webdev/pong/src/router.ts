@@ -96,6 +96,10 @@ export class Router {
 
         console.log('matchInfo en router', matchInfo)
         if (gameCanvasContainer && matchInfo && matchInfo.partidoActivo) {
+
+          const gameArea = document.getElementById('gameArea');
+          gameArea?.classList.add('hidden');
+          
           const renderGame = new GameRender().render();
           gameCanvasContainer.innerHTML = renderGame;
           // console.log('renderGame', renderGame);
