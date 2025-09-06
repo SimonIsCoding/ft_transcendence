@@ -143,5 +143,6 @@ export function playSidebarBehavior()
 			oneVsAIAreaInit();
 			tournamentAreaInit();
 			// TournamentArea.init();
+		}
 	});
 }
