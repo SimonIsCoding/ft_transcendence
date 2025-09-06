@@ -31,7 +31,7 @@ export class Router {
   public static currentUser: User | null;
 
   public static navigate(
-    page: 'home' | 'login' | 'register' | 'game' | 'tournament' | 'notfound',
+    page: Route,
     addToHistory = true
   ): void {
     if (!this.app) {
@@ -63,7 +63,7 @@ export class Router {
         gameController.init();
         break;
 
-	  case 'notfound': NotFound(); break;
+      case 'notfound': NotFound(); break;
 
       case 'tournament':
 
