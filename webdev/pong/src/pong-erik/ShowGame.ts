@@ -102,6 +102,7 @@ export class ShowGame {
                 },
             });
             game.resetGame();
+            game.setGameOn();
             game.start();
         });
     }
