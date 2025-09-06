@@ -3,6 +3,8 @@ import { handleSidebar } from "./sidebar/sidebarBehavior";
 import { TournamentArea } from "./TournamentArea";
 import { GameRender } from "../pong-erik/GameRender";
 import { matchInfo } from '../models/TournamentStore';
+import { tournamentAreaInit } from "./sidebar/playBtn/playSidebarBehavior";
+
 
 export const TournamentView = {
   
@@ -38,6 +40,6 @@ export const TournamentView = {
       gameCanvasContainer.innerHTML = renderGame;
 	}
     await handleSidebar();
-    TournamentArea.init();
+    tournamentAreaInit();
   }
 };
