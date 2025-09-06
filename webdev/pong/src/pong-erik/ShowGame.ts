@@ -111,8 +111,6 @@ export class ShowGame {
                         match.player2.score = player2Score;
                         match.winner = (match.player1.alias === winnerAlias) ? match.player1 : match.player2;
                         console.log('entra en onMatchEnd');
-						console.log(`Erik: match.player1.alias = ${match.player1.alias}`)
-						console.log(`Erik: match.player2.alias = ${match.player2.alias}`)
 						sendGameService(ShowGame.gameType, match);
                         if (ShowGame.noWinner && window.location.pathname === "/game") {
                             if (match.winner.alias && match.winner.alias !== undefined) {

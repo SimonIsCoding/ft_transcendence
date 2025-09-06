@@ -245,14 +245,17 @@ export async function matchesRoutes(fastify) {
         
 			if (!player1 || !player2 || !winner || !gameMode)
 				return reply.code(400).send({ error: 'Missing required fields' });
-			console.log('req.user.id');
+			
 			const userId = req.user.id;
+			
+			console.log('req.user.id');
 			console.log('before sending userId');
 			console.log(`userId = ${userId}`);
 			console.log("typeof userId =", typeof userId, "value =", userId);
+
 			if (!userId)
 				return reply.code(401).send({ error: 'Unauthorized' });
-			// Insert the new match
+
 			const stmt = db.prepare(`
 				INSERT INTO matches
 				(userid, player1, player2, scorePlayer1, scorePlayer2, winner, gameMode, finished_at)
@@ -260,14 +263,8 @@ export async function matchesRoutes(fastify) {
 			`);
 
 			const result = stmt.run(userId, player1, player2, scorePlayer1, scorePlayer2, winner, gameMode);
-			// console.log(`after run`);
 
-			return reply.code(201).send({ success: true, matchId: result.lastInsertRowid });
-            // return reply.status(201).send({
-                // message: 'Match created successfully'
-                // match: match
-            // });
-
+			return reply.code(201).send({ success: true, message: 'Match created successfully', matchId: result.lastInsertRowid });
         }
 		catch (error)
 		{
@@ -279,4 +276,11 @@ export async function matchesRoutes(fastify) {
             });
         }
     });
+
+	fastify.get('/games/nbMatchesPlayed', { preHandler: fastify.auth }, async (request, reply) => {
+		const userId = request.user.id;
+		const stmt = db.prepare("SELECT matchid, player1, player2, scorePlayer1, scorePlayer2, gameMode, finished_at FROM matches WHERE userid = ?");
+		const users = stmt.all(userId);
+		return reply.status(200).send(users);
+	});
 }

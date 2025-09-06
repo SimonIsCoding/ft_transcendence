@@ -1,5 +1,6 @@
 import { Router } from "../router";
 import { showErrorPopup } from "../utils/utils";
+import { renderGameHistoryCard } from "../views/sidebar/profileBtn/gameHistorySubmenuRender";
 
 export type Player = {
   alias: string;
@@ -29,7 +30,6 @@ export async function sendGameService(gameType: string, match: Match)
 			match.player1.alias = match.player2.alias;
 			match.player2.alias = 'AI';
 		}
-		// else if (match.player2.alias)
 	}
 	try
 	{
@@ -65,3 +65,65 @@ export async function sendGameService(gameType: string, match: Match)
 		Router.navigate('home');
 	}
 }
+
+export type matchid = {
+	matchid: number;
+	player1: string;
+	player2: string;
+	scorePlayer1: number;
+	scorePlayer2: number;
+	gameMode: string;
+	finished_at: string;
+};
+
+export async function gameCurrentUserHasPlayedService()
+{
+	try {
+		const games: matchid[] = await fetch('/api/auth/games/nbMatchesPlayed', {
+			credentials: 'include',
+		}).then(res => res.json());
+
+		const result = {
+			count: games.length,
+			data: games,
+		};
+
+		console.log(result);
+		return result;
+	}
+	catch (error)
+	{
+		console.error('gameCurrentUserHasPlayedService error:', error);
+		showErrorPopup("Error with storing the game in historial.", "popup");
+		Router.navigate('home');
+	}
+}
+
+export const manageGameHistorial = (() => {
+  let i = 0;
+  let games: matchid[] = [];
+
+  async function main() {
+    console.log("entered in manageGameHistorial");
+
+    const gamesResult = await gameCurrentUserHasPlayedService();
+    games = gamesResult?.data ?? [];
+
+    const container = document.getElementById("gameHistorySubmenu");
+    if (!container) return;
+
+    while (i < games.length)
+	{
+		const match = games[i];
+		container.innerHTML += renderGameHistoryCard(match);
+		i++;
+    }
+  }
+
+  function reset() {
+    i = 0;
+    games = [];
+  }
+
+  return { main, reset };
+})();
