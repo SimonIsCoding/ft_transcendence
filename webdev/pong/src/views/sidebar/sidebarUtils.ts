@@ -5,8 +5,9 @@ import { loadProfileAndPrefill } from './profileBtn/editProfileSubmenuRender';
 import { userChangingInfo } from './profileBtn/userChangingInfo';
 import { seeFriendsList } from './profileBtn/manageFriendsSubmenu';
 import { setupGameSettingsListeners } from '../../controllers/gameSettingsControllers';
-import { showDashboard, type DashboardData } from "../dashboard";
 import { manageGameHistorial } from "../../services/gameService";
+// import { showDashboard, type DashboardData } from "../dashboard";
+// import { getUserDashboardDataService } from "../../services/sidebarService/dashboardDataService";
 
 let currentUser: User | null = null;
 
@@ -67,19 +68,19 @@ export function closeAllMenus(submenus: NodeListOf<HTMLElement>)
 }
 
 //toErase
-export const mockDashboardData: DashboardData = {
-	username: "PlayerOne",
-	stats: {
-		won: 12,
-		lost: 8,
-		scores: 230,
-		friends: 5
-	},
-	points: {
-		scored: 150,
-		received: 180
-	}
-};
+// export const mockDashboardData: DashboardData = {
+// 	username: "PlayerOne",
+// 	stats: {
+// 		won: 12,
+// 		lost: 8,
+// 		scores: 230,
+// 		friends: 5
+// 	},
+// 	points: {
+// 		scored: 150,
+// 		received: 180
+// 	}
+// };
 
 
 export function profileSidebarBehavior()
@@ -91,13 +92,14 @@ export function profileSidebarBehavior()
 	const gameHistorySubmenu = document.getElementById("gameHistorySubmenu");
 
 	const dashboardBtn = document.getElementById("DashboardBtn");
-	dashboardBtn?.addEventListener('click', () => {
+	dashboardBtn?.addEventListener('click', async () => {
 		friendsSubmenu?.classList.add('hidden');
 		gameHistorySubmenu?.classList.add('hidden');
 		dashboardSubmenu?.classList.remove('hidden');
 		openMenu('largeSubmenu');
 		openMenu('dashboardSubmenu');
-		showDashboard(mockDashboardData);// mockDashboardData is just for testing 
+		// const dashboardData = await getUserDashboardDataService();
+		// showDashboard(dashboardData);// mockDashboardData is just for testing 
 		const backBtnDasboardSubmenu = document.getElementById("backBtnDasboardSubmenu");
 		backBtnDasboardSubmenu?.addEventListener('click', () => {
 			closeAllMenus(submenus);

@@ -1,4 +1,5 @@
 import { setCurrentUser } from "../../views/sidebar/sidebarUtils";
+import { gameCurrentUserHasPlayedService } from "../gameService";
 
 export async function isConnected(): Promise<boolean>
 {
@@ -33,11 +34,10 @@ export async function getUserInfo()
 
 	//here we should add the stats of the matchs won
 	// but we have to fecth another db which is the stats one
-	// const stats = document.getElementById("statsInProfileSubmenu");
-	// if (stats && )
-	// 	stats.textContent = ;
-	// else
-	// 	stats!.textContent = `12/15 matchs won`;
+	const stats = document.getElementById("statsInProfileSubmenu");
+	const nbGames = await gameCurrentUserHasPlayedService();
+	if (stats)
+		stats.textContent = `${nbGames!.count} games played`;
 
 	const playerNameDashboard = document.getElementById("playerNameDashboard");
 	if (playerNameDashboard)
