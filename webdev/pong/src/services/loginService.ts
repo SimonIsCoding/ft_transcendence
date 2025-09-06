@@ -1,6 +1,7 @@
 import { Router } from '../router';
 import { showSuccessPopup, showErrorPopup } from '../utils/utils';
 import { TwoFAController } from '../controllers/twofaController';
+import { enviarLogALogstash } from '../utils/logstash';
 
 export async function initLogin() {
   console.log('1 - Login service initialized'); // Basic log
@@ -19,6 +20,7 @@ export async function initLogin() {
     const login = (document.getElementById("login") as HTMLInputElement).value.trim();
     const password = (document.getElementById("password") as HTMLInputElement).value;
     submitBtn.disabled = true;
+
     try {
       const loginResponse = await fetch('/api/auth/users/check', {
         method: 'POST',
@@ -118,6 +120,10 @@ export async function handleSuccessfulLogin(username: string, userId: string): P
 
     // 3. Navigate to home
 	console.log(`in loginService tokenRes = ${tokenRes}`);
+	enviarLogALogstash('login_initiated', {
+			login_id: 'login-' + Date.now(),
+			player_username: username,
+		});
     Router.navigate('home');
     showSuccessPopup("You are logged in", 3500, "popup");
 

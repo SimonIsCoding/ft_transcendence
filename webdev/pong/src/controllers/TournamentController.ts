@@ -6,29 +6,45 @@ import { Game } from '../pong-erik/Game';
 import { enviarLogALogstash } from '../utils/logstash';
 import { closeAllMenus } from '../views/sidebar/sidebarUtils';
 import { ShowGame } from '../pong-erik/ShowGame';
+import { sendGameService } from '../services/gameService';
 
 export class TournamentController {
     async iniciarTorneo() {
         if (!currentTournament?.isReady()) return;
-
-        enviarLogALogstash('tournament_created', {
-            tournament_id: 'tourn-' + Date.now(),
-            players_count: 4,
-            player_aliases: 'test'
-        });
         currentTournament?.generateMatches();
-        await this.jugarPartido(currentTournament.semifinal1!);
+        await this.jugarPartido(currentTournament.semifinal1!, 'semifinal');
         TournamentUIManager.updateBracket(currentTournament);
         this.mostrarVistaTorneo();
+        enviarLogALogstash('Semifinal', {
+            tournament_id: 'tourn-' + Date.now(),
+            player1: currentTournament?.semifinal1?.player1.alias,
+            player2: currentTournament?.semifinal1?.player2.alias,
+            score1: currentTournament?.semifinal1?.player1.score,
+            score2: currentTournament?.semifinal1?.player2.score
+        });
         await this.esperarClickDelUsuario();
-        await this.jugarPartido(currentTournament.semifinal2!);
+        await this.jugarPartido(currentTournament.semifinal2!, 'semifinal');
         TournamentUIManager.updateBracket(currentTournament);
         this.mostrarVistaTorneo();
+        enviarLogALogstash('Semifinal', {
+            tournament_id: 'tourn-' + Date.now(),
+            player1: currentTournament?.semifinal2?.player1.alias,
+            player2: currentTournament?.semifinal2?.player2.alias,
+            score1: currentTournament?.semifinal2?.player1.score,
+            score2: currentTournament?.semifinal2?.player2.score
+        });
         await this.esperarClickDelUsuario();
         if (currentTournament.semifinal1?.winner && currentTournament.semifinal2?.winner) {
             currentTournament.generateFinal();
-            await this.jugarPartido(currentTournament.finalMatch!);
+            await this.jugarPartido(currentTournament.finalMatch!, 'final');
             const ganador = currentTournament.finalMatch!.winner!;
+            enviarLogALogstash('Final', {
+                tournament_id: 'tourn-' + Date.now(),
+                player1: currentTournament?.finalMatch?.player1,
+                player2: currentTournament?.finalMatch?.player2,
+                winner: ganador.alias,
+                scores: ganador.score
+            });
             currentTournament.setWinner(ganador);
 
             TournamentUIManager.updateBracket(currentTournament);
@@ -76,7 +92,7 @@ export class TournamentController {
         if (gameArea) gameArea.style.display = 'block';
     }
 
-    private jugarPartido(match: Match): Promise<void> {
+    private jugarPartido(match: Match, type: string): Promise<void> {
         return new Promise(async (resolve) => {
             // Prevent race conditions - only one game creation at a time
             if (ShowGame.isCreatingGame) {
@@ -105,11 +121,11 @@ export class TournamentController {
                         match.player1.score = player1Score;
                         match.player2.score = player2Score;
                         match.winner = (match.player1.alias === winnerAlias) ? match.player1 : match.player2;
+						sendGameService(type, match);
                         const torneo = getTournament();
-                        if (ShowGame.noWinner && match.winner.alias && match.winner.alias !== undefined) {
+                        if (match.winner.alias && match.winner.alias !== undefined) {
                             if (torneo)
                                 TournamentUIManager.updateBracket(torneo);
-                            ShowGame.noWinner = false;
                         } else {
                             resetTournament();
                             Router.navigate('home');
@@ -118,7 +134,7 @@ export class TournamentController {
                     },
                 });
                 // Store the current game instance
-                ShowGame.currentGame = game;                
+                // ShowGame.currentGame = game;                
                 game.resetGame();
                 game.setGameOn();
 
