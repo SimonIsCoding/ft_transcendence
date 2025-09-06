@@ -111,20 +111,21 @@ export function profileSidebarBehavior()
 	});
 
 	const gameHistoryBtn = document.getElementById("gameHistoryBtn");
-	gameHistoryBtn?.addEventListener('click', () => {
-		const backBtnGameHistorySubmenu = document.getElementById("backBtnGameHistorySubmenu");
-		backBtnGameHistorySubmenu?.addEventListener('click', () => {
-			closeAllMenus(submenus);
-			toggleMenuVisibility('profileSubmenu', submenus);
-		});
+	const backBtnGameHistorySubmenu = document.getElementById("backBtnGameHistorySubmenu");
+	backBtnGameHistorySubmenu?.addEventListener('click', () => {
+		console.log("clicked");
+		closeAllMenus(submenus);
+		toggleMenuVisibility('profileSubmenu', submenus);
+	});
 
+	gameHistoryBtn?.addEventListener('click', () => {
 		dashboardSubmenu?.classList.add('hidden');
 		friendsSubmenu?.classList.add('hidden');
 		gameHistorySubmenu?.classList.remove('hidden');
 		openMenu('largeSubmenu');
 		openMenu('gameHistorySubmenu');
 
-		console.log('just before calling gameHistoialManage')
+		// Injecte les matchs sans toucher au back button
 		manageGameHistorial.main();
 	});
 
