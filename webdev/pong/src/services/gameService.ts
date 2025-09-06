@@ -1,0 +1,49 @@
+// import { Router } from "../router";
+// import { showErrorPopup } from "../utils/utils";
+
+export type Player = {
+  alias: string;
+  score?: number;
+};
+
+export type Match = {
+  player1: Player;
+  player2: Player;
+  winner: Player | null;
+};
+
+/*export async function sendGameService(gameType: string, match: Match)
+{
+	if (gameType == 'p-vs-ai')
+	{
+		if (match.player1.alias === '')
+			match.player1.alias = 'AI'
+		else if (match.player2.alias === '')
+			match.player2.alias = 'AI'
+	}
+	try
+	{
+		const gameReponse = await fetch('/api/auth/games/matches', {
+			method: 'POST',
+			credentials: 'include',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				player1: match.player1.alias,
+				player2: match.player2.alias,
+				scorePlayer1: match.player1.score,
+				scorePlayer2: match.player2.score,
+				winner: match.winner?.alias,
+				gameMode: gameType,
+			})
+		});
+		
+		// if (!gameReponse.ok)
+        	// return showErrorPopup(gameReponse.error, "popup");
+	}
+	catch (error)
+	{
+		console.error('Game Fetch error:', error);
+		showErrorPopup("Error with storing the game in historial.", "popup");
+		Router.navigate('home');
+	}
+}*/
