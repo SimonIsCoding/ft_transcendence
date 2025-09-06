@@ -8,10 +8,10 @@ export function gameSettingsSubmenuRender():string
 			<label for="iaDifficulty" class="font-bold basis-[40%] whitespace-nowrap text-sm pl-2 text-center">
 				AI Difficulty
 			</label>
-			<input id="iaDifficultySliderInput" type="range" min="1" max="3" value="2"
+			<input id="iaDifficultySliderInput" type="range" min="1" max="3" value="1"
 				class="basis-[40%] h-1 rounded cursor-pointer" />
 			<span id="iaDifficultyValue" class="font-bold basis-[20%] text-center font-mono">
-				Medium
+				Easy
 			</span>
 		</div>
 		<div class="flex items-center pt-5 w-full">

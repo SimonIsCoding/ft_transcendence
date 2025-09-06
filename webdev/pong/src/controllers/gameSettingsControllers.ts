@@ -2,7 +2,7 @@
 
 export const gameSettings = {
 	iaDifficulty: "Medium",
-	scoreLimit: "7"
+	scoreLimit: "5"
 };
 
 export function setupGameSettingsListeners()
