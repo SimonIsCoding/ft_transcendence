@@ -97,7 +97,7 @@ export class Router {
       case 'tournament':
 
         const tournamentArea = document.getElementById('tournamentArea');
-        let gameCanvasContainer = document.getElementById('gameCanvasContainer');
+		let gameCanvasContainer = document.getElementById('gameCanvasContainer');
 
         if (!gameCanvasContainer && tournamentArea?.parentNode) {
           gameCanvasContainer = document.createElement('div');

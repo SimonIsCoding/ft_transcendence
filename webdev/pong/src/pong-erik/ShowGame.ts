@@ -4,6 +4,7 @@ import { handleSidebar } from '../views/sidebar/sidebarBehavior';
 import { Game } from "./Game";
 import { GameRender } from './GameRender';
 import { gameDifficulty, gameSettings } from "../controllers/gameSettingsControllers";
+import { sendGameService } from "../services/gameService";
 
 type GameMode = 'p-vs-ai' | 'ai-vs-p' | 'p-vs-p' | 'ai-vs-ai';
 
@@ -82,17 +83,17 @@ export class ShowGame {
         return new Promise(async () => {
             // Prevent race conditions - only one game creation at a time
             if (ShowGame.isCreatingGame) {
-                console.log('🚫 Game creation already in progress, skipping...');
+                // console.log('🚫 Game creation already in progress, skipping...');
                 return;
             }
             
             ShowGame.isCreatingGame = true;
-            console.log('🔒 Locking game creation');
+            // console.log('🔒 Locking game creation');
             
             try {
                 // Stop any existing game before starting a new one
                 if (ShowGame.currentGame) {
-                    console.log('🛑 Found existing game in playGame, stopping it');
+                    // console.log('🛑 Found existing game in playGame, stopping it');
                     ShowGame.currentGame.stopGame();
                     ShowGame.currentGame = null;
                     // Add a small delay to ensure cleanup is complete
@@ -115,6 +116,7 @@ export class ShowGame {
                         match.player2.score = player2Score;
                         match.winner = (match.player1.alias === winnerAlias) ? match.player1 : match.player2;
                         console.log('entra en onMatchEnd');
+						sendGameService(ShowGame.gameType, match);
                         if (ShowGame.noWinner && window.location.pathname === "/game") {
                             if (match.winner.alias && match.winner.alias !== undefined) {
                                 this.showWinner(match, player2Score > player1Score);
@@ -136,7 +138,7 @@ export class ShowGame {
                 
                 // Store the current game instance
                 ShowGame.currentGame = game;
-                console.log('🎮 New game instance stored in ShowGame.currentGame');
+                // console.log('🎮 New game instance stored in ShowGame.currentGame');
                 
                 game.resetGame();
                 game.setGameOn();
@@ -145,7 +147,7 @@ export class ShowGame {
             } finally {
                 // Always unlock game creation
                 ShowGame.isCreatingGame = false;
-                console.log('🔓 Unlocking game creation');
+                // console.log('🔓 Unlocking game creation');
             }
         });
     }
@@ -154,16 +156,16 @@ export class ShowGame {
      * Static method to cleanup any running game and prevent race conditions
      */
     static async cleanup() {
-        console.log('🧹 ShowGame.cleanup() called');
+        // console.log('🧹 ShowGame.cleanup() called');
         
         // Wait if another game is being created
         while (ShowGame.isCreatingGame) {
-            console.log('⏳ Waiting for game creation to complete...');
+            // console.log('⏳ Waiting for game creation to complete...');
             await new Promise(resolve => setTimeout(resolve, 10));
         }
         
         if (ShowGame.currentGame) {
-            console.log('🛑 Found existing game, stopping it');
+            // console.log('🛑 Found existing game, stopping it');
             ShowGame.currentGame.stopGame();
             ShowGame.currentGame = null;
         }

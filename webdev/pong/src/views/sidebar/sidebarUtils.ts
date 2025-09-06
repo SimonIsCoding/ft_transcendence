@@ -5,8 +5,8 @@ import { loadProfileAndPrefill } from './profileBtn/editProfileSubmenuRender';
 import { userChangingInfo } from './profileBtn/userChangingInfo';
 import { seeFriendsList } from './profileBtn/manageFriendsSubmenu';
 import { setupGameSettingsListeners } from '../../controllers/gameSettingsControllers';
-// import { checkService } from '../../services/sidebarService/editProfileService';
 import { showDashboard, type DashboardData } from "../dashboard";
+import { manageGameHistorial } from "../../services/gameService";
 
 let currentUser: User | null = null;
 
@@ -111,20 +111,31 @@ export function profileSidebarBehavior()
 	});
 
 	const gameHistoryBtn = document.getElementById("gameHistoryBtn");
+	const backBtnGameHistorySubmenu = document.getElementById("backBtnGameHistorySubmenu");
+	backBtnGameHistorySubmenu?.addEventListener('click', () => {
+		console.log("clicked");
+		closeAllMenus(submenus);
+		toggleMenuVisibility('profileSubmenu', submenus);
+	});
+
 	gameHistoryBtn?.addEventListener('click', () => {
 		dashboardSubmenu?.classList.add('hidden');
 		friendsSubmenu?.classList.add('hidden');
 		gameHistorySubmenu?.classList.remove('hidden');
 		openMenu('largeSubmenu');
 		openMenu('gameHistorySubmenu');
-		const backBtnGameHistorySubmenu = document.getElementById("backBtnGameHistorySubmenu");
-		backBtnGameHistorySubmenu?.addEventListener('click', () => {
-			closeAllMenus(submenus);
-			toggleMenuVisibility('profileSubmenu', submenus);
-		});
+
+		// Injecte les matchs sans toucher au back button
+		manageGameHistorial.main();
 	});
+
 	editProfileSubmenuBehavior();
 	userChangingInfo();
+}
+
+export function seeGameHistorial()
+{
+	
 }
 
 export function editProfileSubmenuBehavior()

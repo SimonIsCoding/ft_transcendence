@@ -1,6 +1,7 @@
 import { Router } from "../../router";
 import { showErrorPopup } from "../../utils/utils";
 import { manageOthersUsersCard, manageFriendsRequestsCard, manageFriendsCard } from "../../views/sidebar/profileBtn/manageFriendsSubmenu";
+import { manageGameHistorial } from "../gameService";
 
 export function initLogout() {
   const logoutSidebarBtn = document.getElementById('logoutSidebarBtn');
@@ -29,6 +30,7 @@ export function initLogout() {
 	  manageFriendsRequestsCard.reset();
 	  manageFriendsCard.reset();
 	  manageOthersUsersCard.reset();
+	  manageGameHistorial.reset();
       Router.navigate('home');
 	  showErrorPopup("You have been disconnected", "popup");
       

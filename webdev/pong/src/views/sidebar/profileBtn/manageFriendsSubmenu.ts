@@ -59,8 +59,6 @@ export async function displayAllFriends(i: number)
 	const userToDisplay = await displayFriend(i);
 	if (friendsListDiv)
 	{
-		// document.getElementById("friendsCard")?.insertAdjacentHTML("beforeend", friendsCard.render(userToDisplay));
-		// await friendsCard.init(userToDisplay);
 		friendsListDiv.classList.remove("hidden");
 		const existingCard = document.getElementById(`friendBox_${userToDisplay.id}`);
 		if (!existingCard)
@@ -69,15 +67,8 @@ export async function displayAllFriends(i: number)
 			await friendsCard.init(userToDisplay);
 		}
 		else
-			await friendsCard.init(userToDisplay); // juste mettre à jour (status, image, etc.)
+			await friendsCard.init(userToDisplay);
 	}
-	// else
-	// {
-	// 	// change the msg bc it is a bit ugly but the logic is there
-	// 	// friendsListDiv.classList.remove("hidden");
-	// 	// const friendsListP = document.getElementById("friendsListP");
-	// 	// friendsListP!.textContent = "No Friends for the moment - You can add new friends below!";
-	// }
 }
 
 export const manageFriendsCard = (() => {
