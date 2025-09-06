@@ -2,12 +2,14 @@ import type { User } from "./config";
 import { HomeView } from './views/home';
 import { loginView } from './views/loginView';
 import { registerView } from './views/registerView';
-import { GameView } from './views/game';
-import { gameController } from './controllers/gameController';
+// import { GameView } from './views/game';
+// import { gameController } from './controllers/gameController';
+
 import { matchInfo } from './models/TournamentStore';
 // import { TournamentUIManager } from './views/TournamentUIManager';
 // import { Game } from './pong-erik/Game';
 import { GameRender } from './pong-erik/GameRender';
+import { ShowGame } from './pong-erik/ShowGame';
 // import { TournamentController } from './controllers/TournamentController';
 
 
@@ -58,10 +60,43 @@ export class Router {
         break;
 
       case 'game':
-        this.app.innerHTML = GameView.renderGameCanvas();
-        GameView.initGameCanvas();
-        gameController.init();
+        // window.addEventListener('popstate', (event) => {
+        //   const gamesArea = document.getElementById("gamesArea") as HTMLInputElement;
+        //   gamesArea.innerHTML = "";
+        //   const app = document.getElementById("app") as HTMLInputElement;
+        //   app.innerHTML = "";
+        //   Router.navigate('home');
+        //   console.log('Back or forward navigation detected!', event);
+        //   return;
+        // });
+        if (!ShowGame.inGame) {
+          Router.navigate('home');
+          ShowGame.inGame = false;
+          return;
+        }
+        const player1 = document.getElementById("player1") as HTMLInputElement;
+        const player2 = document.getElementById("player2") as HTMLInputElement;
+        const player1VSAI = document.getElementById("player1VSAI") as HTMLInputElement;
+        let tmp = player2;
+        if (ShowGame.gameType === 'p-vs-ai') {
+          tmp = player1VSAI;
+          ShowGame.otherPlayer = tmp.value;
+        }
+        if (!tmp && !player1) {
+          new ShowGame().initGame({
+          player1: { alias: "User 1" }, // ---------------- Give the right name here ----------------
+            player2: { alias: "User 2" }, // ---------------- Give the right name here ----------------
+            winner: null
+          });
+        } else {
+          new ShowGame().initGame({
+          player1: { alias: player1.value }, // ---------------- Give the right name here ----------------
+            player2: { alias: tmp.value }, // ---------------- Give the right name here ----------------
+            winner: null
+          });
+        }
         break;
+        
 
       case 'notfound': NotFound(); break;
 
@@ -76,40 +111,18 @@ export class Router {
           gameCanvasContainer.className = 'hidden content bg-[#fbd11b] h-full';
           tournamentArea.appendChild(gameCanvasContainer);
         }
-        // if (matchInfo && matchInfo.partidoActivo) {
-        // gameCanvasContainer?.classList.remove('hidden');
-        // console.log('entraaa???')
-        // anterior
-        // if (gameCanvasContainer && gameCanvasContainer.innerHTML === '') {
-        //   gameCanvasContainer.innerHTML = GameView.renderGameCanvas();
-        //   GameView.initGameCanvas();
-        // }
 
-        //  new 
         console.log('matchInfo en router', matchInfo)
         if (gameCanvasContainer && matchInfo && matchInfo.partidoActivo) {
           const renderGame = new GameRender().render();
           gameCanvasContainer.innerHTML = renderGame;
           // console.log('renderGame', renderGame);
           console.log('✅ ANTES de crear Game instance');
-          // const game = new Game({
-          //       leftPlayer: matchInfo.player1,
-          //       rightPlayer: matchInfo.player2, maxScore: 2, gameMode: 'p-vs-p',
-          //       onFinish(winner, score1, score2) {
-          //         console.log('🏆 Partido terminado. Ganador:', winner, score1, score2);
-          //       },
-          //   });
           console.log('✅ Game instance creada - ¿Ya empezó el juego?');
 
-          // game.start();
-          // console.log(game)
           console.log('✅ DESPUÉS de game.start()');
 
-          // const controller = new TournamentController();
-          // controller.iniciarTorneo();
-          // console.log(res)
         }
-        // } 
         else if (window.location.pathname === "/tournament"){
           console.log('no hay partido activo, se muestra torneo');
             Router.navigate('home');

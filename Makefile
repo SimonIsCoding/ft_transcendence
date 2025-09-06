@@ -5,6 +5,11 @@ export PROJECT_PATH
 all:
 	mkdir -p srcs/data/pong
 	mkdir -p srcs/data/DB
+	cd webdev/pong && \
+	  npm install && \
+	  npm run build && \
+	  sudo cp -r dist/* ../../srcs/data/pong
+	# docker compose -f $(COMPOSE_FILE) up -d --build
 	docker compose -f $(COMPOSE_FILE) build --no-cache
 	docker compose -f $(COMPOSE_FILE) up -d --remove-orphans
 	sleep 2
@@ -38,7 +43,9 @@ configure-kibana-password:
 	./srcs/configure-kibana-password.sh
 
 clean:
-clean:
+	sudo rm -rf srcs/data/pong/users.db
+	sudo rm -rf srcs/data/DB
+	sudo rm -rf srcs/srcs
 	docker compose -f $(COMPOSE_FILE) down --rmi all -v
 	docker image prune -af
 	docker volume prune -f

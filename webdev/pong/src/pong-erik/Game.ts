@@ -5,6 +5,7 @@ import { InputManager, KeyAction } from "./InputManager.js";
 import { AIManager, PlayerSide } from "./AIManager.js";
 import { ScoreManager, GameResult } from "./ScoreManager.js";
 import { UIManager } from "./UIManager.js";
+import { ShowGame } from "./ShowGame.js";
 
 export interface GameOptions {
   leftPlayer: string;
@@ -22,7 +23,7 @@ export class Game {
   // Game state
   private isPaused = false;
   private lastTime?: number;
-
+  private isGameActive: boolean = true;
   // Game objects
   private ball!: Ball;
   private leftPlayerPaddle!: Paddle;
@@ -104,6 +105,7 @@ export class Game {
     switch (this.options.gameMode) {
       case 'p-vs-ai':
         this.options.rightPlayer = "ChatGPT";
+        this.options.leftPlayer = ShowGame.otherPlayer;
         this.aiManager.disableAI(PlayerSide.LEFT); // Only disable left, right stays AI
         break;
       case 'ai-vs-p':
@@ -166,6 +168,7 @@ export class Game {
   // Main game loop
   public start(): void {
     const gameLoop = (time: number) => {
+      if (!this.isGameActive) return;
       if (this.lastTime != null) {
         const delta = time - this.lastTime;
         
@@ -283,6 +286,7 @@ export class Game {
       const winner = result === GameResult.LEFT_WINS ? this.options.leftPlayer : this.options.rightPlayer;
       if (this.onFinishCallback) {
         const scores = this.scoreManager.getScores();
+        this.isGameActive = false;
         this.onFinishCallback(winner, scores.left, scores.right);
         // alert(`${winner} ha ganado esta partida`);
       }
