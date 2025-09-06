@@ -67,6 +67,7 @@ CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON sessions(user_id);
 		winner TEXT NOT NULL,
 		gameMode TEXT NOT NULL,
 		finished_at DATETIME,
+		FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE
 	);
 
 `);
