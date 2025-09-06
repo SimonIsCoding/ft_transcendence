@@ -1,11 +1,9 @@
 import{ toggleMenuVisibility } from '../sidebarUtils'
 import { Router } from '../../../router';
 import { showErrorPopup } from '../../../utils/utils';
-// import { tournamentAreaInit } from './TournamentArea';
-// import { TournamentModel } from '../../../models/TournamentModel';
-// import { setTournament } from '../../../models/TournamentStore';
-// import { playersName } from '../../tournamentStart';
 import { TournamentArea } from '../../TournamentArea';
+import { ShowGame } from '../../../pong-erik/ShowGame';
+// import { Game } from '../../../pong-erik/Game';
 
 function swapPlayer(id1: string, id2: string): void
 {
@@ -70,6 +68,8 @@ export function oneVsOneAreaInit()
 			showErrorPopup("You need 2 players to play.", "oneVsOneAreaPopup");
 			return ;
 		}
+		ShowGame.gameType = 'p-vs-p';
+		ShowGame.inGame = true;
 		Router.navigate('game'); 
 	});
 }
@@ -120,6 +120,8 @@ export function oneVsAIAreaInit()
 			showErrorPopup("You need 1 player to play.", "oneVsAIAreaPopup");
 			return ;
 		}
+		ShowGame.gameType = 'p-vs-ai';
+		ShowGame.inGame = true;
 		Router.navigate('game');
 	});
 }
@@ -129,10 +131,18 @@ export function playSidebarBehavior()
 	const submenus = document.querySelectorAll<HTMLElement>('.submenu');
 	const playSidebarBtn = document.getElementById('playSidebarBtn');
 	playSidebarBtn?.addEventListener('click', () => {
-		toggleMenuVisibility('playSubmenu', submenus);
-		oneVsOneAreaInit();
-		oneVsAIAreaInit();
-		tournamentAreaInit();
-		// TournamentArea.init();
+		const location = window.location.pathname;
+		if (location === '/game') {
+			const gameArea = document.getElementById('gamesArea');
+			gameArea?.classList.add('hidden');
+			ShowGame.noWinner = false;
+			Router.navigate("home");
+		} else {
+			toggleMenuVisibility('playSubmenu', submenus);
+			oneVsOneAreaInit();
+			oneVsAIAreaInit();
+			tournamentAreaInit();
+			// TournamentArea.init();
+		}
 	});
 }
