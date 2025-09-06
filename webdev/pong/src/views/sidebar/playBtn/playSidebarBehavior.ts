@@ -1,10 +1,6 @@
 import{ toggleMenuVisibility } from '../sidebarUtils'
 import { Router } from '../../../router';
 import { showErrorPopup } from '../../../utils/utils';
-// import { tournamentAreaInit } from './TournamentArea';
-// import { TournamentModel } from '../../../models/TournamentModel';
-// import { setTournament } from '../../../models/TournamentStore';
-// import { playersName } from '../../tournamentStart';
 import { TournamentArea } from '../../TournamentArea';
 import { ShowGame } from '../../../pong-erik/ShowGame';
 // import { Game } from '../../../pong-erik/Game';
@@ -147,6 +143,5 @@ export function playSidebarBehavior()
 			oneVsAIAreaInit();
 			tournamentAreaInit();
 			// TournamentArea.init();
-		}
 	});
 }
