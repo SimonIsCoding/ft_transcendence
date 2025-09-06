@@ -1,5 +1,5 @@
-// import { Router } from "../router";
-// import { showErrorPopup } from "../utils/utils";
+import { Router } from "../router";
+import { showErrorPopup } from "../utils/utils";
 
 export type Player = {
   alias: string;
@@ -12,26 +12,44 @@ export type Match = {
   winner: Player | null;
 };
 
-/*export async function sendGameService(gameType: string, match: Match)
+export async function sendGameService(gameType: string, match: Match)
 {
+	console.log(`
+				player1: ${match.player1.alias},
+				player2: ${match.player2.alias},
+				scorePlayer1: ${match.player1.score},
+				scorePlayer2: ${match.player2.score},
+				winner: ${match.winner?.alias},
+				gameMode: ${gameType},
+			`)
 	if (gameType == 'p-vs-ai')
 	{
-		if (match.player1.alias === '')
-			match.player1.alias = 'AI'
-		else if (match.player2.alias === '')
-			match.player2.alias = 'AI'
+		if (match.player1.alias == '')
+		{
+			match.player1.alias = match.player2.alias;
+			match.player2.alias = 'AI';
+		}
+		// else if (match.player2.alias)
 	}
 	try
 	{
-		const gameReponse = await fetch('/api/auth/games/matches', {
+		console.log(`
+				player1: ${match.player1.alias},
+				player2: ${match.player2.alias},
+				scorePlayer1: ${match.player1.score},
+				scorePlayer2: ${match.player2.score},
+				winner: ${match.winner?.alias},
+				gameMode: ${gameType},
+			`)
+		fetch('/api/auth/games/matches', {
 			method: 'POST',
 			credentials: 'include',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
 				player1: match.player1.alias,
 				player2: match.player2.alias,
-				scorePlayer1: match.player1.score,
-				scorePlayer2: match.player2.score,
+				scorePlayer1: match.player1.score ?? 0,
+				scorePlayer2: match.player2.score ?? 0,
 				winner: match.winner?.alias,
 				gameMode: gameType,
 			})
@@ -46,4 +64,4 @@ export type Match = {
 		showErrorPopup("Error with storing the game in historial.", "popup");
 		Router.navigate('home');
 	}
-}*/
+}

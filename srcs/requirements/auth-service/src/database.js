@@ -64,9 +64,9 @@ CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON sessions(user_id);
 		player2 TEXT NOT NULL,
 		scorePlayer1 INTEGER DEFAULT 0,
 		scorePlayer2 INTEGER DEFAULT 0,
-		winner TEXT NOT NULL,
-		gameMode TEXT NOT NULL,
-		finished_at DATETIME,
+		winner TEXT NOT NULL DEFAULT 'pending',
+		gameMode TEXT NOT NULL DEFAULT 'p-vs-p',
+		finished_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
 		FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE
 	);
 
