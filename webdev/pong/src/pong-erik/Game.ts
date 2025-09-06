@@ -161,6 +161,7 @@ export class Game {
     this.rightPlayerPaddle.reset();
     this.ball.reset();
     this.isPaused = false;
+    ShowGame.gameController = false;
   }
 
   // Getters for accessing game state
@@ -179,7 +180,7 @@ export class Game {
   // Main game loop
   public start(): void {
     const gameLoop = (time: number) => {
-      if (!this.isGameActive) return;
+      if (!this.isGameActive || !ShowGame.noWinner) return;
       if (this.lastTime != null) {
         const delta = time - this.lastTime;
         

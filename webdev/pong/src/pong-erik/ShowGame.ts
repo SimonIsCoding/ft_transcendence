@@ -10,6 +10,7 @@ export class ShowGame {
     static gameType: GameMode = 'p-vs-p';
     static inGame: boolean = false;
     static noWinner: boolean = true;
+    static gameController: boolean = true;
     static otherPlayer: string = "Erik"; 
     private renderGameCanvas() {
     let gameCanvasContainer = document.getElementById('gamesArea');
@@ -29,6 +30,8 @@ export class ShowGame {
         // this.renderCanvas();
         const gameArea = document.getElementById('gameArea');
         gameArea?.classList.add('hidden');
+        // if (ShowGame.noWinner)
+        //     return ;
         ShowGame.noWinner = true;
         await this.playGame(match);
     }
@@ -83,13 +86,19 @@ export class ShowGame {
                     match.player2.score = player2Score;
                     match.winner = (match.player1.alias === winnerAlias) ? match.player1 : match.player2;
                     console.log('entra en onMatchEnd');
-                    if (ShowGame.noWinner) {
-                        this.showWinner(match, player2Score > player1Score);
-                        let winner = document.getElementById('winner-screen');
-                        winner?.classList.remove('hidden');
-                    } else {
-                        game.resetGame();
+                    if (ShowGame.noWinner && window.location.pathname === "/game") {
+                        if (match.winner.alias && match.winner.alias !== undefined) {
+                            this.showWinner(match, player2Score > player1Score);
+                            let winner = document.getElementById('winner-screen');
+                            winner?.classList.remove('hidden');
+                            ShowGame.noWinner = false;
+                        } else if (window.location.pathname === "/game") {
+                            Router.navigate('home');
+                        }
+                    } else if (window.location.pathname === "/game") {
+                        Router.navigate('home');
                     }
+                    game.resetGame();
                 },
             });
             game.start();

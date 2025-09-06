@@ -135,7 +135,7 @@ export function playSidebarBehavior()
 	const playSidebarBtn = document.getElementById('playSidebarBtn');
 	playSidebarBtn?.addEventListener('click', () => {
 		const location = window.location.pathname;
-		if (location !== '/') {
+		if (location === '/game') {
 			const gameArea = document.getElementById('gamesArea');
 			gameArea?.classList.add('hidden');
 			ShowGame.noWinner = false;

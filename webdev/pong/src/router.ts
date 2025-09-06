@@ -29,6 +29,7 @@ export class Router {
     //const gameArea = document.getElementById('gameArea') as HTMLDivElement | null;
     switch (page) {
       case 'home':
+        ShowGame.gameController = false;
         this.app.innerHTML = HomeView.render();
         HomeView.init();
         break;
@@ -44,15 +45,6 @@ export class Router {
         break;
 
       case 'game':
-        // window.addEventListener('popstate', (event) => {
-        //   const gamesArea = document.getElementById("gamesArea") as HTMLInputElement;
-        //   gamesArea.innerHTML = "";
-        //   const app = document.getElementById("app") as HTMLInputElement;
-        //   app.innerHTML = "";
-        //   Router.navigate('home');
-        //   console.log('Back or forward navigation detected!', event);
-        //   return;
-        // });
         if (!ShowGame.inGame) {
           Router.navigate('home');
           ShowGame.inGame = false;
@@ -68,14 +60,14 @@ export class Router {
         }
         if (!tmp && !player1) {
           new ShowGame().initGame({
-          player1: { alias: "User 1" }, // ---------------- Give the right name here ----------------
-            player2: { alias: "User 2" }, // ---------------- Give the right name here ----------------
+          player1: { alias: "User 1" },
+            player2: { alias: "User 2" },
             winner: null
           });
         } else {
           new ShowGame().initGame({
-          player1: { alias: player1.value }, // ---------------- Give the right name here ----------------
-            player2: { alias: tmp.value }, // ---------------- Give the right name here ----------------
+          player1: { alias: player1.value },
+            player2: { alias: tmp.value },
             winner: null
           });
         }
@@ -99,10 +91,9 @@ export class Router {
 
           const gameArea = document.getElementById('gameArea');
           gameArea?.classList.add('hidden');
-          
+
           const renderGame = new GameRender().render();
           gameCanvasContainer.innerHTML = renderGame;
-          // console.log('renderGame', renderGame);
           console.log('✅ ANTES de crear Game instance');
           console.log('✅ Game instance creada - ¿Ya empezó el juego?');
 
