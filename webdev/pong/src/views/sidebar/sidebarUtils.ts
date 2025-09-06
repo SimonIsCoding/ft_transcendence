@@ -6,6 +6,7 @@ import { userChangingInfo } from './profileBtn/userChangingInfo';
 import { seeFriendsList } from './profileBtn/manageFriendsSubmenu';
 import { setupGameSettingsListeners } from '../../controllers/gameSettingsControllers';
 import { showDashboard, type DashboardData } from "../dashboard";
+import { manageGameHistorial } from "../../services/gameService";
 
 let currentUser: User | null = null;
 
@@ -111,19 +112,29 @@ export function profileSidebarBehavior()
 
 	const gameHistoryBtn = document.getElementById("gameHistoryBtn");
 	gameHistoryBtn?.addEventListener('click', () => {
-		dashboardSubmenu?.classList.add('hidden');
-		friendsSubmenu?.classList.add('hidden');
-		gameHistorySubmenu?.classList.remove('hidden');
-		openMenu('largeSubmenu');
-		openMenu('gameHistorySubmenu');
 		const backBtnGameHistorySubmenu = document.getElementById("backBtnGameHistorySubmenu");
 		backBtnGameHistorySubmenu?.addEventListener('click', () => {
 			closeAllMenus(submenus);
 			toggleMenuVisibility('profileSubmenu', submenus);
 		});
+
+		dashboardSubmenu?.classList.add('hidden');
+		friendsSubmenu?.classList.add('hidden');
+		gameHistorySubmenu?.classList.remove('hidden');
+		openMenu('largeSubmenu');
+		openMenu('gameHistorySubmenu');
+
+		console.log('just before calling gameHistoialManage')
+		manageGameHistorial.main();
 	});
+
 	editProfileSubmenuBehavior();
 	userChangingInfo();
+}
+
+export function seeGameHistorial()
+{
+	
 }
 
 export function editProfileSubmenuBehavior()
