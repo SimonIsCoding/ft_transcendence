@@ -99,8 +99,36 @@ export async function gameCurrentUserHasPlayedService()
 	}
 }
 
+// export const manageGameHistorial = (() => {
+//   let i = 0;
+//   let games: matchid[] = [];
+
+//   async function main() {
+//     console.log("entered in manageGameHistorial");
+
+//     const gamesResult = await gameCurrentUserHasPlayedService();
+//     games = gamesResult?.data ?? [];
+
+//     const container = document.getElementById("gameHistorySubmenu");
+//     if (!container) return;
+
+//     while (i < games.length)
+// 	{
+// 		const match = games[i];
+// 		container.innerHTML += renderGameHistoryCard(match);
+// 		i++;
+//     }
+//   }
+
+//   function reset() {
+//     i = 0;
+//     games = [];
+//   }
+
+//   return { main, reset };
+// })();
+
 export const manageGameHistorial = (() => {
-  let i = 0;
   let games: matchid[] = [];
 
   async function main() {
@@ -109,19 +137,15 @@ export const manageGameHistorial = (() => {
     const gamesResult = await gameCurrentUserHasPlayedService();
     games = gamesResult?.data ?? [];
 
-    const container = document.getElementById("gameHistorySubmenu");
+    const container = document.getElementById("gameHistoryContainer");
     if (!container) return;
 
-    while (i < games.length)
-	{
-		const match = games[i];
-		container.innerHTML += renderGameHistoryCard(match);
-		i++;
-    }
+    container.innerHTML = games.map(match => renderGameHistoryCard(match)).join("");
   }
 
   function reset() {
-    i = 0;
+    const container = document.getElementById("gameHistoryContainer");
+    if (container) container.innerHTML = "";
     games = [];
   }
 
