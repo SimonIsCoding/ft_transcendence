@@ -6,13 +6,13 @@ import { Game } from '../pong-erik/Game';
 import { enviarLogALogstash } from '../utils/logstash';
 import { closeAllMenus } from '../views/sidebar/sidebarUtils';
 import { ShowGame } from '../pong-erik/ShowGame';
+import { sendGameService } from '../services/gameService';
 
 export class TournamentController {
     async iniciarTorneo() {
         if (!currentTournament?.isReady()) return;
-
         currentTournament?.generateMatches();
-        await this.jugarPartido(currentTournament.semifinal1!);
+        await this.jugarPartido(currentTournament.semifinal1!, 'semifinal');
         TournamentUIManager.updateBracket(currentTournament);
         this.mostrarVistaTorneo();
         enviarLogALogstash('Semifinal', {
@@ -23,7 +23,7 @@ export class TournamentController {
             score2: currentTournament?.semifinal1?.player2.score
         });
         await this.esperarClickDelUsuario();
-        await this.jugarPartido(currentTournament.semifinal2!);
+        await this.jugarPartido(currentTournament.semifinal2!, 'semifinal');
         TournamentUIManager.updateBracket(currentTournament);
         this.mostrarVistaTorneo();
         enviarLogALogstash('Semifinal', {
@@ -36,7 +36,7 @@ export class TournamentController {
         await this.esperarClickDelUsuario();
         if (currentTournament.semifinal1?.winner && currentTournament.semifinal2?.winner) {
             currentTournament.generateFinal();
-            await this.jugarPartido(currentTournament.finalMatch!);
+            await this.jugarPartido(currentTournament.finalMatch!, 'final');
             const ganador = currentTournament.finalMatch!.winner!;
             enviarLogALogstash('Final', {
                 tournament_id: 'tourn-' + Date.now(),
@@ -92,7 +92,7 @@ export class TournamentController {
         if (gameArea) gameArea.style.display = 'block';
     }
 
-    private jugarPartido(match: Match): Promise<void> {
+    private jugarPartido(match: Match, type: string): Promise<void> {
         return new Promise(async (resolve) => {
             // Prevent race conditions - only one game creation at a time
             if (ShowGame.isCreatingGame) {
@@ -121,7 +121,7 @@ export class TournamentController {
                         match.player1.score = player1Score;
                         match.player2.score = player2Score;
                         match.winner = (match.player1.alias === winnerAlias) ? match.player1 : match.player2;
-						// sendGameService(gameT)
+						sendGameService(type, match);
                         const torneo = getTournament();
                         if (match.winner.alias && match.winner.alias !== undefined) {
                             if (torneo)
