@@ -4,6 +4,7 @@ export PROJECT_PATH
 
 all:
 	mkdir -p srcs/data/pong
+	mkdir -p srcs/data/DB
 	cd webdev/pong && \
 	  npm install && \
 	  npm run build && \
@@ -16,13 +17,12 @@ all:
 	docker ps
 
 w webupdate:
-	mkdir -p srcs/data/pong
-	cd webdev/pong && \
-	  rm -rf dist && \
-	  npm install && \
-	  npm run build && \
-	  sudo cp -r dist/* ../../srcs/data/pong && \
-	  docker exec nginx /usr/sbin/nginx -s reload
+	docker run --rm \
+	  -v $(PROJECT_PATH)/webdev/pong:/app \
+	  -v $(PROJECT_PATH)/srcs/data/pong:/var/www/html/pong \
+	  node:18-bullseye \
+	  sh -c "cd /app && npm install && npm run build && cp -r dist/* /var/www/html/pong/"
+	docker exec nginx /usr/sbin/nginx -s reload
 
 auth-service:
 	docker compose -f $(COMPOSE_FILE) up -d --build auth-service
@@ -44,16 +44,21 @@ configure-kibana-password:
 
 clean:
 	sudo rm -rf srcs/data/pong/users.db
+	sudo rm -rf srcs/data/DB
 	sudo rm -rf srcs/srcs
 	docker compose -f $(COMPOSE_FILE) down --rmi all -v
 	docker image prune -af
 	docker volume prune -f
 	docker network prune -f
-# 	sudo rm -rf srcs/data/pong/assets/index-*
-	cd webdev/pong && \
-	  npm run clean
 
 fclean: clean
+	# clean db
+	rm -rf srcs/data/DB/users.db
+	# temporal docker command to clean pong data
+	docker run --rm -v $(PWD)/srcs/data/pong:/pong alpine sh -c "rm -rf /pong/*"
+
+	# Opcional: limpiar la carpeta de build del frontend
+	cd webdev/pong && npm run clean || true
 
 re: fclean all
 

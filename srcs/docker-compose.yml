@@ -7,7 +7,9 @@ services:
     secrets:
       - server_cert
       - server_key
-    build: ./requirements/nginx
+    build:
+      context: ..
+      dockerfile: srcs/requirements/nginx/Dockerfile
     container_name: nginx
     depends_on: 
       - api-gateway

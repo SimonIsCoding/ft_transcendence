@@ -12,12 +12,28 @@ import { GameRender } from './pong-erik/GameRender';
 import { ShowGame } from './pong-erik/ShowGame';
 // import { TournamentController } from './controllers/TournamentController';
 
+
+function NotFound() {
+  const app = document.getElementById('app');
+  if (!app) return;
+  app.innerHTML = `
+    <div class="not-found">
+      <h1>404 - Page Not Found</h1>
+      <p>The page you are looking for doesn’t exist.</p>
+      <a href="/">Go Home</a>
+    </div>
+  `;
+}
+
+// at the top of router.ts
+export type Route = 'home' | 'login' | 'register' | 'game' | 'tournament' | 'notfound';
+
 export class Router {
   private static app = document.getElementById('app');
   public static currentUser: User | null;
 
   public static navigate(
-    page: 'home' | 'login' | 'register' | 'game' | 'tournament',
+    page: Route,
     addToHistory = true
   ): void {
     if (!this.app) {
@@ -77,6 +93,8 @@ export class Router {
         break;
         
 
+      case 'notfound': NotFound(); break;
+
       case 'tournament':
 
         const tournamentArea = document.getElementById('tournamentArea');
@@ -106,33 +124,30 @@ export class Router {
     }
 
 
-    if (addToHistory)
+    if (addToHistory && page !== 'notfound')
       history.pushState({}, '', page === 'home' ? '/' : `/${page}`);
+  }
+
+  private static resolveRoute(path: string): Route {
+    if (path.includes('login')) return 'login';
+    if (path.includes('register')) return 'register';
+    if (path.includes('game')) return 'game';
+    if (path.includes('tournament')) return 'tournament';
+    if (path === '/' || path === '') return 'home';
+    return 'notfound'; // 👈 fallback
   }
 
   public static init(): void {
     // Handle initial load
     window.addEventListener('load', () => {
-      const path = window.location.pathname;
-      this.navigate(
-        path.includes('login') ? 'login' :
-          path.includes('register') ? 'register' :
-            path.includes('game') ? 'game' :
-              path.includes('tournament') ? 'tournament' :
-                'home',
-        false);
+      const route = this.resolveRoute(window.location.pathname);
+      this.navigate(route, false);
     });
 
     // Handle back/forward navigation
     window.addEventListener('popstate', () => {
-      const path = window.location.pathname;
-      this.navigate(
-        path.includes('login') ? 'login' :
-          path.includes('register') ? 'register' :
-            path.includes('game') ? 'game' :
-              path.includes('tournament') ? 'tournament' :
-                'home',
-        false);
+      const route = this.resolveRoute(window.location.pathname);
+      this.navigate(route, false);
     });
 
     // Clean up games when the page is about to unload
