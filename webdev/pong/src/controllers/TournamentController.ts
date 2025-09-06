@@ -106,9 +106,10 @@ export class TournamentController {
                         match.player2.score = player2Score;
                         match.winner = (match.player1.alias === winnerAlias) ? match.player1 : match.player2;
                         const torneo = getTournament();
-                        if (match.winner.alias && match.winner.alias !== undefined) {
+                        if (ShowGame.noWinner && match.winner.alias && match.winner.alias !== undefined) {
                             if (torneo)
                                 TournamentUIManager.updateBracket(torneo);
+                            ShowGame.noWinner = false;
                         } else {
                             resetTournament();
                             Router.navigate('home');
