@@ -29,7 +29,7 @@ export const GameView = {
     await handleSidebar();
 	  oneVsOneArea.init();
 	  oneVsAIArea.init();
-	const gameArea = document.getElementById("gameArea");
+	const gamesArea = document.getElementById("gamesArea");
 	const oneVsOneElem = document.getElementById("oneVsOneArea");
 	const oneVsAIElem = document.getElementById("oneVsAIArea");
     let winner = document.getElementById('winner-screen');
@@ -38,7 +38,7 @@ export const GameView = {
     const player2 = document.getElementById("player2") as HTMLInputElement;
     const player1VSAI = document.getElementById("player1VSAI") as HTMLInputElement;
     let tmp = player2;
-	gameArea?.classList.add('hidden');
+	gamesArea?.classList.add('hidden');
 	winner?.classList.add('hidden');
 	if (ShowGame.gameType === 'p-vs-p') {
 		oneVsOneElem?.classList.remove('hidden');
