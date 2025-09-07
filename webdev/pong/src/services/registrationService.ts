@@ -3,9 +3,8 @@ import { showSuccessPopup, showErrorPopup } from '../utils/utils';
 import { TwoFAController } from '../controllers/twofaController';
 import { enviarLogALogstash } from '../utils/logstash';
 
-export async function initRegistration() {
-  console.log('1 - Registration service initialized');
-
+export async function initRegistration()
+{
   const status = await fetch('/api/auth/me/status', { credentials: 'include' })
     .then(res => res.json());
   
@@ -19,7 +18,6 @@ export async function initRegistration() {
 	let anonymisationEnabled = false;
 	anonymizedCheckbox.addEventListener('change', () => {
 		anonymisationEnabled = anonymizedCheckbox.checked;
-		console.log("Anonymisation enabled:", anonymisationEnabled);
 	});
   const submitBtn = document.getElementById("createAccountBtn") as HTMLButtonElement;
   submitBtn.addEventListener("click", async () => {
@@ -70,7 +68,6 @@ export async function initRegistration() {
     }
 */
     submitBtn.disabled = true;
-	console.log(`in initRegistrationService => anonymisationEnabled = ${anonymisationEnabled}`);
 
     try {
       const response = await fetch('/api/auth/users/verify', {
@@ -91,12 +88,6 @@ export async function initRegistration() {
       if (data.requires2FA) {
 		const registerForm = document.getElementById("registerForm");
         const twoFaContainer = document.getElementById("twofa-container");
-
-		console.log('Pre-Check:', {
-  		  regFormExists: !!registerForm,
-  		  twofaContainerExists: !!twoFaContainer,
-  		  regData: data
-  		});
 
 		if (!registerForm || !twoFaContainer) {
 			showErrorPopup(data.error || "Registration form problem", "popup");

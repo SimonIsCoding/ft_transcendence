@@ -2,8 +2,8 @@ import { Game, type GameOptions } from "./Game.js";
 
 const gameConfig: GameOptions = {
   // Player names
-  leftPlayer: "Erik",
-  rightPlayer: "Simon",
+  leftPlayer: "",
+  rightPlayer: "",
   
   // Game settings
   maxScore: 2,

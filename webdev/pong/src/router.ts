@@ -115,7 +115,6 @@ export class Router {
           gameCanvasContainer.innerHTML = renderGame;
         }
         else if (window.location.pathname === "/tournament"){
-          console.log('no hay partido activo, se muestra torneo');
             Router.navigate('home');
         }
         break;
@@ -149,9 +148,9 @@ export class Router {
     });
 
     // Clean up games when the page is about to unload
-    window.addEventListener('popstate', (event) => {
-      console.log('History changed:', event.state);
-    });
+    // window.addEventListener('popstate', (event) => {
+    //   console.log('History changed:', event.state);
+    // });
     // 
     window.addEventListener('beforeunload', () => {
       if (window.location.pathname === "/tournament")

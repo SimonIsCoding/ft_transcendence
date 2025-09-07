@@ -2,7 +2,7 @@
 
 export class GameConfig {
   // Game rules
-  public static MAX_SCORE = 5; // Game.maxScore |
+  public static MAX_SCORE = 3; // Game.maxScore |
   public static readonly PADDLE_SPEED = 0.08;
   public static readonly FRAME_RATE_LIMIT = 8.33; // ms ( FPS)
   
@@ -25,6 +25,6 @@ export class GameConfig {
   public static readonly BALL_SCALING_FACTOR = 0.0088; // 0.88vw in pixels
   
   // Player names (could be made configurable later)
-  public static readonly DEFAULT_LEFT_PLAYER = "Erik";
-  public static readonly DEFAULT_RIGHT_PLAYER = "Simon";
+  public static readonly DEFAULT_LEFT_PLAYER = "";
+  public static readonly DEFAULT_RIGHT_PLAYER = "";
 }

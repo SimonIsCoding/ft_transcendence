@@ -35,7 +35,6 @@ export async function uploadProfilePictureRoute(fastify)
     }
 
     const userId = request.user?.id;
-	console.log(`in /uploadProfilePicture userId = ${userId}\n\n`);
     if (!userId)
     	return reply.status(401).send({ error: 'Not authenticated: userId not found in token' });
 

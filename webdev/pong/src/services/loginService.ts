@@ -3,9 +3,8 @@ import { showSuccessPopup, showErrorPopup } from '../utils/utils';
 import { TwoFAController } from '../controllers/twofaController';
 import { enviarLogALogstash } from '../utils/logstash';
 
-export async function initLogin() {
-  console.log('1 - Login service initialized'); // Basic log
-
+export async function initLogin()
+{
   const status = await fetch('/api/auth/me/status', { credentials: 'include' })
     .then(res => res.json());
   
@@ -31,10 +30,6 @@ export async function initLogin() {
 
       const loginData = await loginResponse.json();
 
-	  console.log('login info:', {
-  		  loginData: loginData
-  	  });
-
       if (!loginResponse.ok || loginData.success === false) {
         showErrorPopup(loginData.error || "Login failed", "popup");
         return;
@@ -52,13 +47,10 @@ export async function initLogin() {
 
           if (twofaContainer.querySelector('*') === null) {
 	
-			console.log('Attempting TwoFAController creation');
-
           const controller = new TwoFAController(
 		    loginData.mail,
 		    // 'login',
 		    async () => { 
-		      console.log('2FA Success callback triggered');
 		  		  
 		      loginForm.classList.add('hidden');
 		      twofaContainer.classList.add('hidden');
@@ -66,7 +58,6 @@ export async function initLogin() {
 		    },
 		    twofaContainer,
       		(message, isFinal) => {
-				  console.log(`2FA Error: ${message}`, isFinal);
                   showErrorPopup(message, "popup");
                   if (isFinal) {
 					document.cookie = 'auth_phase=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
@@ -78,15 +69,10 @@ export async function initLogin() {
                   }
                 }
               );
-			  // DEBUG: Verify controller creation
- 			  // console.log('Controller instance:', controller);
 			  		 
  			  const view = controller.init();
- 			  // console.log('View content:', view.outerHTML); // Check HTML exists
 			  		 
  			  twofaContainer.appendChild(view);
- 			  // console.log('Container after append:', twofaContainer.innerHTML); // Verify insertionsole.log('Controller instance init:');
-
           }
         }
       } else {
@@ -94,7 +80,6 @@ export async function initLogin() {
       }
     } catch (error) {
       showErrorPopup("Network error during login", "popup");
-      console.error("Login error:", error);
     } finally {
       submitBtn.disabled = false;
     }
@@ -119,7 +104,6 @@ export async function handleSuccessfulLogin(username: string, userId: string): P
     localStorage.setItem('login', username);
 
     // 3. Navigate to home
-	console.log(`in loginService tokenRes = ${tokenRes}`);
 	enviarLogALogstash('login_initiated', {
 			login_id: 'login-' + Date.now(),
 			player_username: username,
@@ -128,7 +112,6 @@ export async function handleSuccessfulLogin(username: string, userId: string): P
     showSuccessPopup("You are logged in", 3500, "popup");
 
   } catch (error) {
-    console.error("Login completion error:", error);
     showErrorPopup("Login complete but couldn't load session", "popup");
     Router.navigate('home');
   }

@@ -14,7 +14,7 @@ export function profileSubmenuRender():string
 		<div class="flex flex-col items-center space-y-1 mx-2 px-2 w-full">
 			<p id="profileName" class="font-bold">Profile Name</p>
 			<p id="mailInProfileSubmenu" class="w-[99%] text-center overflow-hidden text-ellipsis whitespace-nowrap min-w-0 text-xs">contact@mail.com</p>
-			<p id="statsInProfileSubmenu" class="text-gray-500 text-[13px] font-bold">12/15 matchs won</p>
+			<p id="statsInProfileSubmenu" class="text-gray-500 text-[13px] font-bold"></p>
 		</div>
 		<hr class="border-t-1 border-black w-20" />
 		<button id="DashboardBtn" class="font-bold rounded px-2 py-1 text-sm hover:bg-black hover:text-[#fbd11b] w-fit">Dashboard</button>
