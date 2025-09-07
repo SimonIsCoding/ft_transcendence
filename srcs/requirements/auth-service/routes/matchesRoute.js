@@ -23,7 +23,7 @@ export async function matchesRoutes(fastify)
 			if (!userId)
 				return reply.code(401).send({ error: 'Unauthorized' });
 
-			if (player1 === userLogin.login)
+			if (player1 === userLogin.login || player2 === userLogin.login)
 			{
 				const stmt = db.prepare(`
 				INSERT INTO matches
