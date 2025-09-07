@@ -69,7 +69,6 @@ function initGoogleSignIn()
 
 async function handleCredentialResponse(response: any)
 {
-	console.log("ID Google Token:", response.credential);
 	const res = await fetch("/api/auth/google", {
 		method: "POST",
 		credentials: "include",
@@ -77,8 +76,6 @@ async function handleCredentialResponse(response: any)
 		body: JSON.stringify({ id_token: response.credential })
 	});
 	const data = await res.json();
-	console.log("Internal JWT:", data.success);
-	console.log(`Gprovider = ${data.provider}`);
 	if (!data.success)
 		showErrorPopup("Google SignIn failed", "popup");
 	getGoogleProfile();
@@ -93,19 +90,10 @@ async function getGoogleProfile()
 
 	if (res.status === 401)
 	{
-		console.log("Not authenticated");
 		return;
 	}
 
 	const data = await res.json();
-	console.log(`data = ${data}`);
-	console.log(`data.provider = ${data.provider}`);
 	if (res.status === 201)
-	{
-		// console.log("in res.status === 201, data.provider =", data.provider );
-		console.log(`data.name = ${data.login}, data.userId = ${data.userId}`);
-
 		handleSuccessfulLogin(data.login, data.userId);
-	}
-	console.log("Protected data:", data);
 }

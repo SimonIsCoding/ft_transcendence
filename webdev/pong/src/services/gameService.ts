@@ -73,7 +73,6 @@ export async function gameCurrentUserHasPlayedService()
 			data: games,
 		};
 
-		// console.log(result);
 		return result;
 	}
 	catch (error)

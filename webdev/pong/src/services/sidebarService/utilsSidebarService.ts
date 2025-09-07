@@ -9,7 +9,6 @@ export async function isConnected(): Promise<boolean>
 	})
 
 	const data = await res.json();
-	console.log("data.authenticated = ", data.authenticated);
 	if (data.authenticated === true)
 		return true;
 	return false;

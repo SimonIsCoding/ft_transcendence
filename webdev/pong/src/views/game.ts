@@ -28,8 +28,6 @@ class Game {
   
 	this.player1Name = player1Alias;
     this.player2Name = player2Alias;
-    console.log(this.player1Name)
-    console.log(this.player2Name)
     this.onFinishCallback = onFinish ?? null;
     this.canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
     this.ctx = this.canvas.getContext('2d')!;
@@ -172,12 +170,6 @@ class Game {
     this.ctx.lineTo(this.canvas.width / 2, this.canvas.height);
     this.ctx.stroke();
     this.ctx.setLineDash([]);
-
-//console.log({
-//    physicalCenter: this.canvas.width / 2,
-//    virtualCenter: this.virtualCanvas.toPhysicalX(this.virtualCanvas.baseWidth / 2),
-//    scaleFactor: this.virtualCanvas.scaleFactor
-//});
 
   }
 

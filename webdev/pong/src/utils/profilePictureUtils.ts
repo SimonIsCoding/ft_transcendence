@@ -61,22 +61,18 @@ export async function loadExistingProfilePicture(): Promise<void>
 			return; // not connected
 
 		const data = await res.json();
-		console.log(`data.user.provider = ${data.user.provider}`);
 		if (data && data.user && data.user.profile_picture && data.user.provider !== 'google')
 		{
-			console.log("provider not google");
 			preview.src = `https://localhost:4443/${data.user.profile_picture}`;
 			preview.classList.remove('hidden');
 			previewEdit.src = `https://localhost:4443/${data.user.profile_picture}`;
 			previewEdit.classList.remove('hidden');
 			uploadIcon.classList.add('hidden');
-			// editProfileChangePasswordMail.classList.remove('hidden');
 		}
 		else // to load personal pic
 		{
 			await loadGoogleAvatar(preview, data.user.profile_picture);
 			await loadGoogleAvatar(previewEdit, data.user.profile_picture);
-			// editProfileChangePasswordMail.classList.add('hidden');
 			uploadIcon.classList.add("hidden");
 			uploadPictureProfileSubmenu.classList.remove("bg-black");
 			uploadIconEditProfile.classList.add("hidden");

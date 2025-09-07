@@ -91,23 +91,12 @@ export const friendsCard = {
 	const friendStatus = document.getElementById(`friendsStatus_${friendUser.id}`);
 	const isFriendConnected = await checkFriendIsConnected(friendUser.id);
 	const isGPDRActivated = await checkFriendHasGDPRActivated(friendUser.id);
-	console.log(`isGPDRActivated = ${isGPDRActivated}`);
-	console.log(`isFriendConnected = ${isFriendConnected}`);
 	if (isFriendConnected && !isGPDRActivated)
-	{
-		console.log("entered in green");
 		friendStatus?.classList.add("bg-green-500");
-	}
 	else if (!isFriendConnected && !isGPDRActivated)
-	{
-		console.log("entered in red");
 		friendStatus?.classList.add("bg-red-500");
-	}
 	else
-	{
-		console.log("entered in black");
 		friendStatus?.classList.add("bg-black");
-	}
 	if (friendUser.profile_picture && friendUser.profile_picture.startsWith("https://lh3.googleusercontent.com"))
 		friendImg.src = `${friendUser.profile_picture}`;
 	else
