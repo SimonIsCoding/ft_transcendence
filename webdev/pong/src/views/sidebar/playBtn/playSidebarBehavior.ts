@@ -43,6 +43,10 @@ function swapElements(id1: string, id2: string)
 
 export function oneVsOneAreaInit()
 {
+	const login = localStorage.getItem("login");
+    const alias1 = document.getElementById("player1") as HTMLInputElement | null;
+    if (alias1)
+    	alias1.value = login || "";
 	const oneVsOneBtn = document.getElementById("oneVsOneBtn");
 	const gameArea = document.getElementById("gameArea");
 	const oneVsOneArea = document.getElementById("oneVsOneArea");
@@ -76,7 +80,6 @@ export function oneVsOneAreaInit()
 
 export function tournamentAreaInit()
 {
-	
 	const tournamentBtn = document.getElementById("tournamentBtn");
 	const gameArea = document.getElementById("gameArea");
 	const tournamentArea = document.getElementById("tournamentArea");
@@ -95,6 +98,11 @@ export function tournamentAreaInit()
 
 export function oneVsAIAreaInit()
 {
+	const login = localStorage.getItem("login");
+    const alias1 = document.getElementById("player1VSAI") as HTMLInputElement | null;
+    if (alias1)
+    	alias1.value = login || "";
+
 	const oneVsAIBtn = document.getElementById("oneVsAIBtn");
 	const gameArea = document.getElementById("gameArea");
 	const oneVsAIArea = document.getElementById("oneVsAIArea");

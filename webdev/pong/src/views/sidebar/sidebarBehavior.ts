@@ -95,7 +95,6 @@ export async function handleSidebar()
 	const sidebar = document.getElementById("sidebar");
 	if (isAuthenticated)
 	{
-		console.log("✅ Connected");
 		sidebar!.innerHTML = userLoggedSidebar.render();
 		userLoggedSidebar.init();
 		initLogout();
@@ -106,6 +105,5 @@ export async function handleSidebar()
 	{
 		sidebar!.innerHTML = userUnloggedSidebar.render();
 		userUnloggedSidebar.init();
-		console.log("❌ Not connected");
 	}
 }

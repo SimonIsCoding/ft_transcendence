@@ -18,6 +18,5 @@ export async function enviarLogALogstash(evento: string, datos: Record<string, u
       });
     } catch (error) {
       // Si falla, mostrar en consola
-      console.log('LOG (fallback):', log);
     }
   }

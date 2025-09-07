@@ -91,7 +91,6 @@ export async function googleRoute(fastify)
 		}
 		catch (err)
 		{
-			console.log(err);
 			return reply.status(401).send({ error: "Unauthorized" });
 		}
 	});
