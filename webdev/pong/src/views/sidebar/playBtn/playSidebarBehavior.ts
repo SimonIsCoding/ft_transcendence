@@ -1,5 +1,5 @@
 import{ toggleMenuVisibility } from '../sidebarUtils'
-import { Router } from '../../../router';
+//import { Router } from '../../../router';
 import { showErrorPopup } from '../../../utils/utils';
 import { TournamentArea } from '../../TournamentArea';
 import { ShowGame } from '../../../pong-erik/ShowGame';
@@ -43,24 +43,14 @@ function swapElements(id1: string, id2: string)
 
 export function oneVsOneAreaInit()
 {
-	const oneVsOneBtn = document.getElementById("oneVsOneBtn");
-	const gameArea = document.getElementById("gameArea");
-	const oneVsOneArea = document.getElementById("oneVsOneArea");
-	const oneVsAIArea = document.getElementById("oneVsAIArea");
-	const tournamentArea = document.getElementById("tournamentArea");
 
-	oneVsOneBtn?.addEventListener('click', () => {
-		gameArea?.classList.add('hidden');
-		oneVsOneArea?.classList.remove('hidden');
-		oneVsAIArea?.classList.add('hidden');
-		tournamentArea?.classList.add('hidden');
-	});
 	document.getElementById("swapBtn")?.addEventListener("click", () => {
 		swapPlayer("player1", "player2");
 	});
 
 	const playBtn = document.getElementById('playOneVsOneBtn') as HTMLButtonElement | null;
 	playBtn!.addEventListener('click', () => { 
+console.log('clic 1');
 		const player1 = document.getElementById("player1") as HTMLInputElement;
 		const player2 = document.getElementById("player2") as HTMLInputElement;
 		if (!player1.value.trim() || !player2.value.trim())
@@ -68,14 +58,18 @@ export function oneVsOneAreaInit()
 			showErrorPopup("You need 2 players to play.", "oneVsOneAreaPopup");
 			return ;
 		}
-		ShowGame.gameType = 'p-vs-p';
-		ShowGame.inGame = true;
-		Router.navigate('game'); 
+console.log('clic 2');
+		new ShowGame().initGame({
+	  		player1: { alias: player1.value },
+			player2: { alias: player2.value },
+			winner: null
+		});
 	});
 }
 
 export function tournamentAreaInit()
 {
+  console.log('t area 1');
 	
 	const tournamentBtn = document.getElementById("tournamentBtn");
 	const gameArea = document.getElementById("gameArea");
@@ -95,34 +89,25 @@ export function tournamentAreaInit()
 
 export function oneVsAIAreaInit()
 {
-	const oneVsAIBtn = document.getElementById("oneVsAIBtn");
-	const gameArea = document.getElementById("gameArea");
-	const oneVsAIArea = document.getElementById("oneVsAIArea");
-	const oneVsOneArea = document.getElementById("oneVsOneArea");
-	const tournamentArea = document.getElementById("tournamentArea");
-	const esquemaTorneo = document.getElementById("esquemaTorneo");
-	oneVsAIBtn?.addEventListener('click', () => {
-		gameArea?.classList.add('hidden');
-		oneVsOneArea?.classList.add('hidden');
-		oneVsAIArea?.classList.remove('hidden');
-		tournamentArea?.classList.add('hidden');
-		esquemaTorneo?.classList.add('hidden');
-	});
+
 	document.getElementById("swapAIBtn")?.addEventListener("click", () => {
 		swapElements("player1VSAI", "AIPlayer");
 	});
-
+	
 	const playBtn = document.getElementById('playOneVsAIBtn') as HTMLButtonElement | null;
 	playBtn!.addEventListener('click', () => {
+		//const player1 = document.getElementById("player1") as HTMLInputElement;
 		const player1VSAI = document.getElementById("player1VSAI") as HTMLInputElement;
 		if (!player1VSAI.value.trim())
 		{
 			showErrorPopup("You need 1 player to play.", "oneVsAIAreaPopup");
 			return ;
 		}
-		ShowGame.gameType = 'p-vs-ai';
-		ShowGame.inGame = true;
-		Router.navigate('game');
+		new ShowGame().initGame({
+	  		player1: { alias: player1VSAI.value },
+			player2: { alias: 'chatGPT' },
+			winner: null
+		});
 	});
 }
 
@@ -131,18 +116,18 @@ export function playSidebarBehavior()
 	const submenus = document.querySelectorAll<HTMLElement>('.submenu');
 	const playSidebarBtn = document.getElementById('playSidebarBtn');
 	playSidebarBtn?.addEventListener('click', () => {
-		const location = window.location.pathname;
-		if (location === '/game') {
-			const gameArea = document.getElementById('gamesArea');
-			gameArea?.classList.add('hidden');
-			ShowGame.noWinner = false;
-			Router.navigate("home");
-		} else {
-			toggleMenuVisibility('playSubmenu', submenus);
-			oneVsOneAreaInit();
-			oneVsAIAreaInit();
-			tournamentAreaInit();
-			// TournamentArea.init();
-		}
+		// const location = window.location.pathname;
+		// if (location === '/game') {
+		// 	const gameArea = document.getElementById('gamesArea');
+		// 	gameArea?.classList.add('hidden');
+		// 	ShowGame.noWinner = false;
+		// 	Router.navigate("home");
+		// } else {
+		 	toggleMenuVisibility('playSubmenu', submenus);
+		// 	oneVsOneAreaInit();
+		// 	oneVsAIAreaInit();
+		// 	tournamentAreaInit();
+		// 	// TournamentArea.init();
+		// }
 	});
 }
