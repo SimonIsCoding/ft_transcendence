@@ -25,7 +25,7 @@ export async function sendGameService(gameType: string, match: Match)
 	}
 	try
 	{
-		fetch('/api/auth/games/matches', {
+		fetch('/api/games/matches', {
 			method: 'POST',
 			credentials: 'include',
 			headers: { 'Content-Type': 'application/json' },
@@ -64,7 +64,7 @@ export async function gameCurrentUserHasPlayedService()
 {
 	try
 	{
-		const games: matchid[] = await fetch('/api/auth/games/nbMatchesPlayed', {
+		const games: matchid[] = await fetch('/api/games/nbMatchesPlayed', {
 			credentials: 'include',
 		}).then(res => res.json());
 
