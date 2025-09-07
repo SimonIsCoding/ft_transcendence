@@ -50,6 +50,7 @@ export function oneVsOneAreaInit()
 
 	const playBtn = document.getElementById('playOneVsOneBtn') as HTMLButtonElement | null;
 	playBtn!.addEventListener('click', () => { 
+console.log('clic 1');
 		const player1 = document.getElementById("player1") as HTMLInputElement;
 		const player2 = document.getElementById("player2") as HTMLInputElement;
 		if (!player1.value.trim() || !player2.value.trim())
@@ -57,6 +58,7 @@ export function oneVsOneAreaInit()
 			showErrorPopup("You need 2 players to play.", "oneVsOneAreaPopup");
 			return ;
 		}
+console.log('clic 2');
 		new ShowGame().initGame({
 	  		player1: { alias: player1.value },
 			player2: { alias: player2.value },

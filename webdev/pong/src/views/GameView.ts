@@ -27,9 +27,11 @@ export const GameView = {
   {
 
     await handleSidebar();
+	  oneVsOneArea.init();
+	  oneVsAIArea.init();
 	const gameArea = document.getElementById("gameArea");
-	const oneVsOneArea = document.getElementById("oneVsOneArea");
-	const oneVsAIArea = document.getElementById("oneVsAIArea");
+	const oneVsOneElem = document.getElementById("oneVsOneArea");
+	const oneVsAIElem = document.getElementById("oneVsAIArea");
 	
 	const player1 = document.getElementById("player1") as HTMLInputElement;
     const player2 = document.getElementById("player2") as HTMLInputElement;
@@ -38,13 +40,13 @@ export const GameView = {
 
 	gameArea?.classList.add('hidden');
 	if (ShowGame.gameType === 'p-vs-p') {
-		oneVsOneArea?.classList.remove('hidden');
-		oneVsAIArea?.classList.add('hidden');
+		oneVsOneElem?.classList.remove('hidden');
+		oneVsAIElem?.classList.add('hidden');
 	} else if (ShowGame.gameType === 'p-vs-ai') {
 		tmp = player1VSAI;
 		ShowGame.otherPlayer = tmp.value;
-		oneVsOneArea?.classList.add('hidden');
-		oneVsAIArea?.classList.remove('hidden');
+		oneVsOneElem?.classList.add('hidden');
+		oneVsAIElem?.classList.remove('hidden');
 	}
 	if (!tmp && !player1) {
 	  new ShowGame().initGame({
