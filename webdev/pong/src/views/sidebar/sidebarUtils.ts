@@ -13,10 +13,30 @@ let currentUser: User | null = null;
 
 export function setCurrentUser(user: User | null): void {
   currentUser = user ? { ...user } : null;
+  if (user) {
+      localStorage.setItem("currentUser", JSON.stringify(currentUser));
+  } else {
+	  localStorage.removeItem("currentUser");
+  }
+
 }
 
 export function getCurrentUser(): User | null {
-  return currentUser;
+  if (currentUser) return currentUser;
+
+  // Try to hydrate from storage
+  const stored =
+    localStorage.getItem("currentUser");
+  if (stored) {
+    try {
+      currentUser = JSON.parse(stored);
+      return currentUser;
+    } catch {
+      return null;
+    }
+  }
+
+  return null;
 }
 
 export function renderBackButton(id: string): string
