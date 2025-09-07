@@ -6,8 +6,8 @@ import { AIManager, PlayerSide } from "./AIManager.js";
 import { ScoreManager, GameResult } from "./ScoreManager.js";
 import { UIManager } from "./UIManager.js";
 import { ShowGame } from "./ShowGame.js";
-import { resetTournament } from "../models/TournamentStore.js";
-import { Router } from "../router.js";
+// import { resetTournament } from "../models/TournamentStore.js";
+// import { Router } from "../router.js";
 
 export interface GameOptions {
   leftPlayer: string;
@@ -21,7 +21,7 @@ export interface GameOptions {
 export class Game {
   // Game configuration
   private options: GameOptions;
-  private gameId: string; // Unique identifier for debugging
+//   private gameId: string; // Unique identifier for debugging
 
   // Game state
   private isPaused = false;
@@ -56,8 +56,7 @@ export class Game {
     }
     
     // Set default options and merge with provided options
-    this.gameId = `game-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    console.log(`🎮 Creating new Game instance: ${this.gameId}`);
+    // this.gameId = `game-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     
     this.options = {
       leftPlayer: options?.leftPlayer || GameConfig.DEFAULT_LEFT_PLAYER,
@@ -180,7 +179,6 @@ export class Game {
    * Stops the game completely and cleans up resources
    */
   public stopGame(): void {
-    console.log(`🛑 Stopping Game instance: ${this.gameId}`);
     this.isGameActive = false;
     this.gameOn = false;
     this.isPaused = true;
@@ -189,7 +187,6 @@ export class Game {
     if (this.animationFrameId !== null) {
       cancelAnimationFrame(this.animationFrameId);
       this.animationFrameId = null;
-      console.log(`🎬 Cancelled animation frame for Game: ${this.gameId}`);
     }
     
     // Clear timing state
@@ -214,15 +211,15 @@ export class Game {
 
   // Main game loop
   public start(): void {
-    console.log(`▶️ Starting Game instance: ${this.gameId}`);
+    // console.log(`▶️ Starting Game instance: ${this.gameId}`);
     const gameLoop = (time: number) => {
       if (!this.isGameActive || !ShowGame.noWinner || !this.gameOn) {
-        console.log(`⏹️ Game loop stopping for Game: ${this.gameId} (isActive: ${this.isGameActive}, noWinner: ${ShowGame.noWinner}, gameOn: ${this.gameOn})`);
-        window.addEventListener('popstate', (event) => {
-          resetTournament();
-          Router.navigate('home');
-          console.log('History changed:', event.state);
-        });
+        // console.log(`⏹️ Game loop stopping for Game: ${this.gameId} (isActive: ${this.isGameActive}, noWinner: ${ShowGame.noWinner}, gameOn: ${this.gameOn})`);
+        // window.addEventListener('popstate', (event) => {
+        //   resetTournament();
+        //   Router.navigate('home');
+        //   console.log('History changed:', event.state);
+        // });
         this.resetGame();
         this.animationFrameId = null; // Clear the ID when stopping
         return ;
@@ -243,7 +240,7 @@ export class Game {
           this.updateRightPlayerPaddle(delta);
           
           if (this.isLose()) {
-            console.log(`⚽ Ball lost in Game: ${this.gameId}`);
+            // console.log(`⚽ Ball lost in Game: ${this.gameId}`);
             this.handleLose();
           }
         }

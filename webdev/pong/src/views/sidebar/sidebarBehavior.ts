@@ -1,9 +1,8 @@
-import type { User } from "../../config";
 import { Router } from "../../router";
 import { isConnected } from "../../services/sidebarService/utilsSidebarService"
 import { loadExistingProfilePicture, uploadProfilePicture } from "../../utils/profilePictureUtils";
 import { initLogout } from '../../services/sidebarService/logoutService';
-import { setupMenuHandlers } from './sidebarUtils';
+import { setCurrentUser, setupMenuHandlers } from './sidebarUtils';
 import { gameSettingsSubmenuRender } from './settingsBtn/gameSettingsSubmenuRender';
 import { logoutButtonRender } from './logoutButtonRender';
 import { profileSubmenuRender } from './profileBtn/profileSubmenuRender'
@@ -15,7 +14,6 @@ import { editProfileSubmenuRender } from './profileBtn/editProfileSubmenuRender'
 import { ShowGame } from "../../pong-erik/ShowGame";
 
 export const userUnloggedSidebar = {
-  currentUser: null as User | null,
 
  render(): string {
 	return `
@@ -30,6 +28,7 @@ export const userUnloggedSidebar = {
 
   init(): void
   {
+	setCurrentUser(null);
 	const loginBtn = document.getElementById('loginBtn') as HTMLButtonElement | null;
 	loginBtn!.addEventListener('click', () => { Router.navigate('login'); })
 
@@ -39,7 +38,6 @@ export const userUnloggedSidebar = {
 }
 
 export const userLoggedSidebar = {
-  currentUser: null as User | null,
   isLogin: true,
 
  render(): string {
@@ -106,7 +104,6 @@ export async function handleSidebar()
 	const sidebar = document.getElementById("sidebar");
 	if (isAuthenticated)
 	{
-		console.log("✅ Connected");
 		sidebar!.innerHTML = userLoggedSidebar.render();
 		userLoggedSidebar.init();
 		initLogout();
@@ -117,6 +114,5 @@ export async function handleSidebar()
 	{
 		sidebar!.innerHTML = userUnloggedSidebar.render();
 		userUnloggedSidebar.init();
-		console.log("❌ Not connected");
 	}
 }

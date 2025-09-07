@@ -60,8 +60,8 @@ CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON sessions(user_id);
 	CREATE TABLE IF NOT EXISTS matches (
 		matchid INTEGER PRIMARY KEY AUTOINCREMENT,
 		userid INTEGER,
-		player1 TEXT NOT NULL,
-		player2 TEXT NOT NULL,
+		player1 TEXT NOT NULL DEFAULT 'player1',
+		player2 TEXT NOT NULL DEFAULT 'player2',
 		scorePlayer1 INTEGER DEFAULT 0,
 		scorePlayer2 INTEGER DEFAULT 0,
 		winner TEXT NOT NULL DEFAULT 'pending',

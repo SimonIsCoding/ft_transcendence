@@ -118,7 +118,6 @@ export class TournamentController {
                     leftPlayer: match.player1.alias,
                     rightPlayer: match.player2.alias, maxScore: 3, gameMode: 'p-vs-p',
                     onFinish: (winnerAlias: string, player1Score: number, player2Score: number) => {
-                        console.log(player1Score, player2Score);
                         match.player1.score = player1Score;
                         match.player2.score = player2Score;
                         match.winner = (match.player1.alias === winnerAlias) ? match.player1 : match.player2;
