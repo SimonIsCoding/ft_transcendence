@@ -53,17 +53,14 @@ export class Router {
         break;
 
       case 'game':
-        if (!ShowGame.inGame) {
-          Router.navigate('home');
-          ShowGame.inGame = false;
-          return;
-        }
+		ShowGame.inGame = true;
 		ShowGame.gameType = 'p-vs-p';
         this.app.innerHTML = GameView.render();
 		GameView.init();
         break;
 
 	  case 'gameai':
+		ShowGame.inGame = true;
 
 		ShowGame.gameType = 'p-vs-ai';
         this.app.innerHTML = GameView.render();
@@ -85,8 +82,8 @@ export class Router {
   private static resolveRoute(path: string): Route {
     if (path.includes('login')) return 'login';
     if (path.includes('register')) return 'register';
-    if (path.includes('game')) return 'game';
     if (path.includes('gameai')) return 'gameai';
+    if (path.includes('game')) return 'game';
     if (path.includes('tournament')) return 'tournament';
     if (path === '/' || path === '') return 'home';
     return 'home'; // 👈 fallback

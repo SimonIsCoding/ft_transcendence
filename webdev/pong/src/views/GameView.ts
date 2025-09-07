@@ -37,7 +37,6 @@ export const GameView = {
     const player2 = document.getElementById("player2") as HTMLInputElement;
     const player1VSAI = document.getElementById("player1VSAI") as HTMLInputElement;
     let tmp = player2;
-
 	gameArea?.classList.add('hidden');
 	if (ShowGame.gameType === 'p-vs-p') {
 		oneVsOneElem?.classList.remove('hidden');
