@@ -12,6 +12,7 @@ import { registerView } from './views/registerView';
 import { ShowGame } from './pong-erik/ShowGame';
 // import { TournamentController } from './controllers/TournamentController';
 import { TournamentView } from './views/tournamentView';
+import { GameView } from "./views/GameView";
 
 
 // at the top of router.ts
@@ -57,27 +58,8 @@ export class Router {
           ShowGame.inGame = false;
           return;
         }
-        const player1 = document.getElementById("player1") as HTMLInputElement;
-        const player2 = document.getElementById("player2") as HTMLInputElement;
-        const player1VSAI = document.getElementById("player1VSAI") as HTMLInputElement;
-        let tmp = player2;
-        if (ShowGame.gameType === 'p-vs-ai') {
-          tmp = player1VSAI;
-          ShowGame.otherPlayer = tmp.value;
-        }
-        if (!tmp && !player1) {
-          new ShowGame().initGame({
-          player1: { alias: "User 1" },
-            player2: { alias: "User 2" },
-            winner: null
-          });
-        } else {
-          new ShowGame().initGame({
-          player1: { alias: player1.value },
-            player2: { alias: tmp.value },
-            winner: null
-          });
-        }
+        this.app.innerHTML = GameView.render();
+		GameView.init();
         break;
         
       case 'tournament':
