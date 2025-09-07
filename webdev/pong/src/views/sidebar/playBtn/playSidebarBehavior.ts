@@ -96,7 +96,7 @@ export function oneVsAIAreaInit()
 	
 	const playBtn = document.getElementById('playOneVsAIBtn') as HTMLButtonElement | null;
 	playBtn!.addEventListener('click', () => {
-		//const player1 = document.getElementById("player1") as HTMLInputElement;
+		const player1 = document.getElementById("player1") as HTMLInputElement;
 		const player1VSAI = document.getElementById("player1VSAI") as HTMLInputElement;
 		if (!player1VSAI.value.trim())
 		{
@@ -104,8 +104,8 @@ export function oneVsAIAreaInit()
 			return ;
 		}
 		new ShowGame().initGame({
-	  		player1: { alias: player1VSAI.value },
-			player2: { alias: 'chatGPT' },
+	  		player1: { alias: player1.value },
+			player2: { alias: player1VSAI.value },
 			winner: null
 		});
 	});

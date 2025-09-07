@@ -105,7 +105,9 @@ console.log('render 2');
 //                await handleSidebar();
                 this.renderGameCanvas();
                 await new Promise(resolve => setTimeout(resolve, 100));
-                
+if (ShowGame.gameType === 'p-vs-ai') {
+          ShowGame.otherPlayer =  match.player2.alias;
+        }                
                 const game = new Game({
                     leftPlayer: match.player1.alias,
                     rightPlayer: match.player2.alias,
