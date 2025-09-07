@@ -80,13 +80,15 @@ export class Router {
           new ShowGame().initGame({
           player1: { alias: "User 1" },
             player2: { alias: "User 2" },
-            winner: null
+            winner: null,
+            type: '1vs1'
           });
         } else {
           new ShowGame().initGame({
           player1: { alias: player1.value },
             player2: { alias: tmp.value },
-            winner: null
+            winner: null,
+            type: '1vsIA'
           });
         }
         break;
