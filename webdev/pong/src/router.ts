@@ -81,6 +81,7 @@ export class Router {
         break;
         
       case 'tournament':
+  console.log('router');
         this.app.innerHTML = TournamentView.render();
         TournamentView.init();
 

@@ -76,6 +76,7 @@ export function oneVsOneAreaInit()
 
 export function tournamentAreaInit()
 {
+  console.log('t area 1');
 	
 	const tournamentBtn = document.getElementById("tournamentBtn");
 	const gameArea = document.getElementById("gameArea");
