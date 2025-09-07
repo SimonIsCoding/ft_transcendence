@@ -5,13 +5,14 @@ import { loadProfileAndPrefill } from './profileBtn/editProfileSubmenuRender';
 import { userChangingInfo } from './profileBtn/userChangingInfo';
 import { seeFriendsList } from './profileBtn/manageFriendsSubmenu';
 import { setupGameSettingsListeners } from '../../controllers/gameSettingsControllers';
-import { showDashboard, type DashboardData } from "../dashboard";
 import { manageGameHistorial } from "../../services/gameService";
+import { showDashboard, type DashboardData } from "../dashboard";
+// import { getUserDashboardDataService } from "../../services/sidebarService/dashboardDataService";
 
 let currentUser: User | null = null;
 
-export function setCurrentUser(user: User): void {
-  currentUser = { ...user };
+export function setCurrentUser(user: User | null): void {
+  currentUser = user ? { ...user } : null;
 }
 
 export function getCurrentUser(): User | null {
@@ -91,12 +92,13 @@ export function profileSidebarBehavior()
 	const gameHistorySubmenu = document.getElementById("gameHistorySubmenu");
 
 	const dashboardBtn = document.getElementById("DashboardBtn");
-	dashboardBtn?.addEventListener('click', () => {
+	dashboardBtn?.addEventListener('click', async () => {
 		friendsSubmenu?.classList.add('hidden');
 		gameHistorySubmenu?.classList.add('hidden');
 		dashboardSubmenu?.classList.remove('hidden');
 		openMenu('largeSubmenu');
 		openMenu('dashboardSubmenu');
+		// const dashboardData = await getUserDashboardDataService();
 		showDashboard(mockDashboardData);// mockDashboardData is just for testing 
 		const backBtnDasboardSubmenu = document.getElementById("backBtnDasboardSubmenu");
 		backBtnDasboardSubmenu?.addEventListener('click', () => {
@@ -113,7 +115,6 @@ export function profileSidebarBehavior()
 	const gameHistoryBtn = document.getElementById("gameHistoryBtn");
 	const backBtnGameHistorySubmenu = document.getElementById("backBtnGameHistorySubmenu");
 	backBtnGameHistorySubmenu?.addEventListener('click', () => {
-		console.log("clicked");
 		closeAllMenus(submenus);
 		toggleMenuVisibility('profileSubmenu', submenus);
 	});

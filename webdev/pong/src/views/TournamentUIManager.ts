@@ -61,7 +61,6 @@ class UIManager {
             const p1_points = document.querySelector('#alias1-point') as HTMLInputElement;
             const p2_input = document.querySelector('#alias2') as HTMLInputElement;
             const p2_points = document.querySelector('#alias2-point') as HTMLInputElement;
-            console.log(match)
             p1_input.value = match.player1.alias;
             p2_input.value = match.player2.alias;
             p1_input.disabled = true;

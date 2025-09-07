@@ -53,6 +53,7 @@ export class Router {
         break;
 
       case 'game':
+        ShowGame.cleanup(); // Clean up any running games
 		ShowGame.inGame = true;
 		ShowGame.gameType = 'p-vs-p';
         this.app.innerHTML = GameView.render();
@@ -60,6 +61,7 @@ export class Router {
         break;
 
 	  case 'gameai':
+        ShowGame.cleanup(); // Clean up any running games
 		ShowGame.inGame = true;
 
 		ShowGame.gameType = 'p-vs-ai';
@@ -97,22 +99,23 @@ export class Router {
     });
 
     // Handle back/forward navigation
-    window.addEventListener('popstate', () => {
+    window.addEventListener('popstate', (event) => {
       const route = this.resolveRoute(window.location.pathname);
+      console.log('History changed:', event.state);
       this.navigate(route, false);
     });
 
     // Clean up games when the page is about to unload
-    window.addEventListener('popstate', (event) => {
-      console.log('History changed:', event.state);
-    });
+//    window.addEventListener('popstate', (event) => {
+//      console.log('History changed:', event.state);
+//    });
     // 
     // window.addEventListener('beforeunload', () => {
     //   if (window.location.pathname === "/tournament")
     //     Router.navigate('home');
     //   ShowGame.cleanup();
     // });
-  }
+   }
 }
 
 // Initialize router when imported

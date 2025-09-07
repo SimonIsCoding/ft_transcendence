@@ -13,13 +13,6 @@ export async function reloadUserInfo(): Promise<void>
 		if (!res.ok)
 			return console.error("Error fetching user info:", res.status);
 		const data = await res.json();
-		console.log('in reloadUserInfo, data = ', data);
-		console.log(`reloadUserInfo
-			id: ${data.user.id},
-			login: ${data.user.login},
-			email: ${data.user.mail},
-			profile_picture: ${data.user.profile_picture}
-		`)
 		setCurrentUser(data.user);
 		document.getElementById("mailInProfileSubmenu")!.textContent = data.user.mail;
 	}
@@ -153,7 +146,6 @@ function beginEditProfile2FAFlow(email: string, changes: any) {
       email,
     //   'sidebar', // reuse existing flow type
       async () => {
-        console.log("2FA success, saving profile...");
 		document.cookie = 'pending2FAEdit=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         await submitProfileChanges(changes);
         restoreUI();
@@ -216,7 +208,6 @@ async function submitProfileChanges(changes: any) {
 
 export async function checkFriendHasGDPRActivated(friendId: number)
 {
-	console.log(`in checkFriendHasGDPRActivated friendId = ${friendId}`);
 	const res = await fetch(`/api/auth/friends/${friendId}/GDPR`, { credentials: 'include' })
 	const backend_answer = await res.json();
 

@@ -53,7 +53,6 @@ console.log('render 2');
         if (ShowGame.gameType === 'p-vs-ai' && type) {
             winner = "ChatGPT";
         }
-        console.log("type is=== ", type, "\nwinner is===", winner);
         if (gamesArea && match.winner) {
             gamesArea.innerHTML = `            
                 <!-- Pantalla de Ganador del Torneo -->
@@ -85,17 +84,14 @@ console.log('render 2');
         return new Promise(async () => {
             // Prevent race conditions - only one game creation at a time
             if (ShowGame.isCreatingGame) {
-                // console.log('🚫 Game creation already in progress, skipping...');
                 return;
             }
             
             ShowGame.isCreatingGame = true;
-            // console.log('🔒 Locking game creation');
             
             try {
                 // Stop any existing game before starting a new one
                 if (ShowGame.currentGame) {
-                    // console.log('🛑 Found existing game in playGame, stopping it');
                     ShowGame.currentGame.stopGame();
                     ShowGame.currentGame = null;
                     // Add a small delay to ensure cleanup is complete
@@ -105,7 +101,9 @@ console.log('render 2');
 //                await handleSidebar();
                 this.renderGameCanvas();
                 await new Promise(resolve => setTimeout(resolve, 100));
-                
+if (ShowGame.gameType === 'p-vs-ai') {
+          ShowGame.otherPlayer =  match.player2.alias;
+        }                
                 const game = new Game({
                     leftPlayer: match.player1.alias,
                     rightPlayer: match.player2.alias,
@@ -113,11 +111,9 @@ console.log('render 2');
                     gameMode: ShowGame.gameType,
                     aiDifficulty: gameDifficulty() as 1000 | 100 | 1,
                     onFinish: (winnerAlias: string, player1Score: number, player2Score: number) => {
-                        console.log(player1Score, player2Score);
                         match.player1.score = player1Score;
                         match.player2.score = player2Score;
                         match.winner = (match.player1.alias === winnerAlias) ? match.player1 : match.player2;
-                        console.log('entra en onMatchEnd');
 						sendGameService(ShowGame.gameType, match);
                        if (ShowGame.noWinner && (window.location.pathname.includes("/game") || window.location.pathname.includes("/gameai"))) { 
                             if (match.winner.alias && match.winner.alias !== undefined) {
@@ -140,7 +136,6 @@ console.log('render 2');
                 
                 // Store the current game instance
                 ShowGame.currentGame = game;
-                // console.log('🎮 New game instance stored in ShowGame.currentGame');
                 
                 game.resetGame();
                 game.setGameOn();
@@ -149,7 +144,6 @@ console.log('render 2');
             } finally {
                 // Always unlock game creation
                 ShowGame.isCreatingGame = false;
-                // console.log('🔓 Unlocking game creation');
             }
         });
     }
@@ -158,16 +152,13 @@ console.log('render 2');
      * Static method to cleanup any running game and prevent race conditions
      */
     static async cleanup() {
-        // console.log('🧹 ShowGame.cleanup() called');
         
         // Wait if another game is being created
         while (ShowGame.isCreatingGame) {
-            // console.log('⏳ Waiting for game creation to complete...');
             await new Promise(resolve => setTimeout(resolve, 10));
         }
         
         if (ShowGame.currentGame) {
-            // console.log('🛑 Found existing game, stopping it');
             ShowGame.currentGame.stopGame();
             ShowGame.currentGame = null;
         }
