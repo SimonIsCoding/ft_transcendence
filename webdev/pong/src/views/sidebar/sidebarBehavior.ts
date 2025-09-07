@@ -1,4 +1,3 @@
-import type { User } from "../../config";
 import { Router } from "../../router";
 import { isConnected } from "../../services/sidebarService/utilsSidebarService"
 import { loadExistingProfilePicture, uploadProfilePicture } from "../../utils/profilePictureUtils";
