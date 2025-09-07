@@ -78,7 +78,7 @@ export const oneVsAIArea = {
   init(): void
   {
 	oneVsAIAreaInit();
+
+
   }
 }
-
-

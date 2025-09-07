@@ -95,6 +95,13 @@ export function tournamentAreaInit()
 
 export function oneVsAIAreaInit()
 {
+	const login = localStorage.getItem("login");
+	console.log(`login = ${login}`);
+    const alias1 = document.getElementById("player1VSAI") as HTMLInputElement | null;
+	console.log(`alias1 = ${alias1}`)
+    if (alias1)
+    	alias1.value = login || "";
+
 	const oneVsAIBtn = document.getElementById("oneVsAIBtn");
 	const gameArea = document.getElementById("gameArea");
 	const oneVsAIArea = document.getElementById("oneVsAIArea");
