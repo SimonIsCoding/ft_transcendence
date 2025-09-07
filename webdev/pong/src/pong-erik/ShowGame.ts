@@ -1,6 +1,6 @@
 import { Router } from "../router";
 import type { Match } from '../models/TournamentModel';
-import { handleSidebar } from '../views/sidebar/sidebarBehavior';
+//import { handleSidebar } from '../views/sidebar/sidebarBehavior';
 import { Game } from "./Game";
 import { GameRender } from './GameRender';
 import { gameDifficulty, gameSettings } from "../controllers/gameSettingsControllers";
@@ -20,12 +20,14 @@ export class ShowGame {
     static currentGame: Game | null = null; // Track current game instance
     static isCreatingGame: boolean = false; // Prevent race conditions 
     private renderGameCanvas() {
+console.log('render 1');
     let gameCanvasContainer = document.getElementById('gamesArea');
     let oneVsOneArea = document.getElementById('oneVsOneArea');
     let oneVsAIArea = document.getElementById('oneVsAIArea');
     
     const renderGame = new GameRender().render();
     if (gameCanvasContainer) {
+console.log('render 2');
             gameCanvasContainer.innerHTML = renderGame;
             oneVsAIArea?.classList.add('hidden')
             oneVsOneArea?.classList.add('hidden')
@@ -96,10 +98,12 @@ export class ShowGame {
                     await new Promise(resolve => setTimeout(resolve, 50));
                 }
                 
-                await handleSidebar();
+//                await handleSidebar();
                 this.renderGameCanvas();
                 await new Promise(resolve => setTimeout(resolve, 100));
-                
+if (ShowGame.gameType === 'p-vs-ai') {
+          ShowGame.otherPlayer =  match.player2.alias;
+        }                
                 const game = new Game({
                     leftPlayer: match.player1.alias,
                     rightPlayer: match.player2.alias,
@@ -111,16 +115,16 @@ export class ShowGame {
                         match.player2.score = player2Score;
                         match.winner = (match.player1.alias === winnerAlias) ? match.player1 : match.player2;
 						sendGameService(ShowGame.gameType, match);
-                        if (ShowGame.noWinner && window.location.pathname === "/game") {
+                       if (ShowGame.noWinner && (window.location.pathname.includes("/game") || window.location.pathname.includes("/gameai"))) { 
                             if (match.winner.alias && match.winner.alias !== undefined) {
                                 this.showWinner(match, player2Score > player1Score);
                                 let winner = document.getElementById('winner-screen');
                                 winner?.classList.remove('hidden');
                                 ShowGame.noWinner = false;
-                            } else if (window.location.pathname === "/game") {
+                            } else if (window.location.pathname.includes("/game") || window.location.pathname.includes("/gameai")) {
                                 Router.navigate('home');
                             }
-                        } else if (window.location.pathname === "/game") {
+                        } else if (window.location.pathname.includes("/game") || window.location.pathname.includes("/gameai")) {
                             Router.navigate('home');
                         }
                         
