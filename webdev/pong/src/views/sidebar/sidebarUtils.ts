@@ -11,8 +11,8 @@ import { showDashboard, type DashboardData } from "../dashboard";
 
 let currentUser: User | null = null;
 
-export function setCurrentUser(user: User): void {
-  currentUser = { ...user };
+export function setCurrentUser(user: User | null): void {
+  currentUser = user ? { ...user } : null;
 }
 
 export function getCurrentUser(): User | null {
