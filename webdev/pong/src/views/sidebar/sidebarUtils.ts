@@ -6,7 +6,7 @@ import { userChangingInfo } from './profileBtn/userChangingInfo';
 import { seeFriendsList } from './profileBtn/manageFriendsSubmenu';
 import { setupGameSettingsListeners } from '../../controllers/gameSettingsControllers';
 import { manageGameHistorial } from "../../services/gameService";
-// import { showDashboard, type DashboardData } from "../dashboard";
+import { showDashboard, type DashboardData } from "../dashboard";
 // import { getUserDashboardDataService } from "../../services/sidebarService/dashboardDataService";
 
 let currentUser: User | null = null;
@@ -68,19 +68,19 @@ export function closeAllMenus(submenus: NodeListOf<HTMLElement>)
 }
 
 //toErase
-// export const mockDashboardData: DashboardData = {
-// 	username: "PlayerOne",
-// 	stats: {
-// 		won: 12,
-// 		lost: 8,
-// 		scores: 230,
-// 		friends: 5
-// 	},
-// 	points: {
-// 		scored: 150,
-// 		received: 180
-// 	}
-// };
+export const mockDashboardData: DashboardData = {
+	username: "PlayerOne",
+	stats: {
+		won: 12,
+		lost: 8,
+		scores: 230,
+		friends: 5
+	},
+	points: {
+		scored: 150,
+		received: 180
+	}
+};
 
 
 export function profileSidebarBehavior()
@@ -99,7 +99,7 @@ export function profileSidebarBehavior()
 		openMenu('largeSubmenu');
 		openMenu('dashboardSubmenu');
 		// const dashboardData = await getUserDashboardDataService();
-		// showDashboard(dashboardData);// mockDashboardData is just for testing 
+		showDashboard(mockDashboardData);// mockDashboardData is just for testing 
 		const backBtnDasboardSubmenu = document.getElementById("backBtnDasboardSubmenu");
 		backBtnDasboardSubmenu?.addEventListener('click', () => {
 			closeAllMenus(submenus);
