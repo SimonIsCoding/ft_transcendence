@@ -32,12 +32,14 @@ export const GameView = {
 	const gameArea = document.getElementById("gameArea");
 	const oneVsOneElem = document.getElementById("oneVsOneArea");
 	const oneVsAIElem = document.getElementById("oneVsAIArea");
-	
+    let winner = document.getElementById('winner-screen');
+
 	const player1 = document.getElementById("player1") as HTMLInputElement;
     const player2 = document.getElementById("player2") as HTMLInputElement;
     const player1VSAI = document.getElementById("player1VSAI") as HTMLInputElement;
     let tmp = player2;
 	gameArea?.classList.add('hidden');
+	winner?.classList.add('hidden');
 	if (ShowGame.gameType === 'p-vs-p') {
 		oneVsOneElem?.classList.remove('hidden');
 		oneVsAIElem?.classList.add('hidden');
