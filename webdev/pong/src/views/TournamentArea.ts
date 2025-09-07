@@ -1,8 +1,9 @@
 import { TournamentModel } from '../models/TournamentModel';
-import { getMatchInfo, getTournament, setTournament, setMatchInfo } from '../models/TournamentStore';
+import { matchInfo, getMatchInfo, getTournament, setTournament, setMatchInfo } from '../models/TournamentStore';
 import { TournamentController } from '../controllers/TournamentController';
 // import { Router } from '../router';
 import { closeAllMenus } from './sidebar/sidebarUtils';
+import { GameRender } from "../pong-erik/GameRender";
 
 function swapLineToRightSvg(): string {
   return `
@@ -176,6 +177,25 @@ export const TournamentArea = {
       const controller = new TournamentController();
       controller.iniciarTorneo();
     //   Router.navigate('tournament');
+        const tournamentArea = document.getElementById('tournamentArea');
+	let gameCanvasContainer = document.getElementById('gameCanvasContainer');
+
+        if (!gameCanvasContainer && tournamentArea?.parentNode) {
+          gameCanvasContainer = document.createElement('div');
+          gameCanvasContainer.id = 'gameCanvasContainer';
+          gameCanvasContainer.className = 'hidden content bg-[#fbd11b] h-full';
+          tournamentArea.appendChild(gameCanvasContainer);
+        }
+
+        if (gameCanvasContainer && matchInfo && matchInfo.partidoActivo) {
+
+          const gameArea = document.getElementById('gameArea');
+          gameArea?.classList.add('hidden');
+
+          const renderGame = new GameRender().render();
+          gameCanvasContainer.innerHTML = renderGame;
+        }
+
 	  const submenus = document.querySelectorAll<HTMLElement>('.submenu');
 	  closeAllMenus(submenus);
     });
