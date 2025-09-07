@@ -1,15 +1,17 @@
 // import type { User } from "../config";
+import { Router } from "../router";
 import { handleSidebar } from "./sidebar/sidebarBehavior";
 import { TournamentArea } from "./TournamentArea";
 import { GameRender } from "../pong-erik/GameRender";
 import { matchInfo } from '../models/TournamentStore';
-
+import { getCurrentUser } from "./sidebar/sidebarUtils";
+import { showErrorPopup } from "../utils/utils";
 
 export const TournamentView = {
   
  render(): string {
 	return `
-	<div class="w-screen h-screen flex bg-[#fbd11b] overflow-hidden">
+	<div class="w-screen h-screen flex bg-black overflow-hidden">
 		
 		<div id="popup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50">
 		</div>
@@ -24,9 +26,13 @@ export const TournamentView = {
 
   async init(): Promise<void>
   {
-  console.log('t view 1');
-
     await handleSidebar();
+	const currentUser = getCurrentUser();
+	if (!currentUser) {
+		showErrorPopup("Not logged. You can't access this game.", "popup");
+		Router.navigate('home');
+		return;
+	}	
 	const tournamentArea = document.getElementById('tournamentArea');
 	const esquemaTorneo = document.getElementById("esquemaTorneo");
 	let gameCanvasContainer = document.getElementById('gameCanvasContainer');
