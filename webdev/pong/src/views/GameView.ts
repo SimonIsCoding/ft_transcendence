@@ -1,15 +1,18 @@
 // import type { User } from "../config";
+import { Router } from "../router";
 import { handleSidebar } from "./sidebar/sidebarBehavior";
 import { oneVsOneArea } from "./OneVsOneArea";
 import { oneVsAIArea } from "./OneVsOneArea";
 import { GameRender } from "../pong-erik/GameRender";
 import { ShowGame } from "../pong-erik/ShowGame";
+import { getCurrentUser } from "./sidebar/sidebarUtils";
+import { showErrorPopup } from "../utils/utils";
 
 export const GameView = {
   
  render(): string {
 	return `
-	<div class="w-screen h-screen flex bg-[#fbd11b] overflow-hidden">
+	<div class="w-screen h-screen flex bg-black overflow-hidden">
 		
 		<div id="popup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50">
 		</div>
@@ -27,6 +30,12 @@ export const GameView = {
   {
 
     await handleSidebar();
+	const currentUser = getCurrentUser();
+	if (!currentUser && ShowGame.gameType === 'p-vs-ai') {
+		Router.navigate('home');
+		showErrorPopup("Not logged. You can't access this game.", "popup");
+		return;
+	}
 	  oneVsOneArea.init();
 	  oneVsAIArea.init();
 	const gamesArea = document.getElementById("gamesArea");
