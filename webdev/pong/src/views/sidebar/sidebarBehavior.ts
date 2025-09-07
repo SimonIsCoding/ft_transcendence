@@ -88,15 +88,13 @@ export const userLoggedSidebar = {
 	tournamentBtn?.addEventListener('click', () => { Router.navigate('tournament') });
 	const oneVsOneBtn = document.getElementById("oneVsOneBtn");
 	oneVsOneBtn?.addEventListener('click', () => {
-		ShowGame.gameType = 'p-vs-p';
 		ShowGame.inGame = true;
 		Router.navigate('game'); 
 	});
 	const oneVsAIBtn = document.getElementById("oneVsAIBtn");
 	oneVsAIBtn?.addEventListener('click', () => {
-		ShowGame.gameType = 'p-vs-ai';
 		ShowGame.inGame = true;
-		Router.navigate('game');
+		Router.navigate('gameai');
 	});
 
   }

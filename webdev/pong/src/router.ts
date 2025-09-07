@@ -16,7 +16,7 @@ import { GameView } from "./views/GameView";
 
 
 // at the top of router.ts
-export type Route = 'home' | 'login' | 'register' | 'game' | 'tournament';
+export type Route = 'home' | 'login' | 'register' | 'game' | 'gameai' | 'tournament';
 
 export class Router {
   private static app = document.getElementById('app');
@@ -58,37 +58,22 @@ export class Router {
           ShowGame.inGame = false;
           return;
         }
+		ShowGame.gameType = 'p-vs-p';
         this.app.innerHTML = GameView.render();
 		GameView.init();
         break;
-        
+
+	  case 'gameai':
+
+		ShowGame.gameType = 'p-vs-ai';
+        this.app.innerHTML = GameView.render();
+		GameView.init();
+        break;
+
       case 'tournament':
   console.log('router');
         this.app.innerHTML = TournamentView.render();
         TournamentView.init();
-
-        // const tournamentArea = document.getElementById('tournamentArea');
-		// let gameCanvasContainer = document.getElementById('gameCanvasContainer');
-
-        // if (!gameCanvasContainer && tournamentArea?.parentNode) {
-        //   gameCanvasContainer = document.createElement('div');
-        //   gameCanvasContainer.id = 'gameCanvasContainer';
-        //   gameCanvasContainer.className = 'hidden content bg-[#fbd11b] h-full';
-        //   tournamentArea.appendChild(gameCanvasContainer);
-        // }
-
-        // if (gameCanvasContainer && matchInfo && matchInfo.partidoActivo) {
-
-        //   const gameArea = document.getElementById('gameArea');
-        //   gameArea?.classList.add('hidden');
-
-        //   const renderGame = new GameRender().render();
-        //   gameCanvasContainer.innerHTML = renderGame;
-        // }
-        // else if (window.location.pathname === "/tournament"){
-        //   console.log('no hay partido activo, se muestra torneo');
-        //     Router.navigate('home');
-        // }
         break;
     }
 
@@ -101,6 +86,7 @@ export class Router {
     if (path.includes('login')) return 'login';
     if (path.includes('register')) return 'register';
     if (path.includes('game')) return 'game';
+    if (path.includes('gameai')) return 'gameai';
     if (path.includes('tournament')) return 'tournament';
     if (path === '/' || path === '') return 'home';
     return 'home'; // 👈 fallback
