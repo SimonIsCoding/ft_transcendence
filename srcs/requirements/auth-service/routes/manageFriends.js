@@ -85,9 +85,6 @@ export async function FriendsRoute(fastify)
 	fastify.get('/friends/:id', { preHandler: fastify.auth }, async (req, reply) => {
 	  const currentUserId = req.user.id;
 	  const targetId = req.params.id;
-	  console.log(`entered in /friends/:id`);
-	  console.log(`currentUserId = ${currentUserId}`);
-	  console.log(`targetId = ${targetId}`);
 
   	  // Check friendship OR pending request
   	  const check = db.prepare(`
@@ -128,9 +125,6 @@ export async function FriendsRoute(fastify)
 	  const friendId = parseInt(req.params.id, 10);
 	  if (isNaN(friendId)) return reply.status(400).send({ error: "Invalid friend ID" });
 	  const now = new Date().toISOString();
-	  console.log(`entered in /friends/:id/online`);
-	  console.log(`userId = ${userId}`);
-	  console.log(`friendId = ${friendId}`);
 
 	  // Friendship check
 	  const check = db.prepare(`
@@ -216,9 +210,6 @@ export async function FriendsRoute(fastify)
 	fastify.get('/friends/:id/GDPR', { preHandler: fastify.auth }, async (req, reply) => {
 	  const userId = req.user.id;
 	  const friendId = parseInt(req.params.id, 10);
-	  console.log(`entered in /friends/:id/GDPR`);
-	  console.log(`userId = ${userId}`)
-	  console.log(`friendId = ${friendId}`)
 	  if (isNaN(friendId))
 		return reply.status(400).send({ error: "Invalid friend ID" });
 	  const now = new Date().toISOString();
@@ -231,14 +222,12 @@ export async function FriendsRoute(fastify)
 	       OR (user_a_id = ? AND user_b_id = ?)
 	  `).get(userId, friendId, friendId, userId);
 
-	  console.log(`check = ${check}`);
 	  if (!check)
 		return reply.status(403).send({ error: "Not a friend" });
 
 	  //check firstly if GDPR is activated or not
 	  let row = db.prepare("SELECT GDPR_activated FROM users WHERE id = ?").get(friendId);
 	  let GDPR_activated = row.GDPR_activated;
-	  console.log(`GDPR_activated = ${GDPR_activated}`)
 	  if (GDPR_activated === 0)
 	  {
 		const sessions = db.prepare(`

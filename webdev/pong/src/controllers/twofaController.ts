@@ -29,11 +29,9 @@ export class TwoFAController {
     this.onFailure = onFailure;
     this.viewRender = viewRender || twofaView; // default to main login view
 
-    // console.log('2FA Controller initialized for:', email);
   }
 
   public init(): HTMLElement {
-    // console.log('Rendering 2FA template for:', this.email);
     const view = document.createElement('div');
     view.innerHTML = this.viewRender.render(this.email);
 
@@ -45,24 +43,19 @@ export class TwoFAController {
       });
       throw new Error('2FA template error');
     }
-//   console.log('[TwoFAController] init() form found');
 
     this.container = view;
 
     this.setupEventListeners(view);
-  console.log('[TwoFAController] init() setupEventListener done');
   // Request the first 2FA code via the service
     this.sendInitialCode();
     return view;
   }
 
 private async sendInitialCode(): Promise<void> {
-  console.log('Requesting initial 2FA code for:', this.email);
   try {
     await twoFAService.requestCode(this.email);
-    console.log('Initial 2FA code sent');
   } catch (error) {
-    console.error('Failed to send initial 2FA code:', error);
     this.showError('Could not send verification code');
   }
 }
@@ -80,19 +73,16 @@ private async sendInitialCode(): Promise<void> {
   }
 
   private async verifyCode(code: string): Promise<void> {
-    // console.log('Verifying 2FA code:', code);
     if (!/^\d{6}$/.test(code)) {
       this.showError('Please enter a valid 6-digit code');
       return;
     }
 
     this.attempts++;
-    console.log(`Attempt ${this.attempts}/${this.maxAttempts}`);
 
 try {
   const result = await twoFAService.verifyCode(this.email, code);
 
-//   console.log('Verification result:', result);
 
   if (result.success) {
     this.onSuccess();
@@ -113,7 +103,6 @@ try {
     if (response) {
       try {
         errorMessage = response.message || errorMessage;
-        console.log('Failure details:', response);
       } catch (e) {
         console.error('Failed to parse error response:', e);
       }
@@ -123,7 +112,6 @@ try {
       ? '. Maximum attempts reached.' 
       : ` (${remaining} ${remaining === 1 ? 'attempt' : 'attempts'} remaining)`;
 
-    console.log(`Attempt failed. Message: ${errorMessage}`);
     this.showError(`Attempt failed. Message: ${errorMessage}`);
 
     if (this.onFailure) {
@@ -132,7 +120,6 @@ try {
 }
   
 private async resendCode(): Promise<void> {
-  console.log('Resending 2FA code to:', this.email);
   try {
     await twoFAService.requestCode(this.email);
     this.showError('New code sent successfully');
@@ -143,7 +130,6 @@ private async resendCode(): Promise<void> {
 }
 
   private showError(message: string): void {
-    console.log('Displaying error:', message);
     const errorEl = this.container.querySelector('#twofaError');
     if (errorEl) {
       errorEl.textContent = message;

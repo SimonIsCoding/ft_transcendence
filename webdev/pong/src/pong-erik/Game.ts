@@ -57,7 +57,6 @@ export class Game {
     
     // Set default options and merge with provided options
     // this.gameId = `game-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    // console.log(`🎮 Creating new Game instance: ${this.gameId}`);
     
     this.options = {
       leftPlayer: options?.leftPlayer || GameConfig.DEFAULT_LEFT_PLAYER,
@@ -180,7 +179,6 @@ export class Game {
    * Stops the game completely and cleans up resources
    */
   public stopGame(): void {
-    // console.log(`🛑 Stopping Game instance: ${this.gameId}`);
     this.isGameActive = false;
     this.gameOn = false;
     this.isPaused = true;
@@ -189,7 +187,6 @@ export class Game {
     if (this.animationFrameId !== null) {
       cancelAnimationFrame(this.animationFrameId);
       this.animationFrameId = null;
-    //   console.log(`🎬 Cancelled animation frame for Game: ${this.gameId}`);
     }
     
     // Clear timing state

@@ -115,7 +115,6 @@ export function profileSidebarBehavior()
 	const gameHistoryBtn = document.getElementById("gameHistoryBtn");
 	const backBtnGameHistorySubmenu = document.getElementById("backBtnGameHistorySubmenu");
 	backBtnGameHistorySubmenu?.addEventListener('click', () => {
-		console.log("clicked");
 		closeAllMenus(submenus);
 		toggleMenuVisibility('profileSubmenu', submenus);
 	});

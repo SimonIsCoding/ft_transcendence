@@ -105,14 +105,10 @@ export const manageOthersUsersCard = (() => {
 	const othersUsersDiv = document.getElementById("othersUsersDiv");
 	othersUsersDiv?.classList.remove("hidden");
 	const totalUsers = await getTotalUser();
-	//const currentUser: User = await getCurrentUser();
 
 	if (totalUsers > 1)
 	{
 		let max: number = totalUsers - 1 > 2 ? 2 : totalUsers - 1;
-		// if (totalUsers == 2)
-			// max = 1;
-		console.log(`max user is ${max}`);
 		let randomUser: User | null;
 		let listOthersFriends: User[] = [];
 		let noOtherFriend = 0;
