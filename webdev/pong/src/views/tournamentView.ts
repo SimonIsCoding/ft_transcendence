@@ -29,8 +29,8 @@ export const TournamentView = {
     await handleSidebar();
 	const currentUser = getCurrentUser();
 	if (!currentUser) {
-		showErrorPopup("Not logged. You can't access this game.", "popup");
 		Router.navigate('home');
+		showErrorPopup("Not logged. You can't access this game.", "popup");
 		return;
 	}	
 	const tournamentArea = document.getElementById('tournamentArea');

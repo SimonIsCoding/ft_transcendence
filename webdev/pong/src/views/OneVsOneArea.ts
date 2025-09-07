@@ -64,7 +64,7 @@ export const oneVsAIArea = {
 			</button> -->
 			<div id="swapAIBtn" class="inline-block my-4 p-2.75">
 			</div>
-			<button id="AIPlayer" placeholder="AI" class="flex items-center justify-center text-yellow-400 hover:text-black hover:bg-yellow-400 transition-colors duration-300 border border-[#fbd11b] rounded-lg px-26 py-1.5 rounded-xl inline-block">
+			<button id="AIPlayer" placeholder="AI" class="items-center justify-center text-yellow-400 hover:text-black hover:bg-yellow-400 transition-colors duration-300 border border-[#fbd11b] px-26 py-1.5 rounded-xl inline-block">
 				${AIsvg()}
 			</button>
 			<button id="playOneVsAIBtn" class="inline-block text-yellow-400 hover:text-black hover:bg-yellow-400 transition-colors duration-300 border border-[#fbd11b] rounded-lg my-4 p-2.75 font-bold w-40 text-xl mt-10">Play</button>
