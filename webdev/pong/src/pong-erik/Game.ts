@@ -214,7 +214,7 @@ export class Game {
     // console.log(`▶️ Starting Game instance: ${this.gameId}`);
     const gameLoop = (time: number) => {
       if (!this.isGameActive || !ShowGame.noWinner || !this.gameOn) {
-        console.log(`⏹️ Game loop stopping for Game: ${this.gameId} (isActive: ${this.isGameActive}, noWinner: ${ShowGame.noWinner}, gameOn: ${this.gameOn})`);
+        // console.log(`⏹️ Game loop stopping for Game: ${this.gameId} (isActive: ${this.isGameActive}, noWinner: ${ShowGame.noWinner}, gameOn: ${this.gameOn})`);
         // window.addEventListener('popstate', (event) => {
         //   resetTournament();
         //   Router.navigate('home');
