@@ -1,5 +1,5 @@
 import{ toggleMenuVisibility } from '../sidebarUtils'
-import { Router } from '../../../router';
+//import { Router } from '../../../router';
 import { showErrorPopup } from '../../../utils/utils';
 import { TournamentArea } from '../../TournamentArea';
 import { ShowGame } from '../../../pong-erik/ShowGame';
@@ -43,19 +43,7 @@ function swapElements(id1: string, id2: string)
 
 export function oneVsOneAreaInit()
 {
-	const oneVsOneBtn = document.getElementById("oneVsOneBtn");
-	const gameArea = document.getElementById("gameArea");
-	const oneVsOneArea = document.getElementById("oneVsOneArea");
-	const oneVsAIArea = document.getElementById("oneVsAIArea");
 
-	oneVsOneBtn?.addEventListener('click', () => {
-		gameArea?.classList.add('hidden');
-		oneVsOneArea?.classList.remove('hidden');
-		oneVsAIArea?.classList.add('hidden');
-		ShowGame.gameType = 'p-vs-p';
-		ShowGame.inGame = true;
-		Router.navigate('game'); 
-	});
 	document.getElementById("swapBtn")?.addEventListener("click", () => {
 		swapPlayer("player1", "player2");
 	});
@@ -69,6 +57,11 @@ export function oneVsOneAreaInit()
 			showErrorPopup("You need 2 players to play.", "oneVsOneAreaPopup");
 			return ;
 		}
+		new ShowGame().initGame({
+	  		player1: { alias: player1.value },
+			player2: { alias: player2.value },
+			winner: null
+		});
 	});
 }
 
@@ -98,16 +91,21 @@ export function oneVsAIAreaInit()
 	document.getElementById("swapAIBtn")?.addEventListener("click", () => {
 		swapElements("player1VSAI", "AIPlayer");
 	});
-
+	
 	const playBtn = document.getElementById('playOneVsAIBtn') as HTMLButtonElement | null;
 	playBtn!.addEventListener('click', () => {
+		const player1 = document.getElementById("player1") as HTMLInputElement;
 		const player1VSAI = document.getElementById("player1VSAI") as HTMLInputElement;
 		if (!player1VSAI.value.trim())
 		{
 			showErrorPopup("You need 1 player to play.", "oneVsAIAreaPopup");
 			return ;
 		}
-
+		new ShowGame().initGame({
+	  		player1: { alias: player1.value },
+			player2: { alias: player1VSAI.value },
+			winner: null
+		});
 	});
 }
 

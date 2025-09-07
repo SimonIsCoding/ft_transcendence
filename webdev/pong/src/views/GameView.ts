@@ -52,12 +52,6 @@ export const GameView = {
 		player2: { alias: "User 2" },
 		winner: null
 	  });
-	} else {
-	  new ShowGame().initGame({
-	  player1: { alias: player1.value },
-		player2: { alias: tmp.value },
-		winner: null
-	  });
 	}
 	
 
