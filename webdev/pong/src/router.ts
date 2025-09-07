@@ -5,28 +5,18 @@ import { registerView } from './views/registerView';
 // import { GameView } from './views/game';
 // import { gameController } from './controllers/gameController';
 
-import { matchInfo } from './models/TournamentStore';
+// import { matchInfo } from './models/TournamentStore';
 // import { TournamentUIManager } from './views/TournamentUIManager';
 // import { Game } from './pong-erik/Game';
-import { GameRender } from './pong-erik/GameRender';
+// import { GameRender } from './pong-erik/GameRender';
 import { ShowGame } from './pong-erik/ShowGame';
 // import { TournamentController } from './controllers/TournamentController';
+import { TournamentView } from './views/tournamentView';
+import { GameView } from "./views/GameView";
 
-
-function NotFound() {
-  const app = document.getElementById('app');
-  if (!app) return;
-  app.innerHTML = `
-    <div class="not-found">
-      <h1>404 - Page Not Found</h1>
-      <p>The page you are looking for doesn’t exist.</p>
-      <a href="/">Go Home</a>
-    </div>
-  `;
-}
 
 // at the top of router.ts
-export type Route = 'home' | 'login' | 'register' | 'game' | 'tournament' | 'notfound';
+export type Route = 'home' | 'login' | 'register' | 'game' | 'gameai' | 'tournament';
 
 export class Router {
   private static app = document.getElementById('app');
@@ -63,78 +53,40 @@ export class Router {
         break;
 
       case 'game':
-        if (!ShowGame.inGame) {
-          Router.navigate('home');
-          ShowGame.inGame = false;
-          return;
-        }
-        const player1 = document.getElementById("player1") as HTMLInputElement;
-        const player2 = document.getElementById("player2") as HTMLInputElement;
-        const player1VSAI = document.getElementById("player1VSAI") as HTMLInputElement;
-        let tmp = player2;
-        if (ShowGame.gameType === 'p-vs-ai') {
-          tmp = player1VSAI;
-          ShowGame.otherPlayer = tmp.value;
-        }
-        if (!tmp && !player1) {
-          new ShowGame().initGame({
-          player1: { alias: "User 1" },
-            player2: { alias: "User 2" },
-            winner: null,
-            type: '1vs1'
-          });
-        } else {
-          new ShowGame().initGame({
-          player1: { alias: player1.value },
-            player2: { alias: tmp.value },
-            winner: null,
-            type: '1vsIA'
-          });
-        }
+		ShowGame.inGame = true;
+		ShowGame.gameType = 'p-vs-p';
+        this.app.innerHTML = GameView.render();
+		GameView.init();
         break;
-        
 
-      case 'notfound': NotFound(); break;
+	  case 'gameai':
+		ShowGame.inGame = true;
+
+		ShowGame.gameType = 'p-vs-ai';
+        this.app.innerHTML = GameView.render();
+		GameView.init();
+        break;
 
       case 'tournament':
-
-        const tournamentArea = document.getElementById('tournamentArea');
-		let gameCanvasContainer = document.getElementById('gameCanvasContainer');
-
-        if (!gameCanvasContainer && tournamentArea?.parentNode) {
-          gameCanvasContainer = document.createElement('div');
-          gameCanvasContainer.id = 'gameCanvasContainer';
-          gameCanvasContainer.className = 'hidden content bg-[#fbd11b] h-full';
-          tournamentArea.appendChild(gameCanvasContainer);
-        }
-
-        if (gameCanvasContainer && matchInfo && matchInfo.partidoActivo) {
-
-          const gameArea = document.getElementById('gameArea');
-          gameArea?.classList.add('hidden');
-
-          const renderGame = new GameRender().render();
-          gameCanvasContainer.innerHTML = renderGame;
-        }
-        else if (window.location.pathname === "/tournament"){
-          console.log('no hay partido activo, se muestra torneo');
-            Router.navigate('home');
-        }
+        console.log('router');
+        this.app.innerHTML = TournamentView.render();
+        TournamentView.init();
         break;
     }
 
 
-    if (addToHistory && page !== 'notfound')
+    if (addToHistory)
       history.pushState({}, '', page === 'home' ? '/' : `/${page}`);
   }
 
   private static resolveRoute(path: string): Route {
     if (path.includes('login')) return 'login';
     if (path.includes('register')) return 'register';
+    if (path.includes('gameai')) return 'gameai';
     if (path.includes('game')) return 'game';
     if (path.includes('tournament')) return 'tournament';
     if (path === '/' || path === '') return 'home';
-    return 'notfound'; // 👈 fallback
+    return 'home'; // 👈 fallback
   }
 
   public static init(): void {
@@ -155,11 +107,11 @@ export class Router {
       console.log('History changed:', event.state);
     });
     // 
-    window.addEventListener('beforeunload', () => {
-      if (window.location.pathname === "/tournament")
-        Router.navigate('home');
-      ShowGame.cleanup();
-    });
+    // window.addEventListener('beforeunload', () => {
+    //   if (window.location.pathname === "/tournament")
+    //     Router.navigate('home');
+    //   ShowGame.cleanup();
+    // });
   }
 }
 

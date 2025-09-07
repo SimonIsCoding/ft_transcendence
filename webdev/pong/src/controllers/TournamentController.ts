@@ -112,7 +112,7 @@ export class TournamentController {
                 await TournamentUIManager.showPreGame(match.player1.alias, match.player2.alias);
                 await TournamentUIManager.startCountdown();
                 this.mostrarVistaJuego();
-                Router.navigate('tournament');
+//                Router.navigate('tournament');
                 await new Promise(resolve => setTimeout(resolve, 100));
                 const game = new Game({
                     leftPlayer: match.player1.alias,
