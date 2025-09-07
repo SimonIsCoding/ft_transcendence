@@ -38,8 +38,8 @@ export const GameView = {
 
 	gameArea?.classList.add('hidden');
 	if (ShowGame.gameType === 'p-vs-p') {
-		oneVsOneArea?.classList.add('hidden');
-		oneVsAIArea?.classList.remove('hidden');
+		oneVsOneArea?.classList.remove('hidden');
+		oneVsAIArea?.classList.add('hidden');
 	} else if (ShowGame.gameType === 'p-vs-ai') {
 		tmp = player1VSAI;
 		ShowGame.otherPlayer = tmp.value;
