@@ -62,7 +62,8 @@ console.log('clic 2');
 		new ShowGame().initGame({
 	  		player1: { alias: player1.value },
 			player2: { alias: player2.value },
-			winner: null
+			winner: null,
+			type: '1vs1'
 		});
 	});
 }
@@ -104,7 +105,8 @@ export function oneVsAIAreaInit()
 		new ShowGame().initGame({
 	  		player1: { alias: player1.value },
 			player2: { alias: player1VSAI.value },
-			winner: null
+			winner: null,
+			type: ''
 		});
 	});
 }

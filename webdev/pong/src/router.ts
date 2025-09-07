@@ -106,9 +106,9 @@ export class Router {
     });
 
     // Clean up games when the page is about to unload
-//    window.addEventListener('popstate', (event) => {
-//      console.log('History changed:', event.state);
-//    });
+    // window.addEventListener('popstate', (event) => {
+    //   console.log('History changed:', event.state);
+    // });
     // 
     // window.addEventListener('beforeunload', () => {
     //   if (window.location.pathname === "/tournament")

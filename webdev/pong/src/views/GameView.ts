@@ -62,7 +62,8 @@ export const GameView = {
 	  new ShowGame().initGame({
 	  player1: { alias: "User 1" },
 		player2: { alias: "User 2" },
-		winner: null
+		winner: null,
+		type: '1vs1'
 	  });
 	}
 	

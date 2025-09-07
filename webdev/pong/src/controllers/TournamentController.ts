@@ -1,5 +1,5 @@
 import type { Match } from '../models/TournamentModel';
-import { Router } from '../router';
+// import { Router } from '../router';
 import { currentTournament, getTournament, resetTournament } from '../models/TournamentStore';
 import { TournamentUIManager } from '../views/TournamentUIManager';
 import { Game } from '../pong-erik/Game';
@@ -123,13 +123,10 @@ export class TournamentController {
                         match.winner = (match.player1.alias === winnerAlias) ? match.player1 : match.player2;
 						sendGameService(match.type, match);
                         const torneo = getTournament();
-                        if (match.winner.alias && match.winner.alias !== undefined) {
+                        if (match.winner.alias && match.winner.alias != undefined) {
                             if (torneo)
                                 console.log('tiene que actualizar info???')
-                                // TournamentUIManager.updateBracket(torneo);
-                        } else {
-                            resetTournament();
-                            Router.navigate('home');
+                                // TournamentUIManager.updateBracket();
                         }
                         resolve();
                     },
