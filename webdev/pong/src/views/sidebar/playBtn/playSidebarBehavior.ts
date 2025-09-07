@@ -47,13 +47,14 @@ export function oneVsOneAreaInit()
 	const gameArea = document.getElementById("gameArea");
 	const oneVsOneArea = document.getElementById("oneVsOneArea");
 	const oneVsAIArea = document.getElementById("oneVsAIArea");
-	const tournamentArea = document.getElementById("tournamentArea");
 
 	oneVsOneBtn?.addEventListener('click', () => {
 		gameArea?.classList.add('hidden');
 		oneVsOneArea?.classList.remove('hidden');
 		oneVsAIArea?.classList.add('hidden');
-		tournamentArea?.classList.add('hidden');
+		ShowGame.gameType = 'p-vs-p';
+		ShowGame.inGame = true;
+		Router.navigate('game'); 
 	});
 	document.getElementById("swapBtn")?.addEventListener("click", () => {
 		swapPlayer("player1", "player2");
@@ -68,9 +69,6 @@ export function oneVsOneAreaInit()
 			showErrorPopup("You need 2 players to play.", "oneVsOneAreaPopup");
 			return ;
 		}
-		ShowGame.gameType = 'p-vs-p';
-		ShowGame.inGame = true;
-		Router.navigate('game'); 
 	});
 }
 
@@ -96,19 +94,7 @@ export function tournamentAreaInit()
 
 export function oneVsAIAreaInit()
 {
-	const oneVsAIBtn = document.getElementById("oneVsAIBtn");
-	const gameArea = document.getElementById("gameArea");
-	const oneVsAIArea = document.getElementById("oneVsAIArea");
-	const oneVsOneArea = document.getElementById("oneVsOneArea");
-	const tournamentArea = document.getElementById("tournamentArea");
-	const esquemaTorneo = document.getElementById("esquemaTorneo");
-	oneVsAIBtn?.addEventListener('click', () => {
-		gameArea?.classList.add('hidden');
-		oneVsOneArea?.classList.add('hidden');
-		oneVsAIArea?.classList.remove('hidden');
-		tournamentArea?.classList.add('hidden');
-		esquemaTorneo?.classList.add('hidden');
-	});
+
 	document.getElementById("swapAIBtn")?.addEventListener("click", () => {
 		swapElements("player1VSAI", "AIPlayer");
 	});
@@ -121,9 +107,7 @@ export function oneVsAIAreaInit()
 			showErrorPopup("You need 1 player to play.", "oneVsAIAreaPopup");
 			return ;
 		}
-		ShowGame.gameType = 'p-vs-ai';
-		ShowGame.inGame = true;
-		Router.navigate('game');
+
 	});
 }
 

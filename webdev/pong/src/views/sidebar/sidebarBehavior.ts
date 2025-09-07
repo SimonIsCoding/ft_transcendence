@@ -12,7 +12,7 @@ import { friendsSubmenuRender } from './profileBtn/friendsSubmenuRender'
 import { dashboardSubmenuRender } from './profileBtn/dashboardSubmenuRender'
 import { gameHistorySubmenuRender } from './profileBtn/gameHistorySubmenuRender'
 import { editProfileSubmenuRender } from './profileBtn/editProfileSubmenuRender'
-
+import { ShowGame } from "../../pong-erik/ShowGame";
 
 export const userUnloggedSidebar = {
   currentUser: null as User | null,
@@ -86,6 +86,19 @@ export const userLoggedSidebar = {
 	setupMenuHandlers();
 	const tournamentBtn = document.getElementById('tournamentBtn');
 	tournamentBtn?.addEventListener('click', () => { Router.navigate('tournament') });
+	const oneVsOneBtn = document.getElementById("oneVsOneBtn");
+	oneVsOneBtn?.addEventListener('click', () => {
+		ShowGame.gameType = 'p-vs-p';
+		ShowGame.inGame = true;
+		Router.navigate('game'); 
+	});
+	const oneVsAIBtn = document.getElementById("oneVsAIBtn");
+	oneVsAIBtn?.addEventListener('click', () => {
+		ShowGame.gameType = 'p-vs-ai';
+		ShowGame.inGame = true;
+		Router.navigate('game');
+	});
+
   }
 }
 
