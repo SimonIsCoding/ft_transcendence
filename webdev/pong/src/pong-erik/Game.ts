@@ -6,8 +6,8 @@ import { AIManager, PlayerSide } from "./AIManager.js";
 import { ScoreManager, GameResult } from "./ScoreManager.js";
 import { UIManager } from "./UIManager.js";
 import { ShowGame } from "./ShowGame.js";
-import { resetTournament } from "../models/TournamentStore.js";
-import { Router } from "../router.js";
+// import { resetTournament } from "../models/TournamentStore.js";
+// import { Router } from "../router.js";
 
 export interface GameOptions {
   leftPlayer: string;
@@ -218,11 +218,11 @@ export class Game {
     const gameLoop = (time: number) => {
       if (!this.isGameActive || !ShowGame.noWinner || !this.gameOn) {
         console.log(`⏹️ Game loop stopping for Game: ${this.gameId} (isActive: ${this.isGameActive}, noWinner: ${ShowGame.noWinner}, gameOn: ${this.gameOn})`);
-        window.addEventListener('popstate', (event) => {
-          resetTournament();
-          Router.navigate('home');
-          console.log('History changed:', event.state);
-        });
+        // window.addEventListener('popstate', (event) => {
+        //   resetTournament();
+        //   Router.navigate('home');
+        //   console.log('History changed:', event.state);
+        // });
         this.resetGame();
         this.animationFrameId = null; // Clear the ID when stopping
         return ;
