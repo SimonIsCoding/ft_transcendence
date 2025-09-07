@@ -1,4 +1,4 @@
-import type { TournamentModel } from "../models/TournamentModel";
+import type { Match } from "../models/TournamentModel";
 import { Router } from "../router";
 import { TournamentArea } from "./TournamentArea";
 
@@ -53,11 +53,10 @@ class UIManager {
         });
     }
 
-    public updateBracket(tournament: TournamentModel) {
-
-        if (tournament.semifinal1) {
-
-            const match = tournament.semifinal1;
+    public updateBracket(match: Match)
+    {
+        if (match.type == 'semifinal1')
+        {
             const p1_input = document.querySelector('#alias1') as HTMLInputElement;
             const p1_points = document.querySelector('#alias1-point') as HTMLInputElement;
             const p2_input = document.querySelector('#alias2') as HTMLInputElement;
@@ -81,9 +80,8 @@ class UIManager {
                 }
             }
         }
-        if (tournament.semifinal2) {
-            const match = tournament.semifinal2;
-            console.log(match)
+        else if (match.type == 'semifinal2')
+        {
             const p1_input = document.querySelector('#alias3') as HTMLInputElement;
             const p2_input = document.querySelector('#alias4') as HTMLInputElement;
             const p1_points = document.querySelector('#alias3-point') as HTMLElement;
@@ -110,10 +108,8 @@ class UIManager {
                 }
             }
         }
-
-        if (tournament.finalMatch) {
-            const match = tournament.finalMatch;
-
+        else if (match.type == 'final')
+        {
             const f1_input = document.querySelector('#final1') as HTMLElement;
             const f2_input = document.querySelector('#final2') as HTMLElement;
 
@@ -137,7 +133,6 @@ class UIManager {
                 }
             }
         }
-
     }
 
     public showTournamentWinner(winnerAlias: string) {

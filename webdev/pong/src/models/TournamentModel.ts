@@ -7,6 +7,7 @@ export type Match = {
   player1: Player;
   player2: Player;
   winner: Player | null;
+  type: string;
 };
 
 export class TournamentModel {
@@ -28,12 +29,14 @@ export class TournamentModel {
     this.semifinal1 = {
       player1: { ...this.players[0] }, 
       player2: { ...this.players[1] },
-      winner: null
+      winner: null,
+      type: 'semifinal1'
     };
     this.semifinal2 = {
         player1: { ...this.players[2] },
         player2: { ...this.players[3] },
-        winner: null
+        winner: null,
+        type: 'semifinal2'
     };
   }
 
@@ -43,7 +46,8 @@ export class TournamentModel {
       this.finalMatch = {
         player1: this.semifinal1.winner,
         player2: this.semifinal2.winner,
-        winner: null
+        winner: null,
+        type: 'final'
       };
     }
   }
@@ -52,13 +56,4 @@ export class TournamentModel {
     this.winner = winner;
   }
 
-  saveToLocalStorage() {
-    const historial = JSON.parse(localStorage.getItem('torneos') || '[]');
-    historial.push({
-      jugadores: this.players.map(p => p.alias),
-      ganador: this.winner?.alias,
-      fecha: new Date().toISOString()
-    });
-    localStorage.setItem('torneos', JSON.stringify(historial));
-  }
 }
