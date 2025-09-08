@@ -6,7 +6,7 @@
 // {
 // 	try
 // 	{
-// 		const victories = await fetch('/api/games/victories', { credentials: 'include' });
+// 		const victories = await fetch('/api/game/victories', { credentials: 'include' });
 // 		return result;
 // 	}
 // 	catch (error)

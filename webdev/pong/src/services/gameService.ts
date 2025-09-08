@@ -25,7 +25,7 @@ export async function sendGameService(gameType: string, match: Match)
 	}
 	try
 	{
-		fetch('/api/games/matches', {
+		fetch('/api/game/matches', {
 			method: 'POST',
 			credentials: 'include',
 			headers: { 'Content-Type': 'application/json' },
@@ -64,7 +64,7 @@ export async function gameCurrentUserHasPlayedService()
 {
 	try
 	{
-		const games: matchid[] = await fetch('/api/games/nbMatchesPlayed', {
+		const games: matchid[] = await fetch('/api/game/nbMatchesPlayed', {
 			credentials: 'include',
 		}).then(res => res.json());
 
@@ -78,7 +78,7 @@ export async function gameCurrentUserHasPlayedService()
 	catch (error)
 	{
 		console.error('gameCurrentUserHasPlayedService error:', error);
-		showErrorPopup("Error with storing the game in historial.", "popup");
+		showErrorPopup("Error with getting historic games", "popup");
 		Router.navigate('home');
 	}
 }

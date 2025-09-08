@@ -2,7 +2,7 @@ import db from '../src/database.js';
 
 export async function matchesRoutes(fastify)
 {
-    fastify.post('/games/matches', { preHandler: fastify.auth }, async (req, reply) => {
+    fastify.post('/game/matches', { preHandler: fastify.auth }, async (req, reply) => {
         try {
             const { 
                 player1,
@@ -48,7 +48,7 @@ export async function matchesRoutes(fastify)
         }
     });
 
-	fastify.get('/games/nbMatchesPlayed', { preHandler: fastify.auth }, async (request, reply) => {
+	fastify.get('/game/nbMatchesPlayed', { preHandler: fastify.auth }, async (request, reply) => {
 		const userId = request.user.id;
 		const stmt = db.prepare("SELECT matchid, player1, player2, scorePlayer1, scorePlayer2, gameMode, finished_at FROM matches WHERE userid = ?");
 		const users = stmt.all(userId);
