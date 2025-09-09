@@ -4,6 +4,7 @@ import { TournamentController } from '../controllers/TournamentController';
 // import { Router } from '../router';
 import { closeAllMenus } from './sidebar/sidebarUtils';
 import { GameRender } from "../pong-erik/GameRender";
+import { getCurrentUser } from "./sidebar/sidebarUtils";
 
 function swapLineToRightSvg(): string {
   return `
@@ -127,11 +128,11 @@ export const TournamentArea = {
   init(): void {
     const playtournamentBtn = document.getElementById('playtournamentBtn') as HTMLButtonElement | null;
 
-    let login = localStorage.getItem('login');
+  const currentUser = getCurrentUser();
 
     const alias1 = document.querySelector('#alias1') as HTMLInputElement;
     if (alias1)
-      alias1.value = login || '';
+      alias1.value = currentUser?.login || '';
     playtournamentBtn?.addEventListener('click', () => {
       let player1 = (document.getElementById("alias1") as HTMLInputElement).value;
       let player2 = (document.getElementById("alias2") as HTMLInputElement).value;
