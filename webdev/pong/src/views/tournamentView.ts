@@ -11,16 +11,9 @@ export const TournamentView = {
   
  render(): string {
 	return `
-	<div class="w-screen h-screen flex bg-black overflow-hidden">
-		
-		<div id="popup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50">
-		</div>
 
-		<div id="sidebar" class="bg-[#fbd11b] h-screen flex flex-col overflow-hidden transition-all duration-500 ease-in-out w-[64px]">
-		</div>
       ${TournamentArea.render()}
       ${new GameRender().renderGame()}
-    </div>
   `;
   },
 
@@ -33,6 +26,9 @@ export const TournamentView = {
 		showErrorPopup("Not logged. You can't access this game.", "popup");
 		return;
 	}	
+  let host = document.getElementById('alias1') as HTMLInputElement
+  host.disabled = true;
+  console.log('aquii')
 	const tournamentArea = document.getElementById('tournamentArea');
 	const esquemaTorneo = document.getElementById("esquemaTorneo");
 	let gameCanvasContainer = document.getElementById('gameCanvasContainer');
