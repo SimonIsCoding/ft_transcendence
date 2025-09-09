@@ -33,6 +33,9 @@ export const TournamentView = {
 		showErrorPopup("Not logged. You can't access this game.", "popup");
 		return;
 	}	
+  let host = document.getElementById('alias1') as HTMLInputElement
+  host.disabled = true;
+  console.log('aquii')
 	const tournamentArea = document.getElementById('tournamentArea');
 	const esquemaTorneo = document.getElementById("esquemaTorneo");
 	let gameCanvasContainer = document.getElementById('gameCanvasContainer');
