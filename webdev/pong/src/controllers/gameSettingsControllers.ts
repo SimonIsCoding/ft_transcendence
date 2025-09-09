@@ -11,7 +11,7 @@ export const gameDifficulty = (): number => {
 
 export const gameSettings = {
 	iaDifficulty: "Easy",
-	scoreLimit: "5"
+	scoreLimit: "3"
 };
 
 export function setupGameSettingsListeners()
