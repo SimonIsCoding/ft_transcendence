@@ -17,11 +17,11 @@ export async function sendGameService(gameType: string, match: Match)
 {
 	if (gameType == 'p-vs-ai')
 	{
-		if (match.player1.alias == '')
-		{
-			match.player1.alias = match.player2.alias;
-			match.player2.alias = 'AI';
-		}
+		// if (match.player1.alias == '')
+		// {
+			// match.player1.alias = match.player2.alias;
+			// match.player2.alias = 'AI';
+		// }
 	}
 	try
 	{

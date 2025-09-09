@@ -3,7 +3,7 @@ import type { Match } from '../models/TournamentModel';
 //import { handleSidebar } from '../views/sidebar/sidebarBehavior';
 import { Game } from "./Game";
 import { GameRender } from './GameRender';
-import { gameDifficulty, gameSettings } from "../controllers/gameSettingsControllers";
+// import { gameDifficulty, gameSettings } from "../controllers/gameSettingsControllers";
 import { sendGameService } from "../services/gameService";
 
 type GameMode = 'p-vs-ai' | 'ai-vs-p' | 'p-vs-p' | 'ai-vs-ai';
@@ -42,7 +42,10 @@ console.log('render 2');
         // this.renderCanvas();
         const gameArea = document.getElementById('gameArea');
         gameArea?.classList.add('hidden');
-
+        // if (ShowGame.gameType === 'p-vs-ai') {
+            // match.player1.alias = "match.player2.alias";
+            // match.player2.alias = 'ChatGPT';
+        // }
         ShowGame.noWinner = true;
         await this.playGame(match);
     }
@@ -101,29 +104,35 @@ console.log('render 2');
 //                await handleSidebar();
                 this.renderGameCanvas();
                 await new Promise(resolve => setTimeout(resolve, 100));
-if (ShowGame.gameType === 'p-vs-ai') {
-          ShowGame.otherPlayer =  match.player2.alias;
-        }                
+                if (ShowGame.gameType === 'p-vs-ai') {
+                    ShowGame.otherPlayer = match.player2.alias;
+                }                
                 const game = new Game({
                     leftPlayer: match.player1.alias,
                     rightPlayer: match.player2.alias,
-                    maxScore: parseInt(gameSettings.scoreLimit),
+                    maxScore: 1,
+                    // maxScore: parseInt(gameSettings.scoreLimit),
                     gameMode: ShowGame.gameType,
-                    aiDifficulty: gameDifficulty() as 1000 | 100 | 1,
+                    // aiDifficulty: gameDifficulty() as 1000 | 100 | 1,
                     onFinish: (winnerAlias: string, player1Score: number, player2Score: number) => {
                         match.player1.score = player1Score;
                         match.player2.score = player2Score;
+                        if (ShowGame.gameType == 'p-vs-ai') {
+                            match.player1.alias = match.player2.alias;
+                            match.player2.alias = 'AI';
+                        }
                         match.winner = (match.player1.alias === winnerAlias) ? match.player1 : match.player2;
 						sendGameService(ShowGame.gameType, match);
-                       if (ShowGame.noWinner && (window.location.pathname.includes("/game") || window.location.pathname.includes("/gameai"))) { 
-                            if (match.winner.alias && match.winner.alias !== undefined) {
-                                this.showWinner(match, player2Score > player1Score);
-                                let winner = document.getElementById('winner-screen');
-                                winner?.classList.remove('hidden');
-                                ShowGame.noWinner = false;
-                            } else if (window.location.pathname.includes("/game") || window.location.pathname.includes("/gameai")) {
-                                Router.navigate('home');
-                            }
+
+                        if (ShowGame.noWinner && (window.location.pathname.includes("/game") || window.location.pathname.includes("/gameai"))) { 
+                                if (match.winner.alias && match.winner.alias !== undefined) {
+                                    this.showWinner(match, player2Score > player1Score);
+                                    let winner = document.getElementById('winner-screen');
+                                    winner?.classList.remove('hidden');
+                                    ShowGame.noWinner = false;
+                                } else if (window.location.pathname.includes("/game") || window.location.pathname.includes("/gameai")) {
+                                    Router.navigate('home');
+                                }
                         } else if (window.location.pathname.includes("/game") || window.location.pathname.includes("/gameai")) {
                             Router.navigate('home');
                         }
