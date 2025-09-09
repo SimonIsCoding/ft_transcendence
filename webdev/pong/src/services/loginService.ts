@@ -101,7 +101,7 @@ export async function handleSuccessfulLogin(username: string, userId: string): P
     }
 
     // 2. Store username and fetch user info
-    localStorage.setItem('login', username);
+    // localStorage.setItem('login', username);
 
     // 3. Navigate to home
 	enviarLogALogstash('login_initiated', {
