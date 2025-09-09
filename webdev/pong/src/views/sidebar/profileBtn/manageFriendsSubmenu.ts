@@ -176,7 +176,7 @@ export async function manageCard()
 
 export function seeFriendsList(submenus:NodeListOf<HTMLElement>, dashboardSubmenu:HTMLElement | null, gameHistorySubmenu:HTMLElement | null, friendsSubmenu: HTMLElement | null)
 {
-
+	const largeSubmenu = document.getElementById("largeSubmenu");
 	const backBtnFriendsSubmenu = document.getElementById("backBtnFriendsSubmenu");
 	backBtnFriendsSubmenu?.addEventListener('click', () => {
 		closeAllMenus(submenus);
@@ -188,5 +188,7 @@ export function seeFriendsList(submenus:NodeListOf<HTMLElement>, dashboardSubmen
 	friendsSubmenu?.classList.remove('hidden');
 	openMenu('largeSubmenu');
 	openMenu('friendsSubmenu');
+	largeSubmenu?.classList.add('border', 'border-black');
+	largeSubmenu?.classList.remove('border-0');
 	manageCard();
 }
