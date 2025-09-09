@@ -150,7 +150,6 @@ async function handleSuccessfulRegistration(login: string, mail: string, passwor
 
     if (!tokenRes.ok) throw new Error('Token generation failed');
 
-    localStorage.setItem('login', login);
 	enviarLogALogstash('new_account_created', {
 				register_id: 'new_account_created-' + Date.now(),
 				player_username: login,
