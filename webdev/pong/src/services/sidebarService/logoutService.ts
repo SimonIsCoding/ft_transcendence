@@ -25,7 +25,6 @@ export function initLogout() {
       }
 
       // Optional: Clear client-side storage if needed
-      localStorage.removeItem('userState');
       sessionStorage.clear();
 	  manageFriendsRequestsCard.reset();
 	  manageFriendsCard.reset();
