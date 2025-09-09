@@ -34,7 +34,7 @@ export const TournamentArea = {
       <main id="tournamentArea" class="hidden flex-1 bg-black d-flex items-center justify-center bg-[url('/pongBackgroundPlay.png')] bg-no-repeat bg-cover bg-center w-full h-full" style="background-image: url('/pongBackgroundPlay.png');">
 		<div id="tournamentAreaPopup" class="fixed top-4 right-4 bg-green-600 text-white px-4 py-3 rounded shadow-lg hidden z-50">
 		</div>
-		<div id="esquemaTorneo" class="hidden relative w-full min-h-screen bg-[#1a1a1a] text-white p-4 md:p-8 overflow-hidden">
+		<div id="esquemaTorneo" class="hidden relative w-full min-h-screen text-white p-4 md:p-8 overflow-hidden">
 
     <div class="absolute top-4 md:top-4 z-7 left-[21%]">
         <h1 class="text-4xl md:text-5xl font-bold tracking-wider text-yellow-400/90">
