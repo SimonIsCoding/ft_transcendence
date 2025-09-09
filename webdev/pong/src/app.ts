@@ -1,7 +1,10 @@
 import { Router } from './router.ts';
+import { handleSidebar } from './views/sidebar/sidebarBehavior.ts';
 
 // Initialize on load
 window.addEventListener('load', () => {
+  handleSidebar();   // ✅ setup
+
   const path = window.location.pathname;
   Router.navigate(
 	path.includes('login') ? 'login' :
