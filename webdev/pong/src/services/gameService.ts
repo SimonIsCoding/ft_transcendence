@@ -17,11 +17,14 @@ export async function sendGameService(gameType: string, match: Match)
 {
 	if (gameType == 'p-vs-ai')
 	{
-		if (match.player1.alias == '')
-		{
-			match.player1.alias = match.player2.alias;
+		console.log(`entered in sendGameService`)
+		console.log(`match.player1.alias = ${match.player1.alias}`)
+		console.log(`before match.player2.alias = ${match.player2.alias}`)
+		if (match.player2.alias == '')
 			match.player2.alias = 'AI';
-		}
+		console.log(`match.player1.alias = ${match.player1.alias}`)
+		console.log(`match.player2.alias = ${match.player2.alias}`)
+
 	}
 	try
 	{
@@ -39,8 +42,6 @@ export async function sendGameService(gameType: string, match: Match)
 			})
 		});
 		
-		// if (!gameReponse.ok)
-        	// return showErrorPopup(gameReponse.error, "popup");
 	}
 	catch (error)
 	{
