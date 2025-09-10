@@ -43,14 +43,12 @@ function swapElements(id1: string, id2: string)
 
 export async function oneVsOneAreaInit()
 {
-	//impose currentUserLogin on payer1 Area
 	const player1Field = document.getElementById("player1") as HTMLInputElement;
 	const status = await fetch('/api/auth/me/status', { credentials: 'include' })
     .then(res => res.json());
 	if (status.authenticated)
 	{
 		const user = getCurrentUser();
-		console.log(`userLogin = ${user!.login}`);
 		if (user)
 			player1Field.value = user.login;
 	}
@@ -104,6 +102,10 @@ export function tournamentAreaInit()
 
 export function oneVsAIAreaInit()
 {
+	const player1VSAIField = document.getElementById("player1VSAI") as HTMLInputElement;
+	const user = getCurrentUser();
+	if (user)
+		player1VSAIField.value = user.login;
 
 	document.getElementById("swapAIBtn")?.addEventListener("click", () => {
 		swapElements("player1VSAI", "AIPlayer");
