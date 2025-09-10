@@ -108,10 +108,6 @@ export class ShowGame {
                     gameMode: ShowGame.gameType,
                     aiDifficulty: gameDifficulty() as 1000 | 100 | 1,
                     onFinish: (winnerAlias: string, player1Score: number, player2Score: number) => {
-
-						console.log(`in newGame`)
-						console.log(`match.player1.alias = ${match.player1.alias}`)
-						console.log(`before match.player2.alias = ${match.player2.alias}`)
                         match.player1.score = player1Score;
                         match.player2.score = player2Score;
                         match.winner = (match.player1.alias === winnerAlias) ? match.player1 : match.player2;
