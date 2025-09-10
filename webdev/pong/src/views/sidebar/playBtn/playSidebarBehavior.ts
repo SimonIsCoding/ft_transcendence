@@ -1,4 +1,4 @@
-import{ toggleMenuVisibility } from '../sidebarUtils'
+import{ closeAllMenus, toggleMenuVisibility } from '../sidebarUtils'
 //import { Router } from '../../../router';
 import { showErrorPopup } from '../../../utils/utils';
 import { TournamentArea } from '../../TournamentArea';
@@ -50,7 +50,6 @@ export function oneVsOneAreaInit()
 
 	const playBtn = document.getElementById('playOneVsOneBtn') as HTMLButtonElement | null;
 	playBtn!.addEventListener('click', () => { 
-console.log('clic 1');
 		const player1 = document.getElementById("player1") as HTMLInputElement;
 		const player2 = document.getElementById("player2") as HTMLInputElement;
 		if (!player1.value.trim() || !player2.value.trim())
@@ -58,13 +57,14 @@ console.log('clic 1');
 			showErrorPopup("You need 2 players to play.", "oneVsOneAreaPopup");
 			return ;
 		}
-console.log('clic 2');
 		new ShowGame().initGame({
 	  		player1: { alias: player1.value },
 			player2: { alias: player2.value },
 			winner: null,
 			type: '1vs1'
 		});
+		const submenus = document.querySelectorAll<HTMLElement>('.submenu');
+		closeAllMenus(submenus);
 	});
 }
 
@@ -108,6 +108,8 @@ export function oneVsAIAreaInit()
 			winner: null,
 			type: ''
 		});
+		const submenus = document.querySelectorAll<HTMLElement>('.submenu');
+		closeAllMenus(submenus);
 	});
 }
 
@@ -116,18 +118,6 @@ export function playSidebarBehavior()
 	const submenus = document.querySelectorAll<HTMLElement>('.submenu');
 	const playSidebarBtn = document.getElementById('playSidebarBtn');
 	playSidebarBtn?.addEventListener('click', () => {
-		// const location = window.location.pathname;
-		// if (location === '/game') {
-		// 	const gameArea = document.getElementById('gamesArea');
-		// 	gameArea?.classList.add('hidden');
-		// 	ShowGame.noWinner = false;
-		// 	Router.navigate("home");
-		// } else {
-		 	toggleMenuVisibility('playSubmenu', submenus);
-		// 	oneVsOneAreaInit();
-		// 	oneVsAIAreaInit();
-		// 	tournamentAreaInit();
-		// 	// TournamentArea.init();
-		// }
+		toggleMenuVisibility('playSubmenu', submenus);
 	});
 }
