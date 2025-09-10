@@ -41,7 +41,7 @@ export default class Paddle {
 
   highlight(): void {
     // Change to yellow highlight
-    this.paddleElem.style.backgroundColor = '#EDD24E';
+    this.paddleElem.style.backgroundColor = '#fbd11b';
     
     // Reset to original color after a short delay
     setTimeout(() => {
