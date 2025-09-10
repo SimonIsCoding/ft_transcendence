@@ -1,4 +1,4 @@
-import{ closeAllMenus, toggleMenuVisibility } from '../sidebarUtils'
+import{ closeAllMenus, getCurrentUser, toggleMenuVisibility } from '../sidebarUtils'
 //import { Router } from '../../../router';
 import { showErrorPopup } from '../../../utils/utils';
 import { TournamentArea } from '../../TournamentArea';
@@ -41,8 +41,24 @@ function swapElements(id1: string, id2: string)
 	}
 }
 
-export function oneVsOneAreaInit()
+export async function oneVsOneAreaInit()
 {
+	//impose currentUserLogin on payer1 Area
+	const player1Field = document.getElementById("player1") as HTMLInputElement;
+	const status = await fetch('/api/auth/me/status', { credentials: 'include' })
+    .then(res => res.json());
+	if (status.authenticated)
+	{
+		const user = getCurrentUser();
+		console.log(`userLogin = ${user!.login}`);
+		if (user)
+			player1Field.value = user.login;
+	}
+	else
+	{
+		player1Field.removeAttribute("readonly");
+		player1Field.setAttribute("placeholder", "Player 1");
+	}
 
 	document.getElementById("swapBtn")?.addEventListener("click", () => {
 		swapPlayer("player1", "player2");
@@ -54,7 +70,7 @@ export function oneVsOneAreaInit()
 		const player2 = document.getElementById("player2") as HTMLInputElement;
 		if (!player1.value.trim() || !player2.value.trim())
 		{
-			showErrorPopup("You need 2 players to play.", "oneVsOneAreaPopup");
+			showErrorPopup("You need 2 players to play.", "popup");
 			return ;
 		}
 		new ShowGame().initGame({
@@ -97,11 +113,11 @@ export function oneVsAIAreaInit()
 	playBtn!.addEventListener('click', () => {
 		const player1 = document.getElementById("player1") as HTMLInputElement;
 		const player1VSAI = document.getElementById("player1VSAI") as HTMLInputElement;
-		if (!player1VSAI.value.trim())
-		{
-			showErrorPopup("You need 1 player to play.", "oneVsAIAreaPopup");
-			return ;
-		}
+		// if (!player1VSAI.value.trim())
+		// {
+		// 	showErrorPopup("You need 1 player to play.", "popup");
+		// 	return ;
+		// }
 		new ShowGame().initGame({
 	  		player1: { alias: player1.value },
 			player2: { alias: player1VSAI.value },
