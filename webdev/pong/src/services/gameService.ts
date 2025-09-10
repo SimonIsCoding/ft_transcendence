@@ -64,7 +64,7 @@ export async function gameCurrentUserHasPlayedService()
 {
 	try
 	{
-		const games: matchid[] = await fetch('/api/game/nbMatchesPlayed', {
+		const games: matchid[] = await fetch('/api/game/matches', {
 			credentials: 'include',
 		}).then(res => res.json());
 
