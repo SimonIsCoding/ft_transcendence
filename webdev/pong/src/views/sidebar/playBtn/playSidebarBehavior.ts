@@ -66,11 +66,12 @@ export async function oneVsOneAreaInit()
 	playBtn!.addEventListener('click', () => { 
 		const player1 = document.getElementById("player1") as HTMLInputElement;
 		const player2 = document.getElementById("player2") as HTMLInputElement;
+
+		if (player1.value.trim().length > 40 || player2.value.trim().length > 40)
+			return showErrorPopup("Inputs should contain no more than 40 caracters", "popup");
 		if (!player1.value.trim() || !player2.value.trim())
-		{
-			showErrorPopup("You need 2 players to play.", "popup");
-			return ;
-		}
+			return showErrorPopup("You need 2 players to play.", "popup");
+
 		new ShowGame().initGame({
 	  		player1: { alias: player1.value },
 			player2: { alias: player2.value },
