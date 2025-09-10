@@ -186,16 +186,13 @@ export function editProfileSubmenuBehavior()
 
 	editProfileBtn?.addEventListener('click', () => {
 		loadProfileAndPrefill();
-		editProfileSubmenu?.classList.add("max-h-screen");
-		editProfileSubmenu?.classList.remove("max-h-0");
-		editProfileSubmenu?.classList.remove("hidden");
+		editProfileSubmenu?.classList.remove("max-h-0", "border-0", "hidden");
+		editProfileSubmenu?.classList.add("max-h-screen", "border", "border-black");
 
 		backBtnEditProfileSubmenu?.addEventListener('click', () => {
 			editProfileSubmenu?.classList.add("max-h-0");
-			editProfileSubmenu?.classList.remove("max-h-screen");
+			editProfileSubmenu?.classList.remove("max-h-screen", "border", "border-black");
 		});
-		// checkService("twofa", "2FAtoggleSwitch");
-		// checkService("GDPR", "anonymousToggleSwitch");
 	});
 
 	profileSidebarBtn?.addEventListener('click', () => {
@@ -205,7 +202,7 @@ export function editProfileSubmenuBehavior()
 		if (isProfileOpen || isEditProfileOpen)
 		{
 			submenus.forEach(menu => {
-				menu.classList.remove("max-h-screen");
+				menu.classList.remove("max-h-screen", "border", "border-black");
 				menu.classList.add("max-h-0");
 			});
 		}
@@ -213,7 +210,7 @@ export function editProfileSubmenuBehavior()
 		{
 			toggleMenuVisibility('profileSubmenu', submenus);
 			editProfileSubmenu?.classList.add("max-h-0");
-			editProfileSubmenu?.classList.remove("max-h-screen");
+			editProfileSubmenu?.classList.remove("max-h-screen", "border", "border-black");
 		}
 	});
 }
