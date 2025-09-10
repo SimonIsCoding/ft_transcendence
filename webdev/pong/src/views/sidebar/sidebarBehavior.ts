@@ -116,3 +116,28 @@ export async function handleSidebar()
 		userUnloggedSidebar.init();
 	}
 }
+
+export async function updateSidebar() {
+  const isAuthenticated = await isConnected();
+  const sidebar = document.getElementById("sidebar");
+
+  if (!sidebar) return;
+
+  // Check current state from DOM
+  const hasLoginBtn = !!sidebar.querySelector("#loginBtn");
+  const hasLogoutBtn = !!sidebar.querySelector("#logoutSidebarBtn");
+
+  if (isAuthenticated && !hasLogoutBtn) {
+    // Should be logged, but DOM shows unlogged
+    sidebar.innerHTML = userLoggedSidebar.render();
+    userLoggedSidebar.init();
+    initLogout();
+    uploadProfilePicture();
+    loadExistingProfilePicture();
+  } else if (!isAuthenticated && !hasLoginBtn) {
+    // Should be unlogged, but DOM shows logged
+    sidebar.innerHTML = userUnloggedSidebar.render();
+    userUnloggedSidebar.init();
+  }
+}
+
