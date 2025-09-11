@@ -43,8 +43,8 @@ check-secrets:
 
 w webupdate:
 	docker run --rm \
-	  -v webdev/pong:/app \
-	  -v data/pong:/var/www/html/pong \
+	  -v $(PWD)/webdev/pong:/app \
+	  -v $(PWD)/data/pong:/var/www/html/pong \
 	  node:18-bullseye \
 	  sh -c "cd /app && npm install && npm run build && cp -r dist/* /var/www/html/pong/"
 	docker exec nginx /usr/sbin/nginx -s reload
