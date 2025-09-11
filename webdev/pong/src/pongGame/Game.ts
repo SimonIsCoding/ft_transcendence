@@ -117,19 +117,10 @@ export class Game {
         this.options.leftPlayer = ShowGame.otherPlayer;
         this.aiManager.disableAI(PlayerSide.LEFT); // Only disable left, right stays AI
         break;
-    //   case 'ai-vs-p':
-    //     this.options.leftPlayer = "Gemini";
-    //     this.aiManager.disableAI(PlayerSide.RIGHT); // Only disable right, left stays AI
-    //     break;
       case 'p-vs-p':
         this.aiManager.disableAI(PlayerSide.LEFT);
         this.aiManager.disableAI(PlayerSide.RIGHT);
         break;
-    //   case 'ai-vs-ai':
-    //     this.options.leftPlayer = "AI";
-    //     this.options.rightPlayer = "Gemini";
-    //     // Both AI are already enabled by default, no action needed
-    //     break;
     }
   }
 
