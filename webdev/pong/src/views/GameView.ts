@@ -12,7 +12,6 @@ export const GameView = {
   
  render(): string {
 	return `
-
 	  ${oneVsOneArea.render()}
 	  ${oneVsAIArea.render()}
       ${new GameRender().renderGame()}

@@ -29,10 +29,14 @@ export default class Paddle {
   }
 
   reset(): void {
-    this.position = 50;
+	const paddleHeight = this.paddleElem.offsetHeight;
+	const gameHeight = this.paddleElem.parentElement!.clientHeight;
+	this.position = 50 - (paddleHeight / gameHeight * 100 / 2);
   }
 
   update(delta: number, ballHeight: number): void {
+	console.log(`this.position% = ${this.position}%`)
+	this.paddleElem.style.top = `${this.position}%`;
     this.position += SPEED * delta * (ballHeight - this.position);
     // Add boundary constraints to prevent paddle from going off-screen
     const PADDLE_HALF_HEIGHT = 5; // Half of paddle height (10vh / 2 = 5vh)
