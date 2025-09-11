@@ -7,7 +7,7 @@ export class GameConfig {
   public static readonly FRAME_RATE_LIMIT = 8.33; // ms ( FPS)
   
   // AI settings
-  public static AI_UPDATE_COOLDOWN = 1000; // ms
+  public static AI_UPDATE_COOLDOWN = 2000; // ms
   public static readonly AI_TARGET_THRESHOLD = 2.0; // Minimum change to update target
   public static readonly AI_MOVEMENT_THRESHOLD = 1.0; // Minimum distance to move paddle
   public static readonly AI_MAX_SIMULATION_STEPS = 10;
