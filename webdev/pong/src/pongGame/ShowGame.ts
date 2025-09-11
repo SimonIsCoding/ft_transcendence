@@ -5,7 +5,7 @@ import { GameRender } from './GameRender';
 import { sendGameService } from "../services/gameService";
 import { gameSettings } from "../controllers/gameSettingsControllers";
 
-type GameMode = 'p-vs-ai' | 'ai-vs-p' | 'p-vs-p' | 'ai-vs-ai';
+type GameMode = 'p-vs-ai' | 'p-vs-p';
 
 export class ShowGame {
     static gameType: GameMode = 'p-vs-p';
@@ -39,10 +39,6 @@ export class ShowGame {
         // this.renderCanvas();
         const gameArea = document.getElementById('gameArea');
         gameArea?.classList.add('hidden');
-        // if (ShowGame.gameType === 'p-vs-ai') {
-            // match.player1.alias = "match.player2.alias";
-            // match.player2.alias = 'AI';
-        // }
         ShowGame.noWinner = true;
         await this.playGame(match);
     }

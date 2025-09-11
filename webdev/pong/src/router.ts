@@ -79,7 +79,7 @@ export class Router {
     if (path.includes('game')) return 'game';
     if (path.includes('tournament')) return 'tournament';
     if (path === '/' || path === '') return 'home';
-    return 'home'; // 👈 fallback
+    return 'home';
   }
 
   public static init(): void {
@@ -95,17 +95,6 @@ export class Router {
       console.log('History changed:', event.state);
       this.navigate(route, false);
     });
-
-    // Clean up games when the page is about to unload
-    // window.addEventListener('popstate', (event) => {
-    //   console.log('History changed:', event.state);
-    // });
-    // 
-    // window.addEventListener('beforeunload', () => {
-    //   if (window.location.pathname === "/tournament")
-    //     Router.navigate('home');
-    //   ShowGame.cleanup();
-    // });
    }
 }
 
