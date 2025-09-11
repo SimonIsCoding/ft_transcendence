@@ -15,7 +15,7 @@ export class ShowGame {
     static inGame: boolean = false;
     static noWinner: boolean = true;
     static gameController: boolean = true;
-    static otherPlayer: string = "Erik"; 
+    static otherPlayer: string = "User"; 
     static currentGame: Game | null = null; // Track current game instance
     static isCreatingGame: boolean = false; // Prevent race conditions 
     private renderGameCanvas() {

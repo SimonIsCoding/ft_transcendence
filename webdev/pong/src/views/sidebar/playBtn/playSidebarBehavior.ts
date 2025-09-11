@@ -1,46 +1,8 @@
 import{ closeAllMenus, getCurrentUser, toggleMenuVisibility } from '../sidebarUtils'
-//import { Router } from '../../../router';
 import { showErrorPopup } from '../../../utils/utils';
 import { TournamentArea } from '../../TournamentArea';
-import { ShowGame } from '../../../pong-erik/ShowGame';
+import { ShowGame } from '../../../pongGame/ShowGame';
 import { gameSettings } from '../../../controllers/gameSettingsControllers';
-// import { Game } from '../../../pong-erik/Game';
-
-function swapPlayer(id1: string, id2: string): void
-{
-	const input1 = document.getElementById(id1) as HTMLInputElement | null;
-	const input2 = document.getElementById(id2) as HTMLInputElement | null;
-
-	if (input1 && input2)
-	{
-		const tmp = input1.value;
-		input1.value = input2.value;
-		input2.value = tmp;
-	}
-}
-
-function swapElements(id1: string, id2: string)
-{
-	const el1 = document.getElementById(id1);
-	const el2 = document.getElementById(id2);
-
-	if (!el1 || !el2)
-		return;
-
-	const parent = el1.parentNode;
-	const next1 = el1.nextSibling;
-	const next2 = el2.nextSibling;
-
-	if (next1 === el2)
-		parent!.insertBefore(el2, el1);
-	else if (next2 === el1)
-		parent!.insertBefore(el1, el2);
-	else
-	{
-		parent!.insertBefore(el1, next2);
-		parent!.insertBefore(el2, next1);
-	}
-}
 
 export async function oneVsOneAreaInit()
 {
@@ -58,10 +20,6 @@ export async function oneVsOneAreaInit()
 		player1Field.removeAttribute("readonly");
 		player1Field.setAttribute("placeholder", "Player 1");
 	}
-
-	document.getElementById("swapBtn")?.addEventListener("click", () => {
-		swapPlayer("player1", "player2");
-	});
 
 	const playBtn = document.getElementById('playOneVsOneBtn') as HTMLButtonElement | null;
 	playBtn!.addEventListener('click', () => { 
@@ -108,10 +66,6 @@ export function oneVsAIAreaInit()
 	const user = getCurrentUser();
 	if (user)
 		player1VSAIField.value = user.login;
-
-	document.getElementById("swapAIBtn")?.addEventListener("click", () => {
-		swapElements("player1VSAI", "AIPlayer");
-	});
 	
 	const playBtn = document.getElementById('playOneVsAIBtn') as HTMLButtonElement | null;
 	playBtn!.addEventListener('click', () => {

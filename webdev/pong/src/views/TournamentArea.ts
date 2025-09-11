@@ -9,7 +9,7 @@ import {
 import { TournamentController } from "../controllers/TournamentController";
 // import { Router } from '../router';
 import { closeAllMenus } from "./sidebar/sidebarUtils";
-import { GameRender } from "../pong-erik/GameRender";
+import { GameRender } from "../pongGame/GameRender";
 import { getCurrentUser } from "./sidebar/sidebarUtils";
 
 function swapLineToRightSvg(): string {

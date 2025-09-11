@@ -1,5 +1,5 @@
 import type { User } from "../config";
-import { ShowGame } from "../pong-erik/ShowGame";
+import { ShowGame } from "../pongGame/ShowGame";
 import { Router } from "../router";
 // import { isConnected } from "../services/sidebarService/utilsSidebarService";
 // import { oneVsAIAreaInit, oneVsOneAreaInit } from "./sidebar/playBtn/playSidebarBehavior";

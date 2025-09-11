@@ -6,10 +6,10 @@ import {
   resetTournament,
 } from "../models/TournamentStore";
 import { TournamentUIManager } from "../views/TournamentUIManager";
-import { Game } from "../pong-erik/Game";
+import { Game } from "../pongGame/Game";
 import { enviarLogALogstash } from "../utils/logstash";
 import { closeAllMenus } from "../views/sidebar/sidebarUtils";
-import { ShowGame } from "../pong-erik/ShowGame";
+import { ShowGame } from "../pongGame/ShowGame";
 import { sendGameService } from "../services/gameService";
 
 export class TournamentController {
