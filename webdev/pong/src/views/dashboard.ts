@@ -1,3 +1,5 @@
+import { gameCurrentUserDashboardService } from "../services/gameService";
+
 export interface DashboardData {
     username: string;
     stats: {
@@ -13,6 +15,7 @@ export interface DashboardData {
 }
   
 export function showDashboard(data: DashboardData) {
+    gameCurrentUserDashboardService();
    const dashboardContainer = document.getElementById('dashboard-container');
 	if (!dashboardContainer)
 		return;

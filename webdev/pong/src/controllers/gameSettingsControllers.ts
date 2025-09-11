@@ -4,7 +4,7 @@ export const gameDifficulty = (): number => {
 	if (gameSettings.iaDifficulty === "Easy")
 		return 1000;
 	else if (gameSettings.iaDifficulty === "Medium")
-		return 100;
+		return 750;
 	else
 		return 1
 }

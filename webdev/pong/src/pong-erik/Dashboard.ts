@@ -1,6 +1,8 @@
 // Dashboard.ts
 // SPA version of the dashboard from changes.html
 
+import { gameCurrentUserDashboardService } from "../services/gameService";
+
 export interface DashboardData {
     username: string;
     stats: {
@@ -16,6 +18,7 @@ export interface DashboardData {
   }
   
   export function showDashboard(data: DashboardData) {
+    gameCurrentUserDashboardService();
     // Hide the Pong game UI (assumes main game container has id 'game-container')
     const gameContainer = document.getElementById('game-container');
     if (gameContainer) gameContainer.style.display = 'none';

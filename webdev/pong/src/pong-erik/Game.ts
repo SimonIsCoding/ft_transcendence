@@ -14,7 +14,7 @@ export interface GameOptions {
   rightPlayer: string;
   maxScore: number;
   gameMode: 'p-vs-ai' |  'ai-vs-p' | 'p-vs-p' | 'ai-vs-ai';
-  aiDifficulty?: 1000 | 100 | 1;
+  aiDifficulty?: 1000 | 750 | 1;
   onFinish?: (winner: string, score1: number, score2: number) => void | null;
 }
 
@@ -64,13 +64,17 @@ export class Game {
       maxScore: options?.maxScore || GameConfig.MAX_SCORE,
       gameMode: options?.gameMode || 'p-vs-p',
       onFinish: options?.onFinish || undefined,
-      aiDifficulty: options?.aiDifficulty || (GameConfig.AI_UPDATE_COOLDOWN as 1000 | 100 | 1)
+      aiDifficulty: options?.aiDifficulty || (GameConfig.AI_UPDATE_COOLDOWN as 1000 | 750 | 1)
     };
     this.onFinishCallback = options?.onFinish || null;
     this.initializeDOM();
     this.initializeManagers();
     this.initializeGameObjects();
     this.setupDebugFunctions();
+    // if (this.options.aiDifficulty === 500)
+    //   GameConfig.PADDLE_SPEED = 0.05;
+    if (this.options.aiDifficulty === 1)
+      GameConfig.PADDLE_SPEED = 0.08;
   }
 
   private initializeDOM(): void {

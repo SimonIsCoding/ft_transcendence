@@ -50,8 +50,16 @@ export async function matchesRoutes(fastify)
 
 	fastify.get('/game/nbMatchesPlayed', { preHandler: fastify.auth }, async (request, reply) => {
 		const userId = request.user.id;
-		const stmt = db.prepare("SELECT matchid, player1, player2, scorePlayer1, scorePlayer2, gameMode, finished_at FROM matches WHERE userid = ?");
+		const stmt = db.prepare("SELECT matchid, player1, player2, scorePlayer1, scorePlayer2, winner, gameMode, finished_at FROM matches WHERE userid = ?");
 		const users = stmt.all(userId);
 		return reply.status(200).send(users);
 	});
+
+	// fastify.get('/game/DashboardMatches', { preHandler: fastify.auth }, async (request, reply) => {
+	// 	const userId = request.user.id;
+	// 	const stmt = db.prepare("SELECT winner, COUNT(*) as count FROM matches WHERE userid = ? GROUP BY winner").get(userId);
+	// 	// const stmt = db.prepare("SELECT matchid, player1, player2, scorePlayer1, scorePlayer2, gameMode, finished_at FROM matches WHERE userid = ? ORDER BY finished_at DESC LIMIT 5");
+	// 	// const users = stmt.all(userId);
+	// 	return reply.status(200).send(users);
+	// });
 }
