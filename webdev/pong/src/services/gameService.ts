@@ -74,7 +74,7 @@ export async function gameCurrentUserHasPlayedService()
 	catch (error)
 	{
 		console.error('gameCurrentUserHasPlayedService error:', error);
-		showErrorPopup("Error with getting historic games", "popup");
+		showErrorPopup("Error with getting historic games.", "popup");
 		Router.navigate('home');
 	}
 }
@@ -83,18 +83,16 @@ export async function gameCurrentUserDashboardService()
 {
 	try
 	{
-		const games: matchid[] = await fetch('/api/game/nbMatchesPlayed', {
+		const games: matchid[] = await fetch('/api/game/matches', {
 			credentials: 'include',
 		}).then(res => res.json());
-
+		
 		const result = {
 			victories: games.filter(game => game.winner === game.player1).length,
 			defeats: games.filter(game => game.winner !== game.player1).length,
 			scored: games.reduce((sum, game) => sum + game.scorePlayer1, 0),
 			conceded: games.reduce((sum, game) => sum + game.scorePlayer2, 0),
 		};
-
-		// console.log('Dashboard data:', result.victories, result.defeats, result.scored, result.conceded);
 
 		return result;
 	}
