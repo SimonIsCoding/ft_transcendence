@@ -1,25 +1,25 @@
 export function getDifficultyLabel(value: number): string
 {
-	if (value === 1000)
+	if (value === 2000)
 		return "Easy"
-	if (value === 750)
+	if (value === 1000)
 		return "Medium"
 	return "Hard"
 }
 
 export const gameSettings: {
-	iaDifficulty: 1000 | 750 | 1,
+	iaDifficulty: 2000 | 1000 | 1,
 	scoreLimit: 3 | 5 | 11
 } = {
-	iaDifficulty: 1000,
+	iaDifficulty: 2000,
 	scoreLimit: 3
 };
 
-export function getDifficultyValue(difficulty: 1000 | 750 | 1): number
+export function getDifficultyValue(difficulty: 2000 | 1000 | 1): number
 {
-	if (difficulty === 1000)
+	if (difficulty === 2000)
 		return 1;
-	if (difficulty === 750)
+	if (difficulty === 1000)
 		return 2;
 	return 3;
 }
@@ -41,15 +41,9 @@ export function setupGameSettingsListeners()
 	const scoreSlider = document.getElementById("scoreLimitSliderInput") as HTMLInputElement;
 	const scoreValue = document.getElementById("scoreLimitValue") as HTMLSpanElement;
 
-	// gameSettings.iaDifficulty = getAiLevel(parseInt(iaSlider.value));
-	// iaValue.textContent = gameSettings.iaDifficulty;
-
-	// gameSettings.scoreLimit = getScoreLimit(parseInt(scoreSlider.value));
-	// scoreValue.textContent = gameSettings.scoreLimit;
-
 	iaSlider.addEventListener("input", e => {
 		const value = parseInt((e.target as HTMLInputElement).value);
-		gameSettings.iaDifficulty = value === 1 ? 1000 : value === 2 ? 750 : 1;
+		gameSettings.iaDifficulty = value === 1 ? 2000 : value === 2 ? 1000 : 1;
 		iaValue.textContent = getDifficultyLabel(gameSettings.iaDifficulty);
 	});
 
@@ -58,27 +52,4 @@ export function setupGameSettingsListeners()
 		gameSettings.scoreLimit = value === 1 ? 3 : value === 2 ? 5 : 11;
 		scoreValue.textContent = gameSettings.scoreLimit.toString();
 	});
-
-	// const saveBtnGameSettings = document.getElementById("saveBtnGameSettings") as HTMLInputElement;
 }
-
-
-// function getScoreLimit(value: number): string
-// {
-// 	if (value == 1)
-// 		return "3";
-// 	else if (value == 2)
-// 		return "5";
-// 	else
-// 		return "11";
-// }
-
-// function getAiLevel(value: number): string
-// {
-// 	if (value == 1)
-// 		return "Easy";
-// 	else if (value == 2)
-// 		return "Medium";
-// 	else
-// 		return "Hard";
-// }
