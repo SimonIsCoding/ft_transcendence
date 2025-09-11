@@ -21,7 +21,6 @@ w webupdate:
 
 auth-service:
 	docker compose -f $(COMPOSE_FILE) up -d --build auth-service
-#to rebuild and restart the auth-service container - useful for User Management module
 
 2fa-service:
 	docker compose -f $(COMPOSE_FILE) up -d --build 2fa-service

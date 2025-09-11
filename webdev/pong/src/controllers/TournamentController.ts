@@ -1,16 +1,12 @@
 import type { Match } from "../models/TournamentModel";
-// import { Router } from '../router';
-import {
-  currentTournament,
-  getMatchInfo,
-  resetTournament,
-} from "../models/TournamentStore";
+import { currentTournament, getMatchInfo, resetTournament } from "../models/TournamentStore";
 import { TournamentUIManager } from "../views/TournamentUIManager";
-import { Game } from "../pong-erik/Game";
+import { Game } from "../pongGame/Game";
 import { enviarLogALogstash } from "../utils/logstash";
 import { closeAllMenus } from "../views/sidebar/sidebarUtils";
-import { ShowGame } from "../pong-erik/ShowGame";
+import { ShowGame } from "../pongGame/ShowGame";
 import { sendGameService } from "../services/gameService";
+import { gameSettings } from "./gameSettingsControllers";
 
 export class TournamentController {
   async iniciarTorneo() {
@@ -43,7 +39,6 @@ export class TournamentController {
     return new Promise((resolve) => {
       const btn = document.getElementById("nextMatchBtn");
       if (!btn) {
-        console.warn('Botón "Siguiente" no encontrado.');
         resolve();
         return;
       }
@@ -96,7 +91,7 @@ export class TournamentController {
         const game = new Game({
           leftPlayer: match.player1.alias,
           rightPlayer: match.player2.alias,
-          maxScore: 3,
+          maxScore: gameSettings.scoreLimit,
           gameMode: "p-vs-p",
           onFinish: (
             winnerAlias: string,

@@ -1,62 +1,36 @@
-import{ closeAllMenus, toggleMenuVisibility } from '../sidebarUtils'
-//import { Router } from '../../../router';
+import{ closeAllMenus, getCurrentUser, toggleMenuVisibility } from '../sidebarUtils'
 import { showErrorPopup } from '../../../utils/utils';
 import { TournamentArea } from '../../TournamentArea';
-import { ShowGame } from '../../../pong-erik/ShowGame';
-// import { Game } from '../../../pong-erik/Game';
+import { ShowGame } from '../../../pongGame/ShowGame';
+import { gameSettings } from '../../../controllers/gameSettingsControllers';
 
-function swapPlayer(id1: string, id2: string): void
+export async function oneVsOneAreaInit()
 {
-	const input1 = document.getElementById(id1) as HTMLInputElement | null;
-	const input2 = document.getElementById(id2) as HTMLInputElement | null;
-
-	if (input1 && input2)
+	const player1Field = document.getElementById("player1") as HTMLInputElement;
+	const status = await fetch('/api/auth/me/status', { credentials: 'include' })
+    .then(res => res.json());
+	if (status.authenticated)
 	{
-		const tmp = input1.value;
-		input1.value = input2.value;
-		input2.value = tmp;
+		const user = getCurrentUser();
+		if (user)
+			player1Field.value = user.login;
 	}
-}
-
-function swapElements(id1: string, id2: string)
-{
-	const el1 = document.getElementById(id1);
-	const el2 = document.getElementById(id2);
-
-	if (!el1 || !el2)
-		return;
-
-	const parent = el1.parentNode;
-	const next1 = el1.nextSibling;
-	const next2 = el2.nextSibling;
-
-	if (next1 === el2)
-		parent!.insertBefore(el2, el1);
-	else if (next2 === el1)
-		parent!.insertBefore(el1, el2);
 	else
 	{
-		parent!.insertBefore(el1, next2);
-		parent!.insertBefore(el2, next1);
+		player1Field.removeAttribute("readonly");
+		player1Field.setAttribute("placeholder", "Player 1");
 	}
-}
-
-export function oneVsOneAreaInit()
-{
-
-	document.getElementById("swapBtn")?.addEventListener("click", () => {
-		swapPlayer("player1", "player2");
-	});
 
 	const playBtn = document.getElementById('playOneVsOneBtn') as HTMLButtonElement | null;
 	playBtn!.addEventListener('click', () => { 
 		const player1 = document.getElementById("player1") as HTMLInputElement;
 		const player2 = document.getElementById("player2") as HTMLInputElement;
+
+		if (player1.value.trim().length > 40 || player2.value.trim().length > 40)
+			return showErrorPopup("Inputs should contain no more than 40 caracters", "popup");
 		if (!player1.value.trim() || !player2.value.trim())
-		{
-			showErrorPopup("You need 2 players to play.", "oneVsOneAreaPopup");
-			return ;
-		}
+			return showErrorPopup("You need 2 players to play.", "popup");
+
 		new ShowGame().initGame({
 	  		player1: { alias: player1.value },
 			player2: { alias: player2.value },
@@ -88,20 +62,18 @@ export function tournamentAreaInit()
 
 export function oneVsAIAreaInit()
 {
-
-	document.getElementById("swapAIBtn")?.addEventListener("click", () => {
-		swapElements("player1VSAI", "AIPlayer");
-	});
+	const player1VSAIField = document.getElementById("player1VSAI") as HTMLInputElement;
+	const user = getCurrentUser();
+	if (user)
+		player1VSAIField.value = user.login;
 	
 	const playBtn = document.getElementById('playOneVsAIBtn') as HTMLButtonElement | null;
 	playBtn!.addEventListener('click', () => {
+		console.log(`maxScore: gameSettings.scoreLimit = ${gameSettings.scoreLimit}`)
+		console.log(`aiDifficulty: gameSettings.iaDifficulty = ${gameSettings.iaDifficulty}`)
+
 		const player1 = document.getElementById("player1") as HTMLInputElement;
 		const player1VSAI = document.getElementById("player1VSAI") as HTMLInputElement;
-		if (!player1VSAI.value.trim())
-		{
-			showErrorPopup("You need 1 player to play.", "oneVsAIAreaPopup");
-			return ;
-		}
 		new ShowGame().initGame({
 	  		player1: { alias: player1.value },
 			player2: { alias: player1VSAI.value },

@@ -1,8 +1,7 @@
-// import type { User } from "../config";
 import { Router } from "../router";
 import { updateSidebar } from "./sidebar/sidebarBehavior";
 import { TournamentArea } from "./TournamentArea";
-import { GameRender } from "../pong-erik/GameRender";
+import { GameRender } from "../pongGame/GameRender";
 import { matchInfo } from '../models/TournamentStore';
 import { getCurrentUser } from "./sidebar/sidebarUtils";
 import { showErrorPopup } from "../utils/utils";
@@ -11,7 +10,6 @@ export const TournamentView = {
   
  render(): string {
 	return `
-
       ${TournamentArea.render()}
       ${new GameRender().renderGame()}
   `;
@@ -28,7 +26,6 @@ export const TournamentView = {
 	}	
   let host = document.getElementById('alias1') as HTMLInputElement
   host.disabled = true;
-  console.log('aquii')
 	const tournamentArea = document.getElementById('tournamentArea');
 	const esquemaTorneo = document.getElementById("esquemaTorneo");
 	let gameCanvasContainer = document.getElementById('gameCanvasContainer');

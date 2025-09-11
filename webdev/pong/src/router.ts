@@ -2,15 +2,7 @@ import type { User } from "./config";
 import { HomeView } from './views/home';
 import { loginView } from './views/loginView';
 import { registerView } from './views/registerView';
-// import { GameView } from './views/game';
-// import { gameController } from './controllers/gameController';
-
-// import { matchInfo } from './models/TournamentStore';
-// import { TournamentUIManager } from './views/TournamentUIManager';
-// import { Game } from './pong-erik/Game';
-// import { GameRender } from './pong-erik/GameRender';
-import { ShowGame } from './pong-erik/ShowGame';
-// import { TournamentController } from './controllers/TournamentController';
+import { ShowGame } from './pongGame/ShowGame';
 import { TournamentView } from './views/tournamentView';
 import { GameView } from "./views/GameView";
 
@@ -87,7 +79,7 @@ export class Router {
     if (path.includes('game')) return 'game';
     if (path.includes('tournament')) return 'tournament';
     if (path === '/' || path === '') return 'home';
-    return 'home'; // 👈 fallback
+    return 'home';
   }
 
   public static init(): void {
@@ -103,17 +95,6 @@ export class Router {
       console.log('History changed:', event.state);
       this.navigate(route, false);
     });
-
-    // Clean up games when the page is about to unload
-    // window.addEventListener('popstate', (event) => {
-    //   console.log('History changed:', event.state);
-    // });
-    // 
-    // window.addEventListener('beforeunload', () => {
-    //   if (window.location.pathname === "/tournament")
-    //     Router.navigate('home');
-    //   ShowGame.cleanup();
-    // });
    }
 }
 
