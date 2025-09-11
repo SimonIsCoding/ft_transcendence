@@ -81,6 +81,7 @@ export async function editProfileService(): Promise<void> {
   // --- Build changes object ---
   const changes: any = {};
   let requires2FAFlow = false;
+  //let requiresMailConfirmation = false;
 
   if (current.login !== currentUser.login) changes.login = current.login;
 
@@ -113,6 +114,10 @@ export async function editProfileService(): Promise<void> {
   if (requires2FAFlow) {
 	  return beginEditProfile2FAFlow(currentUser.mail, changes);
   }
+
+//   if (requiresMailConfirmation) {
+//     console.log("A confirmation email will be sent to your new address.");
+//   }
 
   // --- Send update to backend ---
   await submitProfileChanges(changes);

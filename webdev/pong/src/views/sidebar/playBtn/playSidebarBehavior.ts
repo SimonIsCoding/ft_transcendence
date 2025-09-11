@@ -69,6 +69,9 @@ export function oneVsAIAreaInit()
 	
 	const playBtn = document.getElementById('playOneVsAIBtn') as HTMLButtonElement | null;
 	playBtn!.addEventListener('click', () => {
+		console.log(`maxScore: gameSettings.scoreLimit = ${gameSettings.scoreLimit}`)
+		console.log(`aiDifficulty: gameSettings.iaDifficulty = ${gameSettings.iaDifficulty}`)
+
 		const player1 = document.getElementById("player1") as HTMLInputElement;
 		const player1VSAI = document.getElementById("player1VSAI") as HTMLInputElement;
 		new ShowGame().initGame({

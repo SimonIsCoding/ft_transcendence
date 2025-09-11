@@ -72,7 +72,7 @@ export class GameRender {
           <!-- Game elements -->
           <div class="absolute top-1/2 left-1/2 w-4 h-4 rounded-full bg-[#D9D9D9]" id="ball"></div>
           <div class="absolute left-[30px] w-3 h-20 rounded-md top-47/100 -translate-y-1/2 bg-[#D9D9D9]" id="left-paddle"></div>
-		  <div class="absolute right-[30px] w-3 h-20 rounded-md top-47F/100 -translate-y-1/2 bg-[#D9D9D9]" id="right-paddle"></div>
+		  <div class="absolute right-[30px] w-3 h-20 rounded-md top-47/100 -translate-y-1/2 bg-[#D9D9D9]" id="right-paddle"></div>
         </div>
       </div>
       
