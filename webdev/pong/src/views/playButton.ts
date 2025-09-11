@@ -22,21 +22,6 @@ export const playButton = {
 
   async init()
   {
-	// const status = await isConnected();
-	// if (status === true)
-	// {
-	// 	console.log("entered in status = true");
-	// 	const playBtn = document.getElementById('playBtn') as HTMLButtonElement | null;
-	// 	playBtn?.addEventListener('click', () => { 
-	// 		const submenus = document.querySelectorAll<HTMLElement>('.submenu');
-	// 		toggleMenuVisibility('playSubmenu', submenus);
-	// 		oneVsOneAreaInit();
-	// 		oneVsAIAreaInit();
-	// 	 })
-	// }
-	// else
-	// {
-	// }
 		const playBtn = document.getElementById('playBtn') as HTMLButtonElement | null;
 		playBtn?.addEventListener('click', () => {
 			ShowGame.gameType = 'p-vs-p';
