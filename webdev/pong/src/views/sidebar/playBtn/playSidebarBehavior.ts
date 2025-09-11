@@ -3,6 +3,7 @@ import{ closeAllMenus, getCurrentUser, toggleMenuVisibility } from '../sidebarUt
 import { showErrorPopup } from '../../../utils/utils';
 import { TournamentArea } from '../../TournamentArea';
 import { ShowGame } from '../../../pong-erik/ShowGame';
+import { gameSettings } from '../../../controllers/gameSettingsControllers';
 // import { Game } from '../../../pong-erik/Game';
 
 function swapPlayer(id1: string, id2: string): void
@@ -114,13 +115,11 @@ export function oneVsAIAreaInit()
 	
 	const playBtn = document.getElementById('playOneVsAIBtn') as HTMLButtonElement | null;
 	playBtn!.addEventListener('click', () => {
+		console.log(`maxScore: gameSettings.scoreLimit = ${gameSettings.scoreLimit}`)
+		console.log(`aiDifficulty: gameSettings.iaDifficulty = ${gameSettings.iaDifficulty}`)
+
 		const player1 = document.getElementById("player1") as HTMLInputElement;
 		const player1VSAI = document.getElementById("player1VSAI") as HTMLInputElement;
-		// if (!player1VSAI.value.trim())
-		// {
-		// 	showErrorPopup("You need 1 player to play.", "popup");
-		// 	return ;
-		// }
 		new ShowGame().initGame({
 	  		player1: { alias: player1.value },
 			player2: { alias: player1VSAI.value },
