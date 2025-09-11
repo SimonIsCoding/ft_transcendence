@@ -53,8 +53,12 @@ export async function getUserInfo()
 		const stats = document.getElementById("statsInProfileSubmenu");
 		const nbGames = await gameCurrentUserHasPlayedService();
 		if (stats)
-			stats.textContent = `${nbGames!.count} games played`;
-
+		{
+			if (nbGames!.count != undefined && (nbGames!.count === 0 || nbGames!.count === 1))
+				stats.textContent = `${nbGames!.count} game played`;
+			else if (nbGames!.count != undefined)
+				stats.textContent = `${nbGames!.count} games played`;
+		}
 		const playerNameDashboard = document.getElementById("playerNameDashboard");
 		if (playerNameDashboard)
 			playerNameDashboard.textContent = data.user.login ||  "Username";

@@ -189,7 +189,7 @@ export function renderDashboard(data: DashboardData) {
       .attr('y', (d: any) => yScale(d.value))
       .attr('width', xScale.bandwidth())
       .attr('height', (d: any) => height - yScale(d.value))
-      .attr('fill', (d: any) => d.label === 'Scored' ? '#EDD24E' : '#D9D9D9')
+      .attr('fill', (d: any) => d.label === 'Scored' ? '#fbd11b' : '#D9D9D9')
       .attr('rx', 6)
       .attr('ry', 6);
   }
@@ -204,7 +204,7 @@ export function renderDashboard(data: DashboardData) {
     const donutWidth = 30;
     const color = d3.scaleOrdinal()
       .domain(donutChartData.map((d: any) => d.label))
-      .range(['#EDD24E', '#D9D9D9']);
+      .range(['#fbd11b', '#D9D9D9']);
     const svg = d3.select('#donut-chart')
       .append('svg')
       .attr('viewBox', `0 0 ${width} ${height}`)

@@ -14,6 +14,7 @@ export async function reloadUserInfo(): Promise<void>
 			return console.error("Error fetching user info:", res.status);
 		const data = await res.json();
 		setCurrentUser(data.user);
+		document.getElementById("profileName")!.textContent = data.user.login;
 		document.getElementById("mailInProfileSubmenu")!.textContent = data.user.mail;
 	}
 	catch (err)
@@ -66,6 +67,9 @@ export async function editProfileService(): Promise<void> {
     return showErrorPopup("The new passwords are not the same.", "popup");
   }
 
+  if (current.login.length > 40 || (current.changePassword as string).length > 40 || current.mail.length > 40)
+  	return showErrorPopup("Inputs should contain no more than 40 caracters", "popup");
+  	
   if (current.currentPassword && !current.changePassword) {
     return showErrorPopup("You have to insert a new password.", "popup");
   }
@@ -77,14 +81,14 @@ export async function editProfileService(): Promise<void> {
   // --- Build changes object ---
   const changes: any = {};
   let requires2FAFlow = false;
-  let requiresMailConfirmation = false;
+  //let requiresMailConfirmation = false;
 
   if (current.login !== currentUser.login) changes.login = current.login;
 
   // Google users: mail is readonly
   if (currentUser.provider !== "google" && current.mail !== currentUser.mail) {
     changes.mail = current.mail;
-    requiresMailConfirmation = true;
+    //requiresMailConfirmation = true;
   }
 
   if (current.is_2fa_activated !== currentUser.is_2fa_activated) {
@@ -111,9 +115,9 @@ export async function editProfileService(): Promise<void> {
 	  return beginEditProfile2FAFlow(currentUser.mail, changes);
   }
 
-  if (requiresMailConfirmation) {
-    console.log("A confirmation email will be sent to your new address.");
-  }
+//   if (requiresMailConfirmation) {
+//     console.log("A confirmation email will be sent to your new address.");
+//   }
 
   // --- Send update to backend ---
   await submitProfileChanges(changes);
@@ -175,7 +179,7 @@ function beginEditProfile2FAFlow(email: string, changes: any) {
 }
 
 async function submitProfileChanges(changes: any) {
-  try {
+	try {
     const res = await fetch("/api/auth/me", {
       method: "PUT",
       credentials: "include",
@@ -197,7 +201,6 @@ async function submitProfileChanges(changes: any) {
       // Update snapshot
       const currentUser = getCurrentUser();
       if (currentUser) setCurrentUser({ ...currentUser, ...changes });
-
       reloadUserInfo();
     }
   } catch (err) {

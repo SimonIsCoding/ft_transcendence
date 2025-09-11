@@ -61,6 +61,10 @@ class UIManager {
             const p1_points = document.querySelector('#alias1-point') as HTMLInputElement;
             const p2_input = document.querySelector('#alias2') as HTMLInputElement;
             const p2_points = document.querySelector('#alias2-point') as HTMLInputElement;
+			if (!p1_input) return;
+			if (!p2_input) return;
+			if (!p1_points) return;
+			if (!p2_points) return;
             p1_input.value = match.player1.alias;
             p2_input.value = match.player2.alias;
             p1_input.disabled = true;
@@ -85,7 +89,10 @@ class UIManager {
             const p2_input = document.querySelector('#alias4') as HTMLInputElement;
             const p1_points = document.querySelector('#alias3-point') as HTMLElement;
             const p2_points = document.querySelector('#alias4-point') as HTMLElement;
-            console.log(match)
+			if (!p1_input) return;
+			if (!p2_input) return;
+			if (!p1_points) return;
+			if (!p2_points) return;
             p1_input.value = match.player1.alias;
             p2_input.value = match.player2.alias;
             p1_input.disabled = true;
@@ -114,7 +121,10 @@ class UIManager {
 
             const f1_point = document.querySelector('#final1-point') as HTMLElement;
             const f2_point = document.querySelector('#final2-point') as HTMLElement;
-
+			if (!f1_input) return;
+			if (!f2_input) return;
+			if (!f1_point) return;
+			if (!f2_point) return;
             f1_input.textContent = match.player1.alias;
             f2_input.textContent = match.player2.alias;
 
