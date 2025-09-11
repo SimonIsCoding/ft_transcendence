@@ -19,7 +19,7 @@ w webupdate:
 	  sh -c "cd /app && npm install && npm run build && cp -r dist/* /var/www/html/pong/"
 	docker exec nginx /usr/sbin/nginx -s reload
 
-auth-service:
+as auth-service:
 	docker compose -f $(COMPOSE_FILE) up -d --build auth-service
 #to rebuild and restart the auth-service container - useful for User Management module
 

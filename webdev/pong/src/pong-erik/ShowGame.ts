@@ -110,10 +110,10 @@ console.log('render 2');
                 const game = new Game({
                     leftPlayer: match.player1.alias,
                     rightPlayer: match.player2.alias,
-                    maxScore: 1,
+                    maxScore: 3,
                     // maxScore: parseInt(gameSettings.scoreLimit),
                     gameMode: ShowGame.gameType,
-                    // aiDifficulty: gameDifficulty() as 1000 | 100 | 1,
+                    aiDifficulty: 750,
                     onFinish: (winnerAlias: string, player1Score: number, player2Score: number) => {
                         match.player1.score = player1Score;
                         match.player2.score = player2Score;
