@@ -35,7 +35,7 @@ export default class Paddle {
   }
 
   update(delta: number, ballHeight: number): void {
-	console.log(`this.position% = ${this.position}%`)
+	// console.log(`this.position% = ${this.position}%`)
 	this.paddleElem.style.top = `${this.position}%`;
     this.position += SPEED * delta * (ballHeight - this.position);
     // Add boundary constraints to prevent paddle from going off-screen
