@@ -115,7 +115,8 @@ export const manageGameHistorial = (() => {
     const container = document.getElementById("gameHistoryContainer");
     if (!container)
 		return;
-
+	
+	games.reverse();
     container.innerHTML = games.map(match => renderGameHistoryCard(match)).join("");
   }
 
