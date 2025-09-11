@@ -8,7 +8,7 @@ services:
       - server_cert
       - server_key
     build:
-      context: ..
+      context: .
       dockerfile: srcs/requirements/nginx/Dockerfile
     container_name: nginx
     depends_on: 
@@ -137,7 +137,20 @@ services:
     depends_on:
       - elasticsearch
 
-  
+  configure-kibana:
+    build:
+      context: .
+      dockerfile: srcs/configure-kibana/Dockerfile
+    container_name: configure-kibana
+    networks:
+      - your_network_name  # make sure this matches your existing network
+    depends_on:
+      - es01
+    environment:
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - KIBANA_SYSTEM_PASSWORD=${KIBANA_SYSTEM_PASSWORD}
+    restart: "no"
+    
 networks:
   default:
     name: transcendence-network
@@ -148,13 +161,13 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: ${PROJECT_PATH}/srcs/data/pong
+      device: data/pong
       o: bind
   pong_db:
     driver: local
     driver_opts:
       type: none
-      device: ${PROJECT_PATH}/srcs/data/DB
+      device: data/DB
       o: bind
   2fa_data:
     driver: local
