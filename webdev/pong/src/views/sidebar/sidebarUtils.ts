@@ -5,8 +5,9 @@ import { loadProfileAndPrefill } from './profileBtn/editProfileSubmenuRender';
 import { userChangingInfo } from './profileBtn/userChangingInfo';
 import { seeFriendsList } from './profileBtn/manageFriendsSubmenu';
 import { setupGameSettingsListeners } from '../../controllers/gameSettingsControllers';
-import { manageGameHistorial } from "../../services/gameService";
+import { gameCurrentUserDashboardService, manageGameHistorial } from "../../services/gameService";
 import { showDashboard, type DashboardData } from "../dashboard";
+import { howManyFriends } from "../../services/sidebarService/friendsSubmenuService";
 // import { getUserDashboardDataService } from "../../services/sidebarService/dashboardDataService";
 
 let currentUser: User | null = null;
@@ -101,19 +102,23 @@ export function closeAllMenus(submenus: NodeListOf<HTMLElement>)
 }
 
 //toErase
-export const mockDashboardData: DashboardData = {
-	username: "PlayerOne",
+export async function mockDashboardData(): Promise<DashboardData>
+{
+	const data = await gameCurrentUserDashboardService();
+	return {
+	username: getCurrentUser()?.login || "Unknown",
 	stats: {
-		won: 12,
-		lost: 8,
-		scores: 230,
-		friends: 5
+		won: data?.victories || 0,
+		lost: data?.defeats || 0,
+		scores: data?.scored || 0,
+		friends: await howManyFriends()
 	},
 	points: {
-		scored: 150,
-		received: 180
+		scored: data?.scored || 0,
+		received: data?.conceded || 0
 	}
-};
+}
+}
 
 
 export function profileSidebarBehavior()
@@ -135,7 +140,7 @@ export function profileSidebarBehavior()
 		largeSubmenu?.classList.add('border', 'border-black');
 		largeSubmenu?.classList.remove('border-0');
 		// const dashboardData = await getUserDashboardDataService();
-		showDashboard(mockDashboardData);// mockDashboardData is just for testing 
+		showDashboard(await mockDashboardData());
 		const backBtnDasboardSubmenu = document.getElementById("backBtnDasboardSubmenu");
 		backBtnDasboardSubmenu?.addEventListener('click', () => {
 			closeAllMenus(submenus);

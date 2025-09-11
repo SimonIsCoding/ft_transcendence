@@ -67,10 +67,10 @@ export const twofaSidebarView = {
     return `
     <div class="flex flex-col items-center w-full space-y-4 p-2">
       <h3 class="font-bold text-black text-lg">Verify 2FA</h3>
-      <p class="text-black text-sm">Code sent to ${email}</p>
+      <p class="text-center text-black text-sm">Code sent to ${email}</p>
       <form id="twofaForm" class="w-full flex flex-col gap-2">
         <input type="text" id="twofaCode" maxlength="6" placeholder="6-digit code"
-          class="w-full text-black border border-black rounded p-1 text-sm font-bold">
+          class="text-center w-full text-black border border-black rounded p-1 text-sm font-bold">
         <button type="submit" id="verifyBtn"
           class="w-full border border-black rounded p-1 font-bold hover:bg-black hover:text-[#fbd11b]">
           Verify

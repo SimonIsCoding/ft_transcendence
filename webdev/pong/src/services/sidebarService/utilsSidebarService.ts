@@ -48,13 +48,15 @@ export async function getUserInfo()
 		if (mail)
 			mail.textContent = data.user.mail  || "contact@mail.com";
 
-		//here we should add the stats of the matchs won
-		// but we have to fecth another db which is the stats one
 		const stats = document.getElementById("statsInProfileSubmenu");
 		const nbGames = await gameCurrentUserHasPlayedService();
 		if (stats)
-			stats.textContent = `${nbGames!.count} games played`;
-
+		{
+			if (nbGames!.count != undefined && (nbGames!.count === 0 || nbGames!.count === 1))
+				stats.textContent = `${nbGames!.count} game played`;
+			else if (nbGames!.count != undefined)
+				stats.textContent = `${nbGames!.count} games played`;
+		}
 		const playerNameDashboard = document.getElementById("playerNameDashboard");
 		if (playerNameDashboard)
 			playerNameDashboard.textContent = data.user.login ||  "Username";

@@ -15,7 +15,7 @@ export const registerView = {
         </div>
         <input id="newMail" placeholder="Mail" type="email" class="w-80 inline-block text-white font-bold text-lg border border-[#fbd11b] rounded-lg p-2.75"/>
         <div class="relative">
-	    <input id="newPassword" placeholder="Password" type="password" class="w-80 inline-block text-white font-bold text-lg border border-[#fbd11b] rounded-lg p-2.75"/>
+	    <input id="newPassword" placeholder="Password" type="password" class="w-80 inline-block text-white font-bold text-lg border border-[#fbd11b] rounded-lg p-2.75 pr-10"/>
 	    <button id="togglePassword" type="button" class="absolute right-2 top-1/2 transform -translate-y-1/2">
 	      <!-- Closed Eye -->
 	      <svg id="eyeIconClosed" fill="#fbd11b" viewBox="0 0 16 16" width="21" height="21">
@@ -28,7 +28,7 @@ export const registerView = {
 	    </button>
 	  </div>
 	  <div class="relative">
-	    <input id="confirmPassword" placeholder="Confirm Password" type="password" class="w-80 inline-block text-white font-bold text-lg border border-[#fbd11b] rounded-lg p-2.75"/>
+	    <input id="confirmPassword" placeholder="Confirm Password" type="password" class="w-80 inline-block text-white font-bold text-lg border border-[#fbd11b] rounded-lg p-2.75 pr-10"/>
 	    <button id="toggleConfirmPassword" type="button" class="absolute right-2 top-1/2 transform -translate-y-1/2">
 	      <!-- Closed Eye -->
 	      <svg id="confirmEyeIconClosed" fill="#fbd11b" viewBox="0 0 16 16" width="21" height="21">

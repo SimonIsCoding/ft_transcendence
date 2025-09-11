@@ -1,3 +1,5 @@
+import { gameCurrentUserDashboardService } from "../services/gameService";
+
 export interface DashboardData {
     username: string;
     stats: {
@@ -13,6 +15,7 @@ export interface DashboardData {
 }
   
 export function showDashboard(data: DashboardData) {
+    gameCurrentUserDashboardService();
    const dashboardContainer = document.getElementById('dashboard-container');
 	if (!dashboardContainer)
 		return;
@@ -59,13 +62,13 @@ export function showDashboard(data: DashboardData) {
           <h3 class="text-xl font-bold text-custom-white mb-4">Total Points</h3>
           <div id="bar-chart"></div>
           <div class="flex justify-center items-center space-x-6 mt-4">
+		    <div class="flex items-center space-x-2">
+              <div class="w-3 h-3 rounded-full bg-custom-white"></div>
+              <span class="text-sm text-gray-400">Received</span>
+            </div>
             <div class="flex items-center space-x-2">
               <div class="w-3 h-3 rounded-full bg-custom-yellow"></div>
               <span class="text-sm text-gray-400">Scored</span>
-            </div>
-            <div class="flex items-center space-x-2">
-              <div class="w-3 h-3 rounded-full bg-custom-white"></div>
-              <span class="text-sm text-gray-400">Received</span>
             </div>
           </div>
         </div>
@@ -74,12 +77,12 @@ export function showDashboard(data: DashboardData) {
           <div id="donut-chart" class="relative"></div>
           <div class="flex justify-center items-center space-x-6 mt-4">
             <div class="flex items-center space-x-2">
-              <div class="w-3 h-3 rounded-full bg-custom-yellow"></div>
-              <span id="won-percentage" class="text-sm text-gray-400"></span>
-            </div>
-            <div class="flex items-center space-x-2">
               <div class="w-3 h-3 rounded-full bg-custom-white"></div>
               <span id="lost-percentage" class="text-sm text-gray-400"></span>
+            </div>
+			<div class="flex items-center space-x-2">
+              <div class="w-3 h-3 rounded-full bg-custom-yellow"></div>
+              <span id="won-percentage" class="text-sm text-gray-400"></span>
             </div>
           </div>
         </div>
@@ -186,7 +189,7 @@ export function renderDashboard(data: DashboardData) {
       .attr('y', (d: any) => yScale(d.value))
       .attr('width', xScale.bandwidth())
       .attr('height', (d: any) => height - yScale(d.value))
-      .attr('fill', (d: any) => d.label === 'Scored' ? '#EDD24E' : '#D9D9D9')
+      .attr('fill', (d: any) => d.label === 'Scored' ? '#fbd11b' : '#D9D9D9')
       .attr('rx', 6)
       .attr('ry', 6);
   }
@@ -201,7 +204,7 @@ export function renderDashboard(data: DashboardData) {
     const donutWidth = 30;
     const color = d3.scaleOrdinal()
       .domain(donutChartData.map((d: any) => d.label))
-      .range(['#EDD24E', '#D9D9D9']);
+      .range(['#fbd11b', '#D9D9D9']);
     const svg = d3.select('#donut-chart')
       .append('svg')
       .attr('viewBox', `0 0 ${width} ${height}`)

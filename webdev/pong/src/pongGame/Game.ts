@@ -6,15 +6,13 @@ import { AIManager, PlayerSide } from "./AIManager.js";
 import { ScoreManager, GameResult } from "./ScoreManager.js";
 import { UIManager } from "./UIManager.js";
 import { ShowGame } from "./ShowGame.js";
-// import { resetTournament } from "../models/TournamentStore.js";
-// import { Router } from "../router.js";
 
 export interface GameOptions {
   leftPlayer: string;
   rightPlayer: string;
   maxScore: number;
-  gameMode: 'p-vs-ai' |  'ai-vs-p' | 'p-vs-p' | 'ai-vs-ai';
-  aiDifficulty?: 1000 | 100 | 1;
+  gameMode: 'p-vs-ai' | 'p-vs-p';
+  aiDifficulty?: 2000 | 1000 | 1;
   onFinish?: (winner: string, score1: number, score2: number) => void | null;
 }
 
@@ -64,13 +62,17 @@ export class Game {
       maxScore: options?.maxScore || GameConfig.MAX_SCORE,
       gameMode: options?.gameMode || 'p-vs-p',
       onFinish: options?.onFinish || undefined,
-      aiDifficulty: options?.aiDifficulty || (GameConfig.AI_UPDATE_COOLDOWN as 1000 | 100 | 1)
+      aiDifficulty: options?.aiDifficulty || (GameConfig.AI_UPDATE_COOLDOWN as 2000 | 1000 | 1)
     };
     this.onFinishCallback = options?.onFinish || null;
     this.initializeDOM();
     this.initializeManagers();
     this.initializeGameObjects();
     this.setupDebugFunctions();
+    // if (this.options.aiDifficulty === 500)
+    //   GameConfig.PADDLE_SPEED = 0.05;
+    if (this.options.aiDifficulty === 1)
+      GameConfig.PADDLE_SPEED = 0.08;
   }
 
   private initializeDOM(): void {
@@ -111,23 +113,23 @@ export class Game {
   private configureGameMode(): void {
     switch (this.options.gameMode) {
       case 'p-vs-ai':
-        this.options.rightPlayer = "ChatGPT";
+        this.options.rightPlayer = "AI";
         this.options.leftPlayer = ShowGame.otherPlayer;
         this.aiManager.disableAI(PlayerSide.LEFT); // Only disable left, right stays AI
         break;
-      case 'ai-vs-p':
-        this.options.leftPlayer = "Gemini";
-        this.aiManager.disableAI(PlayerSide.RIGHT); // Only disable right, left stays AI
-        break;
+    //   case 'ai-vs-p':
+    //     this.options.leftPlayer = "Gemini";
+    //     this.aiManager.disableAI(PlayerSide.RIGHT); // Only disable right, left stays AI
+    //     break;
       case 'p-vs-p':
         this.aiManager.disableAI(PlayerSide.LEFT);
         this.aiManager.disableAI(PlayerSide.RIGHT);
         break;
-      case 'ai-vs-ai':
-        this.options.leftPlayer = "ChatGPT";
-        this.options.rightPlayer = "Gemini";
-        // Both AI are already enabled by default, no action needed
-        break;
+    //   case 'ai-vs-ai':
+    //     this.options.leftPlayer = "AI";
+    //     this.options.rightPlayer = "Gemini";
+    //     // Both AI are already enabled by default, no action needed
+    //     break;
     }
   }
 
@@ -211,15 +213,8 @@ export class Game {
 
   // Main game loop
   public start(): void {
-    // console.log(`▶️ Starting Game instance: ${this.gameId}`);
     const gameLoop = (time: number) => {
       if (!this.isGameActive || !ShowGame.noWinner || !this.gameOn) {
-        // console.log(`⏹️ Game loop stopping for Game: ${this.gameId} (isActive: ${this.isGameActive}, noWinner: ${ShowGame.noWinner}, gameOn: ${this.gameOn})`);
-        // window.addEventListener('popstate', (event) => {
-        //   resetTournament();
-        //   Router.navigate('home');
-        //   console.log('History changed:', event.state);
-        // });
         this.resetGame();
         this.animationFrameId = null; // Clear the ID when stopping
         return ;
@@ -240,7 +235,6 @@ export class Game {
           this.updateRightPlayerPaddle(delta);
           
           if (this.isLose()) {
-            // console.log(`⚽ Ball lost in Game: ${this.gameId}`);
             this.handleLose();
           }
         }
@@ -346,7 +340,6 @@ export class Game {
         this.gameOn = false; 
         this.resetGame();
         this.onFinishCallback(winner, scores.left, scores.right);
-        // alert(`${winner} ha ganado esta partida`);
       }
     }
     this.ball.reset();

@@ -17,11 +17,8 @@ export async function sendGameService(gameType: string, match: Match)
 {
 	if (gameType == 'p-vs-ai')
 	{
-		if (match.player1.alias == '')
-		{
-			match.player1.alias = match.player2.alias;
+		if (match.player2.alias == '')
 			match.player2.alias = 'AI';
-		}
 	}
 	try
 	{
@@ -39,8 +36,6 @@ export async function sendGameService(gameType: string, match: Match)
 			})
 		});
 		
-		// if (!gameReponse.ok)
-        	// return showErrorPopup(gameReponse.error, "popup");
 	}
 	catch (error)
 	{
@@ -56,6 +51,7 @@ export type matchid = {
 	player2: string;
 	scorePlayer1: number;
 	scorePlayer2: number;
+	winner: string;
 	gameMode: string;
 	finished_at: string;
 };
@@ -71,6 +67,31 @@ export async function gameCurrentUserHasPlayedService()
 		const result = {
 			count: games.length,
 			data: games,
+		};
+
+		return result;
+	}
+	catch (error)
+	{
+		console.error('gameCurrentUserHasPlayedService error:', error);
+		showErrorPopup("Error with getting historic games.", "popup");
+		Router.navigate('home');
+	}
+}
+
+export async function gameCurrentUserDashboardService()
+{
+	try
+	{
+		const games: matchid[] = await fetch('/api/game/matches', {
+			credentials: 'include',
+		}).then(res => res.json());
+		
+		const result = {
+			victories: games.filter(game => game.winner === game.player1).length,
+			defeats: games.filter(game => game.winner !== game.player1).length,
+			scored: games.reduce((sum, game) => sum + game.scorePlayer1, 0),
+			conceded: games.reduce((sum, game) => sum + game.scorePlayer2, 0),
 		};
 
 		return result;
@@ -94,7 +115,8 @@ export const manageGameHistorial = (() => {
     const container = document.getElementById("gameHistoryContainer");
     if (!container)
 		return;
-
+	
+	games.reverse();
     container.innerHTML = games.map(match => renderGameHistoryCard(match)).join("");
   }
 

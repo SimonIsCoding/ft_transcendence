@@ -11,7 +11,7 @@ import { friendsSubmenuRender } from './profileBtn/friendsSubmenuRender'
 import { dashboardSubmenuRender } from './profileBtn/dashboardSubmenuRender'
 import { gameHistorySubmenuRender } from './profileBtn/gameHistorySubmenuRender'
 import { editProfileSubmenuRender } from './profileBtn/editProfileSubmenuRender'
-import { ShowGame } from "../../pong-erik/ShowGame";
+import { ShowGame } from "../../pongGame/ShowGame";
 
 export const userUnloggedSidebar = {
 
