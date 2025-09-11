@@ -11,6 +11,7 @@ import { enviarLogALogstash } from "../utils/logstash";
 import { closeAllMenus } from "../views/sidebar/sidebarUtils";
 import { ShowGame } from "../pongGame/ShowGame";
 import { sendGameService } from "../services/gameService";
+import { gameSettings } from "./gameSettingsControllers";
 
 export class TournamentController {
   async iniciarTorneo() {
@@ -96,7 +97,7 @@ export class TournamentController {
         const game = new Game({
           leftPlayer: match.player1.alias,
           rightPlayer: match.player2.alias,
-          maxScore: 3,
+          maxScore: gameSettings.scoreLimit,
           gameMode: "p-vs-p",
           onFinish: (
             winnerAlias: string,
