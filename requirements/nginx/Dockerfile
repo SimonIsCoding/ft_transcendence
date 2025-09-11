@@ -17,7 +17,7 @@ RUN apt-get update && apt-get -y install \
     openssl \
  && rm -rf /var/lib/apt/lists/*
 
-COPY srcs/requirements/nginx/tools/nginxentry.sh /usr/local/bin/
+COPY requirements/nginx/tools/nginxentry.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/nginxentry.sh
 
 # Default location where nginx will serve files
