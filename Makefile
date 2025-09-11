@@ -11,6 +11,15 @@ SECRET_FILES = \
     ./secrets/cookie_secret.txt \
     ./secrets/jwt_secret.txt
 
+all: check-secrets
+	mkdir -p data/pong
+	mkdir -p data/DB
+	docker compose build --no-cache
+	docker compose up -d --remove-orphans
+	sleep 2
+# 	$(MAKE) configure-kibana-password
+	docker ps
+
 # Check if secret files exist
 check-secrets:
 	@echo "Checking required secret files..."
@@ -28,19 +37,9 @@ check-secrets:
 		echo "Error: Some secret files are missing!"; \
 		echo "Please create the missing files before continuing."; \
 		exit 1; \
-	else \
-		echo ""; \
-		echo "✅ All secret files are present!"; \
-	fi
-
-all: check-secrets
-	mkdir -p srcs/data/pong
-	mkdir -p srcs/data/DB
-	docker compose build --no-cache
-	docker compose up -d --remove-orphans
-	sleep 2
-# 	$(MAKE) configure-kibana-password
-	docker ps
+	fi; \
+	echo ""; \
+	echo "✅ All secret files are present!"; \
 
 w webupdate:
 	docker run --rm \

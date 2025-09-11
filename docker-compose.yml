@@ -9,7 +9,7 @@ services:
       - server_key
     build:
       context: .
-      dockerfile: srcs/requirements/nginx/Dockerfile
+      dockerfile: requirements/nginx/Dockerfile
     container_name: nginx
     depends_on: 
       - api-gateway
@@ -138,14 +138,12 @@ services:
       - elasticsearch
 
   configure-kibana:
-    build:
-      context: .
-      dockerfile: srcs/configure-kibana/Dockerfile
+    build: 
+      context: requirements/configure-kibana
+      dockerfile: Dockerfile
     container_name: configure-kibana
-    networks:
-      - your_network_name  # make sure this matches your existing network
     depends_on:
-      - es01
+      - elasticsearch
     environment:
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
       - KIBANA_SYSTEM_PASSWORD=${KIBANA_SYSTEM_PASSWORD}
