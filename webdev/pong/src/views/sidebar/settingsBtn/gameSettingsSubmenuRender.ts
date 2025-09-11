@@ -1,4 +1,4 @@
-import { gameSettings } from "../../../controllers/gameSettingsControllers";
+import { gameSettings, getDifficultyLabel } from "../../../controllers/gameSettingsControllers";
 
 export function gameSettingsSubmenuRender():string 
 {
@@ -13,14 +13,14 @@ export function gameSettingsSubmenuRender():string
 			<input id="iaDifficultySliderInput" type="range" min="1" max="3" value="1"
 				class="basis-[40%] h-1 rounded cursor-pointer" />
 			<span id="iaDifficultyValue" class="font-bold basis-[20%] text-center font-mono">
-				${gameSettings.iaDifficulty}
+				${getDifficultyLabel(gameSettings.iaDifficulty)}
 			</span>
 		</div>
 		<div class="flex items-center pt-5 w-full">
 			<label for="scoreLimitSlider" class="font-bold basis-[40%] whitespace-nowrap text-sm pl-2 text-center">
 				Score Limit
 			</label>
-			<input id="scoreLimitSliderInput" type="range" min="1" max="3" value="2"
+			<input id="scoreLimitSliderInput" type="range" min="1" max="3" value="1"
 				class="basis-[40%] h-1 rounded cursor-pointer" />
 			<span id="scoreLimitValue" class="font-bold basis-[20%] text-center font-mono">
 				${gameSettings.scoreLimit}

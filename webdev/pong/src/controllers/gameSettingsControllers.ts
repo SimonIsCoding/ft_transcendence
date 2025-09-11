@@ -1,17 +1,18 @@
-// For Erik: you can receive the data using this: Game.start(gameSettings);
-
-export const gameDifficulty = (): number => {
-	if (gameSettings.iaDifficulty === "Easy")
-		return 1000;
-	else if (gameSettings.iaDifficulty === "Medium")
-		return 750;
-	else
-		return 1
+export function getDifficultyLabel(value: number): string
+{
+	if (value === 1000)
+		return "Easy"
+	if (value === 750)
+		return "Medium"
+	return "Hard"
 }
 
-export const gameSettings = {
-	iaDifficulty: "Easy",
-	scoreLimit: "3"
+export const gameSettings: {
+	iaDifficulty: 1000 | 750 | 1,
+	scoreLimit: 3 | 5 | 11
+} = {
+	iaDifficulty: 1000,
+	scoreLimit: 3
 };
 
 export function setupGameSettingsListeners()
@@ -22,42 +23,44 @@ export function setupGameSettingsListeners()
 	const scoreSlider = document.getElementById("scoreLimitSliderInput") as HTMLInputElement;
 	const scoreValue = document.getElementById("scoreLimitValue") as HTMLSpanElement;
 
-	gameSettings.iaDifficulty = getIaLevel(parseInt(iaSlider.value));
-	iaValue.textContent = gameSettings.iaDifficulty;
+	// gameSettings.iaDifficulty = getAiLevel(parseInt(iaSlider.value));
+	// iaValue.textContent = gameSettings.iaDifficulty;
 
-	gameSettings.scoreLimit = getScoreLimit(parseInt(scoreSlider.value));
-	scoreValue.textContent = gameSettings.scoreLimit;
+	// gameSettings.scoreLimit = getScoreLimit(parseInt(scoreSlider.value));
+	// scoreValue.textContent = gameSettings.scoreLimit;
 
 	iaSlider.addEventListener("input", e => {
 		const value = parseInt((e.target as HTMLInputElement).value);
-		gameSettings.iaDifficulty = getIaLevel(value);
-		iaValue.textContent = gameSettings.iaDifficulty;
+		gameSettings.iaDifficulty = value === 1 ? 1000 : value === 2 ? 750 : 1;
+		iaValue.textContent = getDifficultyLabel(gameSettings.iaDifficulty);
 	});
 
 	scoreSlider.addEventListener("input", e => {
 		const value = parseInt((e.target as HTMLInputElement).value);
-		gameSettings.scoreLimit = getScoreLimit(value);
-		scoreValue.textContent = gameSettings.scoreLimit;
+		gameSettings.scoreLimit = value === 1 ? 3 : value === 2 ? 5 : 11;
+		scoreValue.textContent = gameSettings.scoreLimit.toString();
 	});
+
+	// const saveBtnGameSettings = document.getElementById("saveBtnGameSettings") as HTMLInputElement;
 }
 
 
-function getScoreLimit(value: number): string
-{
-	if (value == 1)
-		return "3";
-	else if (value == 2)
-		return "5";
-	else
-		return "11";
-}
+// function getScoreLimit(value: number): string
+// {
+// 	if (value == 1)
+// 		return "3";
+// 	else if (value == 2)
+// 		return "5";
+// 	else
+// 		return "11";
+// }
 
-function getIaLevel(value: number): string
-{
-	if (value == 1)
-		return "Easy";
-	else if (value == 2)
-		return "Medium";
-	else
-		return "Hard";
-}
+// function getAiLevel(value: number): string
+// {
+// 	if (value == 1)
+// 		return "Easy";
+// 	else if (value == 2)
+// 		return "Medium";
+// 	else
+// 		return "Hard";
+// }
