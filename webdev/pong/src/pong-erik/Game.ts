@@ -115,7 +115,7 @@ export class Game {
   private configureGameMode(): void {
     switch (this.options.gameMode) {
       case 'p-vs-ai':
-        this.options.rightPlayer = "ChatGPT";
+        this.options.rightPlayer = "AI";
         this.options.leftPlayer = ShowGame.otherPlayer;
         this.aiManager.disableAI(PlayerSide.LEFT); // Only disable left, right stays AI
         break;
@@ -128,7 +128,7 @@ export class Game {
         this.aiManager.disableAI(PlayerSide.RIGHT);
         break;
       case 'ai-vs-ai':
-        this.options.leftPlayer = "ChatGPT";
+        this.options.leftPlayer = "AI";
         this.options.rightPlayer = "Gemini";
         // Both AI are already enabled by default, no action needed
         break;

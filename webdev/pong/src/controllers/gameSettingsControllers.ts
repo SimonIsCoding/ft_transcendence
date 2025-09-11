@@ -15,6 +15,24 @@ export const gameSettings: {
 	scoreLimit: 3
 };
 
+export function getDifficultyValue(difficulty: 1000 | 750 | 1): number
+{
+	if (difficulty === 1000)
+		return 1;
+	if (difficulty === 750)
+		return 2;
+	return 3;
+}
+
+export function getScoreLimitValue(limit: number): number
+{
+	if (limit === 3)
+		return 1;
+	if (limit === 5)
+		return 2;
+	return 3;
+}
+
 export function setupGameSettingsListeners()
 {
 	const iaSlider = document.getElementById("iaDifficultySliderInput") as HTMLInputElement;

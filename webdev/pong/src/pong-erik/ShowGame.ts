@@ -1,10 +1,9 @@
 import { Router } from "../router";
 import type { Match } from '../models/TournamentModel';
-//import { handleSidebar } from '../views/sidebar/sidebarBehavior';
 import { Game } from "./Game";
 import { GameRender } from './GameRender';
-// import { gameDifficulty, gameSettings } from "../controllers/gameSettingsControllers";
 import { sendGameService } from "../services/gameService";
+import { gameSettings } from "../controllers/gameSettingsControllers";
 
 type GameMode = 'p-vs-ai' | 'ai-vs-p' | 'p-vs-p' | 'ai-vs-ai';
 
@@ -42,7 +41,7 @@ export class ShowGame {
         gameArea?.classList.add('hidden');
         // if (ShowGame.gameType === 'p-vs-ai') {
             // match.player1.alias = "match.player2.alias";
-            // match.player2.alias = 'ChatGPT';
+            // match.player2.alias = 'AI';
         // }
         ShowGame.noWinner = true;
         await this.playGame(match);
@@ -52,7 +51,7 @@ export class ShowGame {
         const gamesArea = document.getElementById('gamesArea');
         let winner = match.winner ? match.winner.alias : '';
         if (ShowGame.gameType === 'p-vs-ai' && type) {
-            winner = "ChatGPT";
+            winner = "AI";
         }
         if (gamesArea && match.winner) {
             gamesArea.innerHTML = `            
@@ -99,7 +98,6 @@ export class ShowGame {
                     await new Promise(resolve => setTimeout(resolve, 50));
                 }
                 
-//                await handleSidebar();
                 this.renderGameCanvas();
                 await new Promise(resolve => setTimeout(resolve, 100));
 				if (ShowGame.gameType === 'p-vs-ai')
@@ -107,10 +105,9 @@ export class ShowGame {
                 const game = new Game({
                     leftPlayer: match.player1.alias,
                     rightPlayer: match.player2.alias,
-                    maxScore: 3,
-                    // maxScore: parseInt(gameSettings.scoreLimit),
+                    maxScore: gameSettings.scoreLimit,
                     gameMode: ShowGame.gameType,
-                    aiDifficulty: 750,
+                    aiDifficulty: gameSettings.iaDifficulty,
                     onFinish: (winnerAlias: string, player1Score: number, player2Score: number) => {
                         match.player1.score = player1Score;
                         match.player2.score = player2Score;
@@ -120,6 +117,8 @@ export class ShowGame {
                         }
                         match.winner = (match.player1.alias === winnerAlias) ? match.player1 : match.player2;
 						sendGameService(ShowGame.gameType, match);
+						console.log(`maxScore: gameSettings.scoreLimit = ${gameSettings.scoreLimit}`)
+						console.log(`aiDifficulty: gameSettings.iaDifficulty = ${gameSettings.iaDifficulty}`)
 
                         if (ShowGame.noWinner && (window.location.pathname.includes("/game") || window.location.pathname.includes("/gameai"))) { 
                                 if (match.winner.alias && match.winner.alias !== undefined) {
