@@ -1,10 +1,5 @@
 import type { Match } from "../models/TournamentModel";
-// import { Router } from '../router';
-import {
-  currentTournament,
-  getMatchInfo,
-  resetTournament,
-} from "../models/TournamentStore";
+import { currentTournament, getMatchInfo, resetTournament } from "../models/TournamentStore";
 import { TournamentUIManager } from "../views/TournamentUIManager";
 import { Game } from "../pongGame/Game";
 import { enviarLogALogstash } from "../utils/logstash";
@@ -44,7 +39,6 @@ export class TournamentController {
     return new Promise((resolve) => {
       const btn = document.getElementById("nextMatchBtn");
       if (!btn) {
-        console.warn('Botón "Siguiente" no encontrado.');
         resolve();
         return;
       }

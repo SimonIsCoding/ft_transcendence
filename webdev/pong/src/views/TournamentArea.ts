@@ -11,6 +11,7 @@ import { TournamentController } from "../controllers/TournamentController";
 import { closeAllMenus } from "./sidebar/sidebarUtils";
 import { GameRender } from "../pongGame/GameRender";
 import { getCurrentUser } from "./sidebar/sidebarUtils";
+import { showErrorPopup } from "../utils/utils";
 
 function swapLineToRightSvg(): string {
   return `
@@ -160,6 +161,9 @@ export const TournamentArea = {
       if (alias2Input) alias2Input.value = player2;
       if (alias3Input) alias3Input.value = player3;
       if (alias4Input) alias4Input.value = player4;
+
+	  if (player1.trim().length > 40 || player2.trim().length > 40 || player3.trim().length > 40 || player4.trim().length > 40)
+			return showErrorPopup("Inputs should contain no more than 40 caracters", "popup");
 
       let torneo = getTournament();
       if (!torneo) {

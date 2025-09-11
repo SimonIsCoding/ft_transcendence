@@ -1,4 +1,3 @@
-// import type { User } from "../config";
 import { Router } from "../router";
 import { handleSidebar } from "./sidebar/sidebarBehavior";
 import { TournamentArea } from "./TournamentArea";
@@ -11,7 +10,6 @@ export const TournamentView = {
   
  render(): string {
 	return `
-
       ${TournamentArea.render()}
       ${new GameRender().renderGame()}
   `;
