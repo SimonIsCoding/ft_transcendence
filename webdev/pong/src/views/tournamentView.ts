@@ -2,7 +2,7 @@
 import { Router } from "../router";
 import { handleSidebar } from "./sidebar/sidebarBehavior";
 import { TournamentArea } from "./TournamentArea";
-import { GameRender } from "../pong-erik/GameRender";
+import { GameRender } from "../pongGame/GameRender";
 import { matchInfo } from '../models/TournamentStore';
 import { getCurrentUser } from "./sidebar/sidebarUtils";
 import { showErrorPopup } from "../utils/utils";

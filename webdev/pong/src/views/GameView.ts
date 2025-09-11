@@ -3,8 +3,8 @@ import { Router } from "../router";
 import { handleSidebar } from "./sidebar/sidebarBehavior";
 import { oneVsOneArea } from "./OneVsOneArea";
 import { oneVsAIArea } from "./OneVsOneArea";
-import { GameRender } from "../pong-erik/GameRender";
-import { ShowGame } from "../pong-erik/ShowGame";
+import { GameRender } from "../pongGame/GameRender";
+import { ShowGame } from "../pongGame/ShowGame";
 import { getCurrentUser } from "./sidebar/sidebarUtils";
 import { showErrorPopup } from "../utils/utils";
 
