@@ -62,13 +62,13 @@ export function showDashboard(data: DashboardData) {
           <h3 class="text-xl font-bold text-custom-white mb-4">Total Points</h3>
           <div id="bar-chart"></div>
           <div class="flex justify-center items-center space-x-6 mt-4">
+		    <div class="flex items-center space-x-2">
+              <div class="w-3 h-3 rounded-full bg-custom-white"></div>
+              <span class="text-sm text-gray-400">Received</span>
+            </div>
             <div class="flex items-center space-x-2">
               <div class="w-3 h-3 rounded-full bg-custom-yellow"></div>
               <span class="text-sm text-gray-400">Scored</span>
-            </div>
-            <div class="flex items-center space-x-2">
-              <div class="w-3 h-3 rounded-full bg-custom-white"></div>
-              <span class="text-sm text-gray-400">Received</span>
             </div>
           </div>
         </div>
@@ -77,12 +77,12 @@ export function showDashboard(data: DashboardData) {
           <div id="donut-chart" class="relative"></div>
           <div class="flex justify-center items-center space-x-6 mt-4">
             <div class="flex items-center space-x-2">
-              <div class="w-3 h-3 rounded-full bg-custom-yellow"></div>
-              <span id="won-percentage" class="text-sm text-gray-400"></span>
-            </div>
-            <div class="flex items-center space-x-2">
               <div class="w-3 h-3 rounded-full bg-custom-white"></div>
               <span id="lost-percentage" class="text-sm text-gray-400"></span>
+            </div>
+			<div class="flex items-center space-x-2">
+              <div class="w-3 h-3 rounded-full bg-custom-yellow"></div>
+              <span id="won-percentage" class="text-sm text-gray-400"></span>
             </div>
           </div>
         </div>
