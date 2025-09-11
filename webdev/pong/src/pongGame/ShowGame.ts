@@ -113,6 +113,9 @@ export class ShowGame {
                         }
                         match.winner = (match.player1.alias === winnerAlias) ? match.player1 : match.player2;
 						sendGameService(ShowGame.gameType, match);
+						console.log(`maxScore: gameSettings.scoreLimit = ${gameSettings.scoreLimit}`)
+						console.log(`aiDifficulty: gameSettings.iaDifficulty = ${gameSettings.iaDifficulty}`)
+
                         if (ShowGame.noWinner && (window.location.pathname.includes("/game") || window.location.pathname.includes("/gameai"))) { 
                                 if (match.winner.alias && match.winner.alias !== undefined) {
                                     this.showWinner(match, player2Score > player1Score);
