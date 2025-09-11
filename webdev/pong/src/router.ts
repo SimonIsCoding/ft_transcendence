@@ -6,7 +6,6 @@ import { ShowGame } from './pongGame/ShowGame';
 import { TournamentView } from './views/tournamentView';
 import { GameView } from "./views/GameView";
 
-
 // at the top of router.ts
 export type Route = 'home' | 'login' | 'register' | 'game' | 'gameai' | 'tournament';
 
