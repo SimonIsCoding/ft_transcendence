@@ -54,10 +54,7 @@ export async function initRegistration()
     }
 
 	if (login.length > 40 || password.length > 40 || mail.length > 40)
-	{
-	  showErrorPopup("Inputs should contain no more than 40 caracters", "popup");
-      return;
-    }
+	  return showErrorPopup("Inputs should contain no more than 40 caracters", "popup");
 /*
     // --- Password rules ---
     // Example: min 8 chars, at least 1 uppercase, 1 lowercase, 1 number, 1 special char
@@ -150,7 +147,6 @@ async function handleSuccessfulRegistration(login: string, mail: string, passwor
 
     if (!tokenRes.ok) throw new Error('Token generation failed');
 
-    localStorage.setItem('login', login);
 	enviarLogALogstash('new_account_created', {
 				register_id: 'new_account_created-' + Date.now(),
 				player_username: login,

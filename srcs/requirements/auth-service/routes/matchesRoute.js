@@ -48,7 +48,7 @@ export async function matchesRoutes(fastify)
         }
     });
 
-	fastify.get('/game/nbMatchesPlayed', { preHandler: fastify.auth }, async (request, reply) => {
+	fastify.get('/game/matches', { preHandler: fastify.auth }, async (request, reply) => {
 		const userId = request.user.id;
 		const stmt = db.prepare("SELECT matchid, player1, player2, scorePlayer1, scorePlayer2, winner, gameMode, finished_at FROM matches WHERE userid = ?");
 		const users = stmt.all(userId);

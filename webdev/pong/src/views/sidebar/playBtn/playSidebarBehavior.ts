@@ -1,4 +1,4 @@
-import{ toggleMenuVisibility } from '../sidebarUtils'
+import{ closeAllMenus, getCurrentUser, toggleMenuVisibility } from '../sidebarUtils'
 //import { Router } from '../../../router';
 import { showErrorPopup } from '../../../utils/utils';
 import { TournamentArea } from '../../TournamentArea';
@@ -41,8 +41,22 @@ function swapElements(id1: string, id2: string)
 	}
 }
 
-export function oneVsOneAreaInit()
+export async function oneVsOneAreaInit()
 {
+	const player1Field = document.getElementById("player1") as HTMLInputElement;
+	const status = await fetch('/api/auth/me/status', { credentials: 'include' })
+    .then(res => res.json());
+	if (status.authenticated)
+	{
+		const user = getCurrentUser();
+		if (user)
+			player1Field.value = user.login;
+	}
+	else
+	{
+		player1Field.removeAttribute("readonly");
+		player1Field.setAttribute("placeholder", "Player 1");
+	}
 
 	document.getElementById("swapBtn")?.addEventListener("click", () => {
 		swapPlayer("player1", "player2");
@@ -50,21 +64,22 @@ export function oneVsOneAreaInit()
 
 	const playBtn = document.getElementById('playOneVsOneBtn') as HTMLButtonElement | null;
 	playBtn!.addEventListener('click', () => { 
-console.log('clic 1');
 		const player1 = document.getElementById("player1") as HTMLInputElement;
 		const player2 = document.getElementById("player2") as HTMLInputElement;
+
+		if (player1.value.trim().length > 40 || player2.value.trim().length > 40)
+			return showErrorPopup("Inputs should contain no more than 40 caracters", "popup");
 		if (!player1.value.trim() || !player2.value.trim())
-		{
-			showErrorPopup("You need 2 players to play.", "oneVsOneAreaPopup");
-			return ;
-		}
-console.log('clic 2');
+			return showErrorPopup("You need 2 players to play.", "popup");
+
 		new ShowGame().initGame({
 	  		player1: { alias: player1.value },
 			player2: { alias: player2.value },
 			winner: null,
 			type: '1vs1'
 		});
+		const submenus = document.querySelectorAll<HTMLElement>('.submenu');
+		closeAllMenus(submenus);
 	});
 }
 
@@ -88,6 +103,10 @@ export function tournamentAreaInit()
 
 export function oneVsAIAreaInit()
 {
+	const player1VSAIField = document.getElementById("player1VSAI") as HTMLInputElement;
+	const user = getCurrentUser();
+	if (user)
+		player1VSAIField.value = user.login;
 
 	document.getElementById("swapAIBtn")?.addEventListener("click", () => {
 		swapElements("player1VSAI", "AIPlayer");
@@ -97,17 +116,19 @@ export function oneVsAIAreaInit()
 	playBtn!.addEventListener('click', () => {
 		const player1 = document.getElementById("player1") as HTMLInputElement;
 		const player1VSAI = document.getElementById("player1VSAI") as HTMLInputElement;
-		if (!player1VSAI.value.trim())
-		{
-			showErrorPopup("You need 1 player to play.", "oneVsAIAreaPopup");
-			return ;
-		}
+		// if (!player1VSAI.value.trim())
+		// {
+		// 	showErrorPopup("You need 1 player to play.", "popup");
+		// 	return ;
+		// }
 		new ShowGame().initGame({
 	  		player1: { alias: player1.value },
 			player2: { alias: player1VSAI.value },
 			winner: null,
 			type: ''
 		});
+		const submenus = document.querySelectorAll<HTMLElement>('.submenu');
+		closeAllMenus(submenus);
 	});
 }
 
@@ -116,18 +137,6 @@ export function playSidebarBehavior()
 	const submenus = document.querySelectorAll<HTMLElement>('.submenu');
 	const playSidebarBtn = document.getElementById('playSidebarBtn');
 	playSidebarBtn?.addEventListener('click', () => {
-		// const location = window.location.pathname;
-		// if (location === '/game') {
-		// 	const gameArea = document.getElementById('gamesArea');
-		// 	gameArea?.classList.add('hidden');
-		// 	ShowGame.noWinner = false;
-		// 	Router.navigate("home");
-		// } else {
-		 	toggleMenuVisibility('playSubmenu', submenus);
-		// 	oneVsOneAreaInit();
-		// 	oneVsAIAreaInit();
-		// 	tournamentAreaInit();
-		// 	// TournamentArea.init();
-		// }
+		toggleMenuVisibility('playSubmenu', submenus);
 	});
 }

@@ -58,13 +58,26 @@ export function toggleMenuVisibility(targetId: string | null, submenus: NodeList
 	submenus.forEach(menu => {
 		if (menu.id === targetId)
 		{
+			const isClosed = menu.classList.contains('max-h-0');
+
 			menu.classList.toggle('max-h-0');
 			menu.classList.toggle('max-h-screen');
+
+			if (isClosed)
+			{
+				menu.classList.remove('border-0');
+				menu.classList.add('border', 'border-black');
+			}
+			else
+			{
+				menu.classList.remove('border', 'border-black');
+				menu.classList.add('border-0');
+			}
 		}
 		else
 		{
-			menu.classList.add('max-h-0');
-			menu.classList.remove('max-h-screen');
+			menu.classList.add('max-h-0', 'border-0');
+			menu.classList.remove('max-h-screen', 'border', 'border-black');
 		}
 	});
 }
@@ -83,8 +96,8 @@ export function openMenu(menuId: string)
 export function closeAllMenus(submenus: NodeListOf<HTMLElement>)
 {
 	submenus.forEach(menu => {
-		menu.classList.add('max-h-0');
-		menu.classList.remove('max-h-screen');
+		menu.classList.add('max-h-0', 'border-0');
+		menu.classList.remove('max-h-screen', 'border', 'border-black');
 	});
 }
 
@@ -112,6 +125,7 @@ export function profileSidebarBehavior()
 {
 	getUserInfo();
 	const submenus = document.querySelectorAll<HTMLElement>('.submenu');
+	const largeSubmenu = document.getElementById("largeSubmenu");
 	const friendsSubmenu = document.getElementById("friendsSubmenu");
 	const dashboardSubmenu = document.getElementById("dashboardSubmenu");
 	const gameHistorySubmenu = document.getElementById("gameHistorySubmenu");
@@ -123,6 +137,8 @@ export function profileSidebarBehavior()
 		dashboardSubmenu?.classList.remove('hidden');
 		openMenu('largeSubmenu');
 		openMenu('dashboardSubmenu');
+		largeSubmenu?.classList.add('border', 'border-black');
+		largeSubmenu?.classList.remove('border-0');
 		// const dashboardData = await getUserDashboardDataService();
 		showDashboard(await mockDashboardData());
 		const backBtnDasboardSubmenu = document.getElementById("backBtnDasboardSubmenu");
@@ -150,8 +166,8 @@ export function profileSidebarBehavior()
 		gameHistorySubmenu?.classList.remove('hidden');
 		openMenu('largeSubmenu');
 		openMenu('gameHistorySubmenu');
-
-		// Injecte les matchs sans toucher au back button
+		largeSubmenu?.classList.add('border', 'border-black');
+		largeSubmenu?.classList.remove('border-0');
 		manageGameHistorial.main();
 	});
 
@@ -175,16 +191,13 @@ export function editProfileSubmenuBehavior()
 
 	editProfileBtn?.addEventListener('click', () => {
 		loadProfileAndPrefill();
-		editProfileSubmenu?.classList.add("max-h-screen");
-		editProfileSubmenu?.classList.remove("max-h-0");
-		editProfileSubmenu?.classList.remove("hidden");
+		editProfileSubmenu?.classList.remove("max-h-0", "border-0", "hidden");
+		editProfileSubmenu?.classList.add("max-h-screen", "border", "border-black");
 
 		backBtnEditProfileSubmenu?.addEventListener('click', () => {
 			editProfileSubmenu?.classList.add("max-h-0");
-			editProfileSubmenu?.classList.remove("max-h-screen");
+			editProfileSubmenu?.classList.remove("max-h-screen", "border", "border-black");
 		});
-		// checkService("twofa", "2FAtoggleSwitch");
-		// checkService("GDPR", "anonymousToggleSwitch");
 	});
 
 	profileSidebarBtn?.addEventListener('click', () => {
@@ -194,7 +207,7 @@ export function editProfileSubmenuBehavior()
 		if (isProfileOpen || isEditProfileOpen)
 		{
 			submenus.forEach(menu => {
-				menu.classList.remove("max-h-screen");
+				menu.classList.remove("max-h-screen", "border", "border-black");
 				menu.classList.add("max-h-0");
 			});
 		}
@@ -202,7 +215,7 @@ export function editProfileSubmenuBehavior()
 		{
 			toggleMenuVisibility('profileSubmenu', submenus);
 			editProfileSubmenu?.classList.add("max-h-0");
-			editProfileSubmenu?.classList.remove("max-h-screen");
+			editProfileSubmenu?.classList.remove("max-h-screen", "border", "border-black");
 		}
 	});
 }
@@ -212,15 +225,15 @@ export function settingsSidebarBehavior()
 {
 	const submenus = document.querySelectorAll<HTMLElement>('.submenu');
 	const settingsSidebarBtn = document.getElementById("settingsSidebarBtn");
-	const largeMenu = document.getElementById('largeSubmenu');
+	const largeSubmenu = document.getElementById('largeSubmenu');
 	const settingsSubmenu = document.getElementById('settingsSubmenu');
 
 	settingsSidebarBtn?.addEventListener('click', () => {
 
 		if (settingsSubmenu?.classList.contains('max-h-screen'))
 		{
-			largeMenu?.classList.add('max-h-0');
-			largeMenu?.classList.remove('max-h-screen');
+			largeSubmenu?.classList.add('max-h-0');
+			largeSubmenu?.classList.remove('max-h-screen', 'border', 'border-black');
 			settingsSubmenu.classList.add('max-h-0');
 			settingsSubmenu.classList.remove('max-h-screen');
 		}
@@ -229,6 +242,9 @@ export function settingsSidebarBehavior()
 			closeAllMenus(submenus);
 			openMenu('largeSubmenu');
 			openMenu('settingsSubmenu');
+			largeSubmenu?.classList.add('border', 'border-black');
+			largeSubmenu?.classList.remove('border-0');
+
 		}
 	});
 }

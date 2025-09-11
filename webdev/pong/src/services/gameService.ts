@@ -17,11 +17,8 @@ export async function sendGameService(gameType: string, match: Match)
 {
 	if (gameType == 'p-vs-ai')
 	{
-		// if (match.player1.alias == '')
-		// {
-			// match.player1.alias = match.player2.alias;
-			// match.player2.alias = 'AI';
-		// }
+		if (match.player2.alias == '')
+			match.player2.alias = 'AI';
 	}
 	try
 	{
@@ -39,8 +36,6 @@ export async function sendGameService(gameType: string, match: Match)
 			})
 		});
 		
-		// if (!gameReponse.ok)
-        	// return showErrorPopup(gameReponse.error, "popup");
 	}
 	catch (error)
 	{
@@ -65,7 +60,7 @@ export async function gameCurrentUserHasPlayedService()
 {
 	try
 	{
-		const games: matchid[] = await fetch('/api/game/nbMatchesPlayed', {
+		const games: matchid[] = await fetch('/api/game/matches', {
 			credentials: 'include',
 		}).then(res => res.json());
 
