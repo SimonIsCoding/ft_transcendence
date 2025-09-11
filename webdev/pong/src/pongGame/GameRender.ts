@@ -60,19 +60,19 @@ export class GameRender {
           <!-- Score area at top -->
           <div class="flex justify-center items-center px-10 py-5 h-[20vh] z-10">
             <div class="flex flex-col items-center text-center w-1/2">
-              <div class="text-lg font-bold mb-4 tracking-[2px]" style="color: #D9D9D9;" id="left-player">USER 1</div>
+              <div class="text-lg font-bold mb-4 tracking-[2px]" style="color: #D9D9D9;" id="left-player"></div>
               <div class="text-6xl font-bold leading-none" style="color: #D9D9D9;" id="left-score">0</div>
             </div>
             <div class="flex flex-col items-center text-center w-1/2">
-              <div class="text-lg font-bold mb-4 tracking-[2px]" style="color: #D9D9D9;" id="right-player">USER 2</div>
+              <div class="text-lg font-bold mb-4 tracking-[2px]" style="color: #D9D9D9;" id="right-player"></div>
               <div class="text-6xl font-bold leading-none" style="color: #D9D9D9;" id="right-score">0</div>
             </div>
           </div>
 
           <!-- Game elements -->
           <div class="absolute top-1/2 left-1/2 w-4 h-4 rounded-full bg-[#D9D9D9]" id="ball"></div>
-          <div class="absolute left-[30px] w-3 h-20 rounded-md -translate-y-1/2 bg-[#D9D9D9]" id="left-paddle"></div>
-          <div class="absolute right-[30px] w-3 h-20 rounded-md -translate-y-1/2 bg-[#D9D9D9]" id="right-paddle"></div>
+          <div class="absolute left-[30px] w-3 h-20 rounded-md top-47/100 -translate-y-1/2 bg-[#D9D9D9]" id="left-paddle"></div>
+		  <div class="absolute right-[30px] w-3 h-20 rounded-md top-47/100 -translate-y-1/2 bg-[#D9D9D9]" id="right-paddle"></div>
         </div>
       </div>
       
