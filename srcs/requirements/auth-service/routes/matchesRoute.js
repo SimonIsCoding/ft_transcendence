@@ -23,7 +23,7 @@ export async function matchesRoutes(fastify)
 			if (!userId)
 				return reply.code(401).send({ error: 'Unauthorized' });
 
-			if (player1 === userLogin.login || player2 === userLogin.login)
+			if (player1 === userLogin.login)
 			{
 				const stmt = db.prepare(`
 				INSERT INTO matches
@@ -39,7 +39,6 @@ export async function matchesRoutes(fastify)
         }
 		catch (error)
 		{
-			console.error("Error creating match:", error);
             fastify.log.error('Error creating match:', error);
             return reply.status(500).send({
                 error: 'Internal Server Error',
