@@ -101,7 +101,7 @@ services:
               http://localhost:9200 >/dev/null || exit 1"]
       interval: 10s
       timeout: 5s
-      retries: 30
+      retries: 40
   logstash:
     image: docker.elastic.co/logstash/logstash:${ELASTIC_VERSION}
     container_name: ls01
