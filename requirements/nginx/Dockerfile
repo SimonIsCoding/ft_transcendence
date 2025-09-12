@@ -26,7 +26,7 @@ RUN mkdir -p /var/www/html/pong
 # Copy freshly built frontend into the image
 # ⚠️ This will be overridden by the volume at runtime,
 # but ensures the image is usable even without the volume.
-COPY --from=builder /app/dist/ /var/www/html/pong/
+COPY --from=builder /app/dist/ /image-dist
 
 RUN chown -R www-data:www-data /var/www/html/pong
 
