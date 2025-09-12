@@ -46,14 +46,12 @@ export async function loadExistingProfilePicture(): Promise<void>
 	const preview = document.getElementById('previewProfilePicture') as HTMLImageElement;
 	const previewEdit = document.getElementById('previewProfilePictureEditProfile') as HTMLImageElement;
 	const uploadIcon = document.getElementById('uploadIcon')!;
-	// const editProfileChangePasswordMail = document.getElementById('editProfileChangePasswordMail')!;
 	const uploadPictureProfileSubmenu = document.getElementById("uploadPictureProfileSubmenu")!;
 	const uploadIconEditProfile = document.getElementById('uploadIconEditProfile')!;
 	const uploadPictureBtnEditProfile = document.getElementById("uploadPictureBtnEditProfile")!;
 
 	try
 	{
-		// Recover user info
 		const res = await fetch('/api/auth/me', {
 			credentials: 'include'
 		});
@@ -64,15 +62,20 @@ export async function loadExistingProfilePicture(): Promise<void>
 		if (data && data.user && data.user.profile_picture && data.user.provider !== 'google')
 		{
 			preview.src = `https://localhost:4443/${data.user.profile_picture}`;
-			preview.classList.remove('hidden');
 			previewEdit.src = `https://localhost:4443/${data.user.profile_picture}`;
+			preview.classList.remove('hidden');
 			previewEdit.classList.remove('hidden');
 			uploadIcon.classList.add('hidden');
 		}
 		else // to load personal pic
 		{
-			await loadGoogleAvatar(preview, data.user.profile_picture);
-			await loadGoogleAvatar(previewEdit, data.user.profile_picture);
+			// await loadGoogleAvatar(preview, data.user.profile_picture);
+			// await loadGoogleAvatar(previewEdit, data.user.profile_picture);
+			preview.src = data.user.profile_picture;
+			previewEdit.src = data.user.profile_picture;
+			preview.classList.remove('hidden');
+			previewEdit.classList.remove('hidden');
+
 			uploadIcon.classList.add("hidden");
 			uploadPictureProfileSubmenu.classList.remove("bg-black");
 			uploadIconEditProfile.classList.add("hidden");
@@ -87,59 +90,28 @@ export async function loadExistingProfilePicture(): Promise<void>
 
 // export async function loadGoogleAvatar(imgElement: HTMLImageElement, googleImageUrl: string)
 // {
-// 	try
-// 	{
-// 		await new Promise<void>((resolve, reject) => {
-// 			imgElement.onload = () => resolve();
-// 			imgElement.onerror = () => reject(new Error('Failed to load Google avatar'));
-// 			imgElement.src = googleImageUrl;
-// 		});
+// 	console.log('in loadGoogleAvatar');
 
-// 		imgElement.classList.remove('hidden');
-// 	}
-// 	catch (err)
-// 	{
-// 		console.warn('Impossible to load Google default image', err);
-// 		imgElement.src = '/basicGoogleImage.png';
-// 		imgElement.classList.remove('hidden');
-// 	}
+// 	// Crée une image temporaire pour le chargement
+// 	const tempImg = new Image();
+// 	tempImg.src = `/proxy/avatar?url=${encodeURIComponent(googleImageUrl)}`;
+
+// 	return new Promise<void>((resolve) => {
+// 		tempImg.onload = () => {
+// 			// Une fois chargée, on met à jour la balise réelle
+// 			imgElement.src = tempImg.src;
+// 			imgElement.classList.remove("hidden");
+// 			console.log("Image loaded via proxy:", tempImg.naturalWidth, tempImg.naturalHeight);
+// 			resolve();
+// 		};
+
+// 		tempImg.onerror = () => {
+// 			// Fallback si le proxy échoue
+// 			// imgElement.src = "/basicGoogleImage.png";
+// 			imgElement.src = `/proxy/avatar?url=${encodeURIComponent(googleImageUrl)}`;
+// 			imgElement.classList.remove("hidden");
+// 			console.warn("Impossible to load Google avatar, fallback applied");
+// 			resolve();
+// 		};
+// 	});
 // }
-
-export async function loadGoogleAvatar(imgElement: HTMLImageElement, googleImageUrl: string)
-{
-	console.log('in loadGoogleAvatar')
-	try {
-		await new Promise<void>((resolve, reject) => {
-			const timer = setTimeout(() => {
-				reject(new Error("Google avatar load timeout"));
-			}, 3000);
-
-			imgElement.onload = () => {
-				clearTimeout(timer);
-				console.log("finishing try", imgElement.naturalWidth, imgElement.naturalHeight);
-
-				if (imgElement.naturalWidth === 0 || imgElement.naturalHeight === 0) {
-					console.warn("Google avatar looks invalid, using fallback");
-					imgElement.src = "/basicGoogleImage.png";
-				}
-				else {
-					resolve();
-				}
-			};
-			imgElement.onerror = () => {
-				clearTimeout(timer);
-				reject(new Error("Failed to load Google avatar"));
-			};
-			imgElement.src = `/proxy/avatar?url=${encodeURIComponent(googleImageUrl)}`;
-		});
-
-		imgElement.classList.remove("hidden");
-	}
-	catch (err)
-	{
-		console.log('entered in catch');
-		console.warn("Impossible to load Google default image", err);
-		imgElement.src = "/basicGoogleImage.png";
-		imgElement.classList.remove("hidden");
-	}
-}
