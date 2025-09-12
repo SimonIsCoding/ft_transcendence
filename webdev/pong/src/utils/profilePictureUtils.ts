@@ -85,22 +85,61 @@ export async function loadExistingProfilePicture(): Promise<void>
 	}
 }
 
+// export async function loadGoogleAvatar(imgElement: HTMLImageElement, googleImageUrl: string)
+// {
+// 	try
+// 	{
+// 		await new Promise<void>((resolve, reject) => {
+// 			imgElement.onload = () => resolve();
+// 			imgElement.onerror = () => reject(new Error('Failed to load Google avatar'));
+// 			imgElement.src = googleImageUrl;
+// 		});
+
+// 		imgElement.classList.remove('hidden');
+// 	}
+// 	catch (err)
+// 	{
+// 		console.warn('Impossible to load Google default image', err);
+// 		imgElement.src = '/basicGoogleImage.png';
+// 		imgElement.classList.remove('hidden');
+// 	}
+// }
+
 export async function loadGoogleAvatar(imgElement: HTMLImageElement, googleImageUrl: string)
 {
-	try
-	{
+	console.log('in loadGoogleAvatar')
+	try {
 		await new Promise<void>((resolve, reject) => {
-			imgElement.onload = () => resolve();
-			imgElement.onerror = () => reject(new Error('Failed to load Google avatar'));
-			imgElement.src = googleImageUrl;
+			const timer = setTimeout(() => {
+				reject(new Error("Google avatar load timeout"));
+			}, 3000);
+
+			imgElement.onload = () => {
+				clearTimeout(timer);
+				console.log("finishing try", imgElement.naturalWidth, imgElement.naturalHeight);
+
+				if (imgElement.naturalWidth === 0 || imgElement.naturalHeight === 0) {
+					console.warn("Google avatar looks invalid, using fallback");
+					imgElement.src = "/basicGoogleImage.png";
+				}
+				else {
+					resolve();
+				}
+			};
+			imgElement.onerror = () => {
+				clearTimeout(timer);
+				reject(new Error("Failed to load Google avatar"));
+			};
+			imgElement.src = `/proxy/avatar?url=${encodeURIComponent(googleImageUrl)}`;
 		});
 
-		imgElement.classList.remove('hidden');
+		imgElement.classList.remove("hidden");
 	}
 	catch (err)
 	{
-		console.warn('Impossible to load Google default image', err);
-		imgElement.src = '/basicGoogleImage.png';
-		imgElement.classList.remove('hidden');
+		console.log('entered in catch');
+		console.warn("Impossible to load Google default image", err);
+		imgElement.src = "/basicGoogleImage.png";
+		imgElement.classList.remove("hidden");
 	}
 }
