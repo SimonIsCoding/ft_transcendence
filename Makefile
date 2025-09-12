@@ -74,9 +74,9 @@ clean:
 
 fclean: clean
 	# clean db
-	rm -rf data/DB/users.db
+	rm -rf $(PWD)/srcs/data/DB/users.db
 	# temporal docker command to clean pong data
-	docker run --rm -v data/pong:/pong alpine sh -c "rm -rf /pong/*"
+	docker run --rm -v $(PWD)/data/pong:/pong alpine sh -c "rm -rf /pong/*"
 
 re: fclean all
 
