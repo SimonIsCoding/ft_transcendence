@@ -149,12 +149,16 @@ export async function loadProfileAndPrefill(): Promise<void> {
     // Profile picture
     const previewImg = document.getElementById("previewProfilePictureEditProfile") as HTMLImageElement | null;
     const uploadIcon = document.getElementById("uploadIconEditProfile");
-    if (previewImg && uploadIcon) {
-      if (user.profile_picture) {
+    if (previewImg && uploadIcon)
+	{
+      if (user.profile_picture)
+	  {
         previewImg.src = user.profile_picture;
         previewImg.classList.remove("hidden");
         uploadIcon.classList.add("hidden");
-      } else {
+      }
+	  else
+	  {
         previewImg.classList.add("hidden");
         uploadIcon.classList.remove("hidden");
       }
