@@ -13,7 +13,6 @@ export interface GameOptions {
   maxScore: number;
   gameMode: 'p-vs-ai' | 'p-vs-p';
   aiDifficulty?: 2000 | 1000 | 1;
-//   onFinish?: (winner: string, score1: number, score2: number) => void | null;
   onFinish?: (winner: string, score1: number, score2: number) => void | Promise<void> | null;
 }
 

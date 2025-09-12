@@ -4,8 +4,10 @@ import { TournamentUIManager } from "../views/TournamentUIManager";
 import { Game } from "../pongGame/Game";
 import { enviarLogALogstash } from "../utils/logstash";
 import { closeAllMenus } from "../views/sidebar/sidebarUtils";
-import { finishMatchHandler, ShowGame } from "../pongGame/ShowGame";
+import { ShowGame } from "../pongGame/ShowGame";
 import { gameSettings } from "./gameSettingsControllers";
+import { getUserInfo } from "../services/sidebarService/utilsSidebarService";
+import { sendGameService } from "../services/gameService";
 
 export class TournamentController {
   async iniciarTorneo() {
@@ -103,8 +105,8 @@ export class TournamentController {
               match.player1.alias == winnerAlias
                 ? match.player1
                 : match.player2;
-            // sendGameService(match.type, match);
-			await finishMatchHandler(match);
+		    await sendGameService(match.type, match);
+		    await getUserInfo();
             enviarLogALogstash(match.type, {
               tournament_id: "tourn-" + Date.now(),
               match: match,

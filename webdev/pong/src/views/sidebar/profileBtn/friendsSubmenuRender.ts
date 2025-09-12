@@ -4,9 +4,6 @@ import { catchUserInfo, showSuccessPopup } from '../../../utils/utils.ts';
 import { renderBackButton } from '../sidebarUtils.ts'
 import { checkFriendHasGDPRActivated } from '../../../services/sidebarService/editProfileService.ts';
 import { setCurrentUser } from "../sidebarUtils";
-// import { getUserInfo } from "../../../services/sidebarService/utilsSidebarService.ts";
-// import { loadGoogleAvatar } from "../../../utils/profilePictureUtils.ts";
-
 
 export const friendRequestCard = {
 	render(userRequest: User): string {
@@ -135,7 +132,6 @@ export const othersUsersCard = {
 
 	const othersUsersPhoto = document.getElementById(`othersUsersPhoto_${otherUser.id}`) as HTMLImageElement;
 	if (otherUser.profile_picture && otherUser.profile_picture.startsWith("https://lh3.googleusercontent.com"))
-		// await loadGoogleAvatar(othersUsersPhoto, otherUser.profile_picture);
 		othersUsersPhoto.src = otherUser.profile_picture;
 	else
 		othersUsersPhoto.src = `https://localhost:4443/${otherUser.profile_picture}`;

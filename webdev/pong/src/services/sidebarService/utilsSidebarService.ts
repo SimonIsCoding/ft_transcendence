@@ -1,6 +1,5 @@
 import { setCurrentUser } from "../../views/sidebar/sidebarUtils";
 import { gameCurrentUserHasPlayedService } from "../gameService";
-// import { gameCurrentUserHasPlayedService } from "../gameService";
 
 export async function isConnected(): Promise<boolean>
 {

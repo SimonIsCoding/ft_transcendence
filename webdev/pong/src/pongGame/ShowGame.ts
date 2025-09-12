@@ -2,8 +2,8 @@ import { Router } from "../router";
 import type { Match } from '../models/TournamentModel';
 import { Game } from "./Game";
 import { GameRender } from './GameRender';
-import { sendGameService } from "../services/gameService";
 import { gameSettings } from "../controllers/gameSettingsControllers";
+import { sendGameService } from "../services/gameService";
 import { getUserInfo } from "../services/sidebarService/utilsSidebarService";
 
 type GameMode = 'p-vs-ai' | 'p-vs-p';
@@ -113,9 +113,8 @@ export class ShowGame {
                             match.player2.alias = 'AI';
                         }
                         match.winner = (match.player1.alias === winnerAlias) ? match.player1 : match.player2;
-						// sendGameService(ShowGame.gameType, match);
-						// await getUserInfo();
-						await finishMatchHandler(match);
+						await sendGameService(ShowGame.gameType, match);
+						await getUserInfo();
 
                         if (ShowGame.noWinner && (window.location.pathname.includes("/game") || window.location.pathname.includes("/gameai"))) { 
                                 if (match.winner.alias && match.winner.alias !== undefined) {
@@ -168,11 +167,4 @@ export class ShowGame {
         ShowGame.noWinner = true;
         ShowGame.inGame = false;
     }
-}
-
-export async function finishMatchHandler(match: Match)
-{
-	console.log(`match.type = ${match.type}`)
-    await sendGameService(match.type, match);
-    await getUserInfo();
 }
