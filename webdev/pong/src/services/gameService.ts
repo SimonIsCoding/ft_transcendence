@@ -36,15 +36,15 @@ export async function sendGameService(gameType: string, match: Match)
 			})
 		});
 
-		const stats = document.getElementById("statsInProfileSubmenu");
-		const nbGames = await gameCurrentUserHasPlayedService();
-		if (stats)
-		{
-			if (nbGames!.count != undefined && (nbGames!.count === 0 || nbGames!.count === 1))
-				stats.textContent = `${nbGames!.count} game played`;
-			else if (nbGames!.count != undefined)
-				stats.textContent = `${nbGames!.count} games played`;
-		}
+		// const stats = document.getElementById("statsInProfileSubmenu");
+		// const nbGames = await gameCurrentUserHasPlayedService();
+		// if (stats)
+		// {
+		// 	if (nbGames!.count != undefined && (nbGames!.count === 0 || nbGames!.count === 1))
+		// 		stats.textContent = `${nbGames!.count} game played`;
+		// 	else if (nbGames!.count != undefined)
+		// 		stats.textContent = `${nbGames!.count} games played`;
+		// }
 		
 	}
 	catch (error)
