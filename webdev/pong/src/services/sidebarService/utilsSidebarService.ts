@@ -1,5 +1,6 @@
 import { setCurrentUser } from "../../views/sidebar/sidebarUtils";
 import { gameCurrentUserHasPlayedService } from "../gameService";
+// import { gameCurrentUserHasPlayedService } from "../gameService";
 
 export async function isConnected(): Promise<boolean>
 {
@@ -33,7 +34,7 @@ export async function getUserInfo()
 	
 	    // Verificar si data.user existe
 	    if (!data.user) {
-			setCurrentUser(null); // ← Limpiar usuario si no viene en la respuesta
+			setCurrentUser(null);
 			return;
 	    }
 	
@@ -62,6 +63,6 @@ export async function getUserInfo()
 			playerNameDashboard.textContent = data.user.login ||  "Username";
    } catch (err) {
 	   console.error("Network error:", err);
-	   setCurrentUser(null); // ← Limpiar usuario en caso de error de red
+	   setCurrentUser(null);
    }
 }

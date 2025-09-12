@@ -88,7 +88,7 @@ export class TournamentController {
         await TournamentUIManager.startCountdown();
         this.mostrarVistaJuego();
         await new Promise((resolve) => setTimeout(resolve, 100));
-        const game = new Game({
+        const game = new Game ({
           leftPlayer: match.player1.alias,
           rightPlayer: match.player2.alias,
           maxScore: gameSettings.scoreLimit,
