@@ -1,10 +1,10 @@
 import type { User } from "../../../config";
-import { getUserInfo } from '../../../utils/utils.ts';
 import { checkFriendIsConnected, reloadFriendshipsStatus, sendFriendRequestOtherUser, updateFriendshipStatus } from '../../../services/sidebarService/friendsSubmenuService.ts';
-import { showSuccessPopup } from '../../../utils/utils.ts';
+import { catchUserInfo, showSuccessPopup } from '../../../utils/utils.ts';
 import { renderBackButton } from '../sidebarUtils.ts'
 import { checkFriendHasGDPRActivated } from '../../../services/sidebarService/editProfileService.ts';
 import { setCurrentUser } from "../sidebarUtils";
+// import { getUserInfo } from "../../../services/sidebarService/utilsSidebarService.ts";
 // import { loadGoogleAvatar } from "../../../utils/profilePictureUtils.ts";
 
 
@@ -35,7 +35,7 @@ export const friendRequestCard = {
   {
 	if (userRequest)
 	{
-		const currentUser: User = await getUserInfo();
+		const currentUser: User = await catchUserInfo();
 		setCurrentUser(currentUser);
 		const profilePictureFrom_ = document.getElementById(`profilePictureFrom_${userRequest.id}`) as HTMLImageElement;
 		if (userRequest.profile_picture && userRequest.profile_picture.startsWith("https://lh3.googleusercontent.com"))

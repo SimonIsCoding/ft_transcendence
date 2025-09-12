@@ -4,8 +4,7 @@ import { TournamentUIManager } from "../views/TournamentUIManager";
 import { Game } from "../pongGame/Game";
 import { enviarLogALogstash } from "../utils/logstash";
 import { closeAllMenus } from "../views/sidebar/sidebarUtils";
-import { ShowGame } from "../pongGame/ShowGame";
-import { sendGameService } from "../services/gameService";
+import { finishMatchHandler, ShowGame } from "../pongGame/ShowGame";
 import { gameSettings } from "./gameSettingsControllers";
 
 export class TournamentController {
@@ -93,7 +92,7 @@ export class TournamentController {
           rightPlayer: match.player2.alias,
           maxScore: gameSettings.scoreLimit,
           gameMode: "p-vs-p",
-          onFinish: (
+          onFinish: async (
             winnerAlias: string,
             player1Score: number,
             player2Score: number
@@ -104,7 +103,8 @@ export class TournamentController {
               match.player1.alias == winnerAlias
                 ? match.player1
                 : match.player2;
-            sendGameService(match.type, match);
+            // sendGameService(match.type, match);
+			await finishMatchHandler(match);
             enviarLogALogstash(match.type, {
               tournament_id: "tourn-" + Date.now(),
               match: match,
