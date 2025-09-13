@@ -1,5 +1,5 @@
 import { Router } from "../router";
-import { handleSidebar } from "./sidebar/sidebarBehavior";
+import { updateSidebar } from "./sidebar/sidebarBehavior";
 import { TournamentArea } from "./TournamentArea";
 import { GameRender } from "../pongGame/GameRender";
 import { matchInfo } from '../models/TournamentStore';
@@ -17,7 +17,7 @@ export const TournamentView = {
 
   async init(): Promise<void>
   {
-    await handleSidebar();
+    await updateSidebar();
 	const currentUser = getCurrentUser();
 	if (!currentUser) {
 		Router.navigate('home');

@@ -10,6 +10,16 @@ set -e
   chown www-data:www-data /etc/nginx/certs/*
 }
 
+TARGET=/var/www/html/pong
+SOURCE=/image-dist
+
+if [ -d "$SOURCE" ]; then
+  echo "Syncing frontend build from $SOURCE to $TARGET ..."
+  rm -rf "$TARGET"/*
+  cp -r "$SOURCE"/* "$TARGET"/
+  chown -R www-data:www-data "$TARGET"
+fi
+
 chown -R www-data:www-data /var/www/html
 
 mkdir -p /var/cache/nginx /var/log/nginx

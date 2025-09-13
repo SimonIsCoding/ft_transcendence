@@ -17,7 +17,7 @@ RUN apt-get update && apt-get -y install \
     openssl \
  && rm -rf /var/lib/apt/lists/*
 
-COPY srcs/requirements/nginx/tools/nginxentry.sh /usr/local/bin/
+COPY requirements/nginx/tools/nginxentry.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/nginxentry.sh
 
 # Default location where nginx will serve files
@@ -26,7 +26,7 @@ RUN mkdir -p /var/www/html/pong
 # Copy freshly built frontend into the image
 # ⚠️ This will be overridden by the volume at runtime,
 # but ensures the image is usable even without the volume.
-COPY --from=builder /app/dist/ /var/www/html/pong/
+COPY --from=builder /app/dist/ /image-dist
 
 RUN chown -R www-data:www-data /var/www/html/pong
 
