@@ -1,6 +1,3 @@
-PROJECT_PATH := $(shell pwd)
-export PROJECT_PATH
-
 # Define all required secret files
 SECRET_FILES = \
     ./secrets/cert.pem \
