@@ -1,9 +1,10 @@
-./srcs/docker/website/node_modules
+./docker/website/node_modules
 *node_modules
 *subject.pdf
 console.txt
 *.swp
 srcs/data/pong
+data/pong
 learning/
 .DS_Store
 users.db

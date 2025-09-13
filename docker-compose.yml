@@ -8,8 +8,8 @@ services:
       - server_cert
       - server_key
     build:
-      context: ..
-      dockerfile: srcs/requirements/nginx/Dockerfile
+      context: .
+      dockerfile: requirements/nginx/Dockerfile
     container_name: nginx
     depends_on: 
       - api-gateway
@@ -101,7 +101,7 @@ services:
               http://localhost:9200 >/dev/null || exit 1"]
       interval: 10s
       timeout: 5s
-      retries: 30
+      retries: 40
   logstash:
     image: docker.elastic.co/logstash/logstash:${ELASTIC_VERSION}
     container_name: ls01
@@ -137,7 +137,19 @@ services:
     depends_on:
       - elasticsearch
 
-  
+  configure-kibana:
+    build: 
+      context: requirements/configure-kibana
+      dockerfile: Dockerfile
+    container_name: configure-kibana
+    depends_on:
+      elasticsearch:
+          condition: service_healthy
+    environment:
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - KIBANA_SYSTEM_PASSWORD=${KIBANA_SYSTEM_PASSWORD}
+    restart: "no"
+    
 networks:
   default:
     name: transcendence-network
@@ -148,13 +160,13 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: ${PROJECT_PATH}/srcs/data/pong
+      device: data/pong
       o: bind
   pong_db:
     driver: local
     driver_opts:
       type: none
-      device: ${PROJECT_PATH}/srcs/data/DB
+      device: data/DB
       o: bind
   2fa_data:
     driver: local

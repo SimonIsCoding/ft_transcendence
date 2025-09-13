@@ -1,6 +1,6 @@
 // import type { User } from "../config";
 import { Router } from "../router";
-import { handleSidebar } from "./sidebar/sidebarBehavior";
+import { updateSidebar } from "./sidebar/sidebarBehavior";
 import { oneVsOneArea } from "./OneVsOneArea";
 import { oneVsAIArea } from "./OneVsOneArea";
 import { GameRender } from "../pongGame/GameRender";
@@ -21,7 +21,7 @@ export const GameView = {
   async init(): Promise<void>
   {
 
-    await handleSidebar();
+    await updateSidebar();
 	const currentUser = getCurrentUser();
 	if (!currentUser && ShowGame.gameType === 'p-vs-ai') {
 		Router.navigate('home');

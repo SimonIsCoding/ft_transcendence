@@ -13,7 +13,7 @@
     ```
     git clone git@github.com:SimonIsCoding/ft_transcendence.git ft_transcendence
     cd ft_transcendence
-    echo "DOMAIN_NAME=localhost" > srcs/.env
+    echo "DOMAIN_NAME=localhost" > .env
     make
     xdg-open http://localhost:4443
     ```
