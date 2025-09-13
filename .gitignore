@@ -9,3 +9,5 @@ learning/
 .DS_Store
 users.db
 */users.db
+.env
+./secrets/*
