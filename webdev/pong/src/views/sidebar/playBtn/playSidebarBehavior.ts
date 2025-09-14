@@ -22,17 +22,19 @@ export async function oneVsOneAreaInit()
 
 	const playBtn = document.getElementById('playOneVsOneBtn') as HTMLButtonElement | null;
 	playBtn!.addEventListener('click', () => { 
-		const player1 = document.getElementById("player1") as HTMLInputElement;
-		const player2 = document.getElementById("player2") as HTMLInputElement;
+		const player1 = (document.getElementById("player1") as HTMLInputElement).value.trim();
+		const player2 = (document.getElementById("player2") as HTMLInputElement).value.trim();
 
-		if (player1.value.trim().length > 40 || player2.value.trim().length > 40)
+		if (player1.length > 40 || player2.length > 40)
 			return showErrorPopup("Inputs should contain no more than 40 caracters", "popup");
-		if (!player1.value.trim() || !player2.value.trim())
+		if (!player1 || !player2)
 			return showErrorPopup("You need 2 players to play.", "popup");
+		if (player1 === player2)
+		  	return showErrorPopup("Aliases must be unique", "popup");
 
 		new ShowGame().initGame({
-	  		player1: { alias: player1.value },
-			player2: { alias: player2.value },
+	  		player1: { alias: player1 },
+			player2: { alias: player2 },
 			winner: null,
 			type: '1vs1'
 		});
