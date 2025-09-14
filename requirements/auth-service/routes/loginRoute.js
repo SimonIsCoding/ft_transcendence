@@ -21,12 +21,16 @@ export async function loginRoute(fastify) {
 		return reply.status(401).send({ error: 'Login not found', success: false});
     const valid = await bcrypt.compare(password, user.password);
 
+	// 4. check 2FA
+	// const env2faDisabled = process.env.ENABLE_2FA === 'false';
+	const requires2FA = Boolean(Number(user.is_2fa_activated));
+
     if (!valid) {
       return reply.code(401).send({ 
         success: false,
         error: 'Invalid credentials',
-        requires2FA: process.env.ENABLE_2FA === 'true'
-      });
+        requires2FA      
+});
     }
 
     // 3. Set auth phase cookie
@@ -39,8 +43,7 @@ export async function loginRoute(fastify) {
     });
 
 	// 4. check 2FA
-	const env2faDisabled = process.env.ENABLE_2FA === 'false';
-	const requires2FA = !env2faDisabled && Boolean(Number(user.is_2fa_activated));
+	// const env2faDisabled = process.env.ENABLE_2FA === 'false';
 
     // 5. Response
     reply.send({
@@ -72,8 +75,8 @@ export async function loginRoute(fastify) {
     if (!user) return reply.code(404).send({ error: 'User not found' });
   
     // 2. Determine verification status
-    const env2faDisabled = process.env.ENABLE_2FA === 'false';
-	const requires2FA = !env2faDisabled && user.is_2fa_activated;
+    // const env2faDisabled = process.env.ENABLE_2FA === 'false';
+	const requires2FA = user.is_2fa_activated;
 
 	const is2FAVerified = requires2FA
       ? request.cookies.auth_phase === '2fa_verified' // Check phase if 2FA enabled
