@@ -90,7 +90,7 @@ export async function loadExistingProfilePicture(): Promise<void>
 
 export async function loadGoogleAvatar(imgElement: HTMLImageElement, googleImageUrl: string)
 {
-	console.log('in loadGoogleAvatar');
+	// console.log('in loadGoogleAvatar');
 
 	const tempImg = new Image();
 	tempImg.src = `/proxy/avatar?url=${encodeURIComponent(googleImageUrl)}`;
