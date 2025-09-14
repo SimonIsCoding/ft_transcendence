@@ -95,24 +95,24 @@ export async function googleRoute(fastify)
 		}
 	});
 
-	// fastify.get("/proxy/avatar", async (request, reply) => {
-	// 	const { url } = request.query
-	// 	if (!url)
-	// 		return reply.status(400).send({ error: "Missing url" })
+	fastify.get("/proxy/avatar", async (request, reply) => {
+		const { url } = request.query
+		if (!url)
+			return reply.status(400).send({ error: "Missing url" })
 
-	// 	try {
-	// 		const response = await fetch(url)
-	// 		if (!response.ok)
-	// 			return reply.status(502).send({ error: "Failed to fetch image" })
+		try {
+			const response = await fetch(url)
+			if (!response.ok)
+				return reply.status(502).send({ error: "Failed to fetch image" })
 
-	// 		const buffer = await response.arrayBuffer()
-	// 		reply
-	// 			.header("Content-Type", response.headers.get("content-type") || "image/jpeg")
-	// 			.send(Buffer.from(buffer))
-	// 	}
-	// 	catch (err) {
-	// 		console.error("Proxy error:", err)
-	// 		return reply.status(500).send({ error: "Internal proxy error" })
-	// 	}
-	// })
+			const buffer = await response.arrayBuffer()
+			reply
+				.header("Content-Type", response.headers.get("content-type") || "image/jpeg")
+				.send(Buffer.from(buffer))
+		}
+		catch (err) {
+			console.error("Proxy error:", err)
+			return reply.status(500).send({ error: "Internal proxy error" })
+		}
+	})
 }

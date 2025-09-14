@@ -69,10 +69,10 @@ export async function loadExistingProfilePicture(): Promise<void>
 		}
 		else // to load personal pic
 		{
-			await loadGoogleAvatar(data.user.profile_picture);
-			await loadGoogleAvatar(data.user.profile_picture);
-			// preview.src = data.user.profile_picture;
-			// previewEdit.src = data.user.profile_picture;
+			await loadGoogleAvatar(preview, data.user.profile_picture);
+			await loadGoogleAvatar(previewEdit, data.user.profile_picture);
+			preview.src = data.user.profile_picture;
+			previewEdit.src = data.user.profile_picture;
 			preview.classList.remove('hidden');
 			previewEdit.classList.remove('hidden');
 
@@ -88,61 +88,58 @@ export async function loadExistingProfilePicture(): Promise<void>
 	}
 }
 
-// export async function loadGoogleAvatar(imgElement: HTMLImageElement, googleImageUrl: string)
-// {
-// 	console.log('in loadGoogleAvatar');
-
-// 	// Crée une image temporaire pour le chargement
-// 	const tempImg = new Image();
-// 	tempImg.src = `/proxy/avatar?url=${encodeURIComponent(googleImageUrl)}`;
-
-// 	return new Promise<void>((resolve) => {
-// 		tempImg.onload = () => {
-// 			// Une fois chargée, on met à jour la balise réelle
-// 			imgElement.src = tempImg.src;
-// 			imgElement.classList.remove("hidden");
-// 			console.log("Image loaded via proxy:", tempImg.naturalWidth, tempImg.naturalHeight);
-// 			resolve();
-// 		};
-
-// 		tempImg.onerror = () => {
-// 			// Fallback si le proxy échoue
-// 			// imgElement.src = "/basicGoogleImage.png";
-// 			imgElement.src = `/proxy/avatar?url=${encodeURIComponent(googleImageUrl)}`;
-// 			imgElement.classList.remove("hidden");
-// 			console.warn("Impossible to load Google avatar, fallback applied");
-// 			resolve();
-// 		};
-// 	});
-// }
-
-async function loadGoogleAvatar(googleImageUrl: string)
+export async function loadGoogleAvatar(imgElement: HTMLImageElement, googleImageUrl: string)
 {
-	const preview = document.getElementById('previewProfilePicture') as HTMLImageElement;
-	const previewEdit = document.getElementById('previewProfilePictureEditProfile') as HTMLImageElement;
+	console.log('in loadGoogleAvatar');
 
-		// console.log(`entered in loadGoogleAvatar`);
-	try
-	{
-		preview.src = googleImageUrl;
-		previewEdit.src = googleImageUrl;
+	const tempImg = new Image();
+	tempImg.src = `/proxy/avatar?url=${encodeURIComponent(googleImageUrl)}`;
 
-		await new Promise<void>((resolve, reject) => {
-		preview.onload = () => resolve();
-		preview.onerror = () => reject(new Error('Failed to load Google avatar'));
-		});
+	return new Promise<void>((resolve) => {
+		tempImg.onload = () => {
+			imgElement.src = tempImg.src;
+			imgElement.classList.remove("hidden");
+			console.log("Image loaded via proxy:", tempImg.naturalWidth, tempImg.naturalHeight);
+			resolve();
+		};
 
-		preview.classList.remove('hidden');
-		previewEdit.classList.remove('hidden');
-		// console.log(`finishing try`);
-
-	}
-	catch (err)
-	{
-		// console.log(`entered in catch`);
-		console.warn('Impossible to load Google default image', err);
-		preview.src = '/basicGoogleImage.png';
-		previewEdit.src = '/basicGoogleImage.png';
-		preview.classList.remove('hidden');
-	}
+		tempImg.onerror = () => {
+			imgElement.src = "/basicGoogleImage.png";
+			// imgElement.src = `/proxy/avatar?url=${encodeURIComponent(googleImageUrl)}`;
+			imgElement.classList.remove("hidden");
+			console.warn("Impossible to load Google avatar, fallback applied");
+			resolve();
+		};
+	});
 }
+
+// async function loadGoogleAvatar(googleImageUrl: string)
+// {
+// 	const preview = document.getElementById('previewProfilePicture') as HTMLImageElement;
+// 	const previewEdit = document.getElementById('previewProfilePictureEditProfile') as HTMLImageElement;
+
+// 		// console.log(`entered in loadGoogleAvatar`);
+// 	try
+// 	{
+// 		preview.src = googleImageUrl;
+// 		previewEdit.src = googleImageUrl;
+
+// 		await new Promise<void>((resolve, reject) => {
+// 		preview.onload = () => resolve();
+// 		preview.onerror = () => reject(new Error('Failed to load Google avatar'));
+// 		});
+
+// 		preview.classList.remove('hidden');
+// 		previewEdit.classList.remove('hidden');
+// 		// console.log(`finishing try`);
+
+// 	}
+// 	catch (err)
+// 	{
+// 		// console.log(`entered in catch`);
+// 		console.warn('Impossible to load Google default image', err);
+// 		preview.src = '/basicGoogleImage.png';
+// 		previewEdit.src = '/basicGoogleImage.png';
+// 		preview.classList.remove('hidden');
+// 	}
+// }
