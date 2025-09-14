@@ -1,6 +1,7 @@
 # Define all required secret files
 SECRET_FILES = \
-    ./secrets/cert.pem \
+    .env \
+	./secrets/cert.pem \
     ./secrets/key.pem \
     ./secrets/apicert.pem \
     ./secrets/apikey.pem \
