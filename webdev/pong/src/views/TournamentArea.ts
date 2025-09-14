@@ -143,28 +143,26 @@ export const TournamentArea = {
     if (alias1) alias1.value = currentUser?.login || "";
     playtournamentBtn?.addEventListener("click", () => {
       let player1 = (document.getElementById("alias1") as HTMLInputElement)
-        .value;
+        .value.trim();
       let player2 = (document.getElementById("alias2") as HTMLInputElement)
-        .value;
+        .value.trim();
       let player3 = (document.getElementById("alias3") as HTMLInputElement)
-        .value;
+        .value.trim();
       let player4 = (document.getElementById("alias4") as HTMLInputElement)
-        .value;
+        .value.trim();
 
-      if (!player2.trim()) player2 = "user2";
-      if (!player3.trim()) player3 = "user3";
-      if (!player4.trim()) player4 = "user4";
-      const alias2Input = document.getElementById("alias2") as HTMLInputElement;
-      const alias3Input = document.getElementById("alias3") as HTMLInputElement;
-      const alias4Input = document.getElementById("alias4") as HTMLInputElement;
-
-      if (alias2Input) alias2Input.value = player2;
-      if (alias3Input) alias3Input.value = player3;
-      if (alias4Input) alias4Input.value = player4;
-
-	  if (player1.trim().length > 40 || player2.trim().length > 40 || player3.trim().length > 40 || player4.trim().length > 40)
+      if (!player2) player2 = "user2";
+      if (!player3) player3 = "user3";
+      if (!player4) player4 = "user4";
+	  
+	  if (player1.length > 40 || player2.length > 40 || player3.length > 40 || player4.length > 40)
 			return showErrorPopup("Inputs should contain no more than 40 caracters", "popup");
 
+	  const players = [player1, player2, player3, player4];
+	  const unique = new Set(players);
+	  if (unique.size !== players.length) {
+	  	return showErrorPopup("Aliases must be unique", "popup");
+	  }
       let torneo = getTournament();
       if (!torneo) {
         const torneoNew = new TournamentModel();
