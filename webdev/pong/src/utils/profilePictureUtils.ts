@@ -90,8 +90,6 @@ export async function loadExistingProfilePicture(): Promise<void>
 
 export async function loadGoogleAvatar(imgElement: HTMLImageElement, googleImageUrl: string)
 {
-	// console.log('in loadGoogleAvatar');
-
 	const tempImg = new Image();
 	tempImg.src = `/proxy/avatar?url=${encodeURIComponent(googleImageUrl)}`;
 
@@ -99,15 +97,12 @@ export async function loadGoogleAvatar(imgElement: HTMLImageElement, googleImage
 		tempImg.onload = () => {
 			imgElement.src = tempImg.src;
 			imgElement.classList.remove("hidden");
-			console.log("Image loaded via proxy:", tempImg.naturalWidth, tempImg.naturalHeight);
 			resolve();
 		};
 
 		tempImg.onerror = () => {
 			imgElement.src = "/basicGoogleImage.png";
-			// imgElement.src = `/proxy/avatar?url=${encodeURIComponent(googleImageUrl)}`;
 			imgElement.classList.remove("hidden");
-			console.warn("Impossible to load Google avatar, fallback applied");
 			resolve();
 		};
 	});
