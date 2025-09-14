@@ -61,11 +61,11 @@ export class GameRender {
           <div class="flex justify-center items-center px-10 py-5 h-[20vh] z-10">
             <div class="flex flex-col items-center text-center w-1/2">
               <div class="text-lg font-bold mb-4 tracking-[2px]" style="color: #D9D9D9;" id="left-player"></div>
-              <div class="text-6xl font-bold leading-none" style="color: #D9D9D9;" id="left-score">0</div>
+              <div class="text-6xl font-bold leading-none font-dseg" style="color: #D9D9D9;" id="left-score">0</div>
             </div>
             <div class="flex flex-col items-center text-center w-1/2">
               <div class="text-lg font-bold mb-4 tracking-[2px]" style="color: #D9D9D9;" id="right-player"></div>
-              <div class="text-6xl font-bold leading-none" style="color: #D9D9D9;" id="right-score">0</div>
+              <div class="text-6xl font-bold leading-none font-dseg" style="color: #D9D9D9;" id="right-score">0</div>
             </div>
           </div>
 
