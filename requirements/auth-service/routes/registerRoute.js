@@ -37,7 +37,7 @@ export async function registerRoute(fastify)
 	    path: '/'
 	  });
 
-	  return reply.send({ success: true, requires2FA: process.env.ENABLE_2FA === 'true' });
+	  return reply.send({ success: true, requires2FA: true });
 	});
 
 	fastify.post('/users', async (req, reply) => {
@@ -49,9 +49,10 @@ export async function registerRoute(fastify)
 	  if (!password) return reply.code(400).send({ success: false, error: "Password required" });
 
 	  // If 2FA required, check that auth_phase is verified
-	  if (process.env.ENABLE_2FA === 'true' && req.cookies.auth_phase !== '2fa_verified') {
-	    return reply.code(401).send({ success: false, error: "2FA not verified" });// if ENABLE_2FA is false then error 500 here
-	  }
+	//   if (process.env.ENABLE_2FA === 'true' && req.cookies.auth_phase !== '2fa_verified') {
+	//   if (req.cookies.auth_phase !== '2fa_verified') {
+	//     return reply.code(401).send({ success: false, error: "2FA not verified" });
+	//   }
 
 	  try {
 
