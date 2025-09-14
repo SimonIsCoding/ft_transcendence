@@ -153,7 +153,6 @@ export async function loadProfileAndPrefill(): Promise<void> {
 	{
       if (user.profile_picture)
 	  {
-        previewImg.src = user.profile_picture;
         previewImg.classList.remove("hidden");
         uploadIcon.classList.add("hidden");
       }
