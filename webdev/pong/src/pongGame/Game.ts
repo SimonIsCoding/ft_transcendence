@@ -58,15 +58,16 @@ export class Game {
 		switch (options.paddleSpeed)
 		{
 			case 1: // Slow
-			GameConfig.PADDLE_SPEED = 0.05;
+			GameConfig.PADDLE_SPEED = 0.06;
 			break;
 			case 2: // Normal
-			GameConfig.PADDLE_SPEED = 0.07;
+			GameConfig.PADDLE_SPEED = 0.075;
 			break;
 			case 3: // Fast
-			GameConfig.PADDLE_SPEED = 0.09;
+			GameConfig.PADDLE_SPEED = 0.099;
 			break;
 		}
+		console.log(`GameConfig.PADDLE_SPEED = ${GameConfig.PADDLE_SPEED}`)
 	}
     
     // Set default options and merge with provided options
@@ -276,7 +277,8 @@ export class Game {
       this.leftPlayerPaddle.position = Math.max(
         GameConfig.PADDLE_BOUNDARY_TOP, 
         this.leftPlayerPaddle.position - GameConfig.PADDLE_SPEED * delta
-      );
+	);
+	console.log("⬅️ Left paddle moving at speed:", GameConfig.PADDLE_SPEED);
     } else if (this.inputManager.isPressed(KeyAction.MOVE_LEFT_DOWN)) {
       this.leftPlayerPaddle.position = Math.min(
         GameConfig.PADDLE_BOUNDARY_BOTTOM, 
