@@ -67,7 +67,6 @@ export class Game {
 			GameConfig.PADDLE_SPEED = 0.099;
 			break;
 		}
-		console.log(`GameConfig.PADDLE_SPEED = ${GameConfig.PADDLE_SPEED}`)
 	}
     
     // Set default options and merge with provided options
@@ -278,7 +277,6 @@ export class Game {
         GameConfig.PADDLE_BOUNDARY_TOP, 
         this.leftPlayerPaddle.position - GameConfig.PADDLE_SPEED * delta
 	);
-	console.log("⬅️ Left paddle moving at speed:", GameConfig.PADDLE_SPEED);
     } else if (this.inputManager.isPressed(KeyAction.MOVE_LEFT_DOWN)) {
       this.leftPlayerPaddle.position = Math.min(
         GameConfig.PADDLE_BOUNDARY_BOTTOM, 
