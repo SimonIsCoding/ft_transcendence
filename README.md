@@ -8,34 +8,53 @@
 </div> -->
 
 ## How to setup the project ?
-### Go fast
-1. **to go faster**
+### Requirements
+0. **Requirements**
+    - We work with nodejs and npm in this project. Make sure you have them installed in you computer.
+    - Make sure you have docker & docker-compose installed in you computer.
+
+1. **Download the project**
     ```
     git clone git@github.com:SimonIsCoding/ft_transcendence.git ft_transcendence
     cd ft_transcendence
-    echo "DOMAIN_NAME=localhost" > .env
     make
-    xdg-open http://localhost:4443
+    <!-- xdg-open https://localhost:4443 -->
     ```
 
-### To know what you are doing
-0. **Make sure you have the good prerequisite for your computer**
-   - We work with nodejs and npm in this project. Make sure you have them installed in you computer.
-   - Make sure you have docker installed in you computer
-   - the file /etc/hosts has the line `127.0.0.1 localhost`
+2. **check on web browser**
+   - Open any web browser. You should put on the URL: 'https://localhost:4443' - for the project we use the port 4443. For the moment, it is not availble in https (443) in campus computers.
+   Then you have to accept the risk to proceed to an unsecure website because we have a self-signed certificate.
+   - For Devops Module - Infrastructure setup for log management:
+   You can check the url: http//localhost:5051
+   Then you have to put as credentials: login: password: to connect.
+   You can discover all the setup done for log management.
 
-1. **clone the project**
-   - `git clone git@github.com:SimonIsCoding/ft_transcendence.git ft_transcendence`
+> [!NOTE]
+> In this project, we intentionally left the “/secrets” folder and “.env” file containing secret keys so that every user can view the project, as it is an educational project. In a professional project, we know we should not publicly share these files.
 
-2. **Create a .env file**
-   - go to ft_transcendence repository `cd ft_transcendence`
-   - go to srcs folder `cd srcs`
-   - create a .env file
-   - add a domain name `DOMAIN_NAME=localhost`
-   - then go back to the root of the project `cd ..`
+## Modules Done
+**WEB**
+◦ Major module: Use a framework to build the backend.
+◦ Minor module: Use a framework or a toolkit to build the frontend.
+◦ Minor module: Use a database for the backend
 
-2. **Run the project**
-   - `make`
+**User Management**
+◦ Major module: Standard user management, authentication, users across
+tournaments.
+◦ Major module: Implementing a remote authentication.
 
-3. **check on web browser**
-   - Open any web browser. You should put on the URL: 'http://localhost:4443' - for the project we use the port 4443. For the moment, it is not availble in https (443) in campus computers.
+**AI-Algo**
+◦ Major module: Introduce an AI opponent.
+◦ Minor module: User and game stats dashboards
+
+**Cybersecurity**
+◦ Minor module: GDPR compliance options with user anonymization, local
+data management, and Account Deletion.
+◦ Major module: Implement Two-Factor Authentication (2FA) and JWT.
+
+**Devops**
+◦ Major module: Infrastructure setup for log management.
+◦ Major module: Designing the backend as microservices.
+
+**Accessibility**
+◦ Minor module: Expanding browser compatibility
