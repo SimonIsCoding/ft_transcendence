@@ -25,34 +25,34 @@
    - For Devops Module - Infrastructure setup for log management:
    You can check the URL: http//localhost:5051<br>
    Then to connect, you have to put as credentials: <br>login: <br>password:
-   You can discover all the setup done for log management.
+   <br>You can discover all the setup done for log management.
 
 > [!NOTE]
 > In this project, we intentionally left the “/secrets” folder and “.env” file containing secret keys so that every user can view the project, as it is an educational project. In a professional project, we know we should not publicly share these files.
 
 ## Modules Done
 **WEB**
-◦ Major module: Use a framework to build the backend.
-◦ Minor module: Use a framework or a toolkit to build the frontend.
-◦ Minor module: Use a database for the backend
+<br>◦ Major module: Use a framework to build the backend.
+<br>◦ Minor module: Use a framework or a toolkit to build the frontend.
+<br>◦ Minor module: Use a database for the backend
 
 **User Management**
-◦ Major module: Standard user management, authentication, users across
+<br>◦ Major module: Standard user management, authentication, users across
 tournaments.
-◦ Major module: Implementing a remote authentication.
+<br>◦ Major module: Implementing a remote authentication.
 
 **AI-Algo**
-◦ Major module: Introduce an AI opponent.
-◦ Minor module: User and game stats dashboards
+<br>◦ Major module: Introduce an AI opponent.
+<br>◦ Minor module: User and game stats dashboards
 
 **Cybersecurity**
-◦ Minor module: GDPR compliance options with user anonymization, local
+<br>◦ Minor module: GDPR compliance options with user anonymization, local
 data management, and Account Deletion.
-◦ Major module: Implement Two-Factor Authentication (2FA) and JWT.
+<br>◦ Major module: Implement Two-Factor Authentication (2FA) and JWT.
 
 **Devops**
-◦ Major module: Infrastructure setup for log management.
-◦ Major module: Designing the backend as microservices.
+<br>◦ Major module: Infrastructure setup for log management.
+<br>◦ Major module: Designing the backend as microservices.
 
 **Accessibility**
-◦ Minor module: Expanding browser compatibility
+<br>◦ Minor module: Expanding browser compatibility
