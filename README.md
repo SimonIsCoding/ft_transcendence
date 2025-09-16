@@ -56,3 +56,14 @@ data management, and Account Deletion.
 
 **Accessibility**
 <br>◦ Minor module: Expanding browser compatibility
+
+## Advices
+As written in the subject, and after doing it, it's totally true:
+1 - think about your design before starting coding anything - it will save you soooo much time & you will be proud of it at the end.
+2 - This project is definitely a long run, and a wrong path will lead you to a huge loss
+of time. Your project management and team management choices will strongly impact
+your timeline and results.
+3 - Read the subject many times and choose the modules wisely. It is not because you don't understand the module that it is not interesting, it can be quite the opposite.
+4 - From the beginning, and during the whole project, organise your folders, subfolders and files very well. There is so many files that you can be quickly lost. I would suggest you to firstly create two main folders, the first one for the backend and the second one for the frontend, as we did. And then one folder for each services you use (for the backend).
+5 - I would suggest you to design the backend as microservices. It is easier to build and easier to debug. Moreover, it is quicker to recompile.
+6 - Use tailwind to design your pages, it gives you a minor module and save you a lot of lines of code and time.
