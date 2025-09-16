@@ -8,7 +8,6 @@
 </div> -->
 
 ## How to setup the project ?
-### Requirements
 0. **Requirements**
     - We work with nodejs and npm in this project. Make sure you have them installed in you computer.
     - Make sure you have docker & docker-compose installed in you computer.
@@ -22,11 +21,10 @@
     ```
 
 2. **check on web browser**
-   - Open any web browser. You should put on the URL: 'https://localhost:4443' - for the project we use the port 4443. For the moment, it is not availble in https (443) in campus computers.
-   Then you have to accept the risk to proceed to an unsecure website because we have a self-signed certificate.
+   - Open any web browser. You should put on the URL: https://localhost:4443 - for the project we use the port 4443. Then you have to accept the risk to proceed to an unsecure website because we have a self-signed certificate.
    - For Devops Module - Infrastructure setup for log management:
-   You can check the url: http//localhost:5051
-   Then you have to put as credentials: login: password: to connect.
+   You can check the URL: http//localhost:5051<br>
+   Then to connect, you have to put as credentials: <br>login: <br>password:
    You can discover all the setup done for log management.
 
 > [!NOTE]
