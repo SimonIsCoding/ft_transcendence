@@ -93,6 +93,7 @@ export class TournamentController {
           leftPlayer: match.player1.alias,
           rightPlayer: match.player2.alias,
           maxScore: gameSettings.scoreLimit,
+		  paddleSpeed: gameSettings.paddleSpeed,
           gameMode: "p-vs-p",
           onFinish: async (
             winnerAlias: string,

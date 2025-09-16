@@ -1,4 +1,4 @@
-import { gameSettings, getDifficultyLabel, getDifficultyValue, getScoreLimitValue } from "../../../controllers/gameSettingsControllers";
+import { convertPaddleSpeed, gameSettings, getDifficultyLabel, getDifficultyValue, getPaddleSpeedValue, getScoreLimitValue } from "../../../controllers/gameSettingsControllers";
 
 export function gameSettingsSubmenuRender():string 
 {
@@ -24,6 +24,16 @@ export function gameSettingsSubmenuRender():string
 				class="basis-[40%] h-1 rounded cursor-pointer" />
 			<span id="scoreLimitValue" class="font-bold basis-[20%] text-center font-mono">
 				${gameSettings.scoreLimit}
+			</span>
+		</div>
+		<div class="flex items-center pt-5 w-full">
+			<label for="paddleSpeedSlider" class="font-bold basis-[40%] whitespace-nowrap text-sm pl-2 text-center">
+				Paddle Speed
+			</label>
+			<input id="paddleSpeedSliderInput" type="range" min="1" max="3" value="${getPaddleSpeedValue(gameSettings.paddleSpeed)}"
+				class="basis-[40%] h-1 rounded cursor-pointer" />
+			<span id="paddleSpeedValue" class="font-bold basis-[20%] text-center font-mono">
+				${convertPaddleSpeed(gameSettings.paddleSpeed)}
 			</span>
 		</div>
 	</div>

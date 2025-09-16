@@ -13,6 +13,7 @@ export interface GameOptions {
   maxScore: number;
   gameMode: 'p-vs-ai' | 'p-vs-p';
   aiDifficulty?: 2000 | 1000 | 1;
+  paddleSpeed?: 1 | 2 | 3;
   onFinish?: (winner: string, score1: number, score2: number) => void | Promise<void> | null;
 }
 
@@ -52,6 +53,21 @@ export class Game {
     if (options?.aiDifficulty) {
       GameConfig.AI_UPDATE_COOLDOWN = options.aiDifficulty;
     }
+	if (options?.paddleSpeed)
+	{
+		switch (options.paddleSpeed)
+		{
+			case 1: // Slow
+			GameConfig.PADDLE_SPEED = 0.06;
+			break;
+			case 2: // Normal
+			GameConfig.PADDLE_SPEED = 0.075;
+			break;
+			case 3: // Fast
+			GameConfig.PADDLE_SPEED = 0.099;
+			break;
+		}
+	}
     
     // Set default options and merge with provided options
     // this.gameId = `game-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -62,6 +78,7 @@ export class Game {
       maxScore: options?.maxScore || GameConfig.MAX_SCORE,
       gameMode: options?.gameMode || 'p-vs-p',
       onFinish: options?.onFinish || undefined,
+	  paddleSpeed: options?.paddleSpeed || 1,
       aiDifficulty: options?.aiDifficulty || (GameConfig.AI_UPDATE_COOLDOWN as 2000 | 1000 | 1)
     };
     this.onFinishCallback = options?.onFinish || null;
@@ -71,8 +88,8 @@ export class Game {
     this.setupDebugFunctions();
     // if (this.options.aiDifficulty === 500)
     //   GameConfig.PADDLE_SPEED = 0.05;
-    if (this.options.aiDifficulty === 1)
-      GameConfig.PADDLE_SPEED = 0.08;
+    // if (this.options.aiDifficulty === 1)
+    //   GameConfig.PADDLE_SPEED = 0.08;
   }
 
   private initializeDOM(): void {
@@ -259,7 +276,7 @@ export class Game {
       this.leftPlayerPaddle.position = Math.max(
         GameConfig.PADDLE_BOUNDARY_TOP, 
         this.leftPlayerPaddle.position - GameConfig.PADDLE_SPEED * delta
-      );
+	);
     } else if (this.inputManager.isPressed(KeyAction.MOVE_LEFT_DOWN)) {
       this.leftPlayerPaddle.position = Math.min(
         GameConfig.PADDLE_BOUNDARY_BOTTOM, 

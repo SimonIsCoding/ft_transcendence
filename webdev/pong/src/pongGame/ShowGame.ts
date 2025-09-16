@@ -105,6 +105,7 @@ export class ShowGame {
                     maxScore: gameSettings.scoreLimit,
                     gameMode: ShowGame.gameType,
                     aiDifficulty: gameSettings.iaDifficulty,
+					paddleSpeed: gameSettings.paddleSpeed,
                     onFinish: async (winnerAlias: string, player1Score: number, player2Score: number) => {
                         match.player1.score = player1Score;
                         match.player2.score = player2Score;
