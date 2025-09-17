@@ -4,6 +4,7 @@ import { catchUserInfo, showSuccessPopup } from '../../../utils/utils.ts';
 import { renderBackButton } from '../sidebarUtils.ts'
 import { checkFriendHasGDPRActivated } from '../../../services/sidebarService/editProfileService.ts';
 import { setCurrentUser } from "../sidebarUtils";
+import { loadGoogleAvatar } from "../../../utils/profilePictureUtils.ts";
 
 export const friendRequestCard = {
 	render(userRequest: User): string {
@@ -36,7 +37,10 @@ export const friendRequestCard = {
 		setCurrentUser(currentUser);
 		const profilePictureFrom_ = document.getElementById(`profilePictureFrom_${userRequest.id}`) as HTMLImageElement;
 		if (userRequest.profile_picture && userRequest.profile_picture.startsWith("https://lh3.googleusercontent.com"))
-			profilePictureFrom_.src = `${userRequest.profile_picture}`;
+		{
+			// profilePictureFrom_.src = `${userRequest.profile_picture}`;
+			await loadGoogleAvatar(profilePictureFrom_, userRequest.profile_picture);
+		}
 		else
 			profilePictureFrom_.src = `https://localhost:4443/${userRequest.profile_picture}`;
 
@@ -93,7 +97,10 @@ export const friendsCard = {
 	else
 		friendStatus?.classList.add("bg-black");
 	if (friendUser.profile_picture && friendUser.profile_picture.startsWith("https://lh3.googleusercontent.com"))
-		friendImg.src = `${friendUser.profile_picture}`;
+	{
+		// friendImg.src = `${friendUser.profile_picture}`;
+		await loadGoogleAvatar(friendImg, friendUser.profile_picture);
+	}
 	else
 		friendImg.src = `https://localhost:4443/${friendUser.profile_picture}`;
 	friendUsername!.textContent = friendUser.login;
@@ -132,7 +139,10 @@ export const othersUsersCard = {
 
 	const othersUsersPhoto = document.getElementById(`othersUsersPhoto_${otherUser.id}`) as HTMLImageElement;
 	if (otherUser.profile_picture && otherUser.profile_picture.startsWith("https://lh3.googleusercontent.com"))
-		othersUsersPhoto.src = otherUser.profile_picture;
+	{
+		// othersUsersPhoto.src = otherUser.profile_picture;
+		await loadGoogleAvatar(othersUsersPhoto, otherUser.profile_picture);
+	}
 	else
 		othersUsersPhoto.src = `https://localhost:4443/${otherUser.profile_picture}`;
 	

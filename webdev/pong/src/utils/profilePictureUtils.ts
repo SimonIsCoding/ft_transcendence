@@ -71,8 +71,8 @@ export async function loadExistingProfilePicture(): Promise<void>
 		{
 			await loadGoogleAvatar(preview, data.user.profile_picture);
 			await loadGoogleAvatar(previewEdit, data.user.profile_picture);
-			preview.src = data.user.profile_picture;
-			previewEdit.src = data.user.profile_picture;
+			// preview.src = data.user.profile_picture;
+			// previewEdit.src = data.user.profile_picture;
 			preview.classList.remove('hidden');
 			previewEdit.classList.remove('hidden');
 
@@ -107,34 +107,3 @@ export async function loadGoogleAvatar(imgElement: HTMLImageElement, googleImage
 		};
 	});
 }
-
-// async function loadGoogleAvatar(googleImageUrl: string)
-// {
-// 	const preview = document.getElementById('previewProfilePicture') as HTMLImageElement;
-// 	const previewEdit = document.getElementById('previewProfilePictureEditProfile') as HTMLImageElement;
-
-// 		// console.log(`entered in loadGoogleAvatar`);
-// 	try
-// 	{
-// 		preview.src = googleImageUrl;
-// 		previewEdit.src = googleImageUrl;
-
-// 		await new Promise<void>((resolve, reject) => {
-// 		preview.onload = () => resolve();
-// 		preview.onerror = () => reject(new Error('Failed to load Google avatar'));
-// 		});
-
-// 		preview.classList.remove('hidden');
-// 		previewEdit.classList.remove('hidden');
-// 		// console.log(`finishing try`);
-
-// 	}
-// 	catch (err)
-// 	{
-// 		// console.log(`entered in catch`);
-// 		console.warn('Impossible to load Google default image', err);
-// 		preview.src = '/basicGoogleImage.png';
-// 		previewEdit.src = '/basicGoogleImage.png';
-// 		preview.classList.remove('hidden');
-// 	}
-// }
