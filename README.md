@@ -32,30 +32,30 @@
 
 ## Modules Done
 **WEB**
-<br>◦ Major module: Use a framework to build the backend.
-<br>◦ Minor module: Use a framework or a toolkit to build the frontend.
-<br>◦ Minor module: Use a database for the backend
+<br>    ◦ Major module: Use a framework to build the backend.
+<br>    ◦ Minor module: Use a framework or a toolkit to build the frontend.
+<br>    ◦ Minor module: Use a database for the backend
 
 **User Management**
-<br>◦ Major module: Standard user management, authentication, users across
+<br>    ◦ Major module: Standard user management, authentication, users across
 tournaments.
-<br>◦ Major module: Implementing a remote authentication.
+<br>    ◦ Major module: Implementing a remote authentication.
 
 **AI-Algo**
-<br>◦ Major module: Introduce an AI opponent.
-<br>◦ Minor module: User and game stats dashboards
+<br>    ◦ Major module: Introduce an AI opponent.
+<br>    ◦ Minor module: User and game stats dashboards
 
 **Cybersecurity**
-<br>◦ Minor module: GDPR compliance options with user anonymization, local
+<br>    ◦ Minor module: GDPR compliance options with user anonymization, local
 data management, and Account Deletion.
-<br>◦ Major module: Implement Two-Factor Authentication (2FA) and JWT.
+<br>    ◦ Major module: Implement Two-Factor Authentication (2FA) and JWT.
 
 **Devops**
-<br>◦ Major module: Infrastructure setup for log management.
-<br>◦ Major module: Designing the backend as microservices.
+<br>    ◦ Major module: Infrastructure setup for log management.
+<br>    ◦ Major module: Designing the backend as microservices.
 
 **Accessibility**
-<br>◦ Minor module: Expanding browser compatibility
+<br>    ◦ Minor module: Expanding browser compatibility
 
 ## Advices
 As written in the subject, and after doing it, it's totally true:<br>
