@@ -23,9 +23,9 @@
 2. **check on web browser**
    - Open any web browser. You should put on the URL: https://localhost:4443 - for the project we use the port 4443. Then you have to accept the risk to proceed to an unsecure website because we have a self-signed certificate.
    - For Devops Module - Infrastructure setup for log management:
-   You can check the URL: http//localhost:5601<br>
-   Then to connect, you have to put as credentials: <br>login: elastic<br>password: ElasticPass123!
-<br>You can discover all the setup done for log management.
+   You can check the URL: http://localhost:5601<br>
+   Then to connect, you have to put as credentials: <br>login: elastic<br>password: ElasticPass123!<br>
+   You can discover all the setup done for log management.
 
 > [!NOTE]
 > In this project, we intentionally left the “/secrets” folder and “.env” file containing secret keys so that every user can view the project, as it is an educational project. In a professional project, we know we should not publicly share these files.
