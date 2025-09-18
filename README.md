@@ -17,7 +17,6 @@
     git clone git@github.com:SimonIsCoding/ft_transcendence.git ft_transcendence
     cd ft_transcendence
     make
-    <!-- xdg-open https://localhost:4443 -->
     ```
 
 2. **check on web browser**
