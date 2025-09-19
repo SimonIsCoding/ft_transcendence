@@ -2,10 +2,10 @@
 
 <!-- Description of the project    -->
 
-<!-- ## Final score
+## Final score
 <div align=center>
 <img src="https://github.com/SimonIsCoding/utils_and_random/blob/main/ft_irc_grade.png"/>
-</div> -->
+</div>
 
 ## How to setup the project ?
 0. **Requirements**
