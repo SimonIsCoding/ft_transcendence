@@ -71,7 +71,7 @@ clean:
 	docker image prune -af
 	docker volume prune -f
 	docker network prune -f
-	docker builder prune
+	docker builder prune -f
 
 fclean: clean
 	# clean db
