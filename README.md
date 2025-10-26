@@ -44,7 +44,7 @@
 **User Management**
 <br>    ◦ Major module: Standard user management, authentication, users across
 tournaments.
-<br>    ◦ Major module: Implementing a remote authentication.
+<br>    ◦ Major module: Implementing a remote authentication - Here's the Google Sign-in
 
 **AI-Algo**
 <br>    ◦ Major module: Introduce an AI opponent.
