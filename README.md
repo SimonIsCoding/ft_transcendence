@@ -9,7 +9,7 @@
   <img src="assets/ft_transcendence_demo.webp" width="1000">
 </p>
 
-👉 [To see full video](assets/ft_transcendence_demo.mp4)
+👉 [To see full video click here, and then click in 'view raw'](assets/ft_transcendence_demo.mp4)
 
 </p>
 
