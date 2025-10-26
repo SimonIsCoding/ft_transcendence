@@ -5,7 +5,7 @@
 > [!NOTE]
 > The demo file is a bit heavy. Wait for it to be displayed. I had to put the video 1.35x faster to lighten it.
 <p align="center">
-  <img src="assets/example.gif" alt="Cub3D demo" width="1000"/>
+  <img src="assets/example.mp4" alt="Cub3D demo" width="1000"/>
 </p>
 
 ## Final score
