@@ -5,7 +5,12 @@
 > [!NOTE]
 > The demo file is a bit heavy. Wait for it to be displayed. I had to put the video 1.35x faster to lighten it.
 <p align="center">
-  <video src="https://github.com/SimonIsCoding/utils_and_random/blob/main/ft_transcendence_demo.mp4" alt="ft_transcendence demo" width="1000"></video>
+<p align="center">
+  <img src="assets/ft_transcendence_demo.webp" width="1000">
+</p>
+
+👉 [To see full video](assets/ft_transcendence_demo.mp4)
+
 </p>
 
 ## Final score
