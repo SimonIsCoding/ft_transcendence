@@ -2,8 +2,6 @@
 
 <!-- Description of the project    -->
 
-> [!NOTE]
-> The demo file is a bit heavy. Wait for it to be displayed. I had to put the video 1.35x faster to lighten it.
 <p align="center">
 <p align="center">
   <img src="assets/ft_transcendence_demo.webp" width="1000">
